@@ -1,6 +1,6 @@
 from django.db import models
 
-
+#Valdiaiton needs to be implemented
 
 class vendor(models.Model):
 	vendor_id = models.AutoField(primary_key=True)
