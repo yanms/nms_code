@@ -5,27 +5,28 @@
 	{% for type in dev_type %}
 		<option>{{ type.dev_type_name }}</option>i
 	{% endfor %}
-	</select>
+	</select><br />
 	Vendor: <select>
 	{% for record in vendor %}
 		<option>{{ record.vendor_name }}</option>
 	{% endfor %}
-	</select>
+	</select><br />
 	Model: <select>
 	{% for model in dev_model %}
 		<option>{{ model.model_name }}</option>
 	{% endfor %}
+	</select><br />
 	OS: <select>
 	{% for record in os %}
 		<option>{{ record.os_name }}</option>
 	{% endfor %}
-	</select>
+	</select><br />
 	Preferred protocol: <select>
 		<option>SSH2</option>
 		<option>SSH1</option>
 		<option>Telnet</option
-	</select>
-	<input type="checkbox" name="ipprot" value="IPv4"> <input type="text" id="ipv4" />
-	<input type="checkbox" name="ipprot6" value="IPv6"> <input type="text" id="ipv6" />
+	</select><br /><br />
+	<input type="checkbox" name="ipprot" value="IPv4"> <input type="text" id="ipv4" /><br />
+	<input type="checkbox" name="ipprot6" value="IPv6"> <input type="text" id="ipv6" /><br />
 	<input type="submit" value="Test Connection" id="testconn" /> <input type="submit" value="Add Device" id="add_device" />
 </form>
