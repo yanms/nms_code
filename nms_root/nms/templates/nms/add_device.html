@@ -1,32 +1,32 @@
 <h1>Add Device</h1>
 <form action="{% url 'nms:nms_admin_add_device'  %}" method="POST">
 {% csrf_token %}
-	Device type: <select>
+	Device type: <select id="dev_type">
 	{% for type in dev_type %}
-		<option>{{ type.dev_type_name }}</option>i
+		<option>{{ type.dev_type_name }}</option>
 	{% endfor %}
 	</select><br />
-	Vendor: <select>
+	Vendor: <select id="vendor_name">
 	{% for record in vendor %}
 		<option>{{ record.vendor_name }}</option>
 	{% endfor %}
 	</select><br />
-	Model: <select>
+	Model: <select id="dev_model">
 	{% for model in dev_model %}
 		<option>{{ model.model_name }}</option>
 	{% endfor %}
 	</select><br />
-	OS: <select>
+	OS: <select id="os_name">
 	{% for record in os %}
 		<option>{{ record.os_name }}</option>
 	{% endfor %}
 	</select><br />
-	Preferred protocol: <select>
+	Preferred protocol: <select id="pref_prot">
 		<option>SSH2</option>
 		<option>SSH1</option>
 		<option>Telnet</option
 	</select><br /><br />
-	<input type="checkbox" name="ipprot" value="IPv4"> <input type="text" id="ipv4" /><br />
-	<input type="checkbox" name="ipprot6" value="IPv6"> <input type="text" id="ipv6" /><br />
+	<input type="radio" name="ipprot" value="IPv4"> IPv4 address: <input type="text" id="ipv4" /><br />
+	<input type="radio" name="ipprot" value="IPv6"> IPv6 address: <input type="text" id="ipv6" /><br />
 	<input type="submit" value="Test Connection" id="testconn" /> <input type="submit" value="Add Device" id="add_device" />
 </form>

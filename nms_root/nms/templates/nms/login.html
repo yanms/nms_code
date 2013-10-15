@@ -4,7 +4,7 @@
 
 <form action="{% url 'nms:nms_admin_login' %}" method="POST">
 	{% csrf_token %}
-	<input type="text" name="username" id="username" /><br />
-	<input type="password" name="password" id="password" /><br />
+	Username: <input type="text" name="username" id="username" /><br />
+	Password: <input type="password" name="password" id="password" /><br />
 	<input type="submit" value="Login" id="login" />
 </form>
