@@ -74,14 +74,6 @@ class devices(models.Model):
 	def __str__(self):
 		return self.gen_dev_id + ' - ' + self.ip
 
-class roles(models.Model):
-	roles_id = models.AutoField(primary_key=True)
-	user_id = models.ForeignKey(user)
-	dev_id = models.ForeignKey(devices)
-
-	def __str__(self):
-		return self.user_id + ': ' + self.dev_id
-
 class user(models.Model):
 	user_id = models.AutoField(primary_key=True)
 	username = models.CharField(max_length=255)
@@ -93,3 +85,11 @@ class user(models.Model):
 	
 	def __str__(self):
 		return self.username
+
+class roles(models.Model):
+	roles_id = models.AutoField(primary_key=True)
+	user_id = models.ForeignKey(user)
+	dev_id = models.ForeignKey(devices)
+
+	def __str__(self):
+		return self.user_id + ': ' + self.dev_id
