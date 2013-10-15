@@ -1,8 +1,9 @@
 <h1>NMS Login</h1>
 
-{% error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="{% url 'nms.login' %}" method="POST">
+<form action="{% url 'nms:nms_admin_login' %}" method="POST">
+	{% csrf_token %}
 	<input type="text" name="username" id="username" />
 	<input type="password" name="password" id="password" />
 	<input type="submit" value="Login" id="login" />

@@ -1,5 +1,5 @@
 <h1>Add Device</h1>
-<form action="{% url 'nms:add' dev.id %}" method="POST">
+<form action="{% url 'nms:nms_admin_add_device'  %}" method="POST">
 {% csrf_token %}
 	Device type: <select>
 	{% for type in dev_type %}
@@ -14,7 +14,7 @@
 	Model: <select>
 	{% for model in dev_model %}
 		<option>{{ model.model_name }}</option>
-	{% enfor %}
+	{% endfor %}
 	OS: <select>
 	{% for record in os %}
 		<option>{{ record.os_name }}</option>
@@ -26,6 +26,6 @@
 		<option>Telnet</option
 	</select>
 	<input type="checkbox" name="ipprot" value="IPv4"> <input type="text" id="ipv4" />
-	<input type="checkbox" name="ipprot" value="IPv6"> <input type="text" id="ipv6" />
+	<input type="checkbox" name="ipprot6" value="IPv6"> <input type="text" id="ipv6" />
 	<input type="submit" value="Test Connection" id="testconn" /> <input type="submit" value="Add Device" id="add_device" />
 </form>
