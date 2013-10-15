@@ -1,5 +1,5 @@
 <h1>Devices</h1>
 
 {% for device in devices.objects.all %}
-	<p>{{ device.dev_id }} | ### NAME ROUTER ### | {{ device.ip }} | ## UP/DOWN ## <input type="submit" value="Refresh" /> <input type="submit" value="Remove" /></p><br />
+	<p>{{ device.gen_dev_id.dev_type_id }} | {{ device.gen_dev_id }} | {{ device.ip }} | ## UP/DOWN ## | <a href="#">Refresh"</a> | <a href="#">Remove<a/></p><br />
 {% endfor %}
