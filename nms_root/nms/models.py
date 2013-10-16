@@ -25,7 +25,7 @@ class os(models.Model):
 	name = models.CharField(max_length=255)
 	
 	def __str__(self):
-		return self.name + ' ' + self.build
+		return str(self.name) + ' ' + str(self.build)
 
 class dev_model(models.Model):
 	model_id = models.AutoField(primary_key=True)
@@ -33,7 +33,7 @@ class dev_model(models.Model):
 	version = models.CharField(max_length=255)
 	
 	def __str__(self):
-		return self.model_name + ' ' + self.version
+		return str(self.model_name) + ' ' + str(self.version)
 
 class dev_type(models.Model):
 	dev_type_id = models.AutoField(primary_key=True)
@@ -57,7 +57,7 @@ class os_dev(models.Model):
 	gen_dev_id = models.ForeignKey(gen_dev)
 
 	def __str__(self):
-		return self.os_id + ' ' + self.gen_dev_id
+		return str(self.os_id) + ' ' + str(self.gen_dev_id)
 	
 class devices(models.Model):
 	dev_id = models.AutoField(primary_key=True)
@@ -72,7 +72,7 @@ class devices(models.Model):
 	pref_remote_prot = models.CharField(max_length=255, default='ssh')
 	
 	def __str__(self):
-		return self.gen_dev_id + ' - ' + self.ip
+		return str(self.gen_dev_id) + ' - ' + str(self.ip)
 
 class user(models.Model):
 	user_id = models.AutoField(primary_key=True)
@@ -92,4 +92,4 @@ class roles(models.Model):
 	dev_id = models.ForeignKey(devices)
 
 	def __str__(self):
-		return self.user_id + ': ' + self.dev_id
+		return str(self.user_id) + ': ' + str(self.dev_id)
