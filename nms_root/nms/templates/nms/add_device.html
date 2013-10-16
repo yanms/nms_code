@@ -1,25 +1,28 @@
-{% if error_message %}<strong>{{ error_message}} </strong>{% endif %}
-
+{% if messages %}
+    {% for message in messages %}
+    <strong> {{ message }} </strong>
+    {% endfor %}
+{% endif %}
 <h1>Add Device</h1>
 <form action="{% url 'nms:nms_admin_add_device'  %}" method="POST">
 {% csrf_token %}
 	Device type: <select id="dev_type">
-	{% for type in dev_type %}
+	{% for type in dev_type_view %}
 		<option>{{ type.dev_type_name }}</option>
 	{% endfor %}
 	</select><br />
 	Vendor: <select id="vendor_name">
-	{% for record in vendor %}
+	{% for record in vendor_view %}
 		<option>{{ record.vendor_name }}</option>
 	{% endfor %}
 	</select><br />
 	Model: <select id="dev_model">
-	{% for model in dev_model %}
+	{% for model in dev_model_view %}
 		<option>{{ model.model_name }}</option>
 	{% endfor %}
 	</select><br />
 	OS: <select id="os_name">
-	{% for record in os %}
+	{% for record in os_view %}
 		<option>{{ record.os_name }}</option>
 	{% endfor %}
 	</select><br />
