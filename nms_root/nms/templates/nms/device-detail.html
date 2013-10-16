@@ -1,0 +1,19 @@
+# manage device view
+# URL: /nms-admin/device/dev_id/manage oid?
+<h1>{{ devices.gen_dev.dev_type.dev_type_name }}: {{ devices.gen_dev_id }} ({{ devices.ip }})</h1>
+
+<ul>
+	<li>Interface configuration</li>
+	<li>Security Settings</li>
+	<li>General Settings</li>
+	<li>
+		<ul>
+			<li>Shutdown</li>
+			<li>Restart</li>
+		</ul>
+	</li>
+</ul>
+
+<a href="/nms-admin/devices">Devices</a><br />
+<a href="/nms-admin/device/{{ devices.dev.id }}/settings">Settings</a><br />
+<a href="/nms-admin/logout">Log out</a>
