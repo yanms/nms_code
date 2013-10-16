@@ -19,7 +19,7 @@ def nms_admin_login(request):
 def nms_admin_add_device(request):
 	if request.method == 'POST':
 		#return HttpResponse('Received post method.')
-		q = devices()
+		q = Devices()
 		try:
 			dev_type = request.POST['dev_type']
 			vendor_name = request.POST['vendor_name']

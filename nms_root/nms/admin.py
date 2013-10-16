@@ -1,13 +1,13 @@
 from django.contrib import admin
-from nms.models import os, os_type, dev_model, gen_dev, dev_type, vendor, os_dev, roles, user, devices
+from nms.models import OS, OS_type, Dev_model, Gen_dev, Dev_type, Vendor, OS_dev, Roles, User, Devices
 
-admin.site.register(os)
-admin.site.register(os_type)
-admin.site.register(dev_model)
-admin.site.register(gen_dev)
-admin.site.register(dev_type)
-admin.site.register(vendor)
-admin.site.register(os_dev)
-admin.site.register(roles)
-admin.site.register(user)
-admin.site.register(devices)
+admin.site.register(OS)
+admin.site.register(OS_type)
+admin.site.register(Dev_model)
+admin.site.register(Gen_dev)
+admin.site.register(Dev_type)
+admin.site.register(Vendor)
+admin.site.register(OS_dev)
+admin.site.register(Roles)
+admin.site.register(User)
+admin.site.register(Devices)
