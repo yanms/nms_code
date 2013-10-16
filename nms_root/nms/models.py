@@ -47,10 +47,10 @@ class gen_dev(models.Model):
 	vendor_id = models.ForeignKey(vendor)
 	model_id = models.ForeignKey(dev_model)
 	dev_type_id = models.ForeignKey(dev_type)
-	
-	def __str__(self):
-		return self.vendor_id + ' ' + self.model_id #Making use of the defined __str__ methods of these classes
 
+	def __str__(self):
+		return str(self.vendor_id) + ' ' + str(self.model_id) #Making use of the defined __str__ methods of these classes
+	
 class os_dev(models.Model):
 	os_dev_id = models.AutoField(primary_key=True)
 	os_id = models.ForeignKey(os)
