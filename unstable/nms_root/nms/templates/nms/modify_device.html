@@ -1,0 +1,78 @@
+### URL: /nms-admin/modify-device/dev_id
+{% if messages %}
+	{% for message in messages %}
+	<strong>{{ message }}</strong>
+	{% endfor %}
+{% endif %}
+<h1>Modify Device {{ devices.gen_dev_id }}</h1>
+<form action="{% url 'nms:nms_admin_modify_device' devices.dev_id  %}" method="POST">
+{% csrf_token %}
+	<table border="0">
+		<tr>
+			<td>Device (type/vendor/model):</td>
+			<td><select id="gen_dev" name="gen_dev_id">
+				{% for dev in gen_dev %}
+					<option value="{{ dev.gen_dev_id }}">{{ dev }}</option>
+				{% endfor %}
+			</select></td>
+		</tr>
+		<tr>
+			<td>OS:</td>
+			<td><<select id="os_dev-id" name="os_dev_id">
+				{% for record in os_view %}
+					<option value="{{ record.os_dev_id }}">{{ record }}</option>
+				{% endfor %}
+			</select></td>
+		</tr>
+		<tr>
+			<td>Preferred protocol:</td>
+			<td><select id="pref_remote_prot" name="pref_remote_prot">
+				<option>SSH2</option>
+				<option>SSH1</option>
+				<option>Telnet</option>
+			</select></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td><strong>Network Settings</strong></td>
+		</tr>
+		<tr>
+			<td><input type="radio" name="ipprot" value="IPv4" /> IPv4</td>
+		</tr>
+		<tr>
+			<td><input type="radio" name="ipprot" value="IPv6" /> IPv6</td>
+		</tr>
+		<tr>
+			<td>Port:</td>
+			<td><input type="text" name="port" id="port" /></td>
+		</tr>
+		<tr>
+			<td>&nsbp;</td>
+		</tr>
+		<tr>
+			<td><strong>Login Settings</strong></td>
+		</tr>
+		<tr>
+			<td>Username:</td>
+			<td><input type="text" name="login_name" id="login_name" /></td>
+		</tr>
+		<tr>
+			<td>Password:</td>
+			<td><input type="password" name="password_remote" id="password_remote" /></td>
+		</tr>
+		<tr>
+			<td>&nsbp;</td>
+		</tr>
+		<tr>
+			<td>Privileged EXEC (enable) password:</td>
+			<td><input type="password" name="password_enable" id="password_enable" /></td>
+		</tr>
+		<tr>
+			<td><input type="submit" value="Test Connection" id="testconn" /></td>
+			<td><input type="submit" value="Modify Device" id="mod_device" /></td>
+		</tr>
+	</table>
+</form>
+</form>
