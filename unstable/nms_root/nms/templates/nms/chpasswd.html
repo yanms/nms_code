@@ -1,0 +1,17 @@
+{% if messages %}
+    {% for message in messages %}
+    <strong> {{ message }} </strong>
+    {% endfor %}
+{% endif %}
+
+<h1>NMS password change</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'nms:chpasswd' %}" method="POST">
+	{% csrf_token %}
+	Username: <input type="password" name="oldpassword" id="oldpassword" /><br />
+	Password: <input type="password" name="newpassword1" id="newpassword1" /><br />
+	Password again: <input type="password" name="newpassword2" id="newpassword2" /><br />
+	<input type="submit" value="Submit" id="submit" />
+</form>
