@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     # ex: /polls/5/vote/
     url(r'^nms-admin/login$', views.nms_admin_login, name='nms_admin_login'),
     url(r'^nms-admin/add-device/$', views.nms_admin_add_device, name='nms_admin_add_device'),
+    url(r'^nms-admin/(?P<device_id_request>\d+)/details/$', views.nms_admin_device_detail, name='nms_admin_device_detail'),
 )

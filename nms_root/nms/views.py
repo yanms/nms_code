@@ -6,7 +6,8 @@ from django.contrib import messages
 
 
 def index(request):
-	return HttpResponse('index page')
+	devices = Devices.objects.all()
+	return render(request, 'nms/devices.html', {'devices': devices})
 
 def register(request):
 	return HttpResponse('register page.')
@@ -51,4 +52,9 @@ def nms_admin_add_device(request):
 		messages.info(request, 'Database updated')
 		return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
 	else:
-		return render(request, 'nms/add_device.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view, 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev})
+		return render(request, 'nms/add_device.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view,
+		 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev})
+
+def nms_admin_device_detail(request, device_id_request):
+	devices = get_object_or_404(Devices, pk=device_id_request)
+	return render(request, 'nms/device_detail.html', {'devices': devices})

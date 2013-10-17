@@ -1,6 +1,6 @@
 <h1>Devices</h1>
 
-{% for device in devices.objects.all %}
+{% for device in devices %}
 	<p>{{ device.gen_dev_id.dev_type_id }} | {{ device.gen_dev_id }} | {{ device.ip }} | ## UP/DOWN ## | <a href="#">Refresh"</a> | <a href="#">Remove<a/></p><br />
 {% endfor %}
 
