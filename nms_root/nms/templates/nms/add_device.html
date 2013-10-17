@@ -6,7 +6,7 @@
 <h1>Add Device</h1>
 <form action="{% url 'nms:nms_admin_add_device'  %}" method="POST">
 {% csrf_token %}
-	Device type: <select id="dev_type">
+	Device type: <select id="dev_type" name="dev_type">
 	{% for type in dev_type_view %}
 		<option>{{ type.dev_type_name }}</option>
 	{% endfor %}
