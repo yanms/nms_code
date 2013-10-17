@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from django.core.urlresolvers import reverse
 from nms.models import *
 from django.contrib import messages
@@ -26,7 +26,6 @@ def nms_admin_add_device(request):
 		#return HttpResponse('Received post method.')
 		q = Devices()
 		
-		
 		try:
 			dev_type = request.POST['dev_type']
 			vendor = Vendor.objects.filter(vendor_name = request.POST['vendor_name'])
@@ -41,10 +40,11 @@ def nms_admin_add_device(request):
 			password_enable = request.POST['password_enable']
 		except KeyError:
 			messages.error(request, 'Not all fields are set')
-			return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
+			return HttpResponse(request.POST.items())
+			#return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
 		
-		
-		messages.info(request, 'Database updated')
-		return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
+		return HttpResponse(dev_type)
+		#messages.info(request, 'Database updated')
+		#return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
 	else:
 		return render(request, 'nms/add_device.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view, 'dev_model_view' : dev_model_view, 'os_view': os_view})
