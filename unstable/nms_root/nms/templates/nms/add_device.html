@@ -1,8 +1,3 @@
-{% if messages %}
-    {% for message in messages %}
-    <strong> {{ message }} </strong>
-    {% endfor %}
-{% endif %}
 <h1>Add Device</h1>
 <form action="{% url 'nms:nms_admin_add_device' %}" method="POST">
 {% csrf_token %}

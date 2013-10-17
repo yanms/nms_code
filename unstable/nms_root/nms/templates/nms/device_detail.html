@@ -1,5 +1,3 @@
-# manage device view
-# URL: /nms-admin/device/dev_id/manage oid?
 <h1>{{ devices.gen_dev.dev_type.dev_type_name }}: {{ devices.gen_dev_id }} ({{ devices.ip }})</h1>
 
 <ul>
@@ -15,5 +13,4 @@
 </ul>
 
 <a href="/nms-admin">Devices</a><br />
-<a href="/nms-admin/device/{{ devices.dev.id }}/settings">Settings</a><br />
 <a href="{% url 'nms:logout_handler' %}">Log out</a>
