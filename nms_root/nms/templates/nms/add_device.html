@@ -9,7 +9,7 @@
 	<table border="0">
 		<tr>
 			<td>Device type:</td>
-			<td><select id="dev_type" name="dev_type_id">
+			<td><select id="dev_type" name="type_id">
 				{% for type in dev_type_view %}
 					<option value="{{ type.dev_type_id }}">{{ type.dev_type_name }}</option>
 				{% endfor %}
@@ -17,15 +17,15 @@
 		</tr>
 		<tr>
 			<td>Vendor:</td>
-			<td><select id="vendor_name" name="vendor_name_id">
+			<td><select id="vendor_name" name="vendor_id">
 				{% for record in vendor_view %}
-					<option value="{{ vendor.vendor_id }}">{{ record.vendor_name }}</option>
+					<option value="{{ record.vendor_id }}">{{ record.vendor_name }}</option>
 				{% endfor %}
 			</select></td>
 		</tr>
 		<tr>
 			<td>Model:</td>
-			<td><select id="dev_model" name="dev_model_id">
+			<td><select id="dev_model" name="model_id">
 				{% for model in dev_model_view %}
 					<option value="{{ model.model_id }}">{{ model }}</option>
 				{% endfor %}
@@ -33,9 +33,9 @@
 		</tr>
 		<tr>
 			<td>OS:</td>
-			<td><select id="os_name" name="os_name_id">
+			<td><select id="os_name" name="os_id">
 				{% for record in os_view %}
-					<option value="{{ os.os_id }}">{{ record }}</option>
+					<option value="{{ record.os_id }}">{{ record }}</option>
 				{% endfor %}
 			</select></td>
 		</tr>
