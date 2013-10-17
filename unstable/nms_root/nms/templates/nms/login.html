@@ -10,7 +10,18 @@
 
 <form action="{% url 'nms:session_handler' %}" method="POST">
 	{% csrf_token %}
-	Username: <input type="text" name="username" id="username" /><br />
-	Password: <input type="password" name="password" id="password" /><br />
-	<input type="submit" value="Login" id="login" />
+	<table border="0">
+		<tr>
+			<td>Username:</td>
+			<td><input type="text" name="username" id="username" /></td>
+		</tr>
+		<tr>
+			<td>Password:</td>
+			<td><input type="password" name="password" id="password" /></td>
+		</tr>
+		<tr>
+			<td><input type="submit" value="Login" id="login" /></td>
+			<td><input type="reset" value="Reset" id="reset" /></td>
+		</tr>
+	</table>
 </form>
