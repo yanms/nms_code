@@ -1,6 +1,7 @@
 from django.db import models
 
 #Valdiaiton needs to be implemented
+app_label = 'nms'
 
 class Vendor(models.Model):
 	vendor_id = models.AutoField(primary_key=True)

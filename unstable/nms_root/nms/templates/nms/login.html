@@ -1,8 +1,14 @@
+{% if messages %}
+    {% for message in messages %}
+    <strong> {{ message }} </strong>
+    {% endfor %}
+{% endif %}
+
 <h1>NMS Login</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="{% url 'nms:nms_admin_login' %}" method="POST">
+<form action="{% url 'nms:session_handler' %}" method="POST">
 	{% csrf_token %}
 	Username: <input type="text" name="username" id="username" /><br />
 	Password: <input type="password" name="password" id="password" /><br />
