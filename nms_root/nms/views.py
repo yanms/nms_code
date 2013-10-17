@@ -22,6 +22,7 @@ def nms_admin_add_device(request):
 	vendor_view = Vendor.objects.all()
 	dev_model_view = Dev_model.objects.all()
 	os_view = OS.objects.all()
+	gen_dev = Gen_dev.objects.all()
 	if request.method == 'POST':
 		#return HttpResponse('Received post method.')
 		q = Devices()
@@ -48,4 +49,4 @@ def nms_admin_add_device(request):
 		#messages.info(request, 'Database updated')
 		#return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
 	else:
-		return render(request, 'nms/add_device.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view, 'dev_model_view' : dev_model_view, 'os_view': os_view})
+		return render(request, 'nms/add_device.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view, 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev})
