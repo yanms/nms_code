@@ -25,7 +25,7 @@ class OS(models.Model):
 	name = models.CharField(max_length=255)
 	
 	def __str__(self):
-		return str(self.name) + ' ' + str(self.build)
+		return str(self.os_type_id) + ' - ' + str(self.name) + ' ' + str(self.build)
 
 class Dev_model(models.Model):
 	model_id = models.AutoField(primary_key=True)
