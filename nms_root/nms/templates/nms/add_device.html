@@ -4,41 +4,96 @@
     {% endfor %}
 {% endif %}
 <h1>Add Device</h1>
-<form action="{% url 'nms:nms_admin_add_device'  %}" method="POST">
+<form action="{% url 'nms:nms_admin_add_device' dev_type.dev_type_id  %}" method="POST">
 {% csrf_token %}
-	Device type: <select id="dev_type" name="dev_type">
-	{% for type in dev_type_view %}
-		<option>{{ type.dev_type_name }}</option>
-	{% endfor %}
-	</select><br />
-	Vendor: <select id="vendor_name">
-	{% for record in vendor_view %}
-		<option>{{ record.vendor_name }}</option>
-	{% endfor %}
-	</select><br />
-	Model: <select id="dev_model">
-	{% for model in dev_model_view %}
-		<option>{{ model.model_name }}</option>
-	{% endfor %}
-	</select><br />
-	OS: <select id="os_name">
-	{% for record in os_view %}
-		<option>{{ record }}</option>
-	{% endfor %}
-	</select><br />
-	Preferred protocol: <select id="pref_remote_prot">
-		<option>SSH2</option>
-		<option>SSH1</option>
-		<option>Telnet</option
-	</select><br /><br />
-	Network settings: <br />
-	<input type="radio" name="ipprot" value="IPv4"><br />
-	<input type="radio" name="ipprot" value="IPv6"><br />
-	<input type="text" name="ipaddr" id="ipaddr" /><br />
-	Port: <input type="text" id="port" /><br /><br />
-	Login Settings (SSH(1/2)):<br />
-	Username: <input type="text" id="login_name" /><br />
-	Password: <input type="password" id="password_remote" /><br /><br />
-	Privileged EXEC (enable) password: <input type="password" id="password_enable" /><br /><br />
-	<input type="submit" value="Test Connection" id="testconn" /> <input type="submit" value="Add Device" id="add_device" />
+	<table border="0">
+		<tr>
+			<td>Device type:</td>
+			<td><select id="dev_type" name="dev_type">
+				{% for type in dev_type_view %}
+					<option>{{ type.dev_type_name }}</option>
+				{% endfor %}
+			</select></td>
+		</tr>
+		<tr>
+			<td>Vendor:</td>
+			<td><select id="vendor_name">
+				{% for record in vendor_view %}
+					<option>{{ record.vendor_name }}</option>
+				{% endfor %}
+			</select></td>
+		</tr>
+		<tr>
+			<td>Model:</td>
+			<td><select id="dev_model">
+				{% for model in dev_model_view %}
+					<option>{{ model.model_name }}</option>
+				{% endfor %}
+			</select></td>
+		</tr>
+		<tr>
+			<td>OS:</td>
+			<td><select id="os_name">
+				{% for record in os_view %}
+					<option>{{ record }}</option>
+				{% endfor %}
+			</select></td>
+		</tr>
+		<tr>
+			<td>Preferred protocol:</td>
+			<td><select id="pref_remote_prot">
+				<option>SSH2</option>
+				<option>SSH1</option>
+				<option>Telnet</option>
+			</select></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td><strong>Network settings:</strong></td>
+		</tr>
+		<tr>
+			<td><input type="radio" name="ipprot" value="IPv4"> IPv4</td>
+		</tr>
+		<tr>
+			<td><input type="radio" name="ipprot" value="IPv6"> IPv6</td>
+		</tr>
+		<tr>
+			<td>IP address:</td>
+			<td><input type="text" name="ipaddr" id="ipaddr" /></td>
+		</tr>
+		<tr>
+			<td>Port:</td>
+			<td><input type="text" id="port" /></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td><strong>Login Settings:</strong></td>
+		</tr>
+		<tr>
+			<td>Username:</td>
+			<td><input type="text" id="login_name" /></td>
+		</tr>
+		<tr>
+			<td>Password:</td>
+			<td><input type="password" id="password_remote" /></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>Privileged EXEC (enable) password:</td>
+			<td><input type="password" id="password_enable" /></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td><input type="submit" value="Test Connection" id="testconn" /></td>
+			<td><input type="submit" value="Add Device" id="add_device" /></td>
+		</tr>
+	</table>
 </form>
