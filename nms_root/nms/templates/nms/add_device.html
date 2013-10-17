@@ -4,44 +4,44 @@
     {% endfor %}
 {% endif %}
 <h1>Add Device</h1>
-<form action="{% url 'nms:nms_admin_add_device' dev_type.dev_type_id  %}" method="POST">
+<form action="{% url 'nms:nms_admin_add_device' %}" method="POST">
 {% csrf_token %}
 	<table border="0">
 		<tr>
 			<td>Device type:</td>
-			<td><select id="dev_type" name="dev_type">
+			<td><select id="dev_type" name="dev_type_id">
 				{% for type in dev_type_view %}
-					<option>{{ type.dev_type_name }}</option>
+					<option value="{{ type.dev_type_id }}">{{ type.dev_type_name }}</option>
 				{% endfor %}
 			</select></td>
 		</tr>
 		<tr>
 			<td>Vendor:</td>
-			<td><select id="vendor_name">
+			<td><select id="vendor_name" name="vendor_name_id">
 				{% for record in vendor_view %}
-					<option>{{ record.vendor_name }}</option>
+					<option value="{{ vendor.vendor_id }}">{{ record.vendor_name }}</option>
 				{% endfor %}
 			</select></td>
 		</tr>
 		<tr>
 			<td>Model:</td>
-			<td><select id="dev_model">
+			<td><select id="dev_model" name="dev_model_id">
 				{% for model in dev_model_view %}
-					<option>{{ model.model_name }}</option>
+					<option value="{{ model.model_id }}">{{ model }}</option>
 				{% endfor %}
 			</select></td>
 		</tr>
 		<tr>
 			<td>OS:</td>
-			<td><select id="os_name">
+			<td><select id="os_name" name="os_name_id">
 				{% for record in os_view %}
-					<option>{{ record }}</option>
+					<option value="{{ os.os_id }}">{{ record }}</option>
 				{% endfor %}
 			</select></td>
 		</tr>
 		<tr>
 			<td>Preferred protocol:</td>
-			<td><select id="pref_remote_prot">
+			<td><select id="pref_remote_prot" name="pref_remote_prot">
 				<option>SSH2</option>
 				<option>SSH1</option>
 				<option>Telnet</option>
@@ -65,7 +65,7 @@
 		</tr>
 		<tr>
 			<td>Port:</td>
-			<td><input type="text" id="port" /></td>
+			<td><input type="text" name="port" id="port" /></td>
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
@@ -75,18 +75,18 @@
 		</tr>
 		<tr>
 			<td>Username:</td>
-			<td><input type="text" id="login_name" /></td>
+			<td><input type="text" name="login_name" id="login_name" /></td>
 		</tr>
 		<tr>
 			<td>Password:</td>
-			<td><input type="password" id="password_remote" /></td>
+			<td><input type="password" name="password_remote" id="password_remote" /></td>
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<td>Privileged EXEC (enable) password:</td>
-			<td><input type="password" id="password_enable" /></td>
+			<td><input type="password" name="password_enable" id="password_enable" /></td>
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
