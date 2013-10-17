@@ -16,26 +16,18 @@
 			</select></td>
 		</tr>
 		<tr>
-			<td>Vendor:</td>
-			<td><select id="vendor_name" name="vendor_id">
-				{% for record in vendor_view %}
-					<option value="{{ record.vendor_id }}">{{ record.vendor_name }}</option>
-				{% endfor %}
-			</select></td>
-		</tr>
-		<tr>
-			<td>Model:</td>
-			<td><select id="dev_model" name="model_id">
-				{% for model in dev_model_view %}
-					<option value="{{ model.model_id }}">{{ model }}</option>
+			<td>Device (vendor/type):</td>
+			<td><select id="gen_dev" name="gen_dev_id">
+				{% for dev in gen_dev %}
+					<option value="{{ dev.gen_dev_id }}">{{ dev }}</option>
 				{% endfor %}
 			</select></td>
 		</tr>
 		<tr>
 			<td>OS:</td>
-			<td><select id="os_name" name="os_id">
+			<td><select id="os_dev_id" name="os_dev_id">
 				{% for record in os_view %}
-					<option value="{{ record.os_id }}">{{ record }}</option>
+					<option value="{{ record.os_dev_id }}">{{ record }}</option>
 				{% endfor %}
 			</select></td>
 		</tr>
