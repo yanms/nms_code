@@ -27,9 +27,9 @@ def nms_admin_add_device(request):
 		q = Devices()
 		
 		try:
-			dev_type = Vendor.objects.get(request.POST['dev_type_id'])
-			vendor = Vendor.objects.get(vendor_name = request.POST['vendor_name_id'])
-			dev = Dev_model.objects.get(model_name = request.POST['dev_model_id'])
+			dev_type = request.POST['dev_type_id']
+			vendor = request.POST['vendor_id']
+			dev = request.POST['dev_model_id']
 			os_name = request.POST['os_name_id']
 			pref_remote_prot = request.POST['pref_remote_prot']
 			ipprot = request.POST['ipprot']
@@ -38,8 +38,9 @@ def nms_admin_add_device(request):
 			login_name = request.POST['login_name']
 			password_remote = request.POST['password_remote']
 			password_enable = request.POST['password_enable']
-		except KeyError:
+		except KeyError as err:
 			messages.error(request, 'Not all fields are set')
+			print(err)
 			return HttpResponse(request.POST.items())
 			#return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
 		
