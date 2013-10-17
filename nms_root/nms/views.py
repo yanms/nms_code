@@ -28,25 +28,27 @@ def nms_admin_add_device(request):
 		q = Devices()
 		
 		try:
-			dev_type = request.POST['dev_type_id']
-			vendor = request.POST['vendor_id']
-			dev = request.POST['dev_model_id']
-			os_name = request.POST['os_name_id']
+			dev = get_object_or_404(Gen_dev, pk=request.POST['gen_dev_id'])
+			os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
 			pref_remote_prot = request.POST['pref_remote_prot']
 			ipprot = request.POST['ipprot']
-			ip = request.POST['ipaddr']
+			ip_recv = request.POST['ipaddr']
 			port = request.POST['port']
 			login_name = request.POST['login_name']
 			password_remote = request.POST['password_remote']
 			password_enable = request.POST['password_enable']
-		except KeyError as err:
-			messages.error(request, 'Not all fields are set')
+			device = Devices(gen_dev_id=dev, os_dev_id=os, ip=ip_recv, pref_remote_prot=pref_remote_prot, 
+			ip_version = ipprot, login_name = login_name, password_remote=password_remote, password_enable=password_enable, port=port)
+			device.save()
+			
+		except (KeyError, ValueError) as err:
+			messages.error(request, 'Not all fields are set or an other error occured')
 			print(err)
-			return HttpResponse(request.POST.items())
-			#return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
+			print(ip_recv)
+			#return HttpResponse(request.POST.items())
+			return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
 		
-		return HttpResponse(dev_type)
-		#messages.info(request, 'Database updated')
-		#return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
+		messages.info(request, 'Database updated')
+		return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
 	else:
 		return render(request, 'nms/add_device.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view, 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev})
