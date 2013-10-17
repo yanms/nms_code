@@ -41,10 +41,10 @@ def nms_admin_add_device(request):
 			ip_version = ipprot, login_name = login_name, password_remote=password_remote, password_enable=password_enable, port=port)
 			device.save()
 			
-		except (KeyError, ValueError) as err:
+		except (KeyError, ValueError, NameError, UnboundLocalError) as err:
 			messages.error(request, 'Not all fields are set or an other error occured')
+			messages.error(request, err)
 			print(err)
-			print(ip_recv)
 			#return HttpResponse(request.POST.items())
 			return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
 		
