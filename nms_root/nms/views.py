@@ -27,13 +27,13 @@ def nms_admin_add_device(request):
 		q = Devices()
 		
 		try:
-			dev_type = request.POST['dev_type']
-			vendor = Vendor.objects.filter(vendor_name = request.POST['vendor_name'])
-			dev = Dev_model.objects.filter(model_name = request.POST['dev_model'])
-			os_name = request.POST['os_name']
+			dev_type = Vendor.objects.get(request.POST['dev_type_id'])
+			vendor = Vendor.objects.get(vendor_name = request.POST['vendor_name_id'])
+			dev = Dev_model.objects.get(model_name = request.POST['dev_model_id'])
+			os_name = request.POST['os_name_id']
 			pref_remote_prot = request.POST['pref_remote_prot']
 			ipprot = request.POST['ipprot']
-			ip = request.POST['ip']
+			ip = request.POST['ipaddr']
 			port = request.POST['port']
 			login_name = request.POST['login_name']
 			password_remote = request.POST['password_remote']
