@@ -21,7 +21,7 @@ def nms_admin_add_device(request):
 	dev_type_view = Dev_type.objects.all()
 	vendor_view = Vendor.objects.all()
 	dev_model_view = Dev_model.objects.all()
-	os_view = OS.objects.all()
+	os_view = OS_dev.objects.all()
 	gen_dev = Gen_dev.objects.all()
 	if request.method == 'POST':
 		#return HttpResponse('Received post method.')
