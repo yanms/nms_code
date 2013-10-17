@@ -57,7 +57,7 @@ class OS_dev(models.Model):
 	gen_dev_id = models.ForeignKey(Gen_dev)
 
 	def __str__(self):
-		return str(self.os_id) + ' ' + str(self.gen_dev_id)
+		return str(self.gen_dev_id) + ' ' + str(self.os_id)
 	
 class Devices(models.Model):
 	dev_id = models.AutoField(primary_key=True)
