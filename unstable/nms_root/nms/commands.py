@@ -1,4 +1,4 @@
-import sshconnection
+import nms.sshconnection as sshconnection
 
 s = None
 execPasswd = '1234'
