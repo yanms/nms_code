@@ -8,8 +8,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 import nms.commands as commands
 
-LOGIN_URL = '/login/'
-LOGOUT_URL = '/logout/'
 
 @login_required
 def index(request):
@@ -91,7 +89,7 @@ def send_command(request, device_id, cmd_name, args):
 	elif cmd_name == 'shotipinterfacebrief':
 		ret = commands.demo_showipinterfacebrief()
 	commands.demo_closeDevice()
-	return HttpResponseRedirect(reverse('nms:nms_admin_device_detail' device_id))
+	return HttpResponseRedirect(reverse('nms:nms_admin_device_detail', device_id))
 
 def session_handler(request):
 	if request.method == 'POST':
