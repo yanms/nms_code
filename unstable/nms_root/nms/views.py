@@ -128,7 +128,34 @@ def device_modify(request, device_id_request):
 
 @login_required
 def user_settings(request):
-	return render(request, 'nms/chpasswd.html')
+	if request.method == 'POST':
+		try:
+			password_old = request.POST['oldpassword']
+			new_password = request.POST['newpassword1']
+			check_new_password = request.POST['newpassword2']
+			if new_password != '' or check_new_password != '':
+				if request.user.check_password(password_old):
+					if new_password == check_new_password:
+						request.user.set_password(new_password)
+						request.user.save()
+						messages.info(request, 'Your password has been updated')
+						#debug = list(request.POST.items())
+						#messages.error(request, debug)
+						return HttpResponseRedirect(reverse('nms:logout_handler'))
+					else:
+						messages.error(request, "The passwords you provided don't match")
+						return HttpResponseRedirect(reverse('nms:user_settings'))
+				else:
+					messages.error(request, "Your old password is incorrect")
+					return HttpResponseRedirect(reverse('nms:user_settings'))
+			else:
+				messages.error(request, 'The password field is empty')
+				return HttpResponseRedirect(reverse('nms:user_settings'))
+		except (ValueError, KeyError):
+			messages.error(request, 'Not all fields are set or an other error occured')
+			return HttpResponseRedirect(reverse('nms:user_settings'))
+	else:	
+		return render(request, 'nms/chpasswd.html')
 
 
 def send_command(request, device_id, cmd_name, args):
@@ -160,7 +187,7 @@ def session_handler(request):
 					login(request, user)
 					messages.info(request, "Successfully loged in")
 					if url == "":
-						return HttpResponseRedirect(reverse('nms:devices'))
+						return HttpResponseRedirect(reverse('nms:index'))
 					else:
 						return HttpResponseRedirect(request.POST['url'])
 				else:
