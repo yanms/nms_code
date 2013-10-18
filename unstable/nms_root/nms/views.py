@@ -74,7 +74,21 @@ def nms_admin_device_detail(request, device_id_request):
 	devices = get_object_or_404(Devices, pk=device_id_request)
 	return render(request, 'nms/device_detail.html', {'devices': devices})
 
-
+def send_command(request, device_id, cmd_name, args):
+	device = Devices.objects.get(pk=device_id)
+	sshconnection.demo_connectDevice(device.ip, device.username, device.password, device.port)
+	if cmd_name == 'shutdown':
+		ret = sshconnection.demo_shutdown(args[0])
+	elif cmd_name == 'noshutdown':
+		ret = sshconnection.demo_noshutdown(args[0])
+	elif cmd_name == 'interfaceip':
+		ret = sshconnection.demo_interfaceip(args[0], args[1])
+	elif cmd_name == 'interfacedescription':
+		ret = sshconnection.demo_interfacedescription(args[0], args[1])
+	elif cmd_name == 'shotipinterfacebrief':
+		ret = sshconnection.demo_showipinterfacebrief()
+	sshconnection.demo_closeDevice()
+	return HttpResponseRedirect(reverse('nms:nms_admin_device_detail' device_id))
 
 def session_handler(request):
 	if request.method == 'POST':

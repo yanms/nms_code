@@ -7,6 +7,9 @@ execPasswd = '1234'
 def demo_connectDevice(hostname, username, password, port = 22):
 	s = sshconnection.SSHConnection(hostname, username, password, port)
 	s.connect()
+	
+def demo_closeDevice():
+	s.close()
 
 def demo_shutdown(interface):
 	s.send_and_receive('enable', delay=0.1)
