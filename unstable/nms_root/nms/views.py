@@ -60,8 +60,8 @@ def nms_admin_add_device(request):
 			messages.error(request, err)
 			messages.error(request, request.POST.items())
 			print(err)
-			#return HttpResponse(request.POST.items())
-			return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
+			return HttpResponse(request.POST.items())
+			#return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
 		
 		messages.info(request, 'Database updated')
 		return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
