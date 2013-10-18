@@ -1,5 +1,9 @@
 <h1>Devices</h1>
-
+{% if messages %}
+    {% for message in messages %}
+    <strong> {{ message }} </strong>
+    {% endfor %}
+{% endif %}
 {% for device in devices %}
 	<p>{{ device.gen_dev_id.dev_type_id }} | {{ device.gen_dev_id }} | {{ device.ip }} | ## UP/DOWN ## | <a href="#">Refresh</a> | <a href="#">Remove<a/></p><br />
 {% endfor %}

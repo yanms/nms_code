@@ -1,4 +1,9 @@
 <h1>Modify Device {{ devices.gen_dev_id }}</h1>
+{% if messages %}
+    {% for message in messages %}
+    <strong> {{ message }} </strong>
+    {% endfor %}
+{% endif %}
 <form action="{% url 'nms:nms_admin_modify_device' devices.dev_id  %}" method="POST">
 {% csrf_token %}
 	<table border="0">

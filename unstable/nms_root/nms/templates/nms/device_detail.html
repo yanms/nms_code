@@ -1,5 +1,9 @@
 <h1>{{ devices.gen_dev.dev_type.dev_type_name }}: {{ devices.gen_dev_id }} ({{ devices.ip }})</h1>
-
+{% if messages %}
+    {% for message in messages %}
+    <strong> {{ message }} </strong>
+    {% endfor %}
+{% endif %}
 <ul>
 	<li>Interface configuration</li>
 	<li>Security Settings</li>

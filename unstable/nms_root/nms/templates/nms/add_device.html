@@ -1,4 +1,9 @@
 <h1>Add Device</h1>
+{% if messages %}
+    {% for message in messages %}
+    <strong> {{ message }} </strong>
+    {% endfor %}
+{% endif %}
 <form action="{% url 'nms:nms_admin_add_device' %}" method="POST">
 {% csrf_token %}
 	<table border="0">
