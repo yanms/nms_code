@@ -11,18 +11,12 @@ import nms.commands as commands
 
 @login_required
 def index(request):
-	devices = Devices.objects.all()
-	return render(request, 'nms/devices.html', {'devices': devices})
+	return HttpResponseRedirect(reverse('nms:devices'))
 
 def register(request):
 	return HttpResponse('register page.')
 
-@login_required
-def nms_admin(request):
-	return render(request, 'nms/devices.html')
-
-
-def nms_admin_login(request):
+def login_handler(request):
 	if (request.method == 'GET' and 'next' in request.GET):
 		url = request.GET['next']
 		return(render(request, 'nms/login.html', {'url': url}))
@@ -30,7 +24,11 @@ def nms_admin_login(request):
 		return render(request, 'nms/login.html')
 
 @login_required
-def nms_admin_add_device(request):
+def devices(request):
+	return render(request, 'nms/devices.html')
+
+@login_required
+def device_add(request):
 	dev_type_view = Dev_type.objects.all()
 	vendor_view = Vendor.objects.all()
 	dev_model_view = Dev_model.objects.all()
@@ -59,19 +57,27 @@ def nms_admin_add_device(request):
 			messages.error(request, err)
 			print(err)
 			#return HttpResponse(request.POST.items())
-			return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
+			return HttpResponseRedirect(reverse('nms:device_add'))
 		
 		messages.info(request, 'Database updated')
-		return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
+		return HttpResponseRedirect(reverse('nms:device_add'))
 	else:
 		return render(request, 'nms/add_device.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view,
 		 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev})
-
-
+		
 @login_required
-def nms_admin_device_detail(request, device_id_request):
+def device_manager(request, device_id_request):
 	devices = get_object_or_404(Devices, pk=device_id_request)
 	return render(request, 'nms/manage_device.html', {'devices': devices})
+
+@login_required
+def device_modify(request, device_id_request):
+	devices = get_object_or_404(Devices, pk=device_id_request)
+	return render(request, 'nms/modify_device.html', {'devices': devices})
+
+@login_required
+def user_settings(request):
+	return render(request, 'nms/chpasswd.html')
 
 
 def send_command(request, device_id, cmd_name, args):
@@ -89,7 +95,7 @@ def send_command(request, device_id, cmd_name, args):
 	elif cmd_name == 'shotipinterfacebrief':
 		ret = commands.demo_showipinterfacebrief()
 	commands.demo_closeDevice()
-	return HttpResponseRedirect(reverse('nms:nms_admin_device_detail', device_id))
+	return HttpResponseRedirect(reverse('nms:device_manager', device_id))
 
 def session_handler(request):
 	if request.method == 'POST':
@@ -103,24 +109,24 @@ def session_handler(request):
 					login(request, user)
 					messages.info(request, "Successfully loged in")
 					if url == "":
-						return HttpResponseRedirect(reverse('nms:nms_admin'))
+						return HttpResponseRedirect(reverse('nms:devices'))
 					else:
 						return HttpResponseRedirect(request.POST['url'])
 				else:
 					messages.error(request, 'Your account has been disabled')
-					return HttpResponseRedirect(reverse('nms:nms_admin_login'))
+					return HttpResponseRedirect(reverse('nms:login_handler'))
 			else:
 				messages.error(request, 'Invalid login')
-				return HttpResponseRedirect(reverse('nms:nms_admin_login'))
+				return HttpResponseRedirect(reverse('nms:login_handler'))
 		except (KeyError) as err:
 			messages.error(request, "You are not logged in")
 			messages.error(err)
-			return HttpResponseRedirect(reverse('nms:nms_admin_login'))
+			return HttpResponseRedirect(reverse('nms:login_handler'))
 	else:
 		messages.error(request, "You are not logged in 2")
-		return HttpResponseRedirect(reverse('nms:nms_admin_login'))
+		return HttpResponseRedirect(reverse('nms:login_handler'))
 
 def logout_handler(request):
 	logout(request)
 	messages.info(request, "You are logged out")
-	return HttpResponseRedirect(reverse('nms:nms_admin_login'))
+	return HttpResponseRedirect(reverse('nms:login_handler'))
