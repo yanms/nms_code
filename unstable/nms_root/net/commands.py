@@ -1,4 +1,4 @@
-import sshconnection
+import nms.sshconnection as sshconncetion
 
 class Connection(object):
 

@@ -62,7 +62,7 @@ class SSHConnection:
 			traceback.print_exc()
 
 	def send_and_receive(self, command):
-		if type(command) != type(bytes())
+		if type(command) != type(bytes()):
 			try:
 				command = command.encode()
 			except AttributeError:
