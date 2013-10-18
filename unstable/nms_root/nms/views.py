@@ -58,6 +58,7 @@ def nms_admin_add_device(request):
 		except (KeyError, ValueError, NameError, UnboundLocalError) as err:
 			messages.error(request, 'Not all fields are set or an other error occured')
 			messages.error(request, err)
+			messages.error(request, request.POST.items())
 			print(err)
 			#return HttpResponse(request.POST.items())
 			return HttpResponseRedirect(reverse('nms:nms_admin_add_device'))
