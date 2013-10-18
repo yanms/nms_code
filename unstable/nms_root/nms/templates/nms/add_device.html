@@ -11,7 +11,7 @@
 			<td>Device (type/vendor/model):</td>
 			<td><select id="gen_dev" name="gen_dev_id">
 				{% for record in gen_dev %}
-					<option value="{{ dev.gen_dev_id }}">{{ record }}</option>
+					<option value="{{ record.gen_dev_id }}">{{ record }}</option>
 				{% endfor %}
 			</select></td>
 		</tr>
