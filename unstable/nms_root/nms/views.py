@@ -14,7 +14,27 @@ def index(request):
 	return HttpResponseRedirect(reverse('nms:devices'))
 
 def register(request):
-	return HttpResponse('register page.')
+	if request.method == 'POST':
+		username = request.POST['username']
+		password = request.POST['password']
+		password_check = request.POST['password1']
+		check_username = User.objects.filter(username=username).exists()
+		if not check_username:
+			if password == password_check:
+				user = User.objects.create_user(username=username, password=password)
+				user.is_active = False
+				user.save()
+				messages.info(request, 'Your accounts is created. An administrator has to activate your account')
+				return HttpResponseRedirect(reverse('nms:register'))
+			else:
+				messages.error(request, 'Password mismatch')
+				return HttpResponseRedirect(request('nms:register'))
+		else:
+			messages.info(request, 'User already exists')
+			return HttpResponseRedirect(reverse('nms:register'))
+	else:
+		return render(request, 'nms/register.html')
+			
 
 def login_handler(request):
 	if (request.method == 'GET' and 'next' in request.GET):
