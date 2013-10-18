@@ -3,7 +3,7 @@ from django.conf.urls import patterns, url
 from nms import views
 
 urlpatterns = patterns('',
-    url(r'^$', views.login_handler, name='index'),
+    url(r'^$', views.index, name='index'),
     url(r'^register$', views.register, name='register'),
     url(r'^login/$', views.login_handler, name='login_handler'),
     url(r'^devices/$', views.devices, name='devices'),

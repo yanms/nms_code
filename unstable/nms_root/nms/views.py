@@ -11,7 +11,7 @@ import nms.commands as commands
 
 @login_required
 def index(request):
-	return HttpResponseRedirect(reverse('nms:devices'))
+	return render(request, 'nms/index.html', {'user': request.user.get_username()})
 
 def register(request):
 	if request.method == 'POST':
@@ -45,7 +45,8 @@ def login_handler(request):
 
 @login_required
 def devices(request):
-	return render(request, 'nms/devices.html')
+	devices = Devices.objects.all()
+	return render(request, 'nms/devices.html', {'devices': devices})
 
 @login_required
 def device_add(request):
@@ -92,8 +93,38 @@ def device_manager(request, device_id_request):
 
 @login_required
 def device_modify(request, device_id_request):
-	devices = get_object_or_404(Devices, pk=device_id_request)
-	return render(request, 'nms/modify_device.html', {'devices': devices})
+	device = get_object_or_404(Devices, pk=device_id_request)
+	gen_dev = Gen_dev.objects.all()
+	os_dev = OS_dev.objects.all()
+	if request.method == 'POST':
+		try:
+			device = get_object_or_404(Devices, pk=device_id_request)
+			dev_type = get_object_or_404(Gen_dev, pk=request.POST['gen_dev_id'])
+			os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
+			pref_remote_prot = request.POST['pref_remote_prot']
+			ipprot = request.POST['ipprot']
+			ip_recv = request.POST['ipaddr']
+			port = request.POST['port']
+			login_name = request.POST['login_name']
+			password_remote = request.POST['password_remote']
+			password_enable = request.POST['password_enable']
+			device.gen_dev_id = dev_type
+			device.os_dev_id = os
+			device.pref_remote_prot = pref_remote_prot
+			device.ip_version = ipprot
+			device.ip = ip_recv
+			device.port = port
+			device.login_name = login_name
+			device.password_remote = password_remote
+			device.password_enable = password_enable
+			device.save()
+			messages.info(request, 'Database updated successfully.')
+			return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
+		except (KeyError, ValueError):
+			messages.error(request, 'Not all fields are are set or an other error occured')
+			return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
+	else:
+		return render(request, 'nms/modify_device.html', {'devices': device, 'gen_dev': gen_dev, 'os_dev': os_dev})
 
 @login_required
 def user_settings(request):

@@ -4,7 +4,7 @@
     <strong> {{ message }} </strong>
     {% endfor %}
 {% endif %}
-<form action="{% url 'nms:chpasswd' %}" method="POST">
+<form action="{% url 'nms:user_settings' %}" method="POST">
 	{% csrf_token %}
 	<table border="0">
 		<tr>

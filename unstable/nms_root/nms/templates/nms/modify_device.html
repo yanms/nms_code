@@ -4,7 +4,7 @@
     <strong> {{ message }} </strong>
     {% endfor %}
 {% endif %}
-<form action="{% url 'nms:nms_admin_modify_device' devices.dev_id  %}" method="POST">
+<form action="{% url 'nms:device_modify' devices.dev_id  %}" method="POST">
 {% csrf_token %}
 	<table border="0">
 		<tr>
@@ -17,8 +17,8 @@
 		</tr>
 		<tr>
 			<td>OS:</td>
-			<td><<select id="os_dev-id" name="os_dev_id">
-				{% for record in os_view %}
+			<td><select id="os_dev_id" name="os_dev_id">
+				{% for record in os_dev %}
 					<option value="{{ record.os_dev_id }}">{{ record }}</option>
 				{% endfor %}
 			</select></td>
@@ -38,10 +38,10 @@
 			<td><strong>Network Settings</strong></td>
 		</tr>
 		<tr>
-			<td><input type="radio" name="ipprot" value="IPv4" /> IPv4</td>
+			<td><input type="radio" name="ipprot" value="4" /> IPv4</td>
 		</tr>
 		<tr>
-			<td><input type="radio" name="ipprot" value="IPv6" /> IPv6</td>
+			<td><input type="radio" name="ipprot" value="6" /> IPv6</td>
 		</tr>
 		<tr>
 			<td>Port:</td>
