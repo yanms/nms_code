@@ -5,7 +5,7 @@
     {% endfor %}
 {% endif %}
 {% for device in devices %}
-	<p>{{ device.gen_dev_id.dev_type_id }} | {{ device.gen_dev_id }} | {{ device.ip }} | ## UP/DOWN ## | <a href="#">Refresh</a> | <a href="#">Remove<a/></p><br />
+	<p>{{ device.gen_dev_id.dev_type_id }} | {{ device.gen_dev_id }} | {{ device.ip }} | ## UP/DOWN ## | <a href="{% url 'nms:device_manager' device.dev_id %}">Manage</a></p><br />
 {% endfor %}
 
 <a href="#">Devices</a><br />

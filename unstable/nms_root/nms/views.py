@@ -161,19 +161,19 @@ def user_settings(request):
 def send_command(request, device_id_request):
 	device = Devices.objects.get(pk=device_id_request)
 	command = request.POST['command']
-	connector = commands.Connection()
-	connector.demo_connectDevice(device.ip, device.username, device.password, device.port)
+	#connector = commands.Connection()
+	commands.demo_connectDevice(device.ip, device.login_name, device.password_remote, device.port)
 	if command.startswith('shutdown'):
-		ret = connector.demo_shutdown(command.split()[1])
+		ret = commands.demo_shutdown(command.split()[1])
 	elif command == 'noshutdown':
-		ret = connector.demo_noshutdown(command)
+		ret = commands.demo_noshutdown(command)
 	elif command == 'interfaceip':
-		ret = connector.demo_interfaceip(command, command)
+		ret = commands.demo_interfaceip(command, command)
 	elif command == 'interfacedescription':
 		ret = connector.demo_interfacedescription(command, command)
-	elif command == 'shotipinterfacebrief':
-		ret = connector.demo_showipinterfacebrief()
-	connector.demo_closeDevice()
+	elif command == 'showipinterfacebrief':
+		ret = commands.demo_showipinterfacebrief()
+	commands.demo_closeDevice()
 	return HttpResponseRedirect(reverse('nms:device_manager', device_id_request))
 
 def session_handler(request):
