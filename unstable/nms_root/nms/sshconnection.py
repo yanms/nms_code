@@ -2,6 +2,7 @@ import socket
 import paramiko
 import traceback
 import os
+import time
 
 
 class SSHConnection:
@@ -61,7 +62,7 @@ class SSHConnection:
 			print('*** Caught exception: ' + str(e.__class__) + ':' + str(e))
 			traceback.print_exc()
 
-	def send_and_receive(self, command):
+	def send_and_receive(self, command, delay=0):
 		if type(command) != type(bytes()):
 			try:
 				command = command.encode()
@@ -72,6 +73,7 @@ class SSHConnection:
 
 		command = command.strip() + b'\n'
 		self.t.chan.send(command)
+		time.sleep(delay)
 		return self.t.chan.recv(4096)
 	
 	def close(self):
