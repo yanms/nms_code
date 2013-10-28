@@ -159,7 +159,7 @@ def user_settings(request):
 
 @login_required
 def send_command(request, device_id_request):
-	device = Devices.objects.get(pk=device_id)
+	device = Devices.objects.get(pk=device_id_request)
 	command = request.POST['command']
 	connector = commands.Connection()
 	connector.demo_connectDevice(device.ip, device.username, device.password, device.port)
