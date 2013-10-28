@@ -40,7 +40,9 @@ class SSHConnection:
 				print('*** Unable to open host keys file')
 				self.keys = {}
 			
+			
 			key = self.t.get_remote_server_key()
+			"""
 			if not self.hostname in self.keys:
 				print('*** WARNING: Unknown host key!')
 			elif not self.keys[hostname].has_key(key.get_name()):
@@ -49,6 +51,7 @@ class SSHConnection:
 				print('*** WARNING: Host key has changed!!!')
 			else:
 				print('*** Host key OK.')
+			"""
 			
 			self.t.auth_password(self.username, self.password)
 			if not self.t.is_authenticated():
