@@ -10,7 +10,7 @@
 	<li>General Settings</li>
 	<li>
 		<ul>
-			<li><form action="{% url 'nms:send_command' 1 %}" method="POST"><input type="hidden" name="command" value="shutdown fe0/0" /><input type="submit" value="Shutdown" /></form></li>
+			<li><form action="{% url 'nms:send_command' 1 %}" method="POST">{% csrf_token %}<input type="hidden" name="command" value="shutdown fe0/0" /><input type="submit" value="Shutdown" /></form></li>
 			<li>Restart</li>
 		</ul>
 	</li>

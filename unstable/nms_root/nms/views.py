@@ -157,7 +157,7 @@ def user_settings(request):
 	else:	
 		return render(request, 'nms/chpasswd.html')
 
-
+@login_required
 def send_command(request, device_id_request):
 	device = Devices.objects.get(pk=device_id)
 	command = request.POST['command']
