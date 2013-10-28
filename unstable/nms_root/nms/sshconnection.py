@@ -75,10 +75,10 @@ class SSHConnection:
 				return
 
 		command = command.strip() + b'\n'
-		self.t.chan.send(command)
+		self.chan.send(command)
 		time.sleep(delay)
-		return self.t.chan.recv(4096)
+		return self.chan.recv(4096)
 	
 	def close(self):
-		self.t.chan.close()
+		self.chan.close()
 		self.t.close()
