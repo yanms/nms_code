@@ -19,7 +19,7 @@ class Connector():
 		self.s.send_and_receive('configure terminal', delay=0.1)
 		self.s.send_and_receive('interface FastEthernet ' + interface, delay=0.1)
 		ret = self.s.send_and_receive('shutdown', delay=0.1)
-		self.s.send_and_receive('end\nend\ndisable')
+		self.s.send_and_receive('end\ndisable')
 		return ret
 
 	def demo_noshutdown(self, interface):
@@ -28,7 +28,7 @@ class Connector():
 		self.s.send_and_receive('configure terminal', delay=0.1)
 		self.s.send_and_receive('interface FastEthernet ' + interface, delay=0.1)
 		ret = self.s.send_and_receive('no shutdown', delay=0.1)
-		self.s.send_and_receive('end\nend\ndisable')
+		self.s.send_and_receive('end\ndisable')
 		return ret
 
 	def demo_interfaceip(self, interface, ip):
@@ -37,7 +37,7 @@ class Connector():
 		self.s.send_and_receive('configure terminal', delay=0.1)
 		self.s.send_and_receive('interface FastEthernet ' + interface, delay=0.1)
 		ret = self.s.send_and_receive('ip ' + ip, delay=0.1)
-		self.s.send_and_receive('end\nend\ndisable')
+		self.s.send_and_receive('end\ndisable')
 		return ret
 
 	def demo_interfacedescription(self, interface, description):
@@ -46,7 +46,7 @@ class Connector():
 		self.s.send_and_receive('configure terminal', delay=0.1)
 		self.s.send_and_receive('interface FastEthernet ' + interface, delay=0.1)
 		ret = self.s.send_and_receive('description ' + description, delay=0.1)
-		self.s.send_and_receive('end\nend\ndisable')
+		self.s.send_and_receive('end\ndisable')
 		return ret
 
 	def demo_showipinterfacebrief(self):
