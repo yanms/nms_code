@@ -158,21 +158,48 @@ def user_settings(request):
 		return render(request, 'nms/chpasswd.html')
 
 @login_required
-def send_command(request, device_id_request):
+def send_command(request):
+	if request.method == 'GET' and 'command' in request.GET:
+		command = request.GET['command']
+	else:
+		return HttpResponseRedirect(reverse('nms:devices'))
+
 	device = Devices.objects.get(pk=device_id_request)
-	command = request.POST['command']
 	connector = commands.Connector()
 	connector.demo_connectDevice(device.ip, device.login_name, device.password_remote, device.port)
-	if command.startswith('shutdown'):
-		ret = connector.demo_shutdown(command.split()[1])
+
+	ret = ''
+	if command == 'shutdown':
+		if 'interface' in request.GET:
+			interface = request.GET['interface']
+			ret = connector.demo_shutdown(interface)
+		else:
+			return HttpResponseRedirect(reverse('nms:device_manager', device_id_request))
 	elif command == 'noshutdown':
-		ret = connector.demo_noshutdown(command)
+		if 'interface' in request.GET:
+			interface = request.GET['interface']
+			ret = connector.demo_noshutdown(interface)
+		else:
+			return HttpResponseRedirect(reverse('nms:device_manager', device_id_request))
 	elif command == 'interfaceip':
-		ret = connector.demo_interfaceip(command, command)
+		if 'interface' in request.GET and 'ip' in request.GET and 'subnet' in request.GET:
+			interface = request.GET['interface']
+			ip = request.GET['ip']
+			subnet = request.GET['subnet']
+			ret = connector.demo_interfaceip(interface, ip, subnet)
+		else:
+			return HttpResponseRedirect(reverse('nms:device_manager', device_id_request))
 	elif command == 'interfacedescription':
-		ret = connector.demo_interfacedescription(command, command)
+		if 'interface' in request.GET and 'description' in request.GET:
+			interface = request.GET['interface']
+			description = request.GET['description']
+			ret = connector.demo_interfacedescription(interface, description)
+		else:
+			return HttpResponseRedirect(reverse('nms:device_manager', device_id_request))
 	elif command == 'showipinterfacebrief':
 		ret = connector.demo_showipinterfacebrief()
+
+	messages.info(request, ret)
 	connector.demo_closeDevice()
 	return HttpResponseRedirect(reverse('nms:device_manager', device_id_request))
 
