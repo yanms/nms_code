@@ -24,13 +24,13 @@ def register(request):
 				user = User.objects.create_user(username=username, password=password)
 				user.is_active = False
 				user.save()
-				messages.info(request, 'Your accounts is created. An administrator has to activate your account')
+				messages.success(request, 'Your accounts is created. An administrator has to activate your account')
 				return HttpResponseRedirect(reverse('nms:register'))
 			else:
 				messages.error(request, 'Password mismatch')
 				return HttpResponseRedirect(request('nms:register'))
 		else:
-			messages.info(request, 'User already exists')
+			messages.error(request, 'User already exists')
 			return HttpResponseRedirect(reverse('nms:register'))
 	else:
 		return render(request, 'nms/register.html')
@@ -80,7 +80,7 @@ def device_add(request):
 			#return HttpResponse(request.POST.items())
 			return HttpResponseRedirect(reverse('nms:device_add'))
 		
-		messages.info(request, 'Database updated')
+		messages.success(request, 'Database updated')
 		return HttpResponseRedirect(reverse('nms:device_add'))
 	else:
 		return render(request, 'nms/add_device.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view,
@@ -118,7 +118,7 @@ def device_modify(request, device_id_request):
 			device.password_remote = password_remote
 			device.password_enable = password_enable
 			device.save()
-			messages.info(request, 'Database updated successfully.')
+			messages.success(request, 'Database updated successfully.')
 			return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
 		except (KeyError, ValueError):
 			messages.error(request, 'Not all fields are are set or an other error occured')
@@ -138,7 +138,7 @@ def user_settings(request):
 					if new_password == check_new_password:
 						request.user.set_password(new_password)
 						request.user.save()
-						messages.info(request, 'Your password has been updated')
+						messages.success(request, 'Your password has been updated')
 						#debug = list(request.POST.items())
 						#messages.error(request, debug)
 						return HttpResponseRedirect(reverse('nms:logout_handler'))
@@ -199,7 +199,7 @@ def send_command(request):
 	elif command == 'showipinterfacebrief':
 		ret = connector.demo_showipinterfacebrief()
 
-	messages.info(request, ret)
+	messages.success(request, ret)
 	connector.demo_closeDevice()
 	return HttpResponseRedirect(reverse('nms:device_manager', device_id_request))
 
@@ -213,7 +213,7 @@ def session_handler(request):
 			if user is not None:
 				if user.is_active:
 					login(request, user)
-					messages.info(request, "Successfully loged in")
+					messages.success(request, "Successfully loged in")
 					if url == "":
 						return HttpResponseRedirect(reverse('nms:index'))
 					else:
@@ -234,5 +234,5 @@ def session_handler(request):
 
 def logout_handler(request):
 	logout(request)
-	messages.info(request, "You are logged out")
+	messages.success(request, "You are logged out")
 	return HttpResponseRedirect(reverse('nms:login_handler'))
