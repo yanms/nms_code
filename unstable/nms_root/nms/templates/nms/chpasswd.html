@@ -2,11 +2,11 @@
 <head>
 	<meta charset="utf-8">
 	<title>Network Management System - AdminPanel: Devices</title>
-	<link media="all" rel="stylesheet" type="text/css" href="css/all.css" />
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="js/jquery-1.7.2.min.js"><\/script>');</script>
-	<script type="text/javascript" src="js/jquery.main.js"></script>
-	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="css/ie.css" /><![endif]-->
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>
 <body>
 	<div id="wrapper">
@@ -78,19 +78,19 @@
 			<strong class="logo"><a href="#">lg</a></strong>
 			<ul class="tabset buttons">
 				<li class="active">
-					<a href="#tab-1" class="ico4"><span>Dashboard</span><em></em></a>
+					<a href="/" class="ico4"><span>Dashboard</span><em></em></a>
 					<span class="tooltip"><span>Dashboard</span></span>
 				</li>
 				<li>
-					<a href="#tab-4" class="ico1"><span>Devices</span><em></em></a>
+					<a href="/devices" class="ico1"><span>Devices</span><em></em></a>
 					<span class="tooltip"><span>Devices</span></span>
 				</li>
 				<li>
-					<a href="#tab-7" class="ico7"><span>Add Device</span><em></em></a>
+					<a href="/devices/add" class="ico7"><span>Add Device</span><em></em></a>
 					<span class="tooltip"><span>Add Device</span></span>
 				</li>
 				<li>
-					<a href="#tab-8" class="ico8"><span>User Settings</span><em></em></a>
+					<a href="/settings" class="ico8"><span>User Settings</span><em></em></a>
 					<span class="tooltip"><span>User Settings</span></span>
 				</li>
 			</ul>
