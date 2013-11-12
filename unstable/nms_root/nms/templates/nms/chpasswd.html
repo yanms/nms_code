@@ -1,29 +1,101 @@
-<h1>NMS password change</h1>
-{% if messages %}
-    {% for message in messages %}
-    <strong> {{ message }} </strong>
-    {% endfor %}
-{% endif %}
-<form action="{% url 'nms:user_settings' %}" method="POST">
-	{% csrf_token %}
-	<table border="0">
-		<tr>
-			<td>Old password:</td>
-			<td><input type="password" name="oldpassword" id="oldpassword" /></td>
-		</tr>
-		<tr>
-			<td>New password:</td>
-			<td><input type="password" name="newpassword1" id="newpassword1" /></td>
-		</tr>
-		<tr>
-			<td>New password again:</td>
-			<td><input type="password" name="newpassword2" id="newpassword2" /></td>
-		</tr>
-		<tr>
-			<td><input type="submit" value="Submit" id="submit" /></td>
-			<td><input type="reset" value="reset" id="reset" /></td>
-		</tr>
-	</table>
-</form>
-
-<a href="{% url 'nms:logout_handler' %}">Logout</a>
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - AdminPanel: Devices</title>
+	<link media="all" rel="stylesheet" type="text/css" href="css/all.css" />
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript" src="js/jquery.main.js"></script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="css/ie.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+						<ul>
+							<li><a href="#" class="ico1">Messages <span class="num">26</span></a></li>
+							<li><a href="#" class="ico2">Alerts <span class="num">5</span></a></li>
+							<li><a href="#" class="ico3">Documents <span class="num">3</span></a></li>
+						</ul>
+					</nav>
+					<div class="profile-box">
+						<span class="profile">
+							<a href="#" class="section">
+								<!-- <img class="image" src="images/img1.png" alt="image description" width="26" height="26" /> -->
+								<span class="text-box">
+									You are logged in as:
+									<strong class="name">{{ user }}</strong>
+								</span>
+							</a>
+							<a href="#" class="opener">opener</a>
+						</span>
+						<a href="{% url 'nms:logout_handler' %}" class="btn-on">On</a>
+					</div>
+				</div>
+				<div class="tabs">
+					<div id="tab-8" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<ul class="states">
+									<li class="error">Error : This is an error placed text message.</li>
+									<li class="warning">Warning: This is a warning placed text message.</li>
+									<li class="succes">Succes : This is a succes placed text message.</li>
+								</ul>
+								<h2>User Settings</h2>
+								<p>
+									<form action="{% url 'nms:user_settings' %}" method="POST">
+										{% csrf_token %}
+										<table border="0">
+											<tr>
+												<td>Old password:</td>
+												<td><input type="password" name="oldpassword" id="oldpassword" /></td>
+											</tr>
+											<tr>
+												<td>New password:</td>
+												<td><input type="password" name="newpassword1" id="newpassword1" /></td>
+											</tr>
+											<tr>
+												<td>New password again:</td>
+												<td><input type="password" name="newpassword2" id="newpassword2" /></td>
+											</tr>
+											<tr>
+												<td><input type="submit" value="Submit" id="submit" /></td>
+												<td><input type="reset" value="reset" id="reset" /></td>
+											</tr>
+										</table>
+									</form>
+								</p>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside id="sidebar">
+			<strong class="logo"><a href="#">lg</a></strong>
+			<ul class="tabset buttons">
+				<li class="active">
+					<a href="#tab-1" class="ico4"><span>Dashboard</span><em></em></a>
+					<span class="tooltip"><span>Dashboard</span></span>
+				</li>
+				<li>
+					<a href="#tab-4" class="ico1"><span>Devices</span><em></em></a>
+					<span class="tooltip"><span>Devices</span></span>
+				</li>
+				<li>
+					<a href="#tab-7" class="ico7"><span>Add Device</span><em></em></a>
+					<span class="tooltip"><span>Add Device</span></span>
+				</li>
+				<li>
+					<a href="#tab-8" class="ico8"><span>User Settings</span><em></em></a>
+					<span class="tooltip"><span>User Settings</span></span>
+				</li>
+			</ul>
+			<span class="shadow"></span>
+		</aside>
+	</div>
+</body>
+</html>

@@ -1,12 +1,81 @@
-<h1>Devices</h1>
-{% if messages %}
-    {% for message in messages %}
-    <strong> {{ message }} </strong>
-    {% endfor %}
-{% endif %}
-{% for device in devices %}
-	<p>{{ device.gen_dev_id.dev_type_id }} | {{ device.gen_dev_id }} | {{ device.ip }} | ## UP/DOWN ## | <a href="{% url 'nms:device_manager' device.dev_id %}">Manage</a></p><br />
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - AdminPanel: Devices</title>
+	<link media="all" rel="stylesheet" type="text/css" href="css/all.css" />
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript" src="js/jquery.main.js"></script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="css/ie.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+						<ul>
+							<li><a href="#" class="ico1">Messages <span class="num">26</span></a></li>
+							<li><a href="#" class="ico2">Alerts <span class="num">5</span></a></li>
+							<li><a href="#" class="ico3">Documents <span class="num">3</span></a></li>
+						</ul>
+					</nav>
+					<div class="profile-box">
+						<span class="profile">
+							<a href="#" class="section">
+								<!-- <img class="image" src="images/img1.png" alt="image description" width="26" height="26" /> -->
+								<span class="text-box">
+									You are logged in as:
+									<strong class="name">{{ user }}</strong>
+								</span>
+							</a>
+							<a href="#" class="opener">opener</a>
+						</span>
+						<a href="{% url 'nms:logout_handler' %}" class="btn-on">On</a>
+					</div>
+				</div>
+				<div class="tabs">
+					<div id="tab-4" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<h2>Devices</h2>
+								<p>{% for device in devices %}
+									{{ device.gen_dev_id.dev_type_id }} | {{ device.gen_dev_id }} | {{ device.ip }} | ## UP/DOWN ## | <a href="{% url 'nms:device_manager' device.dev_id %}">Manage</a></p><br />
 {% endfor %}
-
-<a href="#">Devices</a><br />
-<a href="{% url 'nms:logout_handler' %}">Log out</a>
+							</div>
+							<ul class="states">
+								<li class="error">Error : This is an error placed text message.</li>
+								<li class="warning">Warning: This is a warning placed text message.</li>
+								<li class="succes">Succes : This is a succes placed text message.</li>
+							</ul>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside id="sidebar">
+			<strong class="logo"><a href="#">lg</a></strong>
+			<ul class="tabset buttons">
+				<li class="active">
+					<a href="index.html" class="ico4"><span>Dashboard</span><em></em></a>
+					<span class="tooltip"><span>Dashboard</span></span>
+				</li>
+				<li>
+					<a href="devices.html" class="ico1"><span>Devices</span><em></em></a>
+					<span class="tooltip"><span>Devices</span></span>
+				</li>
+				<li>
+					<a href="add_device.html" class="ico7"><span>Add Device</span><em></em></a>
+					<span class="tooltip"><span>Add Device</span></span>
+				</li>
+				<li>
+					<a href="chpasswd.html" class="ico8"><span>User Settings</span><em></em></a>
+					<span class="tooltip"><span>User Settings</span></span>
+				</li>
+			</ul>
+			<span class="shadow"></span>
+		</aside>
+	</div>
+</body>
+</html>
