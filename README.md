@@ -1,4 +1,4 @@
-Beta code experimental
+Code experimental
 ====
 
 Requirements
