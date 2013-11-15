@@ -36,7 +36,7 @@ class Connector():
 		self.s.send_and_receive(self.execPasswd, delay=0.1)
 		self.s.send_and_receive('configure terminal', delay=0.1)
 		self.s.send_and_receive('interface FastEthernet ' + interface, delay=0.1)
-		ret = self.s.send_and_receive('ip address' + ip + ' ' + subnet, delay=0.1)
+		ret = self.s.send_and_receive('ip address ' + ip + ' ' + subnet, delay=0.1)
 		self.s.send_and_receive('end\ndisable')
 		return ret
 
