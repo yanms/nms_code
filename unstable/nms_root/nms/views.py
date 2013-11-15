@@ -174,13 +174,13 @@ def send_command(request, device_id_request):
 			interface = request.GET['interface']
 			ret = connector.demo_shutdown(interface)
 		else:
-			return HttpResponseRedirect(reverse('nms:device_manager', device_id_request))
+			return HttpResponseRedirect(reverse('nms:device_manager', {'device_id_request':device_id_request}))
 	elif command == 'noshutdown':
 		if 'interface' in request.GET:
 			interface = request.GET['interface']
 			ret = connector.demo_noshutdown(interface)
 		else:
-			return HttpResponseRedirect(reverse('nms:device_manager', device_id_request))
+			return HttpResponseRedirect(reverse('nms:device_manager', {'device_id_request':device_id_request}))
 	elif command == 'interfaceip':
 		if 'interface' in request.GET and 'ip' in request.GET and 'subnet' in request.GET:
 			interface = request.GET['interface']
@@ -188,20 +188,20 @@ def send_command(request, device_id_request):
 			subnet = request.GET['subnet']
 			ret = connector.demo_interfaceip(interface, ip, subnet)
 		else:
-			return HttpResponseRedirect(reverse('nms:device_manager', device_id_request))
+			return HttpResponseRedirect(reverse('nms:device_manager', {'device_id_request':device_id_request}))
 	elif command == 'interfacedescription':
 		if 'interface' in request.GET and 'description' in request.GET:
 			interface = request.GET['interface']
 			description = request.GET['description']
 			ret = connector.demo_interfacedescription(interface, description)
 		else:
-			return HttpResponseRedirect(reverse('nms:device_manager', device_id_request))
+			return HttpResponseRedirect(reverse('nms:device_manager', {'device_id_request':device_id_request}))
 	elif command == 'showipinterfacebrief':
 		ret = connector.demo_showipinterfacebrief()
 
 	messages.success(request, ret)
 	connector.demo_closeDevice()
-	return HttpResponseRedirect(reverse('nms:device_manager', device_id_request))
+	return HttpResponseRedirect(reverse('nms:device_manager', {'device_id_request':device_id_request}))
 
 def session_handler(request):
 	if request.method == 'POST':
