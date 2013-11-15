@@ -213,7 +213,7 @@ def session_handler(request):
 			if user is not None:
 				if user.is_active:
 					login(request, user)
-					messages.success(request, "Successfully loged in")
+					messages.success(request, "Successfully logged in")
 					if url == "":
 						return HttpResponseRedirect(reverse('nms:index'))
 					else:
