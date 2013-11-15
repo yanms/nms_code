@@ -206,7 +206,7 @@ form,fieldset{
 	top:0;
 }
 .* {
-	background:url(../images/NMS.png) no-repeat -53px 0;
+	background:url(../images/sprite.png) no-repeat -53px 0;
 	width:36px;
 	height:44px;
 	overflow:hidden;
