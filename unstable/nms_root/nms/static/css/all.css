@@ -195,12 +195,6 @@ form,fieldset{
 	width:75px;
 	padding:18px 1px 0;
 }
-
-#sidebar img {
-	margin-left: auto;
-	margin-right: auto;
-}
-
 #sidebar .shadow {
 	background:url(../images/bg-shadow.png) no-repeat;
 	width:5px;
