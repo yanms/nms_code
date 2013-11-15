@@ -42,7 +42,7 @@
 								<ul class="states">
 									<li class="error">Error : This is an error placed text message.</li>
 									<li class="warning">Warning: This is a warning placed text message.</li>
-									<li class="succes">Succes : This is a succes placed text message.</li>
+									<li class="success">Succes : This is a succes placed text message.</li>
 								</ul>
 								<h2>Device: {{ devices.gen_dev.dev_type.dev_type_name }}: {{ devices.gen_dev_id }} ({{ devices.ip }})</h2>
 								<p>
@@ -53,7 +53,11 @@
 										<li>
 											<ul>
 												<li><form action="{% url 'nms:device_command_handler' 1 %}" method="POST">{% csrf_token %}<input type="hidden" name="command" value="shutdown fe0/0" /><input type="submit" value="Shutdown" /></form></li>
-												<li>Restart</li>
+												<li><a href="{% url 'nms:device_command_handler' device.dev_id %}?command=shutdown&interface=0%2F1">Shutdown FastEthernet 0/1</a></li>
+												<li><a href="{% url 'nms:device_command_handler' device.dev_id %}?command=noshutdown&interface=0%2F1">No Shutdown FastEthernet 0/1</a></li>
+												<li><a href="{% url 'nms:device_command_handler' device.dev_id %}?command=interfaceip&interface=0%2F1&ip=10.0.0.1&subnet=255.0.0.0">Assign IP to FastEthernet 0/1</a></li>
+												<li><a href="{% url 'nms:device_command_handler' device.dev_id %}?command=interfacedescription&interface=0%2F1&description=DescriptionHere">Assign Description to FastEthernet 0/1</a></li>
+												<li><a href="{% url 'nms:device_command_handler' device.dev_id %}?command=showipinterfacebrief">Show Interface (brief)</a></li>
 											</ul>
 										</li>
 									</ul>
