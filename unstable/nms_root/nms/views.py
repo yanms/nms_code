@@ -158,7 +158,7 @@ def user_settings(request):
 		return render(request, 'nms/chpasswd.html')
 
 @login_required
-def send_command(request):
+def send_command(request, device_id_request):
 	if request.method == 'GET' and 'command' in request.GET:
 		command = request.GET['command']
 	else:
