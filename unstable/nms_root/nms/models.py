@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 #Valdiaiton needs to be implemented
 app_label = 'nms'
@@ -75,22 +76,13 @@ class Devices(models.Model):
 	def __str__(self):
 		return str(self.gen_dev_id) + ' - ' + str(self.ip)
 
-class User(models.Model):
-	user_id = models.AutoField(primary_key=True)
-	username = models.CharField(max_length=255)
-	first_name = models.CharField(max_length=255)
-	last_name = models.CharField(max_length=255)
-	password = models.CharField(max_length=255)
-	is_active = models.BooleanField(default=False)
-	mode = models.PositiveIntegerField(default = '0')
-	
-	def __str__(self):
-		return self.username
+class File_location(models.Model):
+    file_location_id = models.AutoField(primary_key=True)
+    location = models.CharField(max_length=255)
+    dev_id = models.ForeignKey(Devices)
 
-class Roles(models.Model):
-	roles_id = models.AutoField(primary_key=True)
-	user_id = models.ForeignKey(User)
-	dev_id = models.ForeignKey(Devices)
+class History(models.Model):
+    history_id = models.AutoField(primary_key=True)
+    action = models.CharField(max_length=255)
+    user_id = models.ForeignKey(User)
 
-	def __str__(self):
-		return str(self.user_id) + ': ' + str(self.dev_id)
