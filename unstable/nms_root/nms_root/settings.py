@@ -1,5 +1,8 @@
 # Django settings for nms_root project.
+import os
 
+SETTINGS_PATH = os.path.dirname(os.path.realpath(__file__))
+SETTINGS_PATH = SETTINGS_PATH[:SETTINGS_PATH.rfind('nms_root')]
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -110,6 +113,8 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    #'/Users/wouter/git/nms_code/unstable/nms_root/nms/templates/nms'
+    os.path.join(SETTINGS_PATH, 'nms/templates/nms'), 
 )
 
 INSTALLED_APPS = (
