@@ -1,78 +1,152 @@
-<h1>Modify Device {{ devices.gen_dev_id }}</h1>
-{% if messages %}
-    {% for message in messages %}
-    <strong> {{ message }} </strong>
-    {% endfor %}
-{% endif %}
-<form action="{% url 'nms:device_modify' devices.dev_id  %}" method="POST">
-{% csrf_token %}
-	<table border="0">
-		<tr>
-			<td>Device (type/vendor/model):</td>
-			<td><select id="gen_dev" name="gen_dev_id">
-				{% for record in gen_dev %}
-					<option value="{{ dev.gen_dev_id }}">{{ record }}</option>
-				{% endfor %}
-			</select></td>
-		</tr>
-		<tr>
-			<td>OS:</td>
-			<td><select id="os_dev_id" name="os_dev_id">
-				{% for record in os_dev %}
-					<option value="{{ record.os_dev_id }}">{{ record }}</option>
-				{% endfor %}
-			</select></td>
-		</tr>
-		<tr>
-			<td>Preferred protocol:</td>
-			<td><select id="pref_remote_prot" name="pref_remote_prot">
-				<option>SSH2</option>
-				<option>SSH1</option>
-				<option>Telnet</option>
-			</select></td>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-		</tr>
-		<tr>
-			<td><strong>Network Settings</strong></td>
-		</tr>
-		<tr>
-			<td><input type="radio" name="ipprot" value="4" /> IPv4</td>
-		</tr>
-		<tr>
-			<td><input type="radio" name="ipprot" value="6" /> IPv6</td>
-		</tr>
-		<tr>
-			<td>Port:</td>
-			<td><input type="text" name="port" id="port" /></td>
-		</tr>
-		<tr>
-			<td>&nsbp;</td>
-		</tr>
-		<tr>
-			<td><strong>Login Settings</strong></td>
-		</tr>
-		<tr>
-			<td>Username:</td>
-			<td><input type="text" name="login_name" id="login_name" /></td>
-		</tr>
-		<tr>
-			<td>Password:</td>
-			<td><input type="password" name="password_remote" id="password_remote" /></td>
-		</tr>
-		<tr>
-			<td>&nsbp;</td>
-		</tr>
-		<tr>
-			<td>Privileged EXEC (enable) password:</td>
-			<td><input type="password" name="password_enable" id="password_enable" /></td>
-		</tr>
-		<tr>
-			<td><input type="submit" value="Test Connection" id="testconn" /></td>
-			<td><input type="submit" value="Modify Device" id="mod_device" /></td>
-		</tr>
-	</table>
-</form>
-
-<a href="{% url 'nms:logout_handler' %}">Logout</a>
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - AdminPanel</title>
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+						<ul>
+							<li><a href="#" class="ico1">Messages <span class="num">26</span></a></li>
+							<li><a href="#" class="ico2">Alerts <span class="num">5</span></a></li>
+							<li><a href="#" class="ico3">Documents <span class="num">3</span></a></li>
+						</ul>
+					</nav>
+					<div class="profile-box">
+						<span class="profile">
+							<a href="#" class="section">
+								<!-- <img class="image" src="{{ STATIC_URL }}images/img1.png" alt="image description" width="26" height="26" /> -->
+								<span class="text-box">
+									You are logged in as:
+									<strong class="name">{{ user }}</strong>
+								</span>
+							</a>
+							<a href="#" class="opener">opener</a>
+						</span>
+						<a href="/logout" class="btn-on">On</a>
+					</div>
+				</div>
+				<div class="tabs">
+					<div id="tab-1" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<ul class="states">
+									{% for message in messages %}
+									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+									{% endfor %}
+								</ul>
+								<h2>Modify Device {{ devices.gen_dev_id }}</h2>
+								<form action="{% url 'nms:device_modify' devices.dev_id  %}" method="POST">
+								{% csrf_token %}
+									<table border="0">
+										<tr>
+											<td>Device (type/vendor/model):</td>
+											<td><select id="gen_dev" name="gen_dev_id">
+												{% for record in gen_dev %}
+													<option value="{{ dev.gen_dev_id }}">{{ record }}</option>
+												{% endfor %}
+											</select></td>
+										</tr>
+										<tr>
+											<td>OS:</td>
+											<td><select id="os_dev_id" name="os_dev_id">
+												{% for record in os_dev %}
+													<option value="{{ record.os_dev_id }}">{{ record }}</option>
+												{% endfor %}
+											</select></td>
+										</tr>
+										<tr>
+											<td>Preferred protocol:</td>
+											<td><select id="pref_remote_prot" name="pref_remote_prot">
+												<option>SSH2</option>
+												<option>SSH1</option>
+												<option>Telnet</option>
+											</select></td>
+										</tr>
+										<tr>
+											<td>&nbsp;</td>
+										</tr>
+										<tr>
+											<td><strong>Network Settings</strong></td>
+										</tr>
+										<tr>
+											<td><input type="radio" name="ipprot" value="4" /> IPv4</td>
+										</tr>
+										<tr>
+											<td><input type="radio" name="ipprot" value="6" /> IPv6</td>
+										</tr>
+										<tr>
+											<td>IP address:</td>
+											<td><input type="text" name="ipaddr" id="ipaddr" /></td>
+										</tr>
+										<tr>
+											<td>Port:</td>
+											<td><input type="text" name="port" id="port" /></td>
+										</tr>
+										<tr>
+											<td>&nsbp;</td>
+										</tr>
+										<tr>
+											<td><strong>Login Settings</strong></td>
+										</tr>
+										<tr>
+											<td>Username:</td>
+											<td><input type="text" name="login_name" id="login_name" /></td>
+										</tr>
+										<tr>
+											<td>Password:</td>
+											<td><input type="password" name="password_remote" id="password_remote" /></td>
+										</tr>
+										<tr>
+											<td>&nsbp;</td>
+										</tr>
+										<tr>
+											<td>Privileged EXEC (enable) password:</td>
+											<td><input type="password" name="password_enable" id="password_enable" /></td>
+										</tr>
+										<tr>
+											<td><input type="submit" value="Test Connection" id="testconn" /></td>
+											<td><input type="submit" value="Modify Device" id="mod_device" /></td>
+										</tr>
+									</table>
+								</form>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside id="sidebar">
+			<strong class="logo"><a href="#">lg</a></strong>
+			<ul class="tabset buttons">
+				<li class="active">
+					<a href="/" class="ico4"><span>Dashboard</span><em></em></a>
+					<span class="tooltip"><span>Dashboard</span></span>
+				</li>
+				<li>
+					<a href="/devices" class="ico1"><span>Devices</span><em></em></a>
+					<span class="tooltip"><span>Devices</span></span>
+				</li>
+				<li>
+					<a href="/devices/add" class="ico7"><span>Add Device</span><em></em></a>
+					<span class="tooltip"><span>Add Device</span></span>
+				</li>
+				<li>
+					<a href="/settings" class="ico8"><span>User Settings</span><em></em></a>
+					<span class="tooltip"><span>User Settings</span></span>
+				</li>
+			</ul>
+			<span class="shadow"></span>
+		</aside>
+	</div>
+</body>
+</html>

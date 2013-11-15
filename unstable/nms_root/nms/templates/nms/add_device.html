@@ -40,9 +40,9 @@
 							<div class="text-section">
 								<h1>Dashboard</h1>
 								<ul class="states">
-									<li class="error">Error : This is an error placed text message.</li>
-									<li class="warning">Warning: This is a warning placed text message.</li>
-									<li class="succes">Succes : This is a succes placed text message.</li>
+									{% for message in messages %}
+									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+									{% endfor %}
 								</ul>
 								<h2>Add Device</h2>
 								<p>
