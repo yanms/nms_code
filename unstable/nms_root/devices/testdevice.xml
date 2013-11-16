@@ -21,23 +21,23 @@
             <command>
                <argElement position="0" type="plaintext">enable</argElement>
                <argElement position="1" type="privpasswd" />
-			   <argElement position="2" type="plaintext">configure terminal</argElement>
-			   <argElement position="3" type="plaintext">interface %if%</argElement>
-			   <argElement position="4" type="plaintext">no shutdown</argElement>
-			   <argElement position="5" type="plaintext">end</argElement>
-			   <argElement position="6" type="plaintext">disable</argElement>			   
-			</command>
+               <argElement position="2" type="plaintext">configure terminal</argElement>
+               <argElement position="3" type="plaintext">interface %if%</argElement>
+               <argElement position="4" type="plaintext">no shutdown</argElement>
+               <argElement position="5" type="plaintext">end</argElement>
+               <argElement position="6" type="plaintext">disable</argElement>
+            </command>
          </item>
          <item name="Disable interface %if%" type="per-interface">
             <command>
                <argElement position="0" type="plaintext">enable</argElement>
-			   <argElement position="1" type="privpasswd" />
-			   <argElement position="2" type="plaintext">configure terminal</argElement>
-			   <argElement position="3" type="plaintext">interface %if%</argElement>
-			   <argElement position="4" type="plaintext">shutdown</argElement>
-			   <argElement position="5" type="plaintext">end</argElement>
-			   <argElement position="6" type="plaintext">disable</argElement>			   
-			</command>
+               <argElement position="1" type="privpasswd" />
+               <argElement position="2" type="plaintext">configure terminal</argElement>
+               <argElement position="3" type="plaintext">interface %if%</argElement>
+               <argElement position="4" type="plaintext">shutdown</argElement>
+               <argElement position="5" type="plaintext">end</argElement>
+               <argElement position="6" type="plaintext">disable</argElement>
+            </command>
          </item>
          <item name="Get interface status" type="single">
             <command>
@@ -51,11 +51,11 @@
                <argElement position="0" type="plaintext">shutdown</argElement>
             </command>
          </item>
-		 <item name="Reboot" type="single">
-			<command>
-				<argElement position="0" type="plaintext">reboot</argElement>
-			</command>
-		 </item>
+         <item name="Reboot" type="single">
+            <command>
+               <argElement position="0" type="plaintext">reboot</argElement>
+            </command>
+         </item>
       </category>
    </configurationItems>
 </device>
