@@ -7,8 +7,8 @@ cache = {}
 
 class RegexWrapper():
 	def __init__(self, regex, delimiter):
-		self.delimiter = delimiter
-		self.regex = regex
+		self.delimiter = delimiter.encode('utf_8').decode('unicode-escape')
+		self.regex = regex.encode('utf_8').decode('unicode-escape')
 	
 	def parse(self, text):
 		text = text.split(self.delimiter)
@@ -39,8 +39,8 @@ def __getParser__(element):
 	if element.get('type') != 'regex':
 		tb = sys.exc_info()[2]
 		raise ValueError('Unsupported returnParsing type').with_traceback(tb)
-	delimiter = e.get('interfaceDelimiter')
-	regex = e.text
+	delimiter = element.get('interfaceDelimiter')
+	regex = element.text
 	return RegexWrapper(regex, delimiter)
 
 def get_xml_struct(filepath):
