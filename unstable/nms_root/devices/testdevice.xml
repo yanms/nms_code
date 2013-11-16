@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<device>
+   <deviceInfo type="router" vendor="CISCO" model="Model TBD" />
+   <supportedOperatingSystems>
+      <operatingSystem name="OS TBD" />
+   </supportedOperatingSystems>
+   <supportedProtocols>
+      <protocol name="SSH2" />
+   </supportedProtocols>
+
+   <interfaceQuery>
+      <command>
+         <argElement position="0" type="plaintext">show ip interface brief</argElement>
+      </command>
+      <returnParsing interfaceDelimiter="\n" type="regex">(?=(^[0-9a-zA-Z/]+))(?=(?!Interface))</returnParsing>
+   </interfaceQuery>
+
+   <configurationItems>
+      <category name="Interface options">
+         <item name="Enable interface %if%" type="per-interface">
+            <command>
+               <argElement position="0" type="plaintext">enable</argElement>
+			   <argElement position="1" type="privpasswd" />
+			   <argElement position="2" type="plaintext">configure terminal</argElement>
+			   <argElement position="3" type="plaintext">interface %if%</argElement>
+			   <argElement position="4" type="plaintext">no shutdown</argElement>
+			   <argElement position="5" type="plaintext">end</argElement>
+			   <argElement position="6" type="plaintext">disable</argElement>			   
+			</command>
+         </item>
+         <item name="Disable interface %if%" type="per-interface">
+            <command>
+               <argElement position="0" type="plaintext">enable</argElement>
+			   <argElement position="1" type="privpasswd" />
+			   <argElement position="2" type="plaintext">configure terminal</argElement>
+			   <argElement position="3" type="plaintext">interface %if%</argElement>
+			   <argElement position="4" type="plaintext">shutdown</argElement>
+			   <argElement position="5" type="plaintext">end</argElement>
+			   <argElement position="6" type="plaintext">disable</argElement>			   
+			</command>
+         </item>
+         <item name="Get interface status" type="single">
+            <command>
+               <argElement position="0" type="plaintext">show ip interface brief</argElement>
+            </command>
+         </item>
+      </category>
+      <category name="General settings">
+         <item name="Shutdown" type="single">
+            <command>
+               <argElement position="0" type="plaintext">shutdown</argElement>
+            </command>
+         </item>
+		 <item name="Reboot" type="single">
+			<command>
+				<argElement position="0" type="plaintext">reboot</argElement>
+			</command>
+		 </item>
+      </category>
+   </configurationItems>
+</device>

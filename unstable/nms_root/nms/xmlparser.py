@@ -2,8 +2,10 @@ import xml.etree.ElementTree as ET
 from multiprocessing import Lock
 import copy, sys, re
 
-lock = Lock()
+cacheLock = Lock()
+interfaceMapLock = Lock()
 cache = {}
+interfaceMap = {}
 
 class RegexWrapper():
 	def __init__(self, regex, delimiter):
@@ -47,11 +49,11 @@ def get_xml_struct(filepath):
 	global lock
 	global cache
 
-	lock.acquire()
+	cacheLock.acquire()
 	if not filepath in cache.keys():
 		cache[filepath] = ET.parse(filepath).getroot()
 	xml_struct = copy.deepcopy(cache[filepath])
-	lock.release()
+	cacheLock.release()
 	return xml_struct
 
 def getDeviceInfo(root):
@@ -79,3 +81,9 @@ def getInterfaceQuery(root):
 		elif child.tag == 'returnParsing':
 			parser = __getParser__(child)
 	return (command, parser)
+
+def getAvailableTasks(root, interfaces):
+	for child in root.getchildren():
+		if child.tag == 'configurationItems':
+			e = child
+	
