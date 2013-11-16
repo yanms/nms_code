@@ -1,19 +1,56 @@
 import xml.etree.ElementTree as ET
 from multiprocessing import Lock
-import copy
-#xml_struct = get_xml_struct(device)
+import copy, sys, re
 
 lock = Lock()
 cache = {}
 
-def get_xml_struct(device):
+class RegexWrapper():
+	def __init__(self, regex, delimiter):
+		self.delimiter = delimiter
+		self.regex = regex
+	
+	def parse(self, text):
+		text = text.split(self.delimiter)
+		ret = []
+		for line in text:
+			matches = re.findall(self.regex, line)
+			for match in matches:
+				ret.append(match)
+		return ret
+
+def __getCommand__(element, interface = None):
+	ret = []
+	for i in range(0, len(element.getchildren())):
+		for c in element.getchildren():
+			if int(c.get('position')) == i:
+				if c.get('type') == 'plaintext':
+					ret.append(c.text)
+				elif c.get('type') == 'interface':
+					ret.append(interface)
+				else:
+					tb = sys.exc_info()[2]
+					raise ValueError('Unsupported argElement type').with_traceback(tb)
+	return ret
+
+def __getParser__(element):
+	if element.tag != 'returnParsing':
+		return None
+	if element.get('type') != 'regex':
+		tb = sys.exc_info()[2]
+		raise ValueError('Unsupported returnParsing type').with_traceback(tb)
+	delimiter = e.get('interfaceDelimiter')
+	regex = e.text
+	return RegexWrapper(regex, delimiter)
+
+def get_xml_struct(filepath):
 	global lock
 	global cache
 
 	lock.acquire()
-	if not device in cache.keys():
-		cache[device] = ET.parse(device).getroot()
-	xml_struct = copy.deepcopy(cache[device])
+	if not filepath in cache.keys():
+		cache[filepath] = ET.parse(filepath).getroot()
+	xml_struct = copy.deepcopy(cache[filepath])
 	lock.release()
 	return xml_struct
 
@@ -32,10 +69,13 @@ def getSupportedOperatingSystems(root):
 		ret.append(c.get('name'))
 	return ret
 
-def __getCommand__(element):
-	ret = []
-	for i in range(0, len(element.getchildren())):
-		for c in element.getchildren():
-			if int(c.get('position')) == i:
-				ret.append(c.text)
-	return ret
+def getInterfaceQuery(root):
+	for child in root.getchildren():
+		if child.tag == 'interfaceQuery':
+			e = child
+	for child in e.getchildren():
+		if child.tag == 'command':
+			command = __getCommand__(child)
+		elif child.tag == 'returnParsing':
+			parser = __getParser__(child)
+	return (command, parser)
