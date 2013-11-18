@@ -170,7 +170,7 @@ def user_settings(request):
 			messages.error(request, 'Not all fields are set or an other error occured')
 			return HttpResponseRedirect(reverse('nms:user_settings'))
 	else:	
-		return render(request, 'nms/chpasswd.html')
+		return render(request, 'nms/chpasswd.html', context_instance=RequestContext(request))
 
 @login_required
 def send_command(request, device_id_request):
