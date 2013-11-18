@@ -39,7 +39,9 @@ def acl_list(request):
 @permission_required('auth.change_user', login_url='/permissions/?per=list_user')
 def acl_user_manage(request, acl_user):
     user_obj = get_object_or_404(User, pk=acl_user)
-    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'existing_permissions': Permission.objects.values()})
+    user_groups = user_obj.groups.all()
+    existing_groups = Group.objects.all()
+    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'existing_permissions': Permission.objects.values(), 'user_groups': user_groups, 'existing_groups': existing_groups})
 
 @login_required
 def acl_handler(request, acl_user):
