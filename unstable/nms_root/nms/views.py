@@ -26,16 +26,17 @@ def install(request):
         return HttpResponse('Finished installing NMS.')
 
 @login_required
-@permission_required('nms.list_user', login_url='/permissions/?per=list_user')
 def acl(request):
     user_obj = request.user
     return render(request, 'nms/acl.html', {'user_permissions': user_obj.user_permissions.all(), 'existing_permissions': Permission.objects.values()})
 
 @login_required
+@permission_required('auth.list_user', login_url='/permissions/?per=list_user')
 def acl_list(request):
     return render(request, 'nms/acl_list.html', {'users': User.objects.values()})
     
 @login_required
+@permission_required('auth.change_user', login_url='/permissions/?per=list_user')
 def acl_user_manage(request, acl_user):
     user_obj = get_object_or_404(User, pk=acl_user)
     return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'existing_permissions': Permission.objects.values()})
