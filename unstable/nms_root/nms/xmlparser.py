@@ -84,13 +84,23 @@ def getInterfaceQuery(root):
 	return (command, parser)
 
 def __addItemSingle__(e, od):
-	od['i:' + e.get('name')] = (__getCommand__(e), __getParser__(e))
+	for child in e.getchildren():
+			if child.tag == 'command':
+				cmd = child
+			elif child.tag == 'returnParsing':
+				rp = child
+	od['i:' + e.get('name')] = (__getCommand__(cmd), __getParser__(rp))
 
 def __addItemPerInterface__(e, od, interfaces):
 	for interface in interfaces:
 		name = e.get('name')
 		name.replace('%if%', interface)
-		od['i:' + name] = (__getCommand__(e, interface), __getParser__(e))
+		for child in e.getchildren():
+			if child.tag == 'command':
+				cmd = child
+			elif child.tag == 'returnParsing':
+				rp = child
+		od['i:' + name] = (__getCommand__(cmd, interface), __getParser__(rp))
 
 def __addCategory__(e, od, interfaces):
 	od['c:' + e.get('name')] = OrderedDict()
