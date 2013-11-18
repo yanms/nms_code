@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from nms.models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.contrib.auth.decorators import login_required
 import nms.commands as commands
 
@@ -12,6 +12,20 @@ import nms.commands as commands
 @login_required
 def index(request):
 	return render(request, 'nms/index.html', {'user': request.user.get_username()})
+
+@login_required
+def acl(request):
+    user_obj = request.user
+    return render(request, 'nms/acl.html', {'user_permissions': user_obj.user_permissions.all(), 'existing_permissions': Permission.objects.values()})
+
+@login_required
+def acl_list(request):
+    return render(request, 'nms/acl_list.html', {'users': User.objects.values()})
+    
+@login_required
+def acl_user_manage(request, acl_user):
+    user_obj = get_object_or_404(User, pk=acl_user)
+    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'existing_permissions': Permission.objects.values()})
 
 def register(request):
 	if request.method == 'POST':

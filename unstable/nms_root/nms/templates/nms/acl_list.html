@@ -45,16 +45,11 @@
 									{% endfor %}
 								</ul>
 								<h2>ACL: {{user}} id: {{ user.id }} permissions </h2>
-								*** USER PERMISSIONS ***
-								{% for iter in user_permissions %}
-								<li>{{ iter }}</li>
+								*** USERS ***
+								{% for iter in users %}
+								<li>ID: {{ iter.id }}, username: {{ iter.username }}, is superuser: {{ iter.is_superuser }}</li>
 								{% endfor %}
-								<br/>
 								
-								*** EXISTING PERMISSIONS ***
-								{% for iter in existing_permissions %}
-								<li>{{ iter.codename}}</li>
-								{% endfor %}
 							</div>
 						</article>
 					</div>
