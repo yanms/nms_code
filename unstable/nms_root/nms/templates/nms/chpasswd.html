@@ -76,24 +76,7 @@
 		</div>
 		<aside id="sidebar">
 			<img src="{{ STATIC_URL }}images/NMS.png"/>
-			<ul class="tabset buttons">
-				<li>
-					<a href="/" class="ico4"><span>Dashboard</span><em></em></a>
-					<span class="tooltip"><span>Dashboard</span></span>
-				</li>
-				<li>
-					<a href="/devices" class="ico1"><span>Devices</span><em></em></a>
-					<span class="tooltip"><span>Devices</span></span>
-				</li>
-				<li>
-					<a href="/devices/add" class="ico7"><span>Add Device</span><em></em></a>
-					<span class="tooltip"><span>Add Device</span></span>
-				</li>
-				<li class="active">
-					<a href="/settings" class="ico8"><span>User Settings</span><em></em></a>
-					<span class="tooltip"><span>User Settings</span></span>
-				</li>
-			</ul>
+			{% include "_nav.html" %}
 			<span class="shadow"></span>
 		</aside>
 	</div>
