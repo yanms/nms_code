@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 from multiprocessing import Lock
+from collections import OrderedDict
 import copy, sys, re
 
 cacheLock = Lock()
@@ -82,8 +83,33 @@ def getInterfaceQuery(root):
 			parser = __getParser__(child)
 	return (command, parser)
 
+def __addItemSingle__(e, od):
+	od['i:' + e.get('name')] = (__getCommand__(e), __getParser__(e))
+
+def __addItemPerInterface__(e, od, interfaces):
+	for interface in interfaces:
+		name = e.get('name')
+		name.replace('%if%', interface)
+		od['i:' + name] = (__getCommand__(e, interface), __getParser__(e))
+
+def __addCategory__(e, od):
+	od['c:' + e.get('name')] = OrderedDict()
+	for child in e.getchildren():
+		if child.tag == 'category':
+			__addCategory__(child, od['c:' + e.get('name')])
+		elif child.tag == 'item':
+			__addItem__(child, od['c:' + e.get('name')])
+
 def getAvailableTasks(root, interfaces):
 	for child in root.getchildren():
 		if child.tag == 'configurationItems':
 			e = child
-	
+	ret = OrderedDict()
+	for child in e.getchildren():
+		if child.tag == 'category':
+			__addCategory__(child, ret, interfaces)
+		elif child.tag == 'item':
+			if child.get('type') == 'per-interface':
+				__addItemPerInterface__(child, ret, interfaces)
+			elif child.get('type') == 'single':
+				__addItemSingle__(child, ret)
