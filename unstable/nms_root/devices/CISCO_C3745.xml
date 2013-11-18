@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <device>
-   <deviceInfo type="router" vendor="CISCO" model="Model TBD" />
+   <deviceInfo type="router" vendor="CISCO" model="C3745" />
    <supportedOperatingSystems>
-      <operatingSystem name="OS TBD" />
+      <operatingSystem name="IOS 12.4(25b)" />
    </supportedOperatingSystems>
    <supportedProtocols>
       <protocol name="SSH2" />
