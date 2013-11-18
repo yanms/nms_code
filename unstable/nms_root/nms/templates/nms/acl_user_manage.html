@@ -44,16 +44,28 @@
 									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
 									{% endfor %}
 								</ul>
-								<h2>ACL: {{user}} id: {{ user.id }} permissions </h2>
+								<h2>ACL MANAGE USER </h2>
+								*** USER {{ user_obj.username }} ***
+								<li>USERNAME: {{ user_obj.username }}</li>
+								<li>LAST_LOGIN: {{ user_obj.last_login }}</li>
+								<li>IS_SUPERUSER: {{ user_obj.username }}</li>
+								<li>FIRST_NAME: {{ user_obj.first_name }}</li>
+								<li>LAST_NAME: {{ user_obj.last_name }}</li>
+								<li>EMAIL: {{ user_obj.email }}</li>
+								<li>IS_STAFF: {{ user_obj.is_staff }}</li>
+								<li>IS_ACTIVE: {{ user_obj.is_active }}</li>
+								<li>DATE_JOINED: {{ user_obj.date_joined }}</li>
+								
 								*** USER PERMISSIONS ***
-								{% for iter in user_permissions %}
-								<li>{{ iter }}</li>
+								{% for iter in user_obj.user_permissions.all %}
+								<li>{{ iter}}</li>
 								{% endfor %}
 								
 								*** EXISTING PERMISSIONS ***
 								{% for iter in existing_permissions %}
 								<li>{{ iter.codename}}</li>
 								{% endfor %}
+								
 							</div>
 						</article>
 					</div>
