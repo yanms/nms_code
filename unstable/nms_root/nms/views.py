@@ -5,7 +5,7 @@ from nms.models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Permission
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext
 import nms.commands as commands
 
@@ -15,6 +15,7 @@ def index(request):
 	return render(request, 'nms/index.html', {'user': request.user.get_username()})
 
 @login_required
+@permission_required('nms.list_user', login_url='/permissions/?per=list_user')
 def acl(request):
     user_obj = request.user
     return render(request, 'nms/acl.html', {'user_permissions': user_obj.user_permissions.all(), 'existing_permissions': Permission.objects.values()})
@@ -27,6 +28,23 @@ def acl_list(request):
 def acl_user_manage(request, acl_user):
     user_obj = get_object_or_404(User, pk=acl_user)
     return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'existing_permissions': Permission.objects.values()})
+
+@login_required
+def acl_handler(request, acl_user):
+    pass
+
+@login_required
+def permissions(request):
+    if request.method == 'GET':
+        try:
+            per = request.GET['per']
+            return HttpResponse('Permission required for: '+ per)
+        except KeyError:
+            messages.error(request, 'Invalid URL')
+            return HttpResponseRedirect(reverse('nms:index'))
+    else:
+        messages.error(request, 'Invalid URL')
+        return HttpResponseRedirect(reverse('nms:index'))
 
 def register(request):
 	if request.method == 'POST':
