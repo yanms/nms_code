@@ -4,8 +4,8 @@ register = template.Library()
 
 ## menu_tags.py
 @register.simple_tag
-def active(request, pattern):
+def active(path, pattern):
 	import re
-	if re.search(pattern, request.path):
+	if re.search(pattern, path):
 		return 'active'
 	return ''
