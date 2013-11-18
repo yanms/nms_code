@@ -89,7 +89,7 @@ def __addItemSingle__(e, od, privPassword):
 				cmd = child
 			elif child.tag == 'returnParsing':
 				rp = child
-	od['i:' + e.get('name')] = (__getCommand__(cmd), __getParser__(rp))
+	od['i:' + e.get('name')] = (__getCommand__(cmd, privPassword=privPassword), __getParser__(rp))
 
 def __addItemPerInterface__(e, od, interfaces, privPassword):
 	for interface in interfaces:
@@ -99,7 +99,7 @@ def __addItemPerInterface__(e, od, interfaces, privPassword):
 				cmd = child
 			elif child.tag == 'returnParsing':
 				rp = child
-		od['i:' + name] = (__getCommand__(cmd, interface=interface), __getParser__(rp))
+		od['i:' + name] = (__getCommand__(cmd, interface=interface, privPassword=privPassword), __getParser__(rp))
 
 def __addCategory__(e, od, interfaces, privPassword):
 	od['c:' + e.get('name')] = OrderedDict()
