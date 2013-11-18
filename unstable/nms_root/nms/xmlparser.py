@@ -92,13 +92,16 @@ def __addItemPerInterface__(e, od, interfaces):
 		name.replace('%if%', interface)
 		od['i:' + name] = (__getCommand__(e, interface), __getParser__(e))
 
-def __addCategory__(e, od):
+def __addCategory__(e, od, interfaces):
 	od['c:' + e.get('name')] = OrderedDict()
 	for child in e.getchildren():
 		if child.tag == 'category':
 			__addCategory__(child, od['c:' + e.get('name')])
 		elif child.tag == 'item':
-			__addItem__(child, od['c:' + e.get('name')])
+			if child.get('type') == 'per-interface':
+				__addItemPerInterface__(child, od['c:' + e.get('name')], interfaces)
+			elif child.get('type') == 'single':
+				__addItemSingle__(child, od['c:' + e.get('name')])
 
 def getAvailableTasks(root, interfaces):
 	for child in root.getchildren():
