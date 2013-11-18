@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^acl/list$', views.acl_list, name='acl_list'),
     url(r'^acl/(?P<acl_user>\d+)/manage$', views.acl_user_manage, name='acl_user_manage'),
     url(r'^permissions/$', views.permissions, name='permissions'),
+    url(r'^install/$', views.install, name='install'),
     url(r'^session/$', views.session_handler, name='session_handler'),
     url(r'^logout/$', views.logout_handler, name='logout_handler'),
 )
