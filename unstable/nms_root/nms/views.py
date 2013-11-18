@@ -214,7 +214,7 @@ def send_command(request, device_id_request):
 	elif command == 'showipinterfacebrief':
 		ret = connector.demo_showipinterfacebrief()
 
-	messages.info(request, ret.decode().replace('\n', '<br />'))
+	messages.info(request, ret.decode().replace('\n', '<br />'), extra_tags='safe')
 	#for line in ret.splitlines(0):
 	#	messages.info(request, line)
 	connector.demo_closeDevice()

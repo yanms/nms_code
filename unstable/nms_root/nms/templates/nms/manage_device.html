@@ -41,7 +41,7 @@
 								<h1>Dashboard</h1>
 								<ul class="states">
 									{% for message in messages %}
-									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+									<li class="{{message.tags}}">{{message.tags.title}} : {{message|safe}}</li>
 									{% endfor %}
 								</ul>
 								<h2>Device: {{ devices.gen_dev.dev_type.dev_type_name }}: {{ devices.gen_dev_id }} ({{ devices.ip }})</h2>
