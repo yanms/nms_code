@@ -22,15 +22,15 @@ class RegexWrapper():
 				ret.append(match)
 		return ret
 
-def __getCommand__(element, interface = None):
+def __getCommand__(element, interface = '', privPassword = ''):
 	ret = []
 	for i in range(0, len(element.getchildren())):
 		for c in element.getchildren():
 			if int(c.get('position')) == i:
 				if c.get('type') == 'plaintext':
-					ret.append(c.text)
-				elif c.get('type') == 'interface':
-					ret.append(interface)
+					ret.append(c.text.replace('%if%', interface))
+				elif c.get('type') == 'privpassword':
+					ret.append(privPassword)
 				else:
 					tb = sys.exc_info()[2]
 					raise ValueError('Unsupported argElement type').with_traceback(tb)
@@ -83,7 +83,7 @@ def getInterfaceQuery(root):
 			parser = __getParser__(child)
 	return (command, parser)
 
-def __addItemSingle__(e, od):
+def __addItemSingle__(e, od, privPassword):
 	for child in e.getchildren():
 			if child.tag == 'command':
 				cmd = child
@@ -91,7 +91,7 @@ def __addItemSingle__(e, od):
 				rp = child
 	od['i:' + e.get('name')] = (__getCommand__(cmd), __getParser__(rp))
 
-def __addItemPerInterface__(e, od, interfaces):
+def __addItemPerInterface__(e, od, interfaces, privPassword):
 	for interface in interfaces:
 		name = e.get('name')
 		name.replace('%if%', interface)
@@ -102,27 +102,27 @@ def __addItemPerInterface__(e, od, interfaces):
 				rp = child
 		od['i:' + name] = (__getCommand__(cmd, interface), __getParser__(rp))
 
-def __addCategory__(e, od, interfaces):
+def __addCategory__(e, od, interfaces, privPassword):
 	od['c:' + e.get('name')] = OrderedDict()
 	for child in e.getchildren():
 		if child.tag == 'category':
-			__addCategory__(child, od['c:' + e.get('name')])
+			__addCategory__(child, od['c:' + e.get('name')], privPassword)
 		elif child.tag == 'item':
 			if child.get('type') == 'per-interface':
-				__addItemPerInterface__(child, od['c:' + e.get('name')], interfaces)
+				__addItemPerInterface__(child, od['c:' + e.get('name')], interfaces, privPassword)
 			elif child.get('type') == 'single':
-				__addItemSingle__(child, od['c:' + e.get('name')])
+				__addItemSingle__(child, od['c:' + e.get('name')], privPassword)
 
-def getAvailableTasks(root, interfaces):
+def getAvailableTasks(root, interfaces, privPassword):
 	for child in root.getchildren():
 		if child.tag == 'configurationItems':
 			e = child
 	ret = OrderedDict()
 	for child in e.getchildren():
 		if child.tag == 'category':
-			__addCategory__(child, ret, interfaces)
+			__addCategory__(child, ret, interfaces, privPassword)
 		elif child.tag == 'item':
 			if child.get('type') == 'per-interface':
-				__addItemPerInterface__(child, ret, interfaces)
+				__addItemPerInterface__(child, ret, interfaces, privPassword)
 			elif child.get('type') == 'single':
-				__addItemSingle__(child, ret)
+				__addItemSingle__(child, ret, privPassword)
