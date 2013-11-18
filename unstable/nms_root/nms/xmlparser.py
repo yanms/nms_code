@@ -29,7 +29,7 @@ def __getCommand__(element, interface = '', privPassword = ''):
 			if int(c.get('position')) == i:
 				if c.get('type') == 'plaintext':
 					ret.append(c.text.replace('%if%', interface))
-				elif c.get('type') == 'privpas	swd':
+				elif c.get('type') == 'privpasswd':
 					ret.append(privPassword)
 				else:
 					tb = sys.exc_info()[2]
