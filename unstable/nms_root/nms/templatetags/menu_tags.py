@@ -8,7 +8,7 @@ def active(request, pattern):
 
 <!-- navigation -->
 
-{% load tags %}
+{% load menu_tags %}
 <ul class="tabset buttons">
 	<li class="{% active request "^/$" %}">
 		<a href="/" class="ico4"><span>Dashboard</span><em></em></a>
