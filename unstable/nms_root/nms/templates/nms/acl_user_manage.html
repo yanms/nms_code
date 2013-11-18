@@ -55,16 +55,19 @@
 								<li>IS_STAFF: {{ user_obj.is_staff }}</li>
 								<li>IS_ACTIVE: {{ user_obj.is_active }}</li>
 								<li>DATE_JOINED: {{ user_obj.date_joined }}</li>
+								<br />
 								
 								*** USER PERMISSIONS ***
 								{% for iter in user_obj.user_permissions.all %}
 								<li>{{ iter}}</li>
 								{% endfor %}
+								<br/>
 								
 								*** EXISTING PERMISSIONS ***
 								{% for iter in existing_permissions %}
 								<li>{{ iter.codename}}</li>
 								{% endfor %}
+								<br/>
 								
 							</div>
 						</article>
