@@ -29,7 +29,7 @@ def __getCommand__(element, interface = '', privPassword = ''):
 			if int(c.get('position')) == i:
 				if c.get('type') == 'plaintext':
 					ret.append(c.text.replace('%if%', interface))
-				elif c.get('type') == 'privpasswd':
+				elif c.get('type') == 'privpas	swd':
 					ret.append(privPassword)
 				else:
 					tb = sys.exc_info()[2]
@@ -42,7 +42,7 @@ def __getParser__(element):
 	if element.get('type') != 'regex':
 		tb = sys.exc_info()[2]
 		raise ValueError('Unsupported returnParsing type').with_traceback(tb)
-	delimiter = element.get('interfaceDelimiter')
+	delimiter = element.get('delimiter')
 	regex = element.text
 	return RegexWrapper(regex, delimiter)
 
