@@ -6,6 +6,8 @@ def active(request, pattern):
 		return 'active'
 	return ''
 
+<!-- navigation -->
+
 {% load tags %}
 <ul class="tabset buttons">
 	<li class="{% active request "^/$" %}">
