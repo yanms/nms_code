@@ -126,3 +126,4 @@ def getAvailableTasks(root, interfaces, privPassword):
 				__addItemPerInterface__(child, ret, interfaces, privPassword)
 			elif child.get('type') == 'single':
 				__addItemSingle__(child, ret, privPassword)
+	return ret
