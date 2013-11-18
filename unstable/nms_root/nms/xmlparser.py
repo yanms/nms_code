@@ -93,25 +93,24 @@ def __addItemSingle__(e, od, privPassword):
 
 def __addItemPerInterface__(e, od, interfaces, privPassword):
 	for interface in interfaces:
-		name = e.get('name')
-		name.replace('%if%', interface)
+		name = e.get('name').replace('%if%', interface)
 		for child in e.getchildren():
 			if child.tag == 'command':
 				cmd = child
 			elif child.tag == 'returnParsing':
 				rp = child
-		od['i:' + name] = (__getCommand__(cmd, interface), __getParser__(rp))
+		od['i:' + name] = (__getCommand__(cmd, interface=interface), __getParser__(rp))
 
 def __addCategory__(e, od, interfaces, privPassword):
 	od['c:' + e.get('name')] = OrderedDict()
 	for child in e.getchildren():
 		if child.tag == 'category':
-			__addCategory__(child, od['c:' + e.get('name')], privPassword)
+			__addCategory__(child, od['c:' + e.get('name')], interfaces=interfaces, privPassword=privPassword)
 		elif child.tag == 'item':
 			if child.get('type') == 'per-interface':
-				__addItemPerInterface__(child, od['c:' + e.get('name')], interfaces, privPassword)
+				__addItemPerInterface__(child, od['c:' + e.get('name')], interfaces=interfaces, privPassword=privPassword)
 			elif child.get('type') == 'single':
-				__addItemSingle__(child, od['c:' + e.get('name')], privPassword)
+				__addItemSingle__(child, od['c:' + e.get('name')], privPassword=privPassword)
 
 def getAvailableTasks(root, interfaces, privPassword):
 	for child in root.getchildren():
@@ -120,10 +119,10 @@ def getAvailableTasks(root, interfaces, privPassword):
 	ret = OrderedDict()
 	for child in e.getchildren():
 		if child.tag == 'category':
-			__addCategory__(child, ret, interfaces, privPassword)
+			__addCategory__(child, ret, interfaces=interfaces, privPassword=privPassword)
 		elif child.tag == 'item':
 			if child.get('type') == 'per-interface':
-				__addItemPerInterface__(child, ret, interfaces, privPassword)
+				__addItemPerInterface__(child, ret, ,interfaces=interfaces, privPassword=privPassword)
 			elif child.get('type') == 'single':
-				__addItemSingle__(child, ret, privPassword)
+				__addItemSingle__(child, ret, privPassword=privPassword)
 	return ret
