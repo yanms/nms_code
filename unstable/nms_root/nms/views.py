@@ -213,8 +213,9 @@ def send_command(request, device_id_request):
 	elif command == 'showipinterfacebrief':
 		ret = connector.demo_showipinterfacebrief()
 
-	for line in ret.splitlines(0):
-		messages.info(request, line)
+	messages.info(request, ret.replace('\n', '<br />'))
+	#for line in ret.splitlines(0):
+	#	messages.info(request, line)
 	connector.demo_closeDevice()
 	return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
 
