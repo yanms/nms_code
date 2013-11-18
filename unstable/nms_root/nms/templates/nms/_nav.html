@@ -9,15 +9,15 @@
 		<a href="/devices" class="ico1"><span>Devices</span><em></em></a>
 		<span class="tooltip"><span>Devices</span></span>
 	</li>
-	<li class="{% active request "^/devices/add/" %}">
+	<li class="{% active request.path "^/devices/add/" %}">
 		<a href="/devices/add" class="ico7"><span>Add Device</span><em></em></a>
 		<span class="tooltip"><span>Add Device</span></span>
 	</li>
-	<li class="{% active request "^/acl/" %}">
+	<li class="{% active request.path "^/acl/" %}">
 			<a href="/acl" class="ico5"><span>ACL</span><em></em></a>
 			<span class="tooltip"><span>ACL</span></span>
 		</li>
-	<li class="{% active request "^/settings/" %}">
+	<li class="{% active request.path "^/settings/" %}">
 		<a href="/settings" class="ico8"><span>User Settings</span><em></em></a>
 		<span class="tooltip"><span>User Settings</span></span>
 	</li>
