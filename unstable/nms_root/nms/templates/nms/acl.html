@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - AdminPanel: ACL</title>
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+						<ul>
+							<li><a href="#" class="ico1">Messages <span class="num">26</span></a></li>
+							<li><a href="#" class="ico2">Alerts <span class="num">5</span></a></li>
+							<li><a href="#" class="ico3">Documents <span class="num">3</span></a></li>
+						</ul>
+					</nav>
+					<div class="profile-box">
+						<span class="profile">
+							<a href="#" class="section">
+								<!-- <img class="image" src="images/img1.png" alt="image description" width="26" height="26" /> -->
+								<span class="text-box">
+									You are logged in as:
+									<strong class="name">{{ user }}</strong>
+								</span>
+							</a>
+							<a href="#" class="opener">opener</a>
+						</span>
+						<a href="{% url 'nms:logout_handler' %}" class="btn-on">On</a>
+					</div>
+				</div>
+				<div class="tabs">
+					<div id="tab-8" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<ul class="states">
+									{% for message in messages %}
+									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+									{% endfor %}
+								</ul>
+								<h2>ACL</h2>
+								*** PUT YOUR CONTENT STUFF HERE ***
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside id="sidebar">
+			<img src="{{ STATIC_URL }}images/NMS.png"/>
+			<ul class="tabset buttons">
+				<li>
+					<a href="/" class="ico4"><span>Dashboard</span><em></em></a>
+					<span class="tooltip"><span>Dashboard</span></span>
+				</li>
+				<li>
+					<a href="/devices" class="ico1"><span>Devices</span><em></em></a>
+					<span class="tooltip"><span>Devices</span></span>
+				</li>
+				<li>
+					<a href="/devices/add" class="ico7"><span>Add Device</span><em></em></a>
+					<span class="tooltip"><span>Add Device</span></span>
+				</li>
+				<li>
+					<a href="/acl" class="ico7"><span>ACL</span><em></em></a>
+					<span class="tooltip"><span>ACL</span></span>
+				</li>
+				<li class="active">
+					<a href="/settings" class="ico8"><span>User Settings</span><em></em></a>
+					<span class="tooltip"><span>User Settings</span></span>
+				</li>
+			</ul>
+			<span class="shadow"></span>
+		</aside>
+	</div>
+</body>
+</html>
