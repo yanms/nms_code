@@ -46,11 +46,13 @@
 										<td><b>User</b></td>
 										<td><b>Is superuser?</b></td>
 										<td></td>
+										<td></td>
 									</tr>
 								{% for user in user_list %}
 									<tr>
 										<td> {{ user }} </td>
 										<td> {{ user.is_superuser }}</td>
+										<td> <a href="{% url 'nms:acl_user_manage' user.id %}">Info</a> </td>
 										<td> deleteknop </td>
 									</tr>
 								{% endfor %}
