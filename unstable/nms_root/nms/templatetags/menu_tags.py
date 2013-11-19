@@ -1,11 +1,10 @@
 from django import template
+from django.core.urlresolvers import reverse
 
 register = template.Library()
 
-## menu_tags.py
 @register.simple_tag
-def active(path, pattern):
-	import re
-	if re.search(pattern, path):
+def navactive(request, urls):
+	if request.path in ( reverse(url) for url in urls.split() ):
 		return 'active'
 	return ''
