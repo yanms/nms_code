@@ -21,7 +21,24 @@ def install(request):
             return HttpResponse('Installation completed.') 
     else:
         content_type = ContentType.objects.get_for_model(User)
-        permission = Permission.objects.create(codename='list_user', name='Can list users', content_type=content_type)
+        list_user, created = Permission.objects.get_or_create(codename='list_user', name='Can list users', content_type=content_type)
+        content_type = ContentType.objects.get_for_model(Group)
+        list_group, created = Permission.objects.get_or_create(codename='list_group', name='Can list (dev) groups', content_type=content_type)
+        
+        group, created = Group.objects.get_or_create(name='staff')
+        add_group = Permission.objects.get(codename='add_group')
+        change_group = Permission.objects.get(codename='change_group')
+        delete_group = Permission.objects.get(codename='delete_group')
+        group.permissions = [add_group, change_group, delete_group, list_group]
+        
+        group, created = Group.objects.get_or_create(name='admin')
+        add_group = Permission.objects.get(codename='add_user')
+        change_group = Permission.objects.get(codename='change_user')
+        delete_group = Permission.objects.get(codename='delete_user')
+        group.permissions = [add_group, change_group, delete_group, list_user]
+        
+        
+        
         Settings.objects.create(known_id=1, known_name='install complete', known_boolean=True)
         return HttpResponse('Finished installing NMS.')
 
@@ -31,9 +48,9 @@ def acl(request):
     return render(request, 'nms/acl.html', {'user_permissions': user_obj.user_permissions.all(), 'existing_permissions': Permission.objects.values()})
 
 @login_required
-@permission_required('auth.list_user', login_url='/permissions/?per=list_user')
-def acl_list(request):
-    return render(request, 'nms/acl_list.html', {'users': User.objects.values()})
+@permission_required('auth.list_group', login_url='/permissions/?per=list_group')
+def acl_groups(request):
+    return render(request, 'nms/acl_groups.html')
     
 @login_required
 @permission_required('auth.change_user', login_url='/permissions/?per=list_user')

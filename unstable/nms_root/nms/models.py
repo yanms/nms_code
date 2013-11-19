@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 #Validation needs to be implemented
 app_label = 'nms'
@@ -92,4 +92,9 @@ class Settings(models.Model):
     known_id = models.PositiveIntegerField()
     known_name = models.CharField(max_length=255)
     known_boolean = models.BooleanField()
+
+class Dev_group(models.Model):
+    dev_group_id = models.AutoField(primary_key=True)
+    gid = models.ForeignKey(Group)
+    devid = models.ForeignKey(Devices)
 
