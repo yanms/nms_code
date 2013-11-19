@@ -44,17 +44,7 @@
 									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
 									{% endfor %}
 								</ul>
-								<h2>ACL: {{user}} id: {{ user.id }} permissions </h2>
-								*** USER PERMISSIONS ***
-								{% for iter in user_permissions %}
-								<li>{{ iter }}</li>
-								{% endfor %}
-								<br/>
-								
-								*** EXISTING PERMISSIONS ***
-								{% for iter in existing_permissions %}
-								<li>{{ iter.codename}}</li>
-								{% endfor %}
+								 <p>Welcome to the Access control list. Please select one of the options from the top menu.</p>
 							</div>
 						</article>
 					</div>
