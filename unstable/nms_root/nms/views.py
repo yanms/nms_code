@@ -32,10 +32,10 @@ def install(request):
         group.permissions = [add_group, change_group, delete_group, list_group]
         
         group, created = Group.objects.get_or_create(name='admin')
-        add_group = Permission.objects.get(codename='add_user')
-        change_group = Permission.objects.get(codename='change_user')
-        delete_group = Permission.objects.get(codename='delete_user')
-        group.permissions = [add_group, change_group, delete_group, list_user]
+        add_user = Permission.objects.get(codename='add_user')
+        change_user = Permission.objects.get(codename='change_user')
+        delete_user = Permission.objects.get(codename='delete_user')
+        group.permissions = [add_user, change_user, delete_user, list_user]
         
         
         
@@ -50,6 +50,8 @@ def acl(request):
 @login_required
 @permission_required('auth.list_group', login_url='/permissions/?per=list_group')
 def acl_groups(request):
+    user = request.user
+    
     return render(request, 'nms/acl_groups.html')
     
 @login_required
