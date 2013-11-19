@@ -57,9 +57,12 @@
 								<br>
 								<h2>User groups:</h2>
 								<table border="0">
-								{% for group in usr_groups %}
+								{% for group in usr_groups %} # in group.groups.all
 									<tr>
 										<td>{{ group }}</td>
+										{% for permissions in group.groups.all %}
+										<td>{{ permissions }}</td>
+										{% endfor %}
 										<td>deleteknop</td>
 									</tr>
 								{% endfor %}
