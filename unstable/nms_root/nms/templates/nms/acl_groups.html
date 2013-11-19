@@ -59,12 +59,14 @@
 										<th>Group</th>
 										<th>Deletebutton</th>
 										<th>Permissions</th>
-									<tr>{% for group in usr_groups %}
+									<tr>
+										<td>Deleteknop</td>
+									{% for group in usr_groups %}
 										<td>{{ group }}</td> 
 										<td>{% for permissions in group.permissions.all %}
 										{{ permissions }}<br>
 										{% endfor %}</td>
-										<td>Deleteknop</td>
+										
 									</tr>
 								{% endfor %}</tr>
 								
