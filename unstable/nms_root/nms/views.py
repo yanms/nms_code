@@ -18,7 +18,7 @@ def index(request):
 def install(request):
     if Settings.objects.filter(known_name='install complete').exists():
         if Settings.objects.filter(known_name='install complete', known_boolean=True).exists():
-            return HttpResponse('Installation completed.') 
+            return HttpResponse('Installation already finished.') 
     else:
         content_type = ContentType.objects.get_for_model(User)
         list_user, created = Permission.objects.get_or_create(codename='list_user', name='Can list users', content_type=content_type)
