@@ -4,9 +4,10 @@ from django.core.urlresolvers import reverse
 from nms.models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import User, Permission, Group
 from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext
+from django.contrib.contenttypes.models import ContentType
 import nms.commands as commands
 
 
@@ -14,20 +15,33 @@ import nms.commands as commands
 def index(request):
 	return render(request, 'nms/index.html', {'user': request.user.get_username()})
 
+def install(request):
+    if Settings.objects.filter(known_name='install complete').exists():
+        if Settings.objects.filter(known_name='install complete', known_boolean=True).exists():
+            return HttpResponse('Installation completed.') 
+    else:
+        content_type = ContentType.objects.get_for_model(User)
+        permission = Permission.objects.create(codename='list_user', name='Can list users', content_type=content_type)
+        Settings.objects.create(known_id=1, known_name='install complete', known_boolean=True)
+        return HttpResponse('Finished installing NMS.')
+
 @login_required
-@permission_required('nms.list_user', login_url='/permissions/?per=list_user')
 def acl(request):
     user_obj = request.user
     return render(request, 'nms/acl.html', {'user_permissions': user_obj.user_permissions.all(), 'existing_permissions': Permission.objects.values()})
 
 @login_required
+@permission_required('auth.list_user', login_url='/permissions/?per=list_user')
 def acl_list(request):
     return render(request, 'nms/acl_list.html', {'users': User.objects.values()})
     
 @login_required
+@permission_required('auth.change_user', login_url='/permissions/?per=list_user')
 def acl_user_manage(request, acl_user):
     user_obj = get_object_or_404(User, pk=acl_user)
-    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'existing_permissions': Permission.objects.values()})
+    user_groups = user_obj.groups.all()
+    existing_groups = Group.objects.all()
+    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'existing_permissions': Permission.objects.values(), 'user_groups': user_groups, 'existing_groups': existing_groups})
 
 @login_required
 def acl_handler(request, acl_user):

@@ -48,7 +48,7 @@
 								*** USER {{ user_obj.username }} ***
 								<li>USERNAME: {{ user_obj.username }}</li>
 								<li>LAST_LOGIN: {{ user_obj.last_login }}</li>
-								<li>IS_SUPERUSER: {{ user_obj.username }}</li>
+								<li>IS_SUPERUSER: {{ user_obj.is_superuser }}</li>
 								<li>FIRST_NAME: {{ user_obj.first_name }}</li>
 								<li>LAST_NAME: {{ user_obj.last_name }}</li>
 								<li>EMAIL: {{ user_obj.email }}</li>
@@ -56,6 +56,7 @@
 								<li>IS_ACTIVE: {{ user_obj.is_active }}</li>
 								<li>DATE_JOINED: {{ user_obj.date_joined }}</li>
 								<br />
+								
 								
 								*** USER PERMISSIONS ***
 								{% for iter in user_obj.user_permissions.all %}
@@ -69,6 +70,18 @@
 								{% endfor %}
 								<br/>
 								
+								*** GROUPS ***
+								{% for iter in user_groups %}
+								<li>{{ iter}}</li>
+								{% endfor %}
+								<br/>
+								
+								*** EXISTING GROUPS ***
+								{% for iter in existing_groups %}
+								<li>{{ iter}}</li>
+								{% endfor %}
+								<br/>
+								
 							</div>
 						</article>
 					</div>
@@ -77,28 +90,7 @@
 		</div>
 		<aside id="sidebar">
 			<img src="{{ STATIC_URL }}images/NMS.png"/>
-			<ul class="tabset buttons">
-				<li>
-					<a href="/" class="ico4"><span>Dashboard</span><em></em></a>
-					<span class="tooltip"><span>Dashboard</span></span>
-				</li>
-				<li>
-					<a href="/devices" class="ico1"><span>Devices</span><em></em></a>
-					<span class="tooltip"><span>Devices</span></span>
-				</li>
-				<li>
-					<a href="/devices/add" class="ico7"><span>Add Device</span><em></em></a>
-					<span class="tooltip"><span>Add Device</span></span>
-				</li>
-				<li>
-					<a href="/acl" class="ico7"><span>ACL</span><em></em></a>
-					<span class="tooltip"><span>ACL</span></span>
-				</li>
-				<li class="active">
-					<a href="/settings" class="ico8"><span>User Settings</span><em></em></a>
-					<span class="tooltip"><span>User Settings</span></span>
-				</li>
-			</ul>
+			{% include "_nav.html" %}
 			<span class="shadow"></span>
 		</aside>
 	</div>

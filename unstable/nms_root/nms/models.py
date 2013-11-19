@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-#Valdiaiton needs to be implemented
+#Validation needs to be implemented
 app_label = 'nms'
 
 class Vendor(models.Model):
@@ -44,11 +44,16 @@ class Dev_type(models.Model):
 	def __str__(self):
 		return self.dev_type_name
 
+class File_location(models.Model):
+    file_location_id = models.AutoField(primary_key=True)
+    location = models.CharField(max_length=255)
+
 class Gen_dev(models.Model):
 	gen_dev_id = models.AutoField(primary_key=True)
 	vendor_id = models.ForeignKey(Vendor)
 	model_id = models.ForeignKey(Dev_model)
 	dev_type_id = models.ForeignKey(Dev_type)
+	file_location_id = models.ForeignKey(File_location)
 
 	def __str__(self):
 		return str(self.dev_type_id) + ' ' + str(self.vendor_id) + ' ' + str(self.model_id) #Making use of the defined __str__ methods of these classes
@@ -76,13 +81,15 @@ class Devices(models.Model):
 	def __str__(self):
 		return str(self.gen_dev_id) + ' - ' + str(self.ip)
 
-class File_location(models.Model):
-    file_location_id = models.AutoField(primary_key=True)
-    location = models.CharField(max_length=255)
-    dev_id = models.ForeignKey(Devices)
 
 class History(models.Model):
     history_id = models.AutoField(primary_key=True)
     action = models.CharField(max_length=255)
     user_id = models.ForeignKey(User)
+    
+class Settings(models.Model):
+    settings_id = models.AutoField(primary_key=True)
+    known_id = models.PositiveIntegerField()
+    known_name = models.CharField(max_length=255)
+    known_boolean = models.BooleanField()
 
