@@ -61,7 +61,7 @@ def acl_groups(request):
 @permission_required('auth.list_user', login_url='/permissions/?per=list_user')
 def acl_user(request):
     user_list = User.objects.all() 
-    return HttpResponse('test')
+    return render(request, 'nms/acl_users.html', {'user_list': user_list,})
 
 @login_required
 def acl_handler(request, acl_user):
