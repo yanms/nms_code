@@ -1,12 +1,14 @@
 import xml.etree.ElementTree as ET
 from multiprocessing import Lock
 from collections import OrderedDict
-import copy, sys, re
+import sys, re
 
 cacheLock = Lock()
-interfaceMapLock = Lock()
 cache = {}
-interfaceMap = {}
+
+taskcacheLock = Lock()
+taskcache = {}
+
 
 class RegexWrapper():
 	def __init__(self, regex, delimiter):
@@ -46,43 +48,6 @@ def __getParser__(element):
 	regex = element.text
 	return RegexWrapper(regex, delimiter)
 
-def get_xml_struct(filepath):
-	global lock
-	global cache
-
-	cacheLock.acquire()
-	if not filepath in cache.keys():
-		cache[filepath] = ET.parse(filepath).getroot()
-	xml_struct = copy.deepcopy(cache[filepath])
-	cacheLock.release()
-	return xml_struct
-
-def getDeviceInfo(root):
-	for child in root.getchildren():
-		if child.tag == 'deviceInfo':
-			e = child
-	return (e.get('type'), e.get('vendor'), e.get('model'))
-
-def getSupportedOperatingSystems(root):
-	for child in root.getchildren():
-		if child.tag == 'supportedOperatingSystems':
-			e = child
-	ret = []
-	for c in e.getchildren():
-		ret.append(c.get('name'))
-	return ret
-
-def getInterfaceQuery(root):
-	for child in root.getchildren():
-		if child.tag == 'interfaceQuery':
-			e = child
-	for child in e.getchildren():
-		if child.tag == 'command':
-			command = __getCommand__(child)
-		elif child.tag == 'returnParsing':
-			parser = __getParser__(child)
-	return (command, parser)
-
 def __addItemSingle__(e, od, privPassword):
 	for child in e.getchildren():
 			if child.tag == 'command':
@@ -112,17 +77,71 @@ def __addCategory__(e, od, interfaces, privPassword):
 			elif child.get('type') == 'single':
 				__addItemSingle__(child, od['c:' + e.get('name')], privPassword=privPassword)
 
-def getAvailableTasks(root, interfaces, privPassword):
+def get_xml_struct(filepath):
+	global lock
+	global cache
+
+	cacheLock.acquire()
+	try:
+		if not filepath in cache.keys():
+			cache[filepath] = ET.parse(filepath).getroot()
+		xml_struct = cache[filepath]
+	except:
+		raise
+	finally:
+		cacheLock.release()
+	return xml_struct
+
+def getDeviceInfo(root):
 	for child in root.getchildren():
-		if child.tag == 'configurationItems':
+		if child.tag == 'deviceInfo':
 			e = child
-	ret = OrderedDict()
+	return (e.get('type'), e.get('vendor'), e.get('model'))
+
+def getSupportedOperatingSystems(root):
+	for child in root.getchildren():
+		if child.tag == 'supportedOperatingSystems':
+			e = child
+	ret = []
+	for c in e.getchildren():
+		ret.append(c.get('name'))
+	return ret
+
+def getInterfaceQuery(root):
+	for child in root.getchildren():
+		if child.tag == 'interfaceQuery':
+			e = child
 	for child in e.getchildren():
-		if child.tag == 'category':
-			__addCategory__(child, ret, interfaces=interfaces, privPassword=privPassword)
-		elif child.tag == 'item':
-			if child.get('type') == 'per-interface':
-				__addItemPerInterface__(child, ret,interfaces=interfaces, privPassword=privPassword)
-			elif child.get('type') == 'single':
-				__addItemSingle__(child, ret, privPassword=privPassword)
+		if child.tag == 'command':
+			command = __getCommand__(child)
+		elif child.tag == 'returnParsing':
+			parser = __getParser__(child)
+	return (command, parser)
+
+def getAvailableTasks(root, interfaces=[], privPassword=''):
+	#locks might not be required here, as the struct is used as read-only mostly
+	taskcacheLock.acquire()
+	try:
+		if root in taskcache.keys():
+			ret = taskcache[root]
+			taskcacheLock.release()
+			return ret
+
+		for child in root.getchildren():
+			if child.tag == 'configurationItems':
+				e = child
+		ret = OrderedDict()
+		for child in e.getchildren():
+			if child.tag == 'category':
+				__addCategory__(child, ret, interfaces=interfaces, privPassword=privPassword)
+			elif child.tag == 'item':
+				if child.get('type') == 'per-interface':
+					__addItemPerInterface__(child, ret,interfaces=interfaces, privPassword=privPassword)
+				elif child.get('type') == 'single':
+					__addItemSingle__(child, ret, privPassword=privPassword)
+		taskcache[root] = ret
+	except:
+		raise
+	finally:
+		taskcacheLock.release()
 	return ret
