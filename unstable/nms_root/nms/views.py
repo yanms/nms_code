@@ -43,9 +43,10 @@ def install(request):
         return HttpResponse('Finished installing NMS.')
 
 @login_required
+@permission_required('auth.list_group', login_url='/permissions/?per=list_group')
 def acl(request):
     user_obj = request.user
-    return render(request, 'nms/acl.html', {'user_permissions': user_obj.user_permissions.all(), 'existing_permissions': Permission.objects.values()})
+    return render(request, 'nms/acl.html')
 
 @login_required
 @permission_required('auth.list_group', login_url='/permissions/?per=list_group')
@@ -55,14 +56,12 @@ def acl_groups(request):
     dev_groups = Group.objects.filter(name__startswith='dev:')
     usr_groups = Group.objects.filter(name__startswith='usr:')
     return render(request, 'nms/acl_groups.html', {'user_perm': user_perm, 'dev_groups': dev_groups, 'usr_groups': usr_groups})
-    
+
 @login_required
-@permission_required('auth.change_user', login_url='/permissions/?per=list_user')
-def acl_user_manage(request, acl_user):
-    user_obj = get_object_or_404(User, pk=acl_user)
-    user_groups = user_obj.groups.all()
-    existing_groups = Group.objects.all()
-    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'existing_permissions': Permission.objects.values(), 'user_groups': user_groups, 'existing_groups': existing_groups})
+@permission_required('auth.list_user', login_url='/permissions/?per=list_user')
+def acl_user(request):
+    user_list = User.objects.all() 
+    return HttpResponse('test')
 
 @login_required
 def acl_handler(request, acl_user):
