@@ -163,7 +163,7 @@ def device_manager(request, device_id_request):
 	
 	taskhtml = xmlparser.getAvailableTasksHtml(root, interfaces, devices.password_enable)
 	
-	return render(request, 'nms/manage_device.html', {'devices': devices}, 'taskhtml': taskhtml)
+	return render(request, 'nms/manage_device.html', {'devices': devices, 'taskhtml': taskhtml})
 
 @login_required
 def device_modify(request, device_id_request):
