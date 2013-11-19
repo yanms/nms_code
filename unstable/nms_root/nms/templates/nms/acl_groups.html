@@ -53,6 +53,16 @@
 									</tr>
 								{% endfor %}
 								</table>
+								{% if user_perm %}
+								<table border="0">
+								{% for group in usr_groups %}
+									<tr>
+										<td>{{ group }}</td>
+										<td>deleteknop</td>
+									</tr>
+								{% endfor %}
+								{% endif %}	
+								</table>
 								
 							</div>
 						</article>
