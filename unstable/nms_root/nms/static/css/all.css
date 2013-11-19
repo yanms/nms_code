@@ -331,11 +331,12 @@ form,fieldset{
 }
 
 .TFtable{
-	vertical-align: top;
 	border-collapse:collapse; 
 }
 .TFtable td{ 
 	padding:7px; border:#4e95f4 1px solid;
+	text-align: left;
+	vertical-align: top;
 }
 /* provide some minimal visual accomodation for IE8 and below */
 .TFtable tr{
