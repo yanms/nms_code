@@ -155,7 +155,13 @@ def device_add(request):
 @login_required
 def device_manager(request, device_id_request):
 	devices = get_object_or_404(Devices, pk=device_id_request)
-	return render(request, 'nms/manage_device.html', {'devices': devices})
+	root = xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location)
+	cmd, parser = xmlparser.getInterfaceQuery(root)
+	interfaces = commands.getInterfaces(cmd, parser, devices)
+	
+	taskhtml = xmlparser.getAvailableTasksHtml(root, interfaces, devices.password_enable)
+	
+	return render(request, 'nms/manage_device.html', {'devices': devices}, 'taskhtml': taskhtml)
 
 @login_required
 def device_modify(request, device_id_request):
