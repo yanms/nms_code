@@ -25,17 +25,17 @@ def install(request):
         content_type = ContentType.objects.get_for_model(Group)
         list_group, created = Permission.objects.get_or_create(codename='list_group', name='Can list (dev) groups', content_type=content_type)
         
-        group, created = Group.objects.get_or_create(name='staff')
+        group, created = Group.objects.get_or_create(name='usr:staff')
         add_group = Permission.objects.get(codename='add_group')
         change_group = Permission.objects.get(codename='change_group')
         delete_group = Permission.objects.get(codename='delete_group')
         group.permissions = [add_group, change_group, delete_group, list_group]
         
-        group, created = Group.objects.get_or_create(name='admin')
+        group, created = Group.objects.get_or_create(name='usr:admin')
         add_user = Permission.objects.get(codename='add_user')
         change_user = Permission.objects.get(codename='change_user')
         delete_user = Permission.objects.get(codename='delete_user')
-        group.permissions = [add_user, change_user, delete_user, list_user]
+        group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group]
         
         
         
@@ -51,8 +51,10 @@ def acl(request):
 @permission_required('auth.list_group', login_url='/permissions/?per=list_group')
 def acl_groups(request):
     user = request.user
-    
-    return render(request, 'nms/acl_groups.html')
+    user_perm = user.has_perm('auth.list_group')
+    dev_groups = Group.objects.filter(name__startswith='dev:')
+    usr_groups = Group.objects.filter(name__startswith='usr:')
+    return render(request, 'nms/acl_groups.html', {'user_perm': user_perm, 'dev_groups': dev_groups, 'usr_groups': usr_groups})
     
 @login_required
 @permission_required('auth.change_user', login_url='/permissions/?per=list_user')
