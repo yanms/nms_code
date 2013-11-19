@@ -10,7 +10,7 @@ def getInterfaces(command, parser, device):
 	try:
 		s = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
 		s.connect()
-		ret = ''
+		ret = b''
 		for i, arg in enumerate(command):
 			if i+1 == len(command):
 				ret += s.send_and_receive(arg, delay=0.5)
@@ -35,7 +35,7 @@ def executeTask(taskpath, device):
 
 	s = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
 	s.connect()
-	ret = ''
+	ret = b''
 	for i, arg in enumerate(args):
 		if i+1 == len(args):
 			ret += s.send_and_receive(arg, delay=0.5)
