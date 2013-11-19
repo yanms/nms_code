@@ -61,7 +61,7 @@
 									<tr>
 										<td>{{ group }}</td>
 										<td>{% for permissions in group.permissions.all %}
-										<tr><td>{{ permissions }}</td></tr>
+										<tr>{{ permissions }}</tr>
 										{% endfor %}</td>
 										<td>deleteknop</td>
 									</tr>
