@@ -1,57 +1,45 @@
 import nms.sshconnection as sshconnection
+import xmlparser
+from multiprocessing import Lock
 
-class Connector():
-	def __init__(self):
-		self.s = None
-		self.execPasswd = '1234'
+interfaces = {}
+interfacesLock = Lock()
 
+def getInterfaces(command, parser, device):
+	interfacesLock.acquire()
+	try:
+		s = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
+		s.connect()
+		ret = ''
+		for i, arg in enumerate(command):
+			if i+1 == len(command):
+				ret += s.send_and_receive(arg, delay=0.5)
+			else:
+				ret += s.send_and_receive(arg)
+		s.close()
+	except:
+		raise
+	finally:
+		interfacesLock.release()
+	return parser.parse(ret)
 
-	def demo_connectDevice(self, hostname, username, password, port = 22):
-		self.s = sshconnection.SSHConnection(hostname, username, password, port)
-		self.s.connect()
-		
-	def demo_closeDevice(self):
-		self.s.close()
+def executeTask(taskpath, device):
+	xmlroot = xmlparser.get_xml_struct(device.gen_dev_id.file_location_id.location)
+	taskpath = taskpath.split('#')
+	commands = xmlparser.getAvailableTasks(xmlroot)
+	for key in taskpath:
+		if not key in commands.keys():
+			return 'Invalid command'
+		commands = commands[key]
+	args, parser = commands
 
-	def demo_shutdown(self, interface):
-		self.s.send_and_receive('enable', delay=0.1)
-		self.s.send_and_receive(self.execPasswd, delay=0.1)
-		self.s.send_and_receive('configure terminal', delay=0.1)
-		self.s.send_and_receive('interface FastEthernet ' + interface, delay=0.1)
-		ret = self.s.send_and_receive('shutdown', delay=0.1)
-		self.s.send_and_receive('end\ndisable')
-		return ret
-
-	def demo_noshutdown(self, interface):
-		self.s.send_and_receive('enable', delay=0.1)
-		self.s.send_and_receive(self.execPasswd, delay=0.1)
-		self.s.send_and_receive('configure terminal', delay=0.1)
-		self.s.send_and_receive('interface FastEthernet ' + interface, delay=0.1)
-		ret = self.s.send_and_receive('no shutdown', delay=0.1)
-		self.s.send_and_receive('end\ndisable')
-		return ret
-
-	def demo_interfaceip(self, interface, ip, subnet):
-		self.s.send_and_receive('enable', delay=0.1)
-		self.s.send_and_receive(self.execPasswd, delay=0.1)
-		self.s.send_and_receive('configure terminal', delay=0.1)
-		self.s.send_and_receive('interface FastEthernet ' + interface, delay=0.1)
-		ret = self.s.send_and_receive('ip address ' + ip + ' ' + subnet, delay=0.1)
-		self.s.send_and_receive('end\ndisable')
-		return ret
-
-	def demo_interfacedescription(self, interface, description):
-		self.s.send_and_receive('enable', delay=0.1)
-		self.s.send_and_receive(self.execPasswd, delay=0.1)
-		self.s.send_and_receive('configure terminal', delay=0.1)
-		self.s.send_and_receive('interface FastEthernet ' + interface, delay=0.1)
-		ret = self.s.send_and_receive('description ' + description, delay=0.1)
-		self.s.send_and_receive('end\ndisable')
-		return ret
-
-	def demo_showipinterfacebrief(self):
-		self.s.send_and_receive('enable', delay=0.1)
-		self.s.send_and_receive(self.execPasswd, delay=0.1)
-		ret = self.s.send_and_receive('show ip interface brief', delay=0.1)
-		self.s.send_and_receive('disable')
-		return ret
+	s = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
+	s.connect()
+	ret = ''
+	for i, arg in enumerate(args):
+		if i+1 == len(args):
+			ret += s.send_and_receive(arg, delay=0.5)
+		else:
+			ret += s.send_and_receive(arg)
+	s.close()
+	return parser.parse(ret)
