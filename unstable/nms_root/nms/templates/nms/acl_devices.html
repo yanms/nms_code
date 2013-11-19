@@ -14,11 +14,7 @@
 			<div class="c1">
 				<div class="controls">
 					<nav class="links">
-						<ul>
-							<li><a href="#" class="ico1">Messages <span class="num">26</span></a></li>
-							<li><a href="#" class="ico2">Alerts <span class="num">5</span></a></li>
-							<li><a href="#" class="ico3">Documents <span class="num">3</span></a></li>
-						</ul>
+						{% include "_navup.html" %}
 					</nav>
 					<div class="profile-box">
 						<span class="profile">
@@ -44,11 +40,17 @@
 									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
 									{% endfor %}
 								</ul>
-								<h2>Groups: </h2>
+								<h2>Account Control List: Devices</h2>
 								<table border="0">
-								{% for group in groups %}
 									<tr>
-										<td> groupid </td>
+										<td>Type</td>
+										<td>Model</td>
+										<td></td>
+									</tr>
+								{% for device in devices %}
+									<tr>
+										<td> {{ device.gen_dev_id.dev_type_id }} </td>
+										<td> {{ device.gen_dev_id }}
 										<td> deleteknop </td>
 									</tr>
 								{% endfor %}

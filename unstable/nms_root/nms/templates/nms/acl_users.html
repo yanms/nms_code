@@ -44,14 +44,12 @@
 								<table border="1px">
 									<tr>
 										<td>User</td>
-										<td>Is staff?</td>
 										<td>Is superuser?</td>
 										<td></td>
 									</tr>
 								{% for user in user_list %}
 									<tr>
 										<td> {{ user }} </td>
-										<td> {{ user.is_staff }}</td>
 										<td> {{ user.is_superuser }}</td>
 										<td> deleteknop </td>
 									</tr>
