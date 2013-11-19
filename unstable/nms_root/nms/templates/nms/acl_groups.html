@@ -57,7 +57,7 @@
 								<br>
 								<h2>User groups:</h2>
 								<table border="0">
-								{% for group in usr_groups %} # in group.groups.all
+								{% for group in usr_groups %}
 									<tr>
 										<td>{{ group }}</td>
 										{% for permissions in group.groups.all %}
