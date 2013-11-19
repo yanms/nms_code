@@ -54,14 +54,20 @@
 								{% if user_perm %}
 								<br>
 								<h2>User groups:</h2>
-								<ul>
-								{% for group in usr_groups %}
-								<li>{{ group }}  -  deleteknop</li>
-										<ul>{% for permissions in group.permissions.all %}
-										<li>{{ permissions }}</li>
-										{% endfor %}</ul>
-								{% endfor %}
-								</ul>
+								<table class="TFtable">
+									<tr>
+										<th>Group</th>
+										<th>Deletebutton</th>
+										<th>Permissions</th>
+									<tr>{% for group in usr_groups %}
+										<td>{{ group }}</td> 
+										<td>{% for permissions in group.permissions.all %}
+										{{ permissions }}<br>
+										{% endfor %}</td>
+										<td>Deleteknop</td>
+									</tr>
+								{% endfor %}</tr>
+								
 								{% endif %}	
 
 								
