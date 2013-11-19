@@ -46,9 +46,9 @@
 								</ul>
 								<h2>Groups: </h2>
 								<table border="0">
-								{% for group in groups %}
+								{% for user in user_list %}
 									<tr>
-										<td> groupid </td>
+										<td> {{ user }} </td>
 										<td> deleteknop </td>
 									</tr>
 								{% endfor %}
