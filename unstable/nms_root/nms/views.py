@@ -24,6 +24,10 @@ def install(request):
         list_user, created = Permission.objects.get_or_create(codename='list_user', name='Can list users', content_type=content_type)
         content_type = ContentType.objects.get_for_model(Group)
         list_group, created = Permission.objects.get_or_create(codename='list_group', name='Can list (dev) groups', content_type=content_type)
+        content_type = ContentType.objects.get_for_model(Devices)
+        manage_devices, created = Permission.objects.get_or_create(codename='manage_devices', name='Can manage devices (perform action)', content_type=content_type)
+        content_type = ContentType.objects.get_for_model(Devices)
+        list_devices, created = Permission.objects.get_or_create(codename='list_devices', name='Can list devices', content_type=content_type)
         
         group, created = Group.objects.get_or_create(name='usr:staff')
         add_group = Permission.objects.get(codename='add_group')
@@ -35,7 +39,7 @@ def install(request):
         add_user = Permission.objects.get(codename='add_user')
         change_user = Permission.objects.get(codename='change_user')
         delete_user = Permission.objects.get(codename='delete_user')
-        group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group]
+        group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, manage_devices, list_devices]
         
         
         
@@ -64,8 +68,21 @@ def acl_user(request):
     return render(request, 'nms/acl_users.html', {'user_list': user_list,})
 
 @login_required
+@permission_required('auth.change_user', login_url='/permissions/?per=change_user')
+def acl_user_manage(request, acl_user):
+    user_list = User.objects.all() 
+    return render(request, 'nms/acl_users.html', {'user_list': user_list,})
+
+@login_required
+@permission_required('nms.list_devices', login_url='/permissions/?per=list_devices')
+def acl_device(request):
+    devices = Devices.objects.all() 
+    return render(request, 'nms/acl_devices.html', {'devices': devices,})
+
+@login_required
 def acl_handler(request, acl_user):
     pass
+
 
 @login_required
 def permissions(request):
