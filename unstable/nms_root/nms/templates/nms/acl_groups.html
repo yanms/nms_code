@@ -45,26 +45,22 @@
 									{% endfor %}
 								</ul>
 								<h2>Groups: </h2>
-								
+								<ul>
 								{% for group in dev_groups %}
-									<ul>
 										<li>{{ group }}  -  deleteknop</li>
-									</ul>
 								{% endfor %}
-
+								</ul>
 								{% if user_perm %}
 								<br>
 								<h2>User groups:</h2>
-								<table border="1">
+								<ul>
 								{% for group in usr_groups %}
-									<tr>
-										<td>{{ group }}</td>
-										<td>{% for permissions in group.permissions.all %}
-										{{ permissions }}<br>
-										{% endfor %}</td>
-										<td>deleteknop</td>
-									</tr>
+								<li>{{ group }}  -  deleteknop</li>
+										<ul>{% for permissions in group.permissions.all %}
+										<li>{{ permissions }}</li>
+										{% endfor %}</ul>
 								{% endfor %}
+								</ul>
 								{% endif %}	
 								</table>
 								
