@@ -1,5 +1,5 @@
 import nms.sshconnection as sshconnection
-import xmlparser
+import nms.xmlparser as xmlparser
 from multiprocessing import Lock
 
 interfaces = {}
