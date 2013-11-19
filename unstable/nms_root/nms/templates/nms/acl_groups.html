@@ -44,11 +44,15 @@
 									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
 									{% endfor %}
 								</ul>
-								<h2>ACL: {{user}} id: {{ user.id }} permissions </h2>
-								*** USERS ***
-								{% for iter in users %}
-								<li>ID: {{ iter.id }}, username: {{ iter.username }}, is superuser: {{ iter.is_superuser }}</li>
+								<h2>Groups: </h2>
+								<table border="0">
+								{% for group in groups %}
+									<tr>
+										<td> groupid </td>
+										<td> deleteknop </td>
+									</tr>
 								{% endfor %}
+								</table>
 								
 							</div>
 						</article>
