@@ -80,6 +80,12 @@ def acl_device(request):
     return render(request, 'nms/acl_devices.html', {'devices': devices,})
 
 @login_required
+@permission_required('nms.list_devices', login_url='/permissions/?per=list_devices')
+def acl_device_manage(request):
+    devices = Devices.objects.all() 
+    return render(request, 'nms/acl_devices.html', {'devices': devices,})
+
+@login_required
 def acl_handler(request, acl_user):
     pass
 
