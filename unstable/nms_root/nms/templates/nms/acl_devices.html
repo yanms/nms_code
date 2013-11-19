@@ -52,7 +52,7 @@
 									<tr>
 										<td> {{ device.gen_dev_id.dev_type_id }} </td>
 										<td> {{ device.gen_dev_id }}</td>
-										<td> <a href="{% url 'nms:acl_device_manage' dev_id %}">Info</a> </td>
+										<td> <a href="{% url 'nms:acl_device_manage' device.dev_id %}">Info</a> </td>
 										<td> deleteknop </td>
 									</tr>
 								{% endfor %}
