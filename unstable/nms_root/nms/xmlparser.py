@@ -124,7 +124,6 @@ def getAvailableTasks(root, interfaces=[], privPassword=''):
 	try:
 		if root in taskcache.keys():
 			ret = taskcache[root]
-			taskcacheLock.release()
 			return ret
 
 		for child in root.getchildren():
