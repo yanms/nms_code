@@ -42,9 +42,17 @@
 								</ul>
 								<h2>Account Control List: Users: </h2>
 								<table border="0">
+									<tr>
+										<td>User</td>
+										<td>Is staff?</td>
+										<td>Is superuser?</td>
+										<td></td>
+									</tr>
 								{% for user in user_list %}
 									<tr>
 										<td> {{ user }} </td>
+										<td> {{ user.is_staff }}</td>
+										<td> {{ user.is_superuser }}</td>
 										<td> deleteknop </td>
 									</tr>
 								{% endfor %}
