@@ -18,10 +18,27 @@ def index(request):
 def install(request):
     if Settings.objects.filter(known_name='install complete').exists():
         if Settings.objects.filter(known_name='install complete', known_boolean=True).exists():
-            return HttpResponse('Installation completed.') 
+            return HttpResponse('Installation already finished.') 
     else:
         content_type = ContentType.objects.get_for_model(User)
-        permission = Permission.objects.create(codename='list_user', name='Can list users', content_type=content_type)
+        list_user, created = Permission.objects.get_or_create(codename='list_user', name='Can list users', content_type=content_type)
+        content_type = ContentType.objects.get_for_model(Group)
+        list_group, created = Permission.objects.get_or_create(codename='list_group', name='Can list (dev) groups', content_type=content_type)
+        
+        group, created = Group.objects.get_or_create(name='staff')
+        add_group = Permission.objects.get(codename='add_group')
+        change_group = Permission.objects.get(codename='change_group')
+        delete_group = Permission.objects.get(codename='delete_group')
+        group.permissions = [add_group, change_group, delete_group, list_group]
+        
+        group, created = Group.objects.get_or_create(name='admin')
+        add_user = Permission.objects.get(codename='add_user')
+        change_user = Permission.objects.get(codename='change_user')
+        delete_user = Permission.objects.get(codename='delete_user')
+        group.permissions = [add_user, change_user, delete_user, list_user]
+        
+        
+        
         Settings.objects.create(known_id=1, known_name='install complete', known_boolean=True)
         return HttpResponse('Finished installing NMS.')
 
@@ -31,9 +48,11 @@ def acl(request):
     return render(request, 'nms/acl.html', {'user_permissions': user_obj.user_permissions.all(), 'existing_permissions': Permission.objects.values()})
 
 @login_required
-@permission_required('auth.list_user', login_url='/permissions/?per=list_user')
-def acl_list(request):
-    return render(request, 'nms/acl_list.html', {'users': User.objects.values()})
+@permission_required('auth.list_group', login_url='/permissions/?per=list_group')
+def acl_groups(request):
+    user = request.user
+    
+    return render(request, 'nms/acl_groups.html')
     
 @login_required
 @permission_required('auth.change_user', login_url='/permissions/?per=list_user')
@@ -136,7 +155,13 @@ def device_add(request):
 @login_required
 def device_manager(request, device_id_request):
 	devices = get_object_or_404(Devices, pk=device_id_request)
-	return render(request, 'nms/manage_device.html', {'devices': devices})
+	root = xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location)
+	cmd, parser = xmlparser.getInterfaceQuery(root)
+	interfaces = commands.getInterfaces(cmd, parser, devices)
+	
+	taskhtml = xmlparser.getAvailableTasksHtml(root, interfaces, devices.password_enable)
+	
+	return render(request, 'nms/manage_device.html', {'devices': devices}, 'taskhtml': taskhtml)
 
 @login_required
 def device_modify(request, device_id_request):

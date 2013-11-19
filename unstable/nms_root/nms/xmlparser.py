@@ -16,6 +16,8 @@ class RegexWrapper():
 		self.regex = regex.encode('utf_8').decode('unicode-escape')
 	
 	def parse(self, text):
+		if type(text) == type(bytes()):
+			text = text.decode()
 		text = text.split(self.delimiter)
 		ret = []
 		for line in text:
@@ -124,7 +126,6 @@ def getAvailableTasks(root, interfaces=[], privPassword=''):
 	try:
 		if root in taskcache.keys():
 			ret = taskcache[root]
-			taskcacheLock.release()
 			return ret
 
 		for child in root.getchildren():
