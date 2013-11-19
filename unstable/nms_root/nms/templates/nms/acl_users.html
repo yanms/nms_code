@@ -41,11 +41,10 @@
 									{% endfor %}
 								</ul>
 								<h2>Account Control List: Users: </h2>
-								<table border ="1" celpadding="3" cellspacing="0">
-								<tbody align="left" style="background-color:white">
+								<table class="TFtable">
 									<tr>
-										<td>User</td>
-										<td>Is superuser?</td>
+										<td><b>User</b></td>
+										<td><b>Is superuser?</b></td>
 										<td></td>
 									</tr>
 								{% for user in user_list %}
@@ -55,7 +54,6 @@
 										<td> deleteknop </td>
 									</tr>
 								{% endfor %}
-								</tbody>
 								</table>
 								
 							</div>
