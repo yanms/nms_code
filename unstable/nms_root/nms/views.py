@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext
 from django.contrib.contenttypes.models import ContentType
 import nms.commands as commands
+import nms.xmlparser as xmlparser
 
 
 @login_required
