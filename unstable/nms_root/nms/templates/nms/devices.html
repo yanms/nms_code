@@ -41,6 +41,13 @@
 								<h1>Dashboard</h1>
 								<h2>Devices</h2>
 								<table class="TFtable">
+									<tr>
+										<td><b>Type</b></td>
+										<td><b>Device</b></td>
+										<td><b>IP address</b></td>
+										<td><b>State</b></td>
+										<td><b>Manage</b></td>
+									</tr>
 								{% for device in devices %}
 									<tr>
 										<td>{{ device.gen_dev_id.dev_type_id }}</td>
