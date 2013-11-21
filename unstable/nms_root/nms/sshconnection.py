@@ -48,12 +48,12 @@ class SSHConnection:
 			self.chan.get_pty()
 			self.chan.invoke_shell()
 		except paramiko.SSHException:
-			print('*** SSHException raised')
-			traceback.print_exc()
+			#print('*** SSHException raised')
+			#traceback.print_exc()
 			return -1
 		except Exception as e:
-			print('*** Caught exception')
-			traceback.print_exc()
+			#print('*** Caught exception')
+			#traceback.print_exc()
 			return -1
 
 	def send_and_receive(self, command, delay=0):
@@ -61,8 +61,8 @@ class SSHConnection:
 			try:
 				command = command.encode()
 			except AttributeError:
-				print('*** Expected a string or bytestring as input')
-				traceback.print_exc()
+				#print('*** Expected a string or bytestring as input')
+				#traceback.print_exc()
 				return
 
 		command = command.strip() + b'\n'
