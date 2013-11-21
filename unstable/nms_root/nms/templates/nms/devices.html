@@ -40,9 +40,17 @@
 							<div class="text-section">
 								<h1>Dashboard</h1>
 								<h2>Devices</h2>
-								<p>{% for device in devices %}
-									{{ device.gen_dev_id.dev_type_id }} | {{ device.gen_dev_id }} | {{ device.ip }} | ## UP/DOWN ## | <a href="{% url 'nms:device_manager' device.dev_id %}">Manage</a></p><br />
-{% endfor %}
+								<table class="TFtable">
+								{% for device in devices %}
+									<tr>
+										<td>{{ device.gen_dev_id.dev_type_id }}</td>
+										<td>{{ device.gen_dev_id }}</td>
+										<td>{{ device.ip }}</td>
+										<td>## UP/DOWN ##</td>
+										<td><a href="{% url 'nms:device_manager' device.dev_id %}">Manage</a></td>
+									</tr>
+								{% endfor %}
+								</table>
 							</div>
 							<ul class="states">
 								{% for message in messages %}
