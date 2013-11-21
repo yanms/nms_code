@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 from multiprocessing import Lock
 from collections import OrderedDict
 import sys, re
+from django.core.urlresolvers import reverse
 
 cacheLock = Lock()
 cache = {}
@@ -147,19 +148,20 @@ def getAvailableTasks(root, interfaces=[], privPassword=''):
 		taskcacheLock.release()
 	return ret
 
-def __addToHTML__(curpath, od):
+def __addToHTML__(curpath, od, id):
 	s = ''
 	for key in od.keys():
 		if key.startswith('c:'):
 			s += '<li>%s</li>\n<ul>\n' % key[2:]
-			s += __addToHTML__(curpath + '#' + key, od[key])
+			s += __addToHTML__(curpath + '#' + key, od[key], id)
 			s += '</ul>\n'
 		elif key.startswith('i:'):
-			s += '<li><a href="{%% url \'nms:device_command_handler\' devices.dev_id %%}?command=%s">%s</a></li>' % (curpath + '#' + key, key[2:])
+			url = reverse('nms:device_command_handler', kwargs={'device_id_request':id})
+			s += '<li><a href="%s/?command=%s">%s</a></li>' % (url, curpath + '#' + key, key[2:])
 	return s
 
-def getAvailableTasksHtml(root, interfaces=[], privPassword=''):
+def getAvailableTasksHtml(root, id, interfaces=[], privPassword=''):
 	od = getAvailableTasks(root, interfaces, privPassword)
 	s = '<ul>\n'
-	s += __addToHTML__('', od)
+	s += __addToHTML__('', od, id)
 	return s
