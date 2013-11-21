@@ -164,4 +164,5 @@ def getAvailableTasksHtml(root, id, interfaces=[], privPassword=''):
 	od = getAvailableTasks(root, interfaces, privPassword)
 	s = '<ul>\n'
 	s += __addToHTML__('', od, id)
+	s += '</ul>\n'
 	return s
