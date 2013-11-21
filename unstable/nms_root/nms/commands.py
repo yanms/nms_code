@@ -9,7 +9,8 @@ def getInterfaces(command, parser, device):
 	interfacesLock.acquire()
 	try:
 		s = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
-		s.connect()
+		if s.connect() == -1:
+			return -1
 		ret = b''
 		for i, arg in enumerate(command):
 			if i+1 == len(command):
@@ -34,7 +35,8 @@ def executeTask(taskpath, device):
 	args, parser = commands
 
 	s = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
-	s.connect()
+	if s.connect() == -1:
+		return -1
 	ret = b''
 	for i, arg in enumerate(args):
 		if i+1 == len(args):

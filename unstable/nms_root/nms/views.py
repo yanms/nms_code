@@ -184,6 +184,9 @@ def device_manager(request, device_id_request):
 	cmd, parser = xmlparser.getInterfaceQuery(root)
 	interfaces = commands.getInterfaces(cmd, parser, devices) #Use if the device is online
 	#interfaces = ['FastEthernet0/0', 'FastEthernet0/1'] #Use if no connection to the device is possible for dummy interfaces
+	if interfaces == -1:
+		messages.error(request, 'Failed to connect to device')
+		return HttpResponseRedirect(reverse('nms:devices'))
 	
 	taskhtml = xmlparser.getAvailableTasksHtml(root, devices.dev_id, interfaces, devices.password_enable)
 	return render(request, 'nms/manage_device.html', {'devices': devices, 'taskhtml': taskhtml})
@@ -260,46 +263,13 @@ def send_command(request, device_id_request):
 		command = request.GET['command']
 	else:
 		return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
-
+	
 	device = Devices.objects.get(pk=device_id_request)
-	connector = commands.Connector()
-	connector.demo_connectDevice(device.ip, device.login_name, device.password_remote, device.port)
-
-	ret = ''
-	if command == 'shutdown':
-		if 'interface' in request.GET:
-			interface = request.GET['interface']
-			ret = connector.demo_shutdown(interface)
-		else:
-			return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
-	elif command == 'noshutdown':
-		if 'interface' in request.GET:
-			interface = request.GET['interface']
-			ret = connector.demo_noshutdown(interface)
-		else:
-			return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
-	elif command == 'interfaceip':
-		if 'interface' in request.GET and 'ip' in request.GET and 'subnet' in request.GET:
-			interface = request.GET['interface']
-			ip = request.GET['ip']
-			subnet = request.GET['subnet']
-			ret = connector.demo_interfaceip(interface, ip, subnet)
-		else:
-			return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
-	elif command == 'interfacedescription':
-		if 'interface' in request.GET and 'description' in request.GET:
-			interface = request.GET['interface']
-			description = request.GET['description']
-			ret = connector.demo_interfacedescription(interface, description)
-		else:
-			return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
-	elif command == 'showipinterfacebrief':
-		ret = connector.demo_showipinterfacebrief()
-
-	messages.info(request, ret.decode().replace('\n', '<br />'), extra_tags='safe')
-	#for line in ret.splitlines(0):
-	#	messages.info(request, line)
-	connector.demo_closeDevice()
+	ret = connector = commands.executeTask(command, device)
+	if ret == -1:
+		messages.error(request, 'Failed to connect to device')
+	else:
+		messages.info(request, ret.decode().replace('\n', '<br />'), extra_tags='safe')
 	return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
 
 def session_handler(request):

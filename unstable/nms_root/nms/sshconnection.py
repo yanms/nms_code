@@ -3,7 +3,7 @@ import paramiko
 import traceback
 import os
 import time
-
+from django.contrib import messages
 
 class SSHConnection:
 	def __init__(self, hostname, username, password, port = 22):
@@ -22,48 +22,39 @@ class SSHConnection:
 	def connect(self):
 		try:
 			self.sock.connect((self.hostname, self.port))
-		except Exception as e:
-			print('*** Connection failed: ' + str(e))
-			traceback.print_exc()
-			return
-		try:
+
 			self.t = paramiko.Transport(self.sock)
-			try:
-				self.t.start_client()
-			except paramiko.SSHException:
-				print('*** SSH negotiation failed.')
-				return
-			
+			self.t.start_client()
 			try:
 				self.keys = paramiko.util.load_host_keys(os.path.expanduser('~/.ssh/known_hosts'))
 			except IOError:
-				print('*** Unable to open host keys file')
 				self.keys = {}
 			
-			
 			key = self.t.get_remote_server_key()
-			"""
-			if not self.hostname in self.keys:
-				print('*** WARNING: Unknown host key!')
-			elif not self.keys[hostname].has_key(key.get_name()):
-				print('*** WARNING: Unknown host key!')
-			elif self.keys[hostname][key.get_name()] != key:
-				print('*** WARNING: Host key has changed!!!')
-			else:
-				print('*** Host key OK.')
-			"""
 			
+			#if not self.hostname in self.keys:
+			#	print('*** WARNING: Unknown host key!')
+			#elif not self.keys[hostname].has_key(key.get_name()):
+			#	print('*** WARNING: Unknown host key!')
+			#elif self.keys[hostname][key.get_name()] != key:
+			#	print('*** WARNING: Host key has changed!!!')
+			#else:
+			#	print('*** Host key OK.')
 			self.t.auth_password(self.username, self.password)
 			if not self.t.is_authenticated():
-				print('*** Authentication failed')
 				self.t.close()
-				return
+				return -1
 			self.chan = self.t.open_session()
 			self.chan.get_pty()
 			self.chan.invoke_shell()
+		except paramiko.SSHException:
+			print('*** SSHException raised: ' + str(e.__class__) + ':' + str(e))
+			traceback.print_exc()
+			return -1
 		except Exception as e:
 			print('*** Caught exception: ' + str(e.__class__) + ':' + str(e))
 			traceback.print_exc()
+			return -1
 
 	def send_and_receive(self, command, delay=0):
 		if type(command) != type(bytes()):
