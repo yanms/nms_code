@@ -146,3 +146,20 @@ def getAvailableTasks(root, interfaces=[], privPassword=''):
 	finally:
 		taskcacheLock.release()
 	return ret
+
+def __addToHTML__(curpath, od):
+	s = ''
+	for key in od.keys():
+		if key.startswith('c:'):
+			s += '<li>%s</li>\n<ul>\n' % key[2:]
+			s += __addToHTML__(curpath + '#' + key, od[key])
+			s += '</ul>\n'
+		elif key.startswith('i:'):
+			s += '<li><a href="{%% url \'nms:device_command_handler\' devices.dev_id %%}?command=%s">%s</a></li>' % (curpath + '#' + key, key[2:])
+	return s
+
+def getAvailableTasksHtml(root, interfaces=[], privPassword=''):
+	od = getAvailableTasks(root, interfaces, privPassword)
+	s = '<ul>\n'
+	s += __addToHTML__('', od)
+	return s
