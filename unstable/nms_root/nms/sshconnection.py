@@ -48,11 +48,11 @@ class SSHConnection:
 			self.chan.get_pty()
 			self.chan.invoke_shell()
 		except paramiko.SSHException:
-			print('*** SSHException raised: ' + str(e.__class__) + ':' + str(e))
+			print('*** SSHException raised')
 			traceback.print_exc()
 			return -1
 		except Exception as e:
-			print('*** Caught exception: ' + str(e.__class__) + ':' + str(e))
+			print('*** Caught exception')
 			traceback.print_exc()
 			return -1
 
