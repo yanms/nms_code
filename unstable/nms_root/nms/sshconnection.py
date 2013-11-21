@@ -14,6 +14,7 @@ class SSHConnection:
 		self.password = password
 		try:
 			self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #IPv4
+			self.sock.settimeout(15)
 		except Exception as e:
 			print('*** Socket creation failed: ' + str(e))
 			traceback.print_exc()
@@ -22,7 +23,6 @@ class SSHConnection:
 	def connect(self):
 		try:
 			self.sock.connect((self.hostname, self.port))
-
 			self.t = paramiko.Transport(self.sock)
 			self.t.start_client()
 			try:
