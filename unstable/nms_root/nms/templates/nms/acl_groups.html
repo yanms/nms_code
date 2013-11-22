@@ -41,11 +41,12 @@
 									{% endfor %}
 								</ul>
 								<h2>Groups: </h2>
-								<form action="" method ="POST"
+								<form action="{% url 'nms:acl_groups_add' %}" method ="POST">
+								{% csrf_token %}
 								<table border ="0">
 									<tr>
 										<td>Add group:</td>
-										<td><input type="group" name="newgroup" id="newgroup" /> <input type="submit" value="Submit"></td>
+										<td><input type="group" name="group" /> <input type="hidden" value="dev" name="task" /> <input type="submit" value="Submit"></td>
 									</tr>
 								</table>
 								</form>
@@ -63,11 +64,12 @@
 								{% if user_perm %}
 								<br>
 								<h2>User groups:</h2>
-								<form action="" method ="POST"
+								<form action="{% url 'nms:acl_groups_add' %}" method ="POST">
+								{% csrf_token %}
 								<table border ="0">
 									<tr>
 										<td>Add group:</td>
-										<td><input type="group" name="newgroup" id="newgroup" /> <input type="submit" value="Submit"></td>
+										<td><input type="group" name="group" /> <input type="hidden" value="usr" name="task" /> <input type="submit" value="Submit"></td>
 									</tr>
 								</table>
 								</form>

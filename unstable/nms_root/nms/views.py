@@ -106,8 +106,18 @@ def acl_handler(request, acl_id):
                 pass
             elif task == 'ch_per_dev_group':
                 group = get_object_or_404(Group, pk=acl_id)
-                messages.info(request, list(request.POST.items()))
-                return HttpResponseRedirect(reverse('nms:index'))
+                devices = request.POST.getlist('devices')
+                rights = request.POST.getlist('rights')
+                group.permissions = []
+                for iter in devices:
+                    Dev_group.objects.get_or_create(gid=group, devid=iter)
+                for iter in rights:
+                    right = iter
+                    right += '_device'
+                    permission = Permission.objects.get(codename=right)
+                    group.permissions.add(permission)
+                messages.success(request, 'Database updated successfully')
+                return HttpResponseRedirect(reverse('nms:acl_groups'))
                 
         except KeyError as err:
             messages.error(request, 'Not all required fields are set')
@@ -123,6 +133,25 @@ def acl_groups_manage(request, acl_id):
     group = get_object_or_404(Group, pk=acl_id)
     devices = Devices.objects.all()
     return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group })
+
+@login_required
+def acl_groups_add(request):
+    if request.method == 'POST':
+        if request.POST['task'] == 'usr':
+            name = 'usr:'
+            name += request.POST['name']
+            Group.objects.get_or_create(name=name)
+            messages.success(request, "Database updated succesfully")
+            return HttpResponseRedirect(reverse('nms:acl_groups'))
+        elif request.POST['task'] == 'dev':
+            name = 'dev:'
+            name += request.POST['name']
+            Group.objects.get_or_create(name=name)
+            messages.success(request, "Database updated succesfully")
+            return HttpResponseRedirect(reverse('nms:acl_groups'))
+        else:
+            messages.error(request, "Some fields are not set")
+            return HttpResponseRedirect(reverse('nms:acl_groups'))
 
 @login_required
 def permissions(request):
