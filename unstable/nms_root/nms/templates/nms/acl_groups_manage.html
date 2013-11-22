@@ -42,12 +42,12 @@
 									{% endfor %}
 								</ul>
 								<form name="devices" action="{% url 'nms:acl_handler' group.id %}" method="POST">
+									{% csrf_token %}
 									<h2>Devices</h2>
 									{% for iter in devices %}
 										<input type="checkbox" name="devices" value="{{ iter.dev_id }}" /> {{ iter }}<br />
 									{% endfor %}
 									<h2>Rights</h2>
-									<br>
 									<input type="checkbox" name="rights" value="list" />List Devices<br />
 									<input type="checkbox" name="rights" value="manage" />Manage Devices<br />
 									<input type="checkbox" name="rights" value="change" />Change Devices<br />
