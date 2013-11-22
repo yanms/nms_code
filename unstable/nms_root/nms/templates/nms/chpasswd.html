@@ -48,6 +48,7 @@
 								<p>
 									<form action="{% url 'nms:user_settings' %}" method="POST">
 										{% csrf_token %}
+										<input type="hidden" name="mode" id="mode" value="chpasswd" />
 										<table border="0">
 											<tr>
 												<td>Old password:</td>
@@ -65,32 +66,28 @@
 												<td><input type="submit" value="Submit" id="submit" /></td>
 												<td><input type="reset" value="reset" id="reset" /></td>
 											</tr>
+										</table>
+									</form>
+									<form action="{% url 'nms:user_settings' %}" method="POST">
+										{% csrf_token %}
+										<input type="hidden" name="mode" id="mode" value="chsettings" />
+										<table border="0">
 										<br>
 											<tr>
 												<td>Name:</td>
-												<td><input type="name" name="newname" id="newname" /></td>
+												<td><input type="name" name="newname" id="newname" value="{{ user.first_name }}" /></td>
 											</tr>
-											<tr>
-												<td><input type="submit" value="Submit" id="submit" /></td>
-												<td><input type="reset" value="reset" id="reset" /></td>
-											</tr>
-										<br>
 											<tr>
 												<td>Surname:</td>
-												<td><input type="surname" name="newsurname" id="newsurname" /></td>
+												<td><input type="surname" name="newsurname" id="newsurname" value="{{ user.last_name }}"/></td>
 											</tr>
-											<tr>
-												<td><input type="submit" value="Submit" id="submit" /></td>
-												<td><input type="reset" value="reset" id="reset" /></td>
-											</tr>
-										<br>
 											<tr>
 												<td>E-Mail:</td>
-												<td><input type="e-mail" name="newe-mail" id="newe-mail" /></td>
+												<td><input type="e-mail" name="newemail" id="newemail" value="{{ user.email }}"/></td>
 											</tr>
 											<tr>
 												<td><input type="submit" value="Submit" id="submit" /></td>
-												<td><input type="reset" value="reset" id="reset" /></td>
+												<td><input type="reset" value="Reset" id="reset" /></td>
 											</tr>
 										</table>
 									</form>
