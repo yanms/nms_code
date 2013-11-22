@@ -196,8 +196,11 @@ def acl_groups_handler(request):
             Group.objects.get_or_create(name=name)
             messages.success(request, "Database updated succesfully")
             return HttpResponseRedirect(reverse('nms:acl_groups'))
-        elif request.POST['task'] == 'dev':
-            devices = request.POST.getlist('delete')    
+        elif request.POST['task'] == 'delete':
+            groups = request.POST.getlist('delete')
+            for iter in groups:
+                iter.permissions = []
+                iter.delete()    
         else:
             messages.error(request, "Some fields are not set")
             return HttpResponseRedirect(reverse('nms:acl_groups'))
