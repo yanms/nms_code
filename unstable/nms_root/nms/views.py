@@ -74,7 +74,10 @@ def acl_user(request):
 def acl_user_manage(request, acl_user):
     user_obj = get_object_or_404(User, pk=acl_user)
     user_groups = Group.objects.filter(name__startswith="usr:") 
-    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'user_groups': user_groups})
+    device_groups = Group.objects.filter(name__startswith="dev:")
+    groups = Group.objects.all()
+    existing_permissions = Permission.objects.all()
+    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'user_groups': user_groups, 'device_groups': device_groups, 'groups': groups, 'existing_permissions': existing_permissions})
 
 @login_required
 @permission_required('nms.list_devices', login_url='/permissions/?per=list_devices')

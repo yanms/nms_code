@@ -58,7 +58,19 @@
 								<br />
 								
 								
-								*** USER PERMISSIONS ***
+								*** USER IS ADDED IN THE FOLLOWING DEVICE GROUPS ***
+								{% for iter in device_groups %}
+								<li>{{ iter}}</li>
+								{% endfor %}
+								<br/>
+								
+								*** USER IS ADDED IN THE FOLLOWING USER GROUPS ***
+								{% for iter in user_groups %}
+								<li>{{ iter}}</li>
+								{% endfor %}
+								<br/>
+								
+								*** USER HAS THE FOLLOWING PERMISSIONS ***
 								{% for iter in user_obj.user_permissions.all %}
 								<li>{{ iter}}</li>
 								{% endfor %}
@@ -70,15 +82,12 @@
 								{% endfor %}
 								<br/>
 								
-								*** GROUPS ***
-								{% for iter in user_groups %}
-								<li>{{ iter}}</li>
-								{% endfor %}
-								<br/>
-								
-								*** EXISTING GROUPS ***
-								{% for iter in existing_groups %}
-								<li>{{ iter}}</li>
+								*** GROUPS NOT ASSIGNED TO ***
+								{% for iter in groups %}
+								{% if iter in device_groups or iter in user_groups %}
+								{% else %}
+								<li>{{ iter }}</li>
+								{% endif %}
 								{% endfor %}
 								<br/>
 								
