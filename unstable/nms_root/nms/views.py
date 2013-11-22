@@ -249,7 +249,7 @@ def device_manager(request, device_id_request):
 	root = xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location)
 	cmd, parser = xmlparser.getInterfaceQuery(root)
 	if request.method == 'GET' and 'refresh' in request.GET:
-		commands.removeInterfaces(device)
+		commands.removeInterfaces(devices)
 	interfaces = commands.getInterfaces(cmd, parser, devices) #Use if the device is online
 	#interfaces = ['FastEthernet0/0', 'FastEthernet0/1'] #Use if no connection to the device is possible for dummy interfaces
 	if interfaces == -1:
