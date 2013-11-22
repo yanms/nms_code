@@ -44,8 +44,13 @@
 								<form name="usr_group" action="{% url 'nms:acl_handler' user_obj.id %}" method="POST">
 									{% csrf_token %}
 									{% for item in groups %}
-										<input type="checkbox" name="groups" value="{{ item }}" {{ group_check }} />{{ item }}<br />
+									{% if item in user_obj.groups.all %}
+										<input type="checkbox" name="groups" value="{{ item }}" checked />{{ item }}<br />
+										{% else %}
+										<input type="checkbox" name="groups" value="{{ item }}" />{{ item }}<br />
+										{% endif %}
 									{% endfor %}
+									<input type="hidden" name="task" value="usr_group_update" />
 									<input type="submit" value="Update" />
 								</form>
 								<h2>ACL MANAGE USER </h2>
