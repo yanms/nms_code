@@ -41,6 +41,15 @@
 									{% endfor %}
 								</ul>
 								<h2>Groups: </h2>
+								<form action="" method ="POST"
+								<table border ="0">
+									<tr>
+										<td>Add group:</td>
+										<td><input type="group" name="newgroup" id="newgroup" /> <input type="submit" value="Submit"></td>
+									</tr>
+								</table>
+								</form>
+								<br>
 								<table class="TFtable">
 								<tr>
 								<td><b>Group</b></td>
@@ -54,6 +63,15 @@
 								{% if user_perm %}
 								<br>
 								<h2>User groups:</h2>
+								<form action="" method ="POST"
+								<table border ="0">
+									<tr>
+										<td>Add group:</td>
+										<td><input type="group" name="newgroup" id="newgroup" /> <input type="submit" value="Submit"></td>
+									</tr>
+								</table>
+								</form>
+								<br>
 								<table class="TFtable">
 									<tr>
 										<td><b>Group</b></td>
@@ -62,7 +80,7 @@
 									</tr>
 									<tr>		
 									{% for group in usr_groups %}
-										<td>{{ group }}</td> 
+										<td><a href="{% url 'nms:acl_groups_manage' group.id %}">{{ group }}</a></td> 
 										<td>Deleteknop</td>
 										<td>{% for permissions in group.permissions.all %}
 										{{ permissions }}<br>

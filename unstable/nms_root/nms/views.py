@@ -106,7 +106,8 @@ def acl_handler(request, acl_id):
                 pass
             elif task == 'ch_per_dev_group':
                 group = get_object_or_404(Group, pk=acl_id)
-                return HttpResponse(request.POST.items())
+                messages.info(request, list(request.POST.items()))
+                return HttpResponseRedirect(reverse('nms:index'))
                 
         except KeyError as err:
             messages.error(request, 'Not all required fields are set')
