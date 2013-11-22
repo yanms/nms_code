@@ -106,6 +106,7 @@ def acl_handler(request, acl_id):
                 pass
             elif task == 'ch_per_dev_group':
                 group = get_object_or_404(Group, pk=acl_id)
+                messages.error(list(request.POST.items()))
                 return HttpResponseRedirect(reverse('nms:index'))
                 
         except KeyError as err:
