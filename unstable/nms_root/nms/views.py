@@ -112,9 +112,9 @@ def acl_handler(request, acl_id):
                 group.permissions = []
                 for iter in devices:
                     dev = Devices.objects.get(pk=iter)
-                    messages.info(request, 'dev: '+ dev)
+                    #messages.info(request, 'dev: '+ str(dev)
                     Dev_group.objects.get_or_create(gid_id=group, devid_id=dev)
-                    messages.info(request, 'group: '+ group)
+                    #messages.info(request, 'group: '+ str(group))
                 for iter in rights:
                     right = iter
                     right += '_device'
