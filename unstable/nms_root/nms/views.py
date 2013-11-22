@@ -299,7 +299,7 @@ def send_command(request, device_id_request):
 	if ret == -1:
 		messages.error(request, 'Failed to connect to device')
 	else:
-		messages.info(request, ret.decode().replace('\n', '<br />'), extra_tags='safe')
+		messages.info(request, ret.replace('\n', '<br />'))
 	return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
 
 def session_handler(request):
