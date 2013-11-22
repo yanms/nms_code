@@ -110,11 +110,11 @@ def acl_handler(request, acl_id):
                 devices = request.POST.getlist('devices')
                 rights = request.POST.getlist('rights')
                 group.permissions = []
+                if Dev_group.objects.filter(gid=group).exists():
+                    Dev_group.objects.filter(gid=group).delete()
                 for iter in devices:
                     dev = Devices.objects.get(pk=iter)
-                    #messages.info(request, 'dev: '+ str(dev)
                     Dev_group.objects.get_or_create(gid=group, devid=dev)
-                    #messages.info(request, 'group: '+ str(group))
                 for iter in rights:
                     right = iter
                     right += '_devices'
@@ -136,6 +136,7 @@ def acl_handler(request, acl_id):
 def acl_groups_manage(request, acl_id):
     group = get_object_or_404(Group, pk=acl_id)
     devices = Devices.objects.all()
+    
     return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group })
 
 @login_required
