@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - AdminPanel: ACL</title>
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+						{% include "_navup.html" %}
+					</nav>
+					<div class="profile-box">
+						<span class="profile">
+							<a href="#" class="section">
+								<!-- <img class="image" src="images/img1.png" alt="image description" width="26" height="26" /> -->
+								<span class="text-box">
+									You are logged in as:
+									<strong class="name">{{ user }}</strong>
+								</span>
+							</a>
+							<a href="#" class="opener">opener</a>
+						</span>
+						<a href="{% url 'nms:logout_handler' %}" class="btn-on">On</a>
+					</div>
+				</div>
+				<div class="tabs">
+					<div id="tab-8" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<h2>ACL Devices: <strong>{{ device }}</strong></h2>
+								<ul class="states">
+									{% for message in messages %}
+									<li class="{{message.tags}}">{{ message.tags.title }} : {{ message }}</li>
+									{% endfor %}
+								</ul>
+								<form name="groups" action="{% url 'nms:acl_handler' device.dev_id %}" method="POST">
+								{% csrf_token %}
+								{% if dev_check %}
+									<h2>Groups</h2>
+									{% for group in dev_groups %}
+										{% if group in checked %}
+										<input type="checkbox" name="groups" value="{{ group.id }}" checked/> {{ group }}<br />
+										{% else %}
+										<input type="checkbox" name="groups" value="{{ group.id }}" /> {{ group }}<br />
+										{%endif %}
+									{% endfor %}
+									<input type="hidden" value="dev_group_update" name="task" />
+									<input type="submit" value="Update" id="update" />
+								</form>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside id="sidebar">
+			<img src="{{ STATIC_URL }}images/NMS.png"/>
+			{% include "_nav.html" %}
+			<span class="shadow"></span>
+		</aside>
+	</div>
+</body>
+</html>
