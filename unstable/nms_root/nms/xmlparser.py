@@ -160,7 +160,7 @@ def __addToHTML__(curpath, od, id):
 			s += '</ul>\n'
 		elif key.startswith('i:'):
 			url = reverse('nms:device_command_handler', kwargs={'device_id_request':id})
-			s += '<li><a href="%s/?command=%s">%s</a></li>' % (url, curpath + '|' + key, key[2:])
+			s += '<li><a href="%s?command=%s">%s</a></li>' % (url, curpath + '|' + key, key[2:])
 	return s
 
 def getAvailableTasksHtml(root, id, interfaces=[], privPassword=''):
