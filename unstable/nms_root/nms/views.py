@@ -199,8 +199,9 @@ def acl_groups_handler(request):
         elif request.POST['task'] == 'delete':
             groups = request.POST.getlist('delete')
             for iter in groups:
-                iter.permissions = []
-                iter.delete()  
+                group = get_object_or_404(Group, pk=iter)
+                group.permissions = []
+                group.delete()  
                 
             messages.success(request, "Database updated succesfully")
             return HttpResponseRedirect(reverse('nms:acl_groups'))  
