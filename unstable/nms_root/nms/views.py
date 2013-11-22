@@ -135,15 +135,24 @@ def acl_handler(request, acl_id):
 @login_required
 def acl_groups_manage(request, acl_id):
     group = get_object_or_404(Group, pk=acl_id)
-    devices = Devices.objects.all()
-    checked = []
-    for iter in devices:
-        if Dev_group.objects.filter(devid=iter, gid=group).exists():
-            checked.append(iter)
-    list_check = 'checked' if group.permissions.filter(codename='list_devices').exists() else ''
-    manage_check = 'checked' if group.permissions.filter(codename='manage_devices').exists() else ''
-    change_check = 'checked' if group.permissions.filter(codename='change_devices').exists() else ''
-    return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked })
+    dev_check = True if group.name[:4] == 'dev:' else False
+    devices = None
+    list_check = None
+    manage_check = None
+    change_check = None
+    checked = None
+    if dev_check:
+        devices = Devices.objects.all()
+        checked = []
+        for iter in devices:
+            if Dev_group.objects.filter(devid=iter, gid=group).exists():
+                checked.append(iter)
+        list_check = 'checked' if group.permissions.filter(codename='list_devices').exists() else ''
+        manage_check = 'checked' if group.permissions.filter(codename='manage_devices').exists() else ''
+        change_check = 'checked' if group.permissions.filter(codename='change_devices').exists() else ''
+    
+    
+    return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check })
 
 @login_required
 def acl_groups_add(request):

@@ -42,6 +42,7 @@
 									{% endfor %}
 								</ul>
 								<form name="devices" action="{% url 'nms:acl_handler' group.id %}" method="POST">
+								{% if dev_check %}
 									{% csrf_token %}
 									<h2>Devices</h2>
 									{% for iter in devices %}
@@ -56,7 +57,8 @@
 									<input type="checkbox" name="rights" value="manage" {{ manage_check }}/>Manage Devices<br />
 									<input type="checkbox" name="rights" value="change" {{ change_check }} />Change Devices<br />
 									<input type="hidden" value="ch_per_dev_group" name="task" />
-									<input type="submit" value="Update" id="update" />	
+									<input type="submit" value="Update" id="update" />
+								{% endif %}
 								</form>
 							</div>
 						</article>
