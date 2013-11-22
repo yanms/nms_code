@@ -42,8 +42,8 @@
 									{% endfor %}
 								</ul>
 								<form name="devices" action="{% url 'nms:acl_handler' group.id %}" method="POST">
+								{% csrf_token %}
 								{% if dev_check %}
-									{% csrf_token %}
 									<h2>Devices</h2>
 									{% for iter in devices %}
 										{% if iter in checked %}
@@ -59,10 +59,15 @@
 									<input type="hidden" value="ch_per_dev_group" name="task" />
 								{% else %}
 									<h2>User Group Rights</h2>
-									<input type="checkbox" name="rights" value="add_user" {{  }}/>Add user to group<br />
-									<input type="checkbox" name="rights" value="change_user" {{  }}/>Change user of group<br />
-									<input type="checkbox" name="rights" value="delete_user" {{  }}/>Delete user of group<br />
-									<input type="checkbox" name="rights" value="list_user" {{  }}/>List user in group<br />
+									<input type="checkbox" name="rights" value="add_user" {{ add_user }}/>Add user to group<br />
+									<input type="checkbox" name="rights" value="change_user" {{ change_user }}/>Change user of group<br />
+									<input type="checkbox" name="rights" value="delete_user" {{ delete_user }}/>Delete user of group<br />
+									<input type="checkbox" name="rights" value="list_user" {{ list_user }}/>List user in group<br />
+									<h2>Group Rights</h2>
+									<input type="checkbox" name="rights" value="add_group" {{ add_group }}/>Add group<br />
+									<input type="checkbox" name="rights" value="change_group" {{ change_group }}/>Change group<br />
+									<input type="checkbox" name="rights" value="delete_group" {{ delete_group }}/>Delete group<br />
+									<input type="checkbox" name="rights" value="list_group" {{ list_group }}/>List group<br />
 									<input type="hidden" value="ch_per_usr_group" name="task">
 								{% endif %}
 									<input type="submit" value="Update" id="update" />
