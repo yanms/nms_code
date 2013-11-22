@@ -27,7 +27,7 @@
                <argElement position="5" type="plaintext">end</argElement>
                <argElement position="6" type="plaintext">disable</argElement>
             </command>
-            <returnParsing delimiter="\n" type="regex">Router\(config-if\)#no shutdown</returnParsing>
+            <returnParsing delimiter="\n" type="regex">^.*?\(config-if\)#no shutdown</returnParsing>
          </item>
          <item name="Disable interface %if%" type="per-interface">
             <command>
@@ -39,13 +39,13 @@
                <argElement position="5" type="plaintext">end</argElement>
                <argElement position="6" type="plaintext">disable</argElement>
             </command>
-            <returnParsing delimiter="\n" type="regex">Router\(config-if\)#shutdown</returnParsing>
+            <returnParsing delimiter="\n" type="regex">^.*?\(config-if\)#shutdown</returnParsing>
          </item>
          <item name="Get interface status" type="single">
             <command>
                <argElement position="0" type="plaintext">show ip interface brief</argElement>
             </command>
-            <returnParsing delimiter="\n" type="regex">(?=(^.*?$))(?=(?!^Router.*?$))</returnParsing>
+            <returnParsing delimiter="\n" type="regex">(?=(^.*?$))(?=(?!^.*?>.*?$))</returnParsing>
          </item>
       </category>
       <category name="General settings">
