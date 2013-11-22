@@ -41,7 +41,7 @@
 									<li class="{{message.tags}}">{{ message.tags.title }} : {{ message }}</li>
 									{% endfor %}
 								</ul>
-								<form name="groups" action="{% url 'nms:acl_handler' device.dev_id %}" method="POST">
+								<form name="groups" action="{% url 'nms:acl_handler' dev_obj.dev_id %}" method="POST">
 								{% csrf_token %}
 									<h2>Groups</h2>
 									{% for group in dev_groups %}
