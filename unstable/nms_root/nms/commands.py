@@ -34,7 +34,7 @@ def executeTask(taskpath, device):
 	commands = xmlparser.getAvailableTasks(xmlroot)
 	for key in taskpath:
 		if not key in commands.keys():
-			return 'Invalid command'
+			return ['Invalid command']
 		commands = commands[key]
 	args, parser = commands
 
