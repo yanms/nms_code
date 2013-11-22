@@ -27,7 +27,7 @@
                <argElement position="5" type="plaintext">end</argElement>
                <argElement position="6" type="plaintext">disable</argElement>
             </command>
-            <returnParsing delimiter="\n" type="regex">router\(config-if\)#no shutdown</returnParsing>
+            <returnParsing delimiter="\n" type="regex">Router\(config-if\)#no shutdown</returnParsing>
          </item>
          <item name="Disable interface %if%" type="per-interface">
             <command>
@@ -39,13 +39,13 @@
                <argElement position="5" type="plaintext">end</argElement>
                <argElement position="6" type="plaintext">disable</argElement>
             </command>
-            <returnParsing delimiter="\n" type="regex">router\(config-if\)#shutdown</returnParsing>
+            <returnParsing delimiter="\n" type="regex">Router\(config-if\)#shutdown</returnParsing>
          </item>
          <item name="Get interface status" type="single">
             <command>
                <argElement position="0" type="plaintext">show ip interface brief</argElement>
             </command>
-            <returnParsing delimiter="\n" type="regex">(?=(^.*?$))(?=(?!^router.*?$))</returnParsing>
+            <returnParsing delimiter="\n" type="regex">(?=(^.*?$))(?=(?!^Router.*?$))</returnParsing>
          </item>
       </category>
       <category name="General settings">
@@ -53,13 +53,13 @@
             <command>
                <argElement position="0" type="plaintext">shutdown</argElement>
             </command>
-            <returnParsing delimiter="\n" type="regex">router>shutdown</returnParsing>
+            <returnParsing delimiter="\n" type="regex">Router>shutdown</returnParsing>
          </item>
          <item name="Reboot" type="single">
             <command>
                <argElement position="0" type="plaintext">reboot</argElement>
             </command>
-            <returnParsing delimiter="\n" type="regex">router>reboot</returnParsing>
+            <returnParsing delimiter="\n" type="regex">Router>reboot</returnParsing>
          </item>
       </category>
    </configurationItems>
