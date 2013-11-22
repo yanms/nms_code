@@ -42,9 +42,9 @@
 								</ul>
 								<form name="myform" action="" method="POST">
 								<div align="center"><br>
-								<input type="checkbox" name="option1" value="Milk"> Milk<br>
-								<input type="checkbox" name="option2" value="Butter" checked> Butter<br>
-								<input type="checkbox" name="option3" value="Cheese"> Cheese<br>
+								{% for user in users %}
+								<input type="checkbox" name="username" value="username"> username<br>
+								{% endfor %}
 								<br>
 								</div>
 								</form>
