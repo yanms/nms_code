@@ -98,7 +98,7 @@
 										<td>{% for permissions in group.permissions.all %}
 										{{ permissions.name }}<br>
 										{% endfor %}</td>
-										<td><input type="checkbox" name="delete" value="{{ group.id }}" /></td>
+										<td>{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}{% else %}<input type="checkbox" name="delete" value="{{ group.id }}" />{% endif %}</td>
 										
 									</tr>
 								{% endfor %}
