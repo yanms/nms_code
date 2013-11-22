@@ -179,7 +179,7 @@ def acl_groups_manage(request, acl_id):
     
     
     return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check,
-                                                        'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_group': list_group})
+                                                        'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group})
 
 @login_required
 def acl_groups_add(request):
