@@ -43,7 +43,6 @@
 								</ul>
 								<form name="groups" action="{% url 'nms:acl_handler' device.dev_id %}" method="POST">
 								{% csrf_token %}
-								{% if dev_check %}
 									<h2>Groups</h2>
 									{% for group in dev_groups %}
 										{% if group in checked %}
