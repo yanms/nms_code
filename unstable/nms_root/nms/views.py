@@ -140,13 +140,13 @@ def acl_groups_add(request):
     if request.method == 'POST':
         if request.POST['task'] == 'usr':
             name = 'usr:'
-            name += request.POST['name']
+            name += request.POST['group']
             Group.objects.get_or_create(name=name)
             messages.success(request, "Database updated succesfully")
             return HttpResponseRedirect(reverse('nms:acl_groups'))
         elif request.POST['task'] == 'dev':
             name = 'dev:'
-            name += request.POST['name']
+            name += request.POST['group']
             Group.objects.get_or_create(name=name)
             messages.success(request, "Database updated succesfully")
             return HttpResponseRedirect(reverse('nms:acl_groups'))
