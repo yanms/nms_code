@@ -42,8 +42,8 @@
 								</ul>
 								<form name="myform" action="" method="POST">
 								<div align="center"><br>
-								{% for user in users %}
-								<input type="checkbox" name="username" value="username"> username<br>
+								{% for iter in devices %}
+								<input type="checkbox" name="devices" value="{{ iter.dev_id }}"> {{iter}}<br>
 								{% endfor %}
 								<br>
 								</div>
