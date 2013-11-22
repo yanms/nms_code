@@ -10,6 +10,7 @@ from django.template import RequestContext
 from django.contrib.contenttypes.models import ContentType
 import nms.commands as commands
 import nms.xmlparser as xmlparser
+import traceback
 
 
 @login_required
@@ -120,9 +121,9 @@ def acl_handler(request, acl_id):
                 messages.success(request, 'Database updated successfully')
                 return HttpResponseRedirect(reverse('nms:acl_groups'))
                 
-        except as err:
+        except:
             messages.error(request, 'Not all required fields are set')
-            messages.error(request, err) #debug code
+            messages.error(request, traceback.print_exc()) #debug code
             messages.error(request, list(request.POST.items())) #debug code
             return HttpResponseRedirect(reverse('nms:acl_groups'))
     else:
