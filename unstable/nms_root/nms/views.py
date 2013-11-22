@@ -136,6 +136,11 @@ def acl_handler(request, acl_id):
 def acl_groups_manage(request, acl_id):
     group = get_object_or_404(Group, pk=acl_id)
     dev_check = True if group.name[:4] == 'dev:' else False
+    devices = None
+    list_check = None
+    manage_check = None
+    change_check = None
+    checked = None
     if dev_check:
         devices = Devices.objects.all()
         checked = []
