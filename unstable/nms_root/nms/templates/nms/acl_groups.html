@@ -46,7 +46,7 @@
 								<td><b>Group</b></td>
 								<td><b>Deletebutton</b></td>
 								<tr>{% for group in dev_groups %}
-										<td><a href="{% url 'nms:acl_groups_manage' dev.groups_id %}"{{ group }}</a></td>
+										<td><a href="{% url 'nms:acl_groups_manage' acl_groups.id %}"{{ group }}</a></td>
 										<td>deleteknop</td>
 								{% endfor %}</tr>
 								</table>
