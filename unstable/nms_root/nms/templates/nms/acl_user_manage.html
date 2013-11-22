@@ -41,7 +41,7 @@
 									{% endfor %}
 								</ul>
 								<h2>Manage User: {{ user }}</h2>
-								<form name="usr_group" action="{% url 'nms:acl_handler' usr_obj.id %}" method="POST">
+								<form name="usr_group" action="{% url 'nms:acl_handler' user_obj.id %}" method="POST">
 									{% csrf_token %}
 									{% for item in groups %}
 										<input type="checkbox" name="groups" value="{{ item }}" {{ group_check }} />{{ item }}<br />
