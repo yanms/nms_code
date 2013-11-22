@@ -88,11 +88,11 @@
 									<tr>		
 									{% for group in usr_groups %}
 										<td><a href="{% url 'nms:acl_groups_manage' group.id %}">{{ group }}</a></td> 
-										<input type="checkbox" name="delete" value="{{group}}" /><br />
+										<br />
 										<td>{% for permissions in group.permissions.all %}
 										{{ permissions.name }}<br>
 										{% endfor %}</td>
-										<td>Deleteknop</td>
+										<td><input type="checkbox" name="delete" value="{{group}}" /></td>
 										
 									</tr>
 								{% endfor %}
