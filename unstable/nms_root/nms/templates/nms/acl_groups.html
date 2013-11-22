@@ -89,7 +89,7 @@
 										<td><a href="{% url 'nms:acl_groups_manage' group.id %}">{{ group }}</a></td> 
 										<td>Deleteknop</td>
 										<td>{% for permissions in group.permissions.all %}
-										{{ permissions }}<br>
+										{{ permissions.codename }}<br>
 										{% endfor %}</td>
 										
 									</tr>
