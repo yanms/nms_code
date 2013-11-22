@@ -57,8 +57,8 @@
 								<td><b>Deletebutton</b></td>
 								<tr>{% for group in dev_groups %}
 										<td><a href="{% url 'nms:acl_groups_manage' group.id %}">{{ group }}</a></td>
-										<td>deleteknop</td>
-								{% endfor %}</tr>
+										<td>deleteknop
+								{% endfor %}</td></tr>
 								</table>
 								
 								{% if user_perm %}
