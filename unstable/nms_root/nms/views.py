@@ -123,7 +123,7 @@ def acl_handler(request, acl_id):
                 
         except:
             messages.error(request, 'Not all required fields are set')
-            messages.error(request, traceback.print_exc()) #debug code
+            messages.error(request, traceback.format_exc()) #debug code
             messages.error(request, list(request.POST.items())) #debug code
             return HttpResponseRedirect(reverse('nms:acl_groups'))
     else:
