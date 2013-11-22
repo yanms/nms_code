@@ -87,7 +87,7 @@ def acl_device(request):
 def acl_device_manage(request, acl_id):
     dev_obj = get_object_or_404(Devices, pk=acl_id)
     dev_groups = Group.objects.filter(name__startswith='dev:')
-    return render(request, 'nms/acl_devices.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups})
+    return render(request, 'nms/acl_devices_manage.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups})
 
 @login_required
 def acl_handler(request, acl_id):
