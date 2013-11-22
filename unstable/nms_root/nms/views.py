@@ -117,7 +117,6 @@ def acl_handler(request, acl_id):
 
 @login_required
 def acl_groups_manage(request, acl_id):
-    
     devices = Devices.objects.all()
     return render(request, 'nms/acl_groups_manage.html', {'devices': devices, })
 
