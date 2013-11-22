@@ -42,8 +42,8 @@
 									{% endfor %}
 								</ul>
 								<form name="devices" action="{% url 'nms:acl_handler' group.id %}" method="POST">
+								{% csrf_token %}
 								{% if dev_check %}
-									{% csrf_token %}
 									<h2>Devices</h2>
 									{% for iter in devices %}
 										{% if iter in checked %}
