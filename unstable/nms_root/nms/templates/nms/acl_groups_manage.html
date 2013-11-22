@@ -45,7 +45,11 @@
 									{% csrf_token %}
 									<h2>Devices</h2>
 									{% for iter in devices %}
+										{% if iter in checked %}
+										<input type="checkbox" name="devices" value="{{ iter.dev_id }}" checked/> {{ iter }}<br />
+										{% else %}
 										<input type="checkbox" name="devices" value="{{ iter.dev_id }}" /> {{ iter }}<br />
+										{%endif %}
 									{% endfor %}
 									<h2>Rights</h2>
 									<input type="checkbox" name="rights" value="list" {{ list_check }}/>List Devices<br />
