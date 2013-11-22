@@ -105,7 +105,9 @@ def acl_handler(request, acl_id):
             elif task == 'ch_per_usr_group':
                 pass
             elif task == 'ch_per_dev_group':
-                pass
+                group = get_object_or_404(Group, pk=acl_id)
+                return HttpResponse(request.POST.items())
+                
         except KeyError as err:
             messages.error(request, 'Not all required fields are set')
             messages.error(request, err) #debug code
@@ -117,8 +119,9 @@ def acl_handler(request, acl_id):
 
 @login_required
 def acl_groups_manage(request, acl_id):
+    group = get_object_or_404(Group, pk=acl_id)
     devices = Devices.objects.all()
-    return render(request, 'nms/acl_groups_manage.html', {'devices': devices, })
+    return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group })
 
 @login_required
 def permissions(request):
