@@ -46,10 +46,10 @@
 									<h2>Groups</h2>
 									{% for group in dev_groups %}
 										{% if group in checked %}
-										<input type="checkbox" name="groups" value="{{ group.id }}" checked/> {{ group }}<br />
+										<input type="checkbox" name="groups" value="{{ group.id }}" checked /> {{ group }}<br />
 										{% else %}
 										<input type="checkbox" name="groups" value="{{ group.id }}" /> {{ group }}<br />
-										{%endif %}
+										{% endif %}
 									{% endfor %}
 									<input type="hidden" value="dev_group_update" name="task" />
 									<input type="submit" value="Update" id="update" />

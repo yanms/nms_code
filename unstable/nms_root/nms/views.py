@@ -87,7 +87,11 @@ def acl_device(request):
 def acl_device_manage(request, acl_id):
     dev_obj = get_object_or_404(Devices, pk=acl_id)
     dev_groups = Group.objects.filter(name__startswith='dev:')
-    return render(request, 'nms/acl_devices_manage.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups})
+    check = Dev_group.objects.filter(devid=dev_obj)
+    checked = []
+    for iter in check:
+        checked.append(iter.gid)
+    return render(request, 'nms/acl_devices_manage.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups, 'checked': checked})
 
 @login_required
 def acl_handler(request, acl_id):
@@ -117,7 +121,12 @@ def acl_handler(request, acl_id):
             
             elif task == 'dev_group_update':
                 device = get_object_or_404(Devices, pk=acl_id)
-                
+                groups = request.POST.getlist('groups')
+                if Dev_group.objects.filter(devid=device).exists():
+                    Dev_group.objects.filter(devid=device).delete()
+                for group in groups:
+                    group_obj = get_object_or_404(Group, pk=group)
+                    Dev_group.objects.get_or_create(gid=group_obj, devid=device)
                 messages.success(request, 'Database updated successfully')
                 return HttpResponseRedirect(reverse('nms:acl_groups'))    
             
