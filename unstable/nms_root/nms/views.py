@@ -87,9 +87,39 @@ def acl_device_manage(request, acl_dev_id):
     return render(request, 'nms/acl_devices.html', {'devices': devices,})
 
 @login_required
-def acl_handler(request, acl_user):
-    pass
+def acl_handler(request, acl_id):
+    if request.method == 'POST':
+        try:
+            task = request.POST['task']
+            if task == 'ch_usr_dev_group':
+                user_obj = get_object_or_404(User, pk=acl_id)
+                groups = request.POST.getlist('groups')
+                    
+            elif task == 'ch_usr_usr_group':
+                user_obj = get_object_or_404(User, pk=acl_id)
+                groups = request.POST.getlist('groups')
+            elif task == 'add_usr_group':
+                pass
+            elif task == 'add_dev_group':
+                pass
+            elif task == 'ch_per_usr_group':
+                pass
+            elif task == 'ch_per_dev_group':
+                pass
+        except KeyError as err:
+            messages.error(request, 'Not all required fields are set')
+            messages.error(request, err) #debug code
+            messages.error(request, request.POST.items()) #debug code
+            return HttpResponseRedirect(reverse('nms:index'))
+    else:
+        messages.error(request, 'Not a POST method')
+        return HttpResponseRedirect(reverse('nms:index'))
 
+@login_required
+def acl_groups_manage(request, acl_id):
+    
+    devices = Devices.objects.all()
+    return render(request, 'nms/acl_groups_manage.html', {'devices': devices, })
 
 @login_required
 def permissions(request):
