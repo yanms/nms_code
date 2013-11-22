@@ -10,6 +10,7 @@ from django.template import RequestContext
 from django.contrib.contenttypes.models import ContentType
 import nms.commands as commands
 import nms.xmlparser as xmlparser
+import traceback
 
 
 @login_required
@@ -110,8 +111,10 @@ def acl_handler(request, acl_id):
                 rights = request.POST.getlist('rights')
                 group.permissions = []
                 for iter in devices:
-                    dev = Devices.objects.get_or_create(pk=iter)
-                    Dev_group.objects.get_or_create(gid=group, devid=dev)
+                    dev = Devices.objects.get(pk=iter)
+                    #messages.info(request, 'dev: '+ str(dev)
+                    Dev_group.objects.get_or_create(gid_id=group, devid_id=dev)
+                    #messages.info(request, 'group: '+ str(group))
                 for iter in rights:
                     right = iter
                     right += '_device'
@@ -120,11 +123,11 @@ def acl_handler(request, acl_id):
                 messages.success(request, 'Database updated successfully')
                 return HttpResponseRedirect(reverse('nms:acl_groups'))
                 
-        except KeyError as err:
+        except:
             messages.error(request, 'Not all required fields are set')
-            messages.error(request, err) #debug code
+            messages.error(request, traceback.format_exc()) #debug code
             messages.error(request, list(request.POST.items())) #debug code
-            return HttpResponseRedirect(reverse('nms:index'))
+            return HttpResponseRedirect(reverse('nms:acl_groups'))
     else:
         messages.error(request, 'Not a POST method')
         return HttpResponseRedirect(reverse('nms:index'))
@@ -140,13 +143,13 @@ def acl_groups_add(request):
     if request.method == 'POST':
         if request.POST['task'] == 'usr':
             name = 'usr:'
-            name += request.POST['name']
+            name += request.POST['group']
             Group.objects.get_or_create(name=name)
             messages.success(request, "Database updated succesfully")
             return HttpResponseRedirect(reverse('nms:acl_groups'))
         elif request.POST['task'] == 'dev':
             name = 'dev:'
-            name += request.POST['name']
+            name += request.POST['group']
             Group.objects.get_or_create(name=name)
             messages.success(request, "Database updated succesfully")
             return HttpResponseRedirect(reverse('nms:acl_groups'))
