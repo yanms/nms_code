@@ -200,7 +200,6 @@ def acl_groups_handler(request):
             groups = request.POST.getlist('delete')
             for iter in groups:
                 group = get_object_or_404(Group, pk=iter)
-                group.permissions = []
                 group.delete()  
                 
             messages.success(request, "Database updated succesfully")
