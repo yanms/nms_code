@@ -182,7 +182,7 @@ def acl_groups_manage(request, acl_id):
                                                         'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group})
 
 @login_required
-def acl_groups_add(request):
+def acl_groups_handler(request):
     if request.method == 'POST':
         if request.POST['task'] == 'usr':
             name = 'usr:'
@@ -196,6 +196,8 @@ def acl_groups_add(request):
             Group.objects.get_or_create(name=name)
             messages.success(request, "Database updated succesfully")
             return HttpResponseRedirect(reverse('nms:acl_groups'))
+        elif request.POST['task'] == 'dev':
+            devices = request.POST.getlist('delete')    
         else:
             messages.error(request, "Some fields are not set")
             return HttpResponseRedirect(reverse('nms:acl_groups'))
