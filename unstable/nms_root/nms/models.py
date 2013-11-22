@@ -99,5 +99,5 @@ class Dev_group(models.Model):
     devid = models.ForeignKey(Devices)
     
     def __str__(self):
-        return str(self.gid + ' ' + self.devid)
+        return str(self.gid) + ' ' + str(self.devid)
 
