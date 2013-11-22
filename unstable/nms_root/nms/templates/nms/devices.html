@@ -5,6 +5,22 @@
 	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript">
+		var count=30;
+
+		var counter=setInterval(timer, 1000);
+		function timer()
+		{
+			count=count-1;
+			if (count <= 0)
+			{
+				clearInterval(counter);
+				return;
+			}
+
+			document.getElementById("timer").innerHTML=count + " secs"; // watch for spelling
+		}
+	</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>
@@ -39,7 +55,7 @@
 						<article>
 							<div class="text-section">
 								<h1>Dashboard</h1>
-								<h2>Devices</h2>
+								<h2>Devices</h2><span id="timer"></span>
 								<table class="TFtable">
 									<tr>
 										<td><b>Type</b></td>
