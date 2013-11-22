@@ -73,11 +73,8 @@ def acl_user(request):
 @permission_required('auth.change_user', login_url='/permissions/?per=change_user')
 def acl_user_manage(request, acl_user):
     user_obj = get_object_or_404(User, pk=acl_user)
-    user_groups = Group.objects.filter(name__startswith="usr:") 
-    device_groups = Group.objects.filter(name__startswith="dev:")
     groups = Group.objects.all()
-    existing_permissions = Permission.objects.all()
-    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'user_groups': user_groups, 'device_groups': device_groups, 'groups': groups, 'existing_permissions': existing_permissions})
+    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'groups': groups})
 
 @login_required
 @permission_required('nms.list_devices', login_url='/permissions/?per=list_devices')
@@ -96,17 +93,15 @@ def acl_handler(request, acl_id):
     if request.method == 'POST':
         try:
             task = request.POST['task']
-            if task == 'ch_usr_dev_group':
+            if task == 'usr_group_update':
                 user_obj = get_object_or_404(User, pk=acl_id)
                 groups = request.POST.getlist('groups')
-                    
-            elif task == 'ch_usr_usr_group':
-                user_obj = get_object_or_404(User, pk=acl_id)
-                groups = request.POST.getlist('groups')
-            elif task == 'add_usr_group':
-                pass
-            elif task == 'add_dev_group':
-                pass
+                user_obj.groups = []
+                for iter in groups:
+                    group = get_object_or_404(Group, name=iter)
+                    user_obj.groups.add(group)
+                messages.success(request, 'Database updated successfully')
+                return HttpResponseRedirect(reverse('nms:acl_user'))
             elif task == 'ch_per_usr_group':
                 group = get_object_or_404(Group, pk=acl_id)
                 rights = request.POST.getlist('rights')
