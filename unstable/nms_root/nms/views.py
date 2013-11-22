@@ -104,7 +104,16 @@ def acl_handler(request, acl_id):
             elif task == 'add_dev_group':
                 pass
             elif task == 'ch_per_usr_group':
-                pass
+                group = get_object_or_404(Group, pk=acl_id)
+                rights = request.POST.getlist('rights')
+                group.permissions = []
+                for iter in rights:
+                    right = iter
+                    permission = Permission.objects.get(codename=right)
+                    group.permissions.add(permission)
+                
+                messages.success(request, 'Database updated successfully')
+                return HttpResponseRedirect(reverse('nms:acl_groups'))
             elif task == 'ch_per_dev_group':
                 group = get_object_or_404(Group, pk=acl_id)
                 devices = request.POST.getlist('devices')
@@ -141,6 +150,14 @@ def acl_groups_manage(request, acl_id):
     manage_check = None
     change_check = None
     checked = None
+    add_user = None
+    change_user = None
+    delete_user = None
+    list_user = None
+    add_group = None
+    change_group = None
+    delete_group = None
+    list_group = None
     if dev_check:
         devices = Devices.objects.all()
         checked = []
@@ -150,9 +167,19 @@ def acl_groups_manage(request, acl_id):
         list_check = 'checked' if group.permissions.filter(codename='list_devices').exists() else ''
         manage_check = 'checked' if group.permissions.filter(codename='manage_devices').exists() else ''
         change_check = 'checked' if group.permissions.filter(codename='change_devices').exists() else ''
+    else:
+        add_user = 'checked' if group.permissions.filter(codename='add_user').exists() else ''
+        change_user = 'checked' if group.permissions.filter(codename='change_user').exists() else ''
+        delete_user = 'checked' if group.permissions.filter(codename='delete_user').exists() else ''
+        list_user = 'checked' if group.permissions.filter(codename='list_user').exists() else ''
+        add_group = 'checked' if group.permissions.filter(codename='add_group').exists() else ''
+        change_group = 'checked' if group.permissions.filter(codename='change_group').exists() else ''
+        delete_group = 'checked' if group.permissions.filter(codename='delete_group').exists() else ''
+        list_group = 'checked' if group.permissions.filter(codename='list_group').exists() else ''
     
     
-    return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check })
+    return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check
+                                                            'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_group': list_group})
 
 @login_required
 def acl_groups_add(request):
