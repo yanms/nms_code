@@ -42,18 +42,18 @@
 									{% endfor %}
 								</ul>
 								<form name="devices" action="{% url 'nms:acl_handler' group.id %}" method="POST">
-									<div align="center"><br />
-										<h2>Devices</h2>
-										{% for iter in devices %}
-											<input type="checkbox" name="devices" value="{{ iter.dev_id }}" /> {{ iter }}<br />
-										{% endfor %}
-										<h2>Rights</h2>
-										<br>
-										<input type="checkbox" name="rights" value="list" />List Devices<br />
-										<input type="checkbox" name="rights" value="manage" />Manage Devices<br />
-										<input type="checkbox" name="rights" value="change" />Change Devices<br />
-									</div>
+									<h2>Devices</h2>
+									{% for iter in devices %}
+										<input type="checkbox" name="devices" value="{{ iter.dev_id }}" /> {{ iter }}<br />
+									{% endfor %}
+									<h2>Rights</h2>
+									<br>
+									<input type="checkbox" name="rights" value="list" />List Devices<br />
+									<input type="checkbox" name="rights" value="manage" />Manage Devices<br />
+									<input type="checkbox" name="rights" value="change" />Change Devices<br />
 									<input type="hidden" value="ch_per_dev_group" id="task" />
+									<input type="submit" value="Update" id="update" />
+									
 								</form>
 								{% if user_perm %}
 
