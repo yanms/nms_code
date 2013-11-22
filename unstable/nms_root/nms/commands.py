@@ -26,7 +26,7 @@ def getInterfaces(command, parser, device):
 
 def executeTask(taskpath, device):
 	xmlroot = xmlparser.get_xml_struct(device.gen_dev_id.file_location_id.location)
-	taskpath = taskpath.split('#')
+	taskpath = taskpath.split('|')
 	commands = xmlparser.getAvailableTasks(xmlroot)
 	for key in taskpath:
 		if not key in commands.keys():
