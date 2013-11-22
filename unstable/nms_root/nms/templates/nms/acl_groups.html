@@ -41,7 +41,8 @@
 									{% endfor %}
 								</ul>
 								<h2>Groups: </h2>
-								<form action="{% url 'nms:acl_groups_add' %}" method ="POST"
+								<form action="{% url 'nms:acl_groups_add' %}" method ="POST">
+								{% csrf_token %}
 								<table border ="0">
 									<tr>
 										<td>Add group:</td>
@@ -63,7 +64,8 @@
 								{% if user_perm %}
 								<br>
 								<h2>User groups:</h2>
-								<form action="{% url 'nms:acl_groups_add' %}" method ="POST"
+								<form action="{% url 'nms:acl_groups_add' %}" method ="POST">
+								{% csrf_token %}
 								<table border ="0">
 									<tr>
 										<td>Add group:</td>
