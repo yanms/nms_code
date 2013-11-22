@@ -6,23 +6,27 @@ interfaces = {}
 interfacesLock = Lock()
 
 def getInterfaces(command, parser, device):
+	global interfacesLock
+	global interfaces
 	interfacesLock.acquire()
 	try:
-		s = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
-		if s.connect() == -1:
-			return -1
-		ret = b''
-		for i, arg in enumerate(command):
-			if i+1 == len(command):
-				ret += s.send_and_receive(arg, delay=0.5)
-			else:
-				ret += s.send_and_receive(arg)
-		s.close()
+		if not device in interfaces.keys():
+			s = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
+			if s.connect() == -1:
+				return -1
+			ret = b''
+			for i, arg in enumerate(command):
+				if i+1 == len(command):
+					ret += s.send_and_receive(arg, delay=0.5)
+				else:
+					ret += s.send_and_receive(arg)
+			s.close()
+			interfaces[device] = parser.parse(ret)
 	except:
 		raise
 	finally:
 		interfacesLock.release()
-	return parser.parse(ret)
+	return interfaces[device]
 
 def executeTask(taskpath, device):
 	xmlroot = xmlparser.get_xml_struct(device.gen_dev_id.file_location_id.location)
@@ -30,7 +34,7 @@ def executeTask(taskpath, device):
 	commands = xmlparser.getAvailableTasks(xmlroot)
 	for key in taskpath:
 		if not key in commands.keys():
-			return 'Invalid command'
+			return ['Invalid command']
 		commands = commands[key]
 	args, parser = commands
 
