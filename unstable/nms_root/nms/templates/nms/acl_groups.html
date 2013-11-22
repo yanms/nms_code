@@ -93,7 +93,7 @@
 									</tr>
 									<tr>		
 									{% for group in usr_groups %}
-										<td><a href="{% url 'nms:acl_groups_manage' group.id %}">{{ group }}</a></td> 
+										<td>{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}{{ group }}{% else %}<a href="{% url 'nms:acl_groups_manage' group.id %}">{{ group }}</a>{% endif %}</td> 
 										<br />
 										<td>{% for permissions in group.permissions.all %}
 										{{ permissions.name }}<br>
