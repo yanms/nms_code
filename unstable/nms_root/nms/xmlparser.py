@@ -153,7 +153,10 @@ def __addToHTML__(curpath, od, id):
 	for key in od.keys():
 		if key.startswith('c:'):
 			s += '<li>%s</li>\n<ul>\n' % key[2:]
-			s += __addToHTML__(curpath + '#' + key, od[key], id)
+			if curpath == '':
+				s += __addToHTML__(key, od[key], id)
+			else:
+				s += __addToHTML__(curpath + '|' + key, od[key], id)
 			s += '</ul>\n'
 		elif key.startswith('i:'):
 			url = reverse('nms:device_command_handler', kwargs={'device_id_request':id})
