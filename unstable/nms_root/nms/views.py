@@ -297,7 +297,7 @@ def send_command(request, device_id_request):
 		return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
 	
 	device = Devices.objects.get(pk=device_id_request)
-	ret = connector = commands.executeTask(command, device)
+	ret = commands.executeTask(command, device)
 	if ret == -1:
 		messages.error(request, 'Failed to connect to device')
 	else:
