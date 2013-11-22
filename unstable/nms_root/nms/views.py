@@ -120,11 +120,11 @@ def acl_handler(request, acl_id):
                 messages.success(request, 'Database updated successfully')
                 return HttpResponseRedirect(reverse('nms:acl_groups'))
                 
-        except KeyError as err:
+        except error as err:
             messages.error(request, 'Not all required fields are set')
             messages.error(request, err) #debug code
             messages.error(request, list(request.POST.items())) #debug code
-            return HttpResponseRedirect(reverse('nms:index'))
+            return HttpResponseRedirect(reverse('nms:acl_groups'))
     else:
         messages.error(request, 'Not a POST method')
         return HttpResponseRedirect(reverse('nms:index'))
