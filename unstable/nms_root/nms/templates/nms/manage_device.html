@@ -6,6 +6,12 @@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<script type="text/javascript">
+		function showLoadingImage(num)
+		{
+			document.getElementById('loadingImage'.concat(num)).style.visibility='visible';
+		}
+	</script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>
 <body>
@@ -46,6 +52,7 @@
 								</ul>
 								<h2>Device: {{ devices.gen_dev_id }} ({{ devices.ip }})</h2>
 								<p>
+									<b><a href="{% url 'nms:device_manager' devices.dev_id %}?refresh" onclick="showLoadingImage(1)">Refresh this page</a></b> <img id="loadingImage1" src="{{ STATIC_URL }}images/loading.gif" style="visibility:hidden" />
 									{{ taskhtml|safe }}
 								</p>
 							</div>

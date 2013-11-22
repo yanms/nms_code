@@ -5,6 +5,15 @@ from multiprocessing import Lock
 interfaces = {}
 interfacesLock = Lock()
 
+def removeInterfaces(device):
+	global interfacesLock
+	global interfaces
+	
+	interfacesLock.acquire()
+	if device in interfaces.keys():
+		del interfaces[device]
+	interfacesLock.release()
+
 def getInterfaces(command, parser, device):
 	global interfacesLock
 	global interfaces
