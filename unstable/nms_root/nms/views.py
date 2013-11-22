@@ -110,7 +110,8 @@ def acl_handler(request, acl_id):
                 rights = request.POST.getlist('rights')
                 group.permissions = []
                 for iter in devices:
-                    Dev_group.objects.get_or_create(gid=group, devid=iter)
+                    dev = Devices.objects.get_or_create(pk=iter)
+                    Dev_group.objects.get_or_create(gid=group, devid=dev)
                 for iter in rights:
                     right = iter
                     right += '_device'
