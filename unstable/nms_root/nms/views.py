@@ -300,7 +300,7 @@ def send_command(request, device_id_request):
 	else:
 		msg_text = ''
 		for line in ret:
-			msg_text += line.replace('\n', '<br />')
+			msg_text += line + '<br />'
 		messages.info(request, msg_text)
 	return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
 
