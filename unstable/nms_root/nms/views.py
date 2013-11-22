@@ -84,9 +84,10 @@ def acl_device(request):
 
 @login_required
 @permission_required('nms.list_devices', login_url='/permissions/?per=list_devices')
-def acl_device_manage(request, acl_dev_id):
-    devices = Devices.objects.all() 
-    return render(request, 'nms/acl_devices.html', {'devices': devices,})
+def acl_device_manage(request, acl_id):
+    dev_obj = get_object_or_404(Devices, pk=acl_id)
+    dev_groups = Group.objects.filter(name__startswith='dev:')
+    return render(request, 'nms/acl_devices.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups})
 
 @login_required
 def acl_handler(request, acl_id):
@@ -113,6 +114,13 @@ def acl_handler(request, acl_id):
                 
                 messages.success(request, 'Database updated successfully')
                 return HttpResponseRedirect(reverse('nms:acl_groups'))
+            
+            elif task == 'dev_group_update':
+                device = get_object_or_404(Devices, pk=acl_id)
+                
+                messages.success(request, 'Database updated successfully')
+                return HttpResponseRedirect(reverse('nms:acl_groups'))    
+            
             elif task == 'ch_per_dev_group':
                 group = get_object_or_404(Group, pk=acl_id)
                 devices = request.POST.getlist('devices')

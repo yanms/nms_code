@@ -45,15 +45,15 @@
                                                                         <tr>
                                                                                 <td><b>Type</b></td>
                                                                                 <td><b>Model</b></td>
-                                                                                <td></td>
-                                                                                <td></td>
+                                                                                <td><b>Info</b></td>
+                                                                                
                                                                         </tr>
                                                                 {% for device in devices %}
                                                                         <tr>
                                                                                 <td> {{ device.gen_dev_id.dev_type_id }} </td>
                                                                                 <td> {{ device.gen_dev_id }}</td>
                                                                                 <td> <a href="{% url 'nms:acl_device_manage' device.dev_id %}">Info</a> </td>
-                                                                                <td> deleteknop </td>
+                                                                                
                                                                         </tr>
                                                                 {% endfor %}
                                                                 </table>
