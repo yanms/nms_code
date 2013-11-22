@@ -52,13 +52,20 @@
 										<input type="checkbox" name="devices" value="{{ iter.dev_id }}" /> {{ iter }}<br />
 										{%endif %}
 									{% endfor %}
-									<h2>Rights</h2>
+									<h2>Device Group Rights</h2>
 									<input type="checkbox" name="rights" value="list" {{ list_check }}/>List Devices<br />
 									<input type="checkbox" name="rights" value="manage" {{ manage_check }}/>Manage Devices<br />
 									<input type="checkbox" name="rights" value="change" {{ change_check }} />Change Devices<br />
 									<input type="hidden" value="ch_per_dev_group" name="task" />
-									<input type="submit" value="Update" id="update" />
+								{% else %}
+									<h2>User Group Rights</h2>
+									<input type="checkbox" name="rights" value="add_user" {{  }}/>Add user to group<br />
+									<input type="checkbox" name="rights" value="change_user" {{  }}/>Change user of group<br />
+									<input type="checkbox" name="rights" value="delete_user" {{  }}/>Delete user of group<br />
+									<input type="checkbox" name="rights" value="list_user" {{  }}/>List user in group<br />
+									<input type="hidden" value="ch_per_usr_group" name="task">
 								{% endif %}
+									<input type="submit" value="Update" id="update" />
 								</form>
 							</div>
 						</article>
