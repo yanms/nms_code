@@ -35,18 +35,25 @@
 						<article>
 							<div class="text-section">
 								<h1>Dashboard</h1>
+								<h2>Manage group: <strong>{{ group }}</strong></h2>
 								<ul class="states">
 									{% for message in messages %}
-									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+									<li class="{{message.tags}}">{{ message.tags.title }} : {{ message }}</li>
 									{% endfor %}
 								</ul>
-								<form name="myform" action="" method="POST">
-								<div align="center"><br>
-								{% for iter in devices %}
-								<input type="checkbox" name="devices" value="{{ iter.dev_id }}"> {{iter}}<br>
-								{% endfor %}
-								<br>
-								</div>
+								<form name="devices" action="{% url 'nms:acl_handler' group.id %}" method="POST">
+									<div align="center"><br />
+										<h2>Devices</h2>
+										{% for iter in devices %}
+											<input type="checkbox" name="devices" value="{{ iter.dev_id }}" /> {{ iter }}<br />
+										{% endfor %}
+										<h2>Rights</h2>
+										<br>
+										<input type="checkbox" name="rights" value="list" />List Devices<br />
+										<input type="checkbox" name="rights" value="manage" />Manage Devices<br />
+										<input type="checkbox" name="rights" value="change" />Change Devices<br />
+									</div>
+									<input type="hidden" value="ch_per_dev_group" id="task" />
 								</form>
 								{% if user_perm %}
 
