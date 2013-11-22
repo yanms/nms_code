@@ -5,6 +5,12 @@
 	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript">
+		function showLoadingImage(num)
+		{
+			document.getElementById('loadingImage'.concat(num)).style.visibility='visible';
+		}
+	</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>
@@ -54,7 +60,7 @@
 										<td>{{ device.gen_dev_id }}</td>
 										<td>{{ device.ip }}</td>
 										<td>## UP/DOWN ##</td>
-										<td><a href="{% url 'nms:device_manager' device.dev_id %}">Manage</a><img src="{{ STATIC_URL }}images/loading.gif" /></td>
+										<td><a href="{% url 'nms:device_manager' device.dev_id %}", onclick="showLoadingImage({{ device.dev_id }});">Manage</a> <img id="loadingImage{{ device.dev_id }}" src="{{ STATIC_URL }}images/loading.gif" style="visibility:hidden"/></td>
 									</tr>
 								{% endfor %}
 								</table>
