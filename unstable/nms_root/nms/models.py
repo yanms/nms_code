@@ -97,4 +97,7 @@ class Dev_group(models.Model):
     dev_group_id = models.AutoField(primary_key=True)
     gid = models.ForeignKey(Group)
     devid = models.ForeignKey(Devices)
+    
+    def __str__(self):
+        return str(self.gid + ' ' + self.devid)
 

@@ -117,7 +117,7 @@ def acl_handler(request, acl_id):
                     #messages.info(request, 'group: '+ str(group))
                 for iter in rights:
                     right = iter
-                    right += '_device'
+                    right += '_devices'
                     permission = Permission.objects.get(codename=right)
                     group.permissions.add(permission)
                 messages.success(request, 'Database updated successfully')
