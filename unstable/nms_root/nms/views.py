@@ -143,7 +143,8 @@ def acl_groups_manage(request, acl_id):
     list_check = 'checked' if group.permissions.filter(codename='list_devices').exists() else ''
     manage_check = 'checked' if group.permissions.filter(codename='manage_devices').exists() else ''
     change_check = 'checked' if group.permissions.filter(codename='change_devices').exists() else ''
-    return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked })
+    dev_check = True if group.name[:4] == 'dev:' else False
+    return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check })
 
 @login_required
 def acl_groups_add(request):
