@@ -59,7 +59,9 @@
 		xmlhttp.send();
 	}
 	window.onload = function() {
-		document.getElementById("selectVendor").onchange = loadDropdownItems();
+		document.getElementById("selectVendor").onchange = function() {
+			loadDropdownItems();
+		}
 	}
 	</script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
