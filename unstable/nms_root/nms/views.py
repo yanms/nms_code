@@ -508,6 +508,8 @@ def query(request):
 			text = text + '\n'
 			connection.chan.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
+		elif query == 'del':
+			commands.removeSSHConnection(request.user, device)
 	return HttpResponse('<Unkown query type>', content_type='text/plain')
 
 def logout_handler(request):
