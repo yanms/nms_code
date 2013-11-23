@@ -54,8 +54,8 @@
 		var dtype = selectType.options[selectType.selectedIndex].text;
 		var dvendor = selectVendor.options[selectVendor.selectedIndex].text;
 
-		arguments = "&type=models&q=".concat(dtype, "|", dvendor)
-		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(argments), true);
+		args = "&type=models&q=".concat(dtype, "|", dvendor)
+		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
 		xmlhttp.send();
 	}
 	window.onload = function() {
