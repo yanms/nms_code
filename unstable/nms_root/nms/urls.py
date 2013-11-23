@@ -26,4 +26,5 @@ urlpatterns = patterns('',
     url(r'^session/$', views.session_handler, name='session_handler'),
     url(r'^logout/$', views.logout_handler, name='logout_handler'),
 	url(r'^query/', views.query, name='query'),
+	url(r'^devices/(?P<device_id_request>\d+)/manage/ssh/$', views.device_ssh, name='device_ssh'),
 )

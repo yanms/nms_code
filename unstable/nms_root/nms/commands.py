@@ -5,6 +5,9 @@ from multiprocessing import Lock
 interfaces = {}
 interfacesLock = Lock()
 
+sshconnections = {}
+sshconnectionsLock = Lock()
+
 def removeInterfaces(device):
 	global interfacesLock
 	global interfaces
@@ -58,3 +61,19 @@ def executeTask(taskpath, device):
 			ret += s.send_and_receive(arg)
 	s.close()
 	return parser.parse(ret)
+
+def __createSSHConnection__(device):
+	connection = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
+	connection.sock.setblocking(0)
+	connection.connect()
+	return connection
+
+def getSSHConnection(user, device):
+	sshconnectionsLock.acquire()
+	if not user in sshconnections.keys():
+		sshconnections[user] = {}
+	if not device in sshconnections[user].keys():
+		sshconnections[user][device] = __createSSHConnection__(user, device)
+	connection = sshconnections[user][device]
+	sshconnectionsLock.release()
+	return connection

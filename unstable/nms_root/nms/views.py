@@ -470,24 +470,52 @@ def query(request):
 	else:
 		return HttpResponse('<Error>', content_type='text/plain')
 
-	ret_list = []
-	ret_string = ''
 	if type == 'models':
+		ret_list = []
+		ret_string = ''
 		dtype, dvendor = query.split('|')
 		gen_devs = Gen_dev.objects.all()
 		for gen_dev in gen_devs:
 			if gen_dev.dev_type_id.dev_type_name == dtype and gen_dev.vendor_id.vendor_name == dvendor:
 				ret_list.append(str(gen_dev.model_id))
-	
-	if len(ret_list) == 0:
-		return HttpResponse('<Error>', content_type='text/plain')
-	for i, item in enumerate(ret_list):
-		ret_string += item
-		if i+1 < len(ret_list):
-			ret_string += '|'
-	return HttpResponse(ret_string, content_type='text/plain')
+		if len(ret_list) == 0:
+			return HttpResponse('<Error>', content_type='text/plain')
+		for i, item in enumerate(ret_list):
+			ret_string += item
+			if i+1 < len(ret_list):
+				ret_string += '|'
+		return HttpResponse(ret_string, content_type='text/plain')
+	elif type == 'ssh':
+		if not 'dev' in request.GET:
+			return HttpResponse('<Missing dev in GET>', content_type='text/plain')
+		dev = request.GET['dev']
+		try:
+			device = Devices.object.get(dev)
+		except:
+			return HttpResponse('<No such device>', content_type='text/plain')
+		if query == 'receive':
+			connection = commands.getSSHConnection(request.user, device)
+			try:
+				ret = connection.chan.recv(4096)
+			except:
+				return HttpResponse('', content_type='text/plain')
+			return HttpResponse(ret.decode(), content_type='text/plain')
+		elif query == 'send':
+			if not 'text' in request.GET:
+				return HttpResponse('', content_type='text/plain')
+			text = request.GET['text']
+			connection = commands.getSSHConnection(request.user, device)
+			text = text + '\n'
+			connection.chan.send(text.encode())
+			return HttpResponse('', content_type='text/plain')
+	return HttpResponse('<Unkown query type>', content_type='text/plain')
 
 def logout_handler(request):
 	logout(request)
 	messages.success(request, "You are logged out")
 	return HttpResponseRedirect(reverse('nms:login_handler'))
+
+@login_required
+def device_ssh(request, device_id_request):
+	device = get_object_or_404(Devices, pk=device_id_request)
+	return render(request, 'nms/ssh.html', {'device': device})
