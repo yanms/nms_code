@@ -69,29 +69,29 @@ def __createSSHConnection__(device):
 	return connection
 
 def getSSHConnection(user, device):
-	sshconnectionsLock.acquire()
-	try:
-		if not user in sshconnections.keys():
-			sshconnections[user] = {}
-		if not device in sshconnections[user].keys():
-			sshconnections[user][device] = __createSSHConnection__(device)
-		return sshconnections[user][device]
-	except:
-		raise
-	finally:
-		sshconnectionsLock.release()
+	#sshconnectionsLock.acquire()
+	#try:
+	if not user in sshconnections.keys():
+		sshconnections[user] = {}
+	if not device in sshconnections[user].keys():
+		sshconnections[user][device] = __createSSHConnection__(device)
+	return sshconnections[user][device]
+	#except:
+	#	raise
+	#finally:
+	#	sshconnectionsLock.release()
 		
 def removeSSHConnection(user, device):
-	sshconnectionsLock.acquire()
-	try:
-		if not user in sshconnections.keys():
-			return
-		if not device in sshconnections[user].keys():
-			return
-		connection = sshconnections[user][device]
-		connection.close()
-		del sshconnections[user][device]
-	except:
-		raise
-	finally:
-		sshconnectionsLock.release()
+	#sshconnectionsLock.acquire()
+	#try:
+	if not user in sshconnections.keys():
+		return
+	if not device in sshconnections[user].keys():
+		return
+	connection = sshconnections[user][device]
+	connection.close()
+	del sshconnections[user][device]
+	#except:
+	#	raise
+	#finally:
+	#	sshconnectionsLock.release()
