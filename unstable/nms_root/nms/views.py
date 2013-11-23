@@ -462,7 +462,7 @@ def session_handler(request):
 @login_required
 def query(request):
 	if request.method == 'GET':
-		if 'type' in request.GET and 'q' in 'request.GET':
+		if 'type' in request.GET and 'q' in request.GET:
 			type = request.GET['type']
 			query = request.GET['q']
 		else:
