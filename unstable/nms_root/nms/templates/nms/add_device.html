@@ -107,8 +107,6 @@
 									{% endfor %}
 								</ul>
 								<h2>Add Device</h2>
-								<button type="button" onclick="loadDoc()">AJAX Away!</button>
-								<div id="ajaxreturn">Empty</div>
 								<p>
 									<form action="{% url 'nms:device_add' %}" method="POST">
 									{% csrf_token %}
