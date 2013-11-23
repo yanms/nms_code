@@ -12,7 +12,7 @@
       <command>
          <argElement position="0" type="plaintext">show ip interface brief</argElement>
       </command>
-      <returnParsing delimiter="\n" type="regex">(?=(^[0-9a-zA-Z/]+))(?=(?!Interface))(?=(?!^.*?>))</returnParsing>
+      <returnParsing delimiter="\n" type="regex">(?=(^[0-9a-zA-Z/.]+))(?=(?!Interface))(?=(?!^.*?>))</returnParsing>
    </interfaceQuery>
 
    <configurationItems>
