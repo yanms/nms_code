@@ -32,7 +32,7 @@
 				document.getElementById("ajaxreturn").innerHTML = xmlhttp.responseText;
 			}
 		}
-		xmlhttp.open("GET", "query/?type=models&q=test dev type name|cisco", true);
+		xmlhttp.open("GET", "{% url 'nms:query' %}?type=models&q=test dev type name|cisco", true);
 		xmlhttp.send();
 	}
 	</script>
