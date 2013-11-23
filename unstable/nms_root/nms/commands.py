@@ -64,8 +64,8 @@ def executeTask(taskpath, device):
 
 def __createSSHConnection__(device):
 	connection = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
-	connection.sock.setblocking(0)
 	connection.connect()
+	connection.chan.setblocking(0)
 	return connection
 
 def getSSHConnection(user, device):
