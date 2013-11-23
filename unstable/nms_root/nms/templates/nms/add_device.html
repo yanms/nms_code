@@ -27,7 +27,7 @@
 				var ret = xmlhttp.responseText.split('|');
 				for (var i=0; i<ret.length; i++)
 				{
-					document.write(ret[i] + "<br>");
+					document.getElementById("ajaxreturn").innerHTML = ret[i]
 				}
 			}
 		}
@@ -75,6 +75,7 @@
 								</ul>
 								<h2>Add Device</h2>
 								<button type="button" onclick="loadDoc()">AJAX Away!</button>
+								<div id="ajaxreturn">Empty</div>
 								<p>
 									<form action="{% url 'nms:device_add' %}" method="POST">
 									{% csrf_token %}
