@@ -39,7 +39,7 @@
                <argElement position="5" type="plaintext">end</argElement>
                <argElement position="6" type="plaintext">disable</argElement>
             </command>
-            <returnParsing delimiter="\n" type="regex">(^.*?\(config-[(sub)]*if\)#shutdown)</returnParsing>
+            <returnParsing delimiter="\n" type="regex">.*</returnParsing>
          </item>
          <item name="Get interface status" type="single">
             <command>
