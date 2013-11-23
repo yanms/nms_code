@@ -469,8 +469,6 @@ def query(request):
 	ret_string = ''
 	if type == 'models':
 		dtype, dvendor = query.split('|')
-		ret_list.append(dtype)
-		ret_list.append(dvendor)
 		gen_devs = Gen_dev.objects.all()
 		for gen_dev in gen_devs:
 			if gen_dev.dev_type_id.dev_type_name == dtype and gen_dev.vendor_id.vendor_name == dvendor:
