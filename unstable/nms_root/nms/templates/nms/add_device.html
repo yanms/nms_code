@@ -7,7 +7,7 @@
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
 	<script type="text/javascript">
-	function loadDoc()
+	function loadDropDownItems()
 	{
 		var xmlhttp;
 		if (window.XMLHttpRequest)
@@ -24,16 +24,38 @@
 		{
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
 			{
-				/*var ret = xmlhttp.responseText.split('|');
-				for (var i=0; i<ret.length; i++)
+				var ret = xmlhttp.responseText.split('|');
+				var selectElement = document.getElementById("selectModel");
+				selectElement.innerHTML = "";
+
+				for (var i = 0; i < ret.length; i++)
 				{
-					document.getElementById("ajaxreturn").innerHTML = ret[i];
-				}*/
-				document.getElementById("ajaxreturn").innerHTML = xmlhttp.responseText;
+					var option = document.createElement("option");
+					option.text = ret[i];
+					try
+					{
+						selectElement.add(option, null);
+					}
+					catch (e)
+					{
+						selectElement.add(option, selectElement.options[null]);
+					}
+				}
+				document.getElementById(elementId).innerHTML = htmlOptions;
+				document.getElementById(elementId).disabled = false;
 			}
 		}
-		xmlhttp.open("GET", "{% url 'nms:query' %}?type=models&q=test dev type name|cisco", true);
+		var selectType = document.getElementById("selectType");
+		var selectVendor = document.getElementById("selectVendor");
+		var dtype = selectType.options[selectType.selectedIndex].text;
+		var dvendor = selectVendor.options[selectVendor.selectedIndex].text;
+
+		arguments = "&type=models&q=".concat(dtype, "|", dvendor)
+		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(argments), true);
 		xmlhttp.send();
+	}
+	window.onload = function() {
+		document.getElementById("selectVendor").onchange = loadDropdownItems();
 	}
 	</script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
@@ -82,12 +104,27 @@
 									{% csrf_token %}
 										<table border="0">
 											<tr>
-												<td>Device (type/vendor/model):</td>
-												<td><select id="gen_dev" name="gen_dev_id">
-													{% for record in gen_dev %}
-														<option value="{{ record.gen_dev_id }}">{{ record }}</option>
+												<td>Type:</td>
+												<td><select id="selectType" name="selectType">
+													{% for record in dev_type_view %}
+														<option>{{ record }}</option>
 													{% endfor %}
 												</select></td>
+											</tr>
+											<tr>
+												<td>Vendor:</td>
+												<td><select id="selectVendor" name="selectVendor">
+													{% for record in vendor_view %}
+														<option>{{ record }}</option>
+													{% endfor %}
+												</select></td>
+											</tr>
+											<tr>
+												<td>Model:</td>
+												<td><select id="selectModel" name="selectModel" disabled>
+													<option>Select a type and vendor</option>
+												</select>
+												</td>
 											</tr>
 											<tr>
 												<td>OS:</td>
