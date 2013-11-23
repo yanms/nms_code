@@ -315,7 +315,7 @@ def device_manager(request, device_id_request):
 	devices = get_object_or_404(Devices, pk=device_id_request)
 	if request.method == 'GET' and 'refresh' in request.GET:
 		xmlparser.removeTaskCache(xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location))
-		xmlparser.removeXmlStruct(devices)
+		xmlparser.removeXmlStruct(devices.gen_dev_id.file_location_id.location)
 		commands.removeInterfaces(devices)
 	root = xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location)
 	cmd, parser = xmlparser.getInterfaceQuery(root)
