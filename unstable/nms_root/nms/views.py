@@ -454,6 +454,9 @@ def session_handler(request):
 		messages.error(request, "You are not logged in 2")
 		return HttpResponseRedirect(reverse('nms:login_handler'))
 
+def query(request):
+	return 'TestMessage'
+
 def logout_handler(request):
 	logout(request)
 	messages.success(request, "You are logged out")
