@@ -455,7 +455,7 @@ def session_handler(request):
 		return HttpResponseRedirect(reverse('nms:login_handler'))
 
 def query(request):
-	return 'TestMessage'
+	return HttpResponse('TestMessage', content_type='text/plain')
 
 def logout_handler(request):
 	logout(request)
