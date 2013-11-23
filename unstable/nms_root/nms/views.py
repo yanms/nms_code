@@ -454,8 +454,31 @@ def session_handler(request):
 		messages.error(request, "You are not logged in 2")
 		return HttpResponseRedirect(reverse('nms:login_handler'))
 
+@login_required
 def query(request):
-	return HttpResponse('TestMessage', content_type='text/plain')
+	if request.method == 'GET':
+		if 'type' in request.GET and 'q' in 'request.GET':
+			type = request.GET['type']
+			query = request.GET['q']
+		else:
+			return HttpResponse('<Error>', content_type='text/plain')
+	else:
+		return HttpResponse('<Error>', content_type='text/plain')
+
+	ret_list = []
+	ret_string = ''
+	if type = 'models':
+		dtype, dvendor = q.split('|')
+		gen_devs = Gen_dev.objects.all()
+		for gen_dev in gen_devs:
+			if gen_dev.dev_type_id.dev_type_name == dtype and gen_dev.vendor_id.vendor_name == dvendor:
+				ret_list.append(str(gen_dev.model_id))
+	
+	for i, item in enumerate(ret_list):
+		ret_string += item
+		if i+1 < len(ret_list):
+			ret += '|'
+	return HttpResponse(ret_string, content_type='text/plain')
 
 def logout_handler(request):
 	logout(request)
