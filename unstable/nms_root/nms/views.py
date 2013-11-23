@@ -479,7 +479,7 @@ def query(request):
 	for i, item in enumerate(ret_list):
 		ret_string += item
 		if i+1 < len(ret_list):
-			ret += '|'
+			ret_string += '|'
 	return HttpResponse(ret_string, content_type='text/plain')
 
 def logout_handler(request):
