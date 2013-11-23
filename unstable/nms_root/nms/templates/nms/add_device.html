@@ -24,11 +24,12 @@
 		{
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
 			{
-				var ret = xmlhttp.responseText.split('|');
+				/*var ret = xmlhttp.responseText.split('|');
 				for (var i=0; i<ret.length; i++)
 				{
 					document.getElementById("ajaxreturn").innerHTML = ret[i];
-				}
+				}*/
+				document.getElementById("ajaxreturn").innerHTML = xmlhttp.responseText;
 			}
 		}
 		xmlhttp.open("GET", "query/?type=models&q=test dev type name|cisco", true);
