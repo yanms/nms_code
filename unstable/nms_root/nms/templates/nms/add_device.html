@@ -6,6 +6,35 @@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<script type="text/javascript">
+	function loadDoc()
+	{
+		var xmlhttp;
+		if (window.XMLHttpRequest)
+		{
+			// IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		}
+		else
+		{
+			// IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange = function()
+		{
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+			{
+				var ret = xmlhttp.responseText.split('|');
+				for (var i=0; i<ret.length; i++)
+				{
+					document.write(ret[i] + "<br>");
+				}
+			}
+		}
+		xmlhttp.open("GET", "query/?type=models&q=test dev type name|cisco", true);
+		xmlhttp.send();
+	}
+	</script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>
 <body>
@@ -45,6 +74,7 @@
 									{% endfor %}
 								</ul>
 								<h2>Add Device</h2>
+								<button type="button" onclick="loadDoc()">AJAX Away!</button>
 								<p>
 									<form action="{% url 'nms:device_add' %}" method="POST">
 									{% csrf_token %}
