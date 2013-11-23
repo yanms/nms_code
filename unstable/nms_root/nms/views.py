@@ -479,6 +479,8 @@ def query(request):
 			if gen_dev.dev_type_id.dev_type_name == dtype and gen_dev.vendor_id.vendor_name == dvendor:
 				ret_list.append(str(gen_dev.model_id))
 	
+	if len(ret_list) == 0:
+		return HttpResponse('<Error>', content_type='text/plain')
 	for i, item in enumerate(ret_list):
 		ret_string += item
 		if i+1 < len(ret_list):

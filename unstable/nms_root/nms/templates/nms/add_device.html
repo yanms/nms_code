@@ -29,6 +29,11 @@
 				{
 					return;
 				}
+				if (ret[0] == "<Error>")
+				{
+					document.getElementById("selectModel").disabled = true;
+					return;
+				}
 
 				var selectElement = document.getElementById("selectModel");
 				selectElement.innerHTML = "";
