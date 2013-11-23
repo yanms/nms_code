@@ -490,7 +490,7 @@ def query(request):
 			return HttpResponse('<Missing dev in GET>', content_type='text/plain')
 		dev = request.GET['dev']
 		try:
-			device = Devices.objects.get(dev)
+			device = Devices.objects.get(pk=dev)
 		except:
 			return HttpResponse('<No such device>', content_type='text/plain')
 		if query == 'receive':
