@@ -53,8 +53,3 @@ function loadDropDownItems()
 	xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
 	xmlhttp.send();
 }
-window.onload = function() {
-	document.getElementById("selectVendor").onchange = function() {
-		loadDropDownItems();
-	}
-}

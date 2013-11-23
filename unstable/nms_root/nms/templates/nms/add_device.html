@@ -6,7 +6,7 @@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
-	<script type="text/javascript" src="{{ STATIC_URL }}js/add_device.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/add_device.js">window.onload = function() { document.getElementById("selectVendor").onchange = function() { loadDropDownItems(); } }</script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>
 <body>
