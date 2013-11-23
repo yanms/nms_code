@@ -25,9 +25,13 @@
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
 			{
 				var ret = xmlhttp.responseText.split('|');
+				if (ret.length == 0)
+				{
+					return;
+				}
+
 				var selectElement = document.getElementById("selectModel");
 				selectElement.innerHTML = "";
-
 				for (var i = 0; i < ret.length; i++)
 				{
 					var option = document.createElement("option");
@@ -114,8 +118,9 @@
 											<tr>
 												<td>Vendor:</td>
 												<td><select id="selectVendor" name="selectVendor">
+													<option value="NoSelection">Please select a vendor</option>
 													{% for record in vendor_view %}
-														<option>{{ record }}</option>
+														<option value="{{ record }}">{{ record }}</option>
 													{% endfor %}
 												</select></td>
 											</tr>
