@@ -6,68 +6,7 @@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
-	<script type="text/javascript">
-	function loadDropDownItems()
-	{
-		var xmlhttp;
-		if (window.XMLHttpRequest)
-		{
-			// IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp = new XMLHttpRequest();
-		}
-		else
-		{
-			// IE6, IE5
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		xmlhttp.onreadystatechange = function()
-		{
-			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-			{
-				var ret = xmlhttp.responseText.split('|');
-				if (ret.length == 0)
-				{
-					return;
-				}
-				if (ret[0] == "<Error>")
-				{
-					document.getElementById("selectModel").disabled = true;
-					return;
-				}
-
-				var selectElement = document.getElementById("selectModel");
-				selectElement.innerHTML = "";
-				for (var i = 0; i < ret.length; i++)
-				{
-					var option = document.createElement("option");
-					option.text = ret[i];
-					try
-					{
-						selectElement.add(option, null);
-					}
-					catch (e)
-					{
-						selectElement.add(option, selectElement.options[null]);
-					}
-				}
-				document.getElementById("selectModel").disabled = false;
-			}
-		}
-		var selectType = document.getElementById("selectType");
-		var selectVendor = document.getElementById("selectVendor");
-		var dtype = selectType.options[selectType.selectedIndex].text;
-		var dvendor = selectVendor.options[selectVendor.selectedIndex].text;
-
-		var args = "?type=models&q=".concat(dtype, "|", dvendor);
-		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
-		xmlhttp.send();
-	}
-	window.onload = function() {
-		document.getElementById("selectVendor").onchange = function() {
-			loadDropDownItems();
-		}
-	}
-	</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/add_device.js"></script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>
 <body>
@@ -107,8 +46,6 @@
 									{% endfor %}
 								</ul>
 								<h2>Add Device</h2>
-								<button type="button" onclick="loadDoc()">AJAX Away!</button>
-								<div id="ajaxreturn">Empty</div>
 								<p>
 									<form action="{% url 'nms:device_add' %}" method="POST">
 									{% csrf_token %}
