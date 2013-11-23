@@ -25,4 +25,5 @@ urlpatterns = patterns('',
     url(r'^install/$', views.install, name='install'),
     url(r'^session/$', views.session_handler, name='session_handler'),
     url(r'^logout/$', views.logout_handler, name='logout_handler'),
+	url(r'^query/', views.query, name='query'),
 )
