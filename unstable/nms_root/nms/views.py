@@ -314,11 +314,10 @@ def device_add(request):
 def device_manager(request, device_id_request):
 	devices = get_object_or_404(Devices, pk=device_id_request)
 	if request.method == 'GET' and 'refresh' in request.GET:
+		xmlparser.removeTaskCache(xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location))
 		xmlparser.removeXmlStruct(devices)
 		commands.removeInterfaces(devices)
 	root = xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location)
-	if request.method == 'GET' and 'refresh' in request.GET:
-		xmlparser.removeTaskCache(root)
 	cmd, parser = xmlparser.getInterfaceQuery(root)
 	interfaces = commands.getInterfaces(cmd, parser, devices) #Use if the device is online
 	#interfaces = ['FastEthernet0/0', 'FastEthernet0/1'] #Use if no connection to the device is possible for dummy interfaces
