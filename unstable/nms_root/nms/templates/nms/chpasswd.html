@@ -5,6 +5,20 @@
 	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript">
+	function clearpasswd()
+	{
+		document.getElementById('oldpassword').value='';
+		document.getElementById('newpassword1').value='';
+		document.getElementById('oldpassword2').value='';
+	}
+	function clearsettings()
+	{
+		document.getElementById('newname').value='';
+		document.getElementById('newsurname').value='';
+		document.getElementById('newemail').value='';
+	}
+	</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>
@@ -63,7 +77,7 @@
 												<td><input type="password" name="newpassword2" id="newpassword2" /></td>
 											</tr>
 											<tr>
-												<td><input type="submit" value="Submit" id="submit" /><input type="reset" value="Reset" id="reset" /></td>
+												<td><input type="submit" value="Submit" id="submit" /><input type="reset" value="Reset" id="reset" onclick="clearpasswd()" /></td>
 											</tr>
 										</table>
 									</form>
@@ -85,7 +99,7 @@
 												<td><input type="e-mail" name="newemail" id="newemail" value="{{ user.email }}"/></td>
 											</tr>
 											<tr>
-												<td><input type="submit" value="Submit" id="submit" /><input type="reset" value="Reset" id="reset" /></td>
+												<td><input type="submit" value="Submit" id="submit" /><input type="reset" value="Reset" id="reset" onclick="clearsettings()" /></td>
 											</tr>
 										</table>
 									</form>
