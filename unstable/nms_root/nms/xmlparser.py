@@ -129,8 +129,17 @@ def getInterfaceQuery(root):
 			parser = __getParser__(child)
 	return (command, parser)
 
+def removeTaskCache(root):
+	global taskcacheLock
+	global taskcache
+	taskcacheLock.acquire()
+	if root in taskcache.keys():
+		del taskcache[root]
+	taskcacheLock.release()
+
 def getAvailableTasks(root, interfaces=[], privPassword=''):
-	#locks might not be required here, as the struct is used as read-only mostly
+	global taskcacheLock
+	global taskcache
 	taskcacheLock.acquire()
 	try:
 		if root in taskcache.keys():
