@@ -80,8 +80,16 @@ def __addCategory__(e, od, interfaces, privPassword):
 			elif child.get('type') == 'single':
 				__addItemSingle__(child, od['c:' + e.get('name')], privPassword=privPassword)
 
+def removeXmlStruct(device):
+	global cacheLock
+	global cache
+	cacheLock.acquire()
+	if device in cache.keys():
+		del cache[device]
+	cacheLock.release()
+				
 def get_xml_struct(filepath):
-	global lock
+	global cacheLock
 	global cache
 
 	cacheLock.acquire()
