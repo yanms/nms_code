@@ -467,7 +467,7 @@ def query(request):
 
 	ret_list = []
 	ret_string = ''
-	if type = 'models':
+	if type == 'models':
 		dtype, dvendor = q.split('|')
 		gen_devs = Gen_dev.objects.all()
 		for gen_dev in gen_devs:
