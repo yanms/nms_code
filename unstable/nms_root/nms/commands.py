@@ -75,8 +75,6 @@ def getSSHConnection(user, device):
 		sshconnections[user] = {}
 	if not device in sshconnections[user].keys():
 		sshconnections[user][device] = __createSSHConnection__(device)
-		if device == '1234':
-			print('Dummy change')
 	return sshconnections[user][device]
 	#except:
 	#	raise
