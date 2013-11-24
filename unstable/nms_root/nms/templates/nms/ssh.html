@@ -48,7 +48,7 @@
 				var div = document.getElementById("sshtext");
 				if (xmlhttp.responseText != "")
 				{
-					div.innerHTML = div.innerHTML + "<br></br>" + xmlhttp.responseText.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
+					div.innerHTML = div.innerHTML + xmlhttp.responseText.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
 				}
 			}
 		}
