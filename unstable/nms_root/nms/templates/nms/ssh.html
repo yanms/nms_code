@@ -49,6 +49,7 @@
 				if (xmlhttp.responseText != "")
 				{
 					div.innerHTML = div.innerHTML + xmlhttp.responseText.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
+					div.scrollTop = div.scrollHeight;
 				}
 			}
 		}
@@ -77,6 +78,7 @@
 				if (xmlhttp.responseText != "")
 				{
 					div.innerHTML = div.innerHTML + xmlhttp.responseText.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
+					div.scrollTop = div.scrollHeight;
 				}
 			}
 		}
