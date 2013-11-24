@@ -57,7 +57,37 @@
 		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
 		xmlhttp.send();
 	}
-	window.setInterval(function(){sshReceive()}, 1000);
+	function sshClose()
+	{
+		var xmlhttp;
+		if (window.XMLHttpRequest)
+		{
+			// IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		}
+		else
+		{
+			// IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange = function(){
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+			{
+				var div = document.getElementById("sshtext");
+				if (xmlhttp.responseText != "")
+				{
+					div.innerHTML = div.innerHTML + xmlhttp.responseText.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
+				}
+			}
+		}
+
+		window.clearInterval(intervalId);
+		var args = "?type=ssh&q=del&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
+		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
+		xmlhttp.send();
+	}
+	
+	var intervalId = window.setInterval(function(){sshReceive()}, 1000);
 	</script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>
@@ -98,7 +128,7 @@
 									{% endfor %}
 								</ul>
 								<h2>SSH Connection: {{ device }}</h2>
-								<input type="text" id="sshinput"></input> <button id="sendssh" type="button" onclick="sshSend();">send</button>
+								<input type="text" id="sshinput"></input> <button id="sendssh" type="button" onclick="sshSend();">send</button><button id="sshclose" type="button" onclick="closeSSH();">close</button>
 								<div id="sshtext">
 								</div>
 							</div>
