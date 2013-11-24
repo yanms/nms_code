@@ -511,7 +511,7 @@ def query(request):
 		elif query == 'del':
 			commands.removeSSHConnection(request.user, device)
 			return HttpResponse('Connection closed', content_type='text/plain')
-	return HttpResponse('<Unkown query type>', content_type='text/plain')
+	return HttpResponse('<Unkown query type>!', content_type='text/plain')
 
 def logout_handler(request):
 	logout(request)
