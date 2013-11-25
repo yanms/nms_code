@@ -6,10 +6,8 @@ register = template.Library()
 
 @register.simple_tag
 def active(request, pattern):
-    if pattern == '/':
-        pattern = '^' + pattern + '$'
-        print(request.path)
+    if pattern == '/' or pattern == '':
+        pattern = '^/$'
     if re.match(pattern, request.path):
-        print(request.path)
         return 'active'
     return ''
