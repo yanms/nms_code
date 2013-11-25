@@ -44,21 +44,28 @@
 								<form name="groups" action="{% url 'nms:acl_handler' dev_obj.dev_id %}" method="POST">
 								{% csrf_token %}
 									<h2>Groups</h2>
-									{% for group in dev_groups %}
-										{% if group in checked %}
-										<input type="checkbox" name="groups" value="{{ group.id }}" checked /> {{ group }}<br />
-										{% else %}
-										<input type="checkbox" name="groups" value="{{ group.id }}" /> {{ group }}<br />
-										{% endif %}
-										Users: <br/>
-										{% for iter in group.user_set.all %}
-										{{ iter }} <br/>
+										<table class="TFtable">
+											<tr>
+												<td><b>Group</b></td>
+												<td><b>Users</b></td>
+												<td><b>Permissions</b></td>
+											</tr>
+										{% for group in dev_groups %}
+											<tr>
+											{% if group in checked %}
+												<td><input type="checkbox" name="groups" value="{{ group.id }}" checked /> {{ group }}</td>
+											{% else %}
+												<td><input type="checkbox" name="groups" value="{{ group.id }}" /> {{ group }}</td>
+											{% endif %}
+												<td><ul>{% for iter in group.user_set.all %} 
+														<li>{{ iter }}</li>
+													{% endfor %}</ul></td>
+												<td><ul>{% for iter in group.permissions.all %}
+														<li>{{ iter.name }}</li>
+													{% endfor %}</ul></td>
+											</tr>
 										{% endfor %}
-										Permissions: <br/>
-										{% for iter in group.permissions.all %}
-										{{ iter.name }} <br/>
-										{% endfor %}
-									{% endfor %}
+										</table>
 									<input type="hidden" value="dev_group_update" name="task" />
 									<input type="submit" value="Update" id="update" />
 								</form>
