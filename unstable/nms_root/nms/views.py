@@ -10,6 +10,7 @@ from django.template import RequestContext
 from django.contrib.contenttypes.models import ContentType
 import nms.commands as commands
 import nms.xmlparser as xmlparser
+import nms.passwordstore as passwordstore
 import traceback
 
 
