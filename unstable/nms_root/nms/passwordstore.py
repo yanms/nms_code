@@ -4,7 +4,7 @@ import base64
 from multiprocessing import Lock
 from nms.models import Devices
 
-masterPassword = ''
+masterPassword = bytes()
 masterPasswordLock = Lock()
 
 class AESCipher:
