@@ -41,11 +41,14 @@
                                                                         {% endfor %}
                                                                 </ul>
                                                                 <h2>Account Control List: Devices</h2>
+																<form name="devices" action="{% url 'nms:acl_groups_handler' %}" method="POST">
+																	{% csrf_token %}
                                                                 <table class="TFtable">
                                                                         <tr>
                                                                                 <td><b>Type</b></td>
                                                                                 <td><b>Model</b></td>
-                                                                                <td></td>
+                                                                                <td>Info</td>
+																				<td>Delete</td>
                                                                                 
                                                                         </tr>
                                                                 {% for device in devices %}
@@ -53,10 +56,14 @@
                                                                                 <td> {{ device.gen_dev_id.dev_type_id }} </td>
                                                                                 <td> {{ device.gen_dev_id }}</td>
                                                                                 <td> <a href="{% url 'nms:acl_device_manage' device.dev_id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a> </td>
+																				<td><input type="checkbox" name="delete" value="{{ device.dev_id }}" /></td>
                                                                                 
                                                                         </tr>
                                                                 {% endfor %}
                                                                 </table>
+																<input type="hidden" name="task" value="del_device" />
+																<input type="submit" value="Delete" id="delete" />
+															</form>
                                                                 
                                                         </div>
                                                 </article>
