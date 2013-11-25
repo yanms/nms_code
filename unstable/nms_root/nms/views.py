@@ -530,4 +530,4 @@ def init(request):
 			return HTTPResponse('Success', content_type='text/plain')
 		else:
 			return HTTPResponse('Invalid key length', content_type='text/plain')
-	return render(request, 'nms/init.html')
+	return render(request, 'nms/init.html', {'request':request})
