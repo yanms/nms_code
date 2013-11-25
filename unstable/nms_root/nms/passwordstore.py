@@ -10,7 +10,7 @@ class AESCipher:
 	def __init__(self, key):
 		self.key = key
 		self.BS = 16
-		self.pad = lambda s: s + (self.BS - len(s) % BS) * chr(BS - len(s) % BS)
+		self.pad = lambda s: s + (self.BS - len(s) % self.BS) * chr(self.BS - len(s) % self.BS)
 		self.unpad = lambda s: s[0:-s[-1]]
 	
 	def encrypt(self, raw):
@@ -23,7 +23,7 @@ class AESCipher:
 		enc = base64.b64decode(enc)
 		iv = enc[:16]
 		cipher = AES.new(self.key, AES.MODE_CBC, iv)
-		return unpad(cipher.decrypt(enc[16:]))
+		return self.unpad(cipher.decrypt(enc[16:]))
 
 def storeMasterPassword(password):
 	global masterPasswordLock
