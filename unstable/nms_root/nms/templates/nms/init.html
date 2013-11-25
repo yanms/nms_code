@@ -46,6 +46,7 @@
 								</ul>
 								<h2>init</h2>
                                 <form action="{% url 'nms:init' %}" method="POST">
+									{% csrf_token %}
 									<input type="text" name="master" /><br />
 									<input type="submit" />
 								</form>
