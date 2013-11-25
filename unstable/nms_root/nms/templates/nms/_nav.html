@@ -1,8 +1,9 @@
 <!-- navigation -->
+{% url 'index' as index %}
 
 <ul class="tabset buttons">
-	<li class="{% ifequal index request.path %}current{% endifequal %} "index" %}">
-		<a href="/" class="ico4"><span>Dashboard</span><em></em></a>
+	<li class="{% if request.path == index %}active{% endif %}">
+		<a href="{{ index }}" class="ico4"><span>Dashboard</span><em></em></a>
 		<span class="tooltip"><span>Dashboard</span></span>
 	</li>
 	<li class="">
