@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 register = template.Library()
 
 @register.simple_tag
-def navactive(request, urls):
+def active(request, urls):
 	if re.search(pattern, request.path):
 		return 'active'
 	return ''
