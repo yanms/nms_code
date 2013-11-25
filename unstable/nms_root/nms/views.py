@@ -162,6 +162,8 @@ def acl_handler(request, acl_id):
 def acl_groups_manage(request, acl_id):
     group = get_object_or_404(Group, pk=acl_id)
     dev_check = True if group.name[:4] == 'dev:' else False
+    groups_usr = Group.objects.filter(name__startswith='usr:')
+    users = User.objects.all()
     devices = None
     list_check = None
     manage_check = None
@@ -196,7 +198,7 @@ def acl_groups_manage(request, acl_id):
     
     
     return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check,
-                                                        'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request})
+                                                        'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request, 'groups_usr': groups_usr, 'users': users})
 
 @login_required
 def acl_groups_handler(request):
