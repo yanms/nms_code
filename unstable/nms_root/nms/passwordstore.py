@@ -15,7 +15,7 @@ class AESCipher:
 	
 	def encrypt(self, raw):
 		raw = self.pad(raw)
-		iv = Random.new().read(AES.MODE_CBC, iv)
+		iv = Random.new().read(AES.MODE_CBC)
 		cipher = AES.new(self.key, AES.MODE_CBC, iv)
 		return base64.b64encode(iv+cipher.encrypt(raw))
 	
