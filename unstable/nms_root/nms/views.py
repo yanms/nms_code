@@ -77,7 +77,7 @@ def acl_user_add(request):
 
 @login_required
 @permission_required('auth.add_user', login_url='/permissions/?per=add_user')
-def acl_user_add(request):
+def acl_user_handler(request):
     if request.method == 'POST':
         try:
             username = request.POST['username']
