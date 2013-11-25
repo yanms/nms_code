@@ -72,6 +72,23 @@
 								{% endif %}
 									<input type="submit" value="Update" id="update" />
 								</form>
+								<br />
+								*** INHERIT OPTIONS: *** <br />
+								{% for item in groups_usr %}
+								{{ item }} <br/>
+								{% for iter in item.user_set.all %}
+								+ {{ iter }} <br/>
+								{% endfor %}
+								{% endfor %}
+								
+								*** INDIVIDUAL USERS *** <br/>
+								{% for item in users %}
+								{% if item in group.user_set.all %}
+								+{{ item }} THIS USER IS NOT ADDED TO THIS GROUP<br/>
+								{% else %}
+								-{{item}} ALREADY ADDED<br/>
+								{% endif %}
+								{% endfor %}
 							</div>
 						</article>
 					</div>
