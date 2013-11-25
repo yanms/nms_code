@@ -40,9 +40,9 @@
 									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
 									{% endfor %}
 								</ul>
-								<table border="0">
+								<table border="0" width="100%">
 									<tr>
-										<td style="vertical-align: top;">
+										<td width="50%" style="vertical-align: top;">
 											<h2>Device Groups: </h2>
 											<form action="{% url 'nms:acl_groups_handler' %}" method ="POST">
 											{% csrf_token %}
@@ -75,7 +75,7 @@
 											<input type="submit" value="Delete" id="delete" />
 										</form>
 										</td>
-										<td>
+										<td width="50%" style="vertical-align: top;">
 											{% if user_perm %}
 											<h2>User groups:</h2>
 											<form action="{% url 'nms:acl_groups_handler' %}" method ="POST">
