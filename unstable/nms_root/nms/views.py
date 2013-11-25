@@ -71,6 +71,11 @@ def acl_user(request):
     return render(request, 'nms/acl_users.html', {'user_list': user_list,'request':request})
 
 @login_required
+@permission_required('auth.add_user', login_url='/permissions/?per=add_user')
+def acl_user_add(request):
+    return render(request, 'nms/acl_user_add.html', {'request':request})
+
+@login_required
 @permission_required('auth.change_user', login_url='/permissions/?per=change_user')
 def acl_user_manage(request, acl_user):
     user_obj = get_object_or_404(User, pk=acl_user)
