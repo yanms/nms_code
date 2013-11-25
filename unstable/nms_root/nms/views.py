@@ -62,26 +62,26 @@ def acl_groups(request):
     user_perm = user.has_perm('auth.list_group')
     dev_groups = Group.objects.filter(name__startswith='dev:')
     usr_groups = Group.objects.filter(name__startswith='usr:')
-    return render(request, 'nms/acl_groups.html', {'user_perm': user_perm, 'dev_groups': dev_groups, 'usr_groups': usr_groups})
+    return render(request, 'nms/acl_groups.html', {'user_perm': user_perm, 'dev_groups': dev_groups, 'usr_groups': usr_groups, 'request':request})
 
 @login_required
 @permission_required('auth.list_user', login_url='/permissions/?per=list_user')
 def acl_user(request):
     user_list = User.objects.all() 
-    return render(request, 'nms/acl_users.html', {'user_list': user_list,})
+    return render(request, 'nms/acl_users.html', {'user_list': user_list,'request':request})
 
 @login_required
 @permission_required('auth.change_user', login_url='/permissions/?per=change_user')
 def acl_user_manage(request, acl_user):
     user_obj = get_object_or_404(User, pk=acl_user)
     groups = Group.objects.all()
-    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'groups': groups})
+    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'groups': groups, 'request':request})
 
 @login_required
 @permission_required('nms.list_devices', login_url='/permissions/?per=list_devices')
 def acl_device(request):
     devices = Devices.objects.all() 
-    return render(request, 'nms/acl_devices.html', {'devices': devices,})
+    return render(request, 'nms/acl_devices.html', {'devices': devices,'request':request})
 
 @login_required
 @permission_required('nms.list_devices', login_url='/permissions/?per=list_devices')
@@ -92,7 +92,7 @@ def acl_device_manage(request, acl_id):
     checked = []
     for iter in check:
         checked.append(iter.gid)
-    return render(request, 'nms/acl_devices_manage.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups, 'checked': checked})
+    return render(request, 'nms/acl_devices_manage.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups, 'checked': checked, 'request':request})
 
 @login_required
 def acl_handler(request, acl_id):
@@ -196,7 +196,7 @@ def acl_groups_manage(request, acl_id):
     
     
     return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check,
-                                                        'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group})
+                                                        'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request})
 
 @login_required
 def acl_groups_handler(request):
@@ -258,7 +258,7 @@ def register(request):
 			messages.error(request, 'User already exists')
 			return HttpResponseRedirect(reverse('nms:register'))
 	else:
-		return render(request, 'nms/register.html')
+		return render(request, 'nms/register.html', {'request':request})
 			
 
 def login_handler(request):
@@ -266,7 +266,7 @@ def login_handler(request):
 		url = request.GET['next']
 		return(render(request, 'nms/login.html', {'url': url}))
 	else:
-		return render(request, 'nms/login.html')
+		return render(request, 'nms/login.html', {'request':request})
 
 @login_required
 def devices(request):
@@ -332,7 +332,7 @@ def device_manager(request, device_id_request):
 		return HttpResponseRedirect(reverse('nms:devices'))
 	
 	taskhtml = xmlparser.getAvailableTasksHtml(root, devices.dev_id, interfaces, devices.password_enable)
-	return render(request, 'nms/manage_device.html', {'devices': devices, 'taskhtml': taskhtml})
+	return render(request, 'nms/manage_device.html', {'devices': devices, 'taskhtml': taskhtml, 'request':request})
 
 @login_required
 def device_modify(request, device_id_request):
@@ -367,7 +367,7 @@ def device_modify(request, device_id_request):
 			messages.error(request, 'Not all fields are are set or an other error occured')
 			return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
 	else:
-		return render(request, 'nms/modify_device.html', {'devices': device, 'gen_dev': gen_dev, 'os_dev': os_dev})
+		return render(request, 'nms/modify_device.html', {'devices': device, 'gen_dev': gen_dev, 'os_dev': os_dev, 'request':request})
 
 @login_required
 def user_settings(request):
@@ -522,7 +522,7 @@ def logout_handler(request):
 @login_required
 def device_ssh(request, device_id_request):
 	device = get_object_or_404(Devices, pk=device_id_request)
-	return render(request, 'nms/ssh.html', {'device': device})
+	return render(request, 'nms/ssh.html', {'device': device, 'request':request})
 
 def init(request):
 	if request.method == 'POST' and 'master' in request.POST:
