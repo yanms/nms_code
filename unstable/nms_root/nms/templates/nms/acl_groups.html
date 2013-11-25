@@ -42,11 +42,11 @@
 								</ul>
 								<table border="0">
 									<tr>
-										<td>
+										<td style="vertical-align: top;">
 											<h2>Device Groups: </h2>
 											<form action="{% url 'nms:acl_groups_handler' %}" method ="POST">
 											{% csrf_token %}
-											<table border ="0">
+											<table border="0">
 												<tr>
 													<td>Add group:</td>
 													<td><input type="group" name="group" /> <input type="hidden" value="dev" name="task" /> <input type="submit" value="Submit"></td>
