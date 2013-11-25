@@ -76,6 +76,39 @@ def acl_user_add(request):
     return render(request, 'nms/acl_user_add.html', {'request':request})
 
 @login_required
+@permission_required('auth.add_user', login_url='/permissions/?per=add_user')
+def acl_user_add_handler(request):
+    if request.method == 'POST':
+        try:
+            username = request.POST['username']
+            firstname = request.POST['firstname']
+            lastname = request.POST['surname']
+            email = request.POST['emailaddress']
+            password = request.POST['password']
+            password_check = request.POST['password2']
+            check = User.objects.filter(username=username).exists()
+            if check:
+                messages.error(request, 'User already exists.')
+                return HttpResponseRedirect(reverse('nms:acl_user_add'))
+            if password == password_check:
+                user = User.objects.create()
+                user.username = username
+                user.first_name = firstname
+                user.last_name = lastname
+                user.email = email
+                user.set_password(password)
+                user.save()
+                messages.success(request, "Database updated successfully.")
+                return HttpResponseRedirect(reverse('nms:acl_user_add'))
+        except KeyError as err:
+            messages.error(request, "Not all fields are set")
+            messages.error(request, err)
+            return HttpResponseRedirect(reverse('nms:acl_user_add'))
+    else:
+        messages.success(request, "Invalid method")
+        return HttpResponseRedirect(reverse('nms:acl_user_add'))
+
+@login_required
 @permission_required('auth.change_user', login_url='/permissions/?per=change_user')
 def acl_user_manage(request, acl_user):
     user_obj = get_object_or_404(User, pk=acl_user)
