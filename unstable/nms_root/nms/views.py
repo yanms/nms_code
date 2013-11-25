@@ -528,7 +528,7 @@ def init(request):
 	if request.method == 'POST' and 'master' in request.POST:
 		master = request.POST['master']
 		if passwordstore.storeMasterPassword(master) != -1:
-			return HTTPResponse('Success', content_type='text/plain')
+			return HttpResponse('Success', content_type='text/plain')
 		else:
-			return HTTPResponse('Invalid key length', content_type='text/plain')
+			return HttpResponse('Invalid key length', content_type='text/plain')
 	return render(request, 'nms/init.html', {'request':request})
