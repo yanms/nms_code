@@ -220,10 +220,23 @@ def acl_groups_handler(request):
             groups = request.POST.getlist('delete')
             for iter in groups:
                 group = get_object_or_404(Group, pk=iter)
+                if group.name == 'usr:admin' or group.name == 'usr:staff':
+                    messages.error(request, "Can't remove group: " + group.name)
+                    return HttpResponseRedirect(reverse('nms:acl_groups'))
                 group.delete()  
                 
             messages.success(request, "Database updated succesfully")
-            return HttpResponseRedirect(reverse('nms:acl_groups'))  
+            return HttpResponseRedirect(reverse('nms:acl_groups'))
+        elif request.POST['task'] == 'del_user':
+            users = request.POST.getlist('delete')
+            for item in users:
+                user = get_object_or_404(User, pk=item)
+                if user.username == 'root':
+                    messages.error(request, "Can't remove user: root")
+                    return HttpResponseRedirect(reverse('nms:acl_user'))
+                user.delete()
+            messages.success(request, "Database updated succesfully")
+            return HttpResponseRedirect(reverse('nms:acl_user'))
         else:
             messages.error(request, "Some fields are not set")
             return HttpResponseRedirect(reverse('nms:acl_groups'))
