@@ -1,6 +1,6 @@
 <!-- navigation -->
 {% load menu_tags %}
-{% url 'nms:devices' as devices %}
+{% url 'nms:devices' as devicespage %}
 {% url 'nms:index' as index %}
 {% url 'nms:device_add' as device_add %}
 {% url 'nms:acl' as acl %}
@@ -11,7 +11,7 @@
 		<a href="{% url 'nms:index' %}" class="ico4"><span>Dashboard</span><em></em></a>
 		<span class="tooltip"><span>Dashboard</span></span>
 	</li>
-	<li class="{% active request devices %}">
+	<li class="{% active request devicespage %}">
 		<a href="{% url 'nms:devices' %}" class="ico1"><span>Devices</span><em></em></a>
 		<span class="tooltip"><span>Devices</span></span>
 	</li>
