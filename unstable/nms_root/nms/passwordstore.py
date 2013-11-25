@@ -28,9 +28,12 @@ class AESCipher:
 def storeMasterPassword(password):
 	global masterPasswordLock
 	global masterPassword
+	if len(password) != 16 and len(password) != 24 and len(password) != 32:
+		return -1
 	masterPasswordLock.acquire()
 	masterPassword = password
 	masterPasswordLock.release()
+	return 0
 
 def storeEnablePassword(device, password):
 	cipher = AESCipher(masterPassword)

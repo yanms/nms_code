@@ -522,3 +522,12 @@ def logout_handler(request):
 def device_ssh(request, device_id_request):
 	device = get_object_or_404(Devices, pk=device_id_request)
 	return render(request, 'nms/ssh.html', {'device': device})
+
+def init(request):
+	if request.method == 'POST' and 'master' in request.POST:
+		master = request.POST['master']
+		if passwordstore.storeMasterPassword(master) != -1:
+			return HTTPResponse('Success', content_type='text/plain')
+		else:
+			return HTTPResponse('Invalid key length', content_type='text/plain')
+	return render(request, 'nms/init.html')
