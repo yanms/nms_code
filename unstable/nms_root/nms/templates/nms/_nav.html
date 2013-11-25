@@ -6,7 +6,7 @@
 		<a href="{% url 'nms:index' %}" class="ico4"><span>Dashboard</span><em></em></a>
 		<span class="tooltip"><span>Dashboard</span></span>
 	</li>
-	<li class="{% active request devices %}">
+	<li class="{% active request nms:devices %}">
 		<a href="{% url 'nms:devices' %}" class="ico1"><span>Devices</span><em></em></a>
 		<span class="tooltip"><span>Devices</span></span>
 	</li>
@@ -14,11 +14,11 @@
 		<a href="{% url 'nms:device_add' %}" class="ico7"><span>Add Device</span><em></em></a>
 		<span class="tooltip"><span>Add Device</span></span>
 	</li>
-	<li class="">
-			<a href="/acl" class="ico8"><span>ACL</span><em></em></a>
+	<li class="{% active request acl %}">
+			<a href="{% url 'nms:acl' %}" class="ico8"><span>ACL</span><em></em></a>
 			<span class="tooltip"><span>ACL</span></span>
 		</li>
-	<li class="">
+	<li class="{% active request user_settings %}">
 		<a href="/settings" class="ico5"><span>User Settings</span><em></em></a>
 		<span class="tooltip"><span>User Settings</span></span>
 	</li>
