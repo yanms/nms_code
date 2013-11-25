@@ -52,7 +52,7 @@ def install(request):
 @permission_required('auth.list_group', login_url='/permissions/?per=list_group')
 def acl(request):
     user_obj = request.user
-    return render(request, 'nms/acl.html')
+    return render(request, 'nms/acl.html', {'request':request})
 
 @login_required
 @permission_required('auth.list_group', login_url='/permissions/?per=list_group')
@@ -410,7 +410,7 @@ def user_settings(request):
 		except (ValueError, KeyError):
 			messages.error(request, 'Not all fields are set or an other error occured')
 			return HttpResponseRedirect(reverse('nms:user_settings'))
-	return render(request, 'nms/chpasswd.html', context_instance=RequestContext(request))
+	return render(request, 'nms/chpasswd.html', context_instance=RequestContext(request), {'request':request})
 
 @login_required
 def send_command(request, device_id_request):
