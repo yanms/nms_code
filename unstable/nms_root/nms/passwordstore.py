@@ -12,7 +12,7 @@ class AESCipher:
 		self.key = key
 		self.BS = 16
 		self.pad = lambda s: s + (self.BS - len(s) % BS) * chr(BS - len(s) % BS)
-		self.unpad = lambda s: s[0:-s[-1])]
+		self.unpad = lambda s: s[0:-s[-1]]
 	
 	def encrypt(self, raw):
 		raw = self.pad(raw)
