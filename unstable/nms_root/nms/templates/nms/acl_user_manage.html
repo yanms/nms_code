@@ -43,23 +43,30 @@
 								<h2>Manage User: {{ user }}</h2>
 								<form name="usr_group" action="{% url 'nms:acl_handler' user_obj.id %}" method="POST">
 									{% csrf_token %}
+									<table class="TFtable">
+										<tr>
+											<td>Group</td>
+											<td>Users</td>
+											<td>Permissions</td>
+										</tr>
 									{% for item in groups %}
-									{% if item in user_obj.groups.all %}
-										<input type="checkbox" name="groups" value="{{ item }}" checked />{{ item }}<br />
-										{% else %}
-										<input type="checkbox" name="groups" value="{{ item }}" />{{ item }}<br />
-										{% endif %}
-										Permissions: </br>
-										{% for iter in item.permissions.all %}
-										{{ iter.name }} <br/>
+										<tr>
+										{% if item in user_obj.groups.all %}
+											<td><input type="checkbox" name="groups" value="{{ item }}" checked />{{ item }}</td>
+											{% else %}
+											<td><input type="checkbox" name="groups" value="{{ item }}" />{{ item }}</td>
+											{% endif %}
+											<td><ul>{% for usr_item in item.user_set.all %}
+												<li>{{ usr_item }}</li>
+											</ul></td>
+											<td><ul>{% for iter in item.permissions.all %}
+												<li>{{ iter.name }}</li>
+											</ul></td>
+											{% endfor %}
 										{% endfor %}
-										<br/>
-										Users: <br/>
-										{% for usr_item in item.user_set.all %}
-										{{ usr_item }} <br/>
-										{% endfor %}
-										<br/>
+										</tr>
 									{% endfor %}
+									</table>
 									<input type="hidden" name="task" value="usr_group_update" />
 									<input type="submit" value="Update" />
 								</form>
