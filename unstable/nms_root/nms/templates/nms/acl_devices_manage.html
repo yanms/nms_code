@@ -60,7 +60,7 @@
 												<td>{% for iter in group.user_set.all %} 
 														{{ iter }}<br />
 													{% endfor %}</td>
-												<td><{% for iter in group.permissions.all %}
+												<td>{% for iter in group.permissions.all %}
 														{{ iter.name }}<br />
 													{% endfor %}</td>
 											</tr>
