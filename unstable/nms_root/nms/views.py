@@ -270,7 +270,7 @@ def login_handler(request):
 @login_required
 def devices(request):
 	devices = Devices.objects.all()
-	return render(request, 'nms/devices.html', {'devices': devices})
+	return render(request, 'nms/devices.html', {'devices': devices, 'request':request})
 
 @login_required
 def device_add(request):
