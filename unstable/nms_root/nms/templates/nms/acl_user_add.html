@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - Add User</title>
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+						<ul>
+							<li><a href="#" class="ico1">Messages <span class="num">26</span></a></li>
+							<li><a href="#" class="ico2">Alerts <span class="num">5</span></a></li>
+							<li><a href="#" class="ico3">Documents <span class="num">3</span></a></li>
+						</ul>
+					</nav>
+					<div class="profile-box">
+						<span class="profile">
+							<a href="#" class="section">
+								<!-- <img class="image" src="images/img1.png" alt="image description" width="26" height="26" /> -->
+								<span class="text-box">
+									You are logged in as:
+									<strong class="name">{{ user }}</strong>
+								</span>
+							</a>
+							<a href="#" class="opener">opener</a>
+						</span>
+						<a href="{% url 'nms:logout_handler' %}" class="btn-on">On</a>
+					</div>
+				</div>
+				<div class="tabs">
+					<div id="tab-8" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<ul class="states">
+									{% for message in messages %}
+									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+									{% endfor %}
+								</ul>
+								<h2>Add User</h2>
+								<p>
+									<form action="{% url 'nms:user_settings' %}" method="POST">
+										{% csrf_token %}
+										<input type="hidden" name="mode" id="mode" value="chsettings" />
+										<table border="0">
+										<br>
+											<tr>
+												<td>First Name:</td>
+												<td><input type="name" name="firstname" id="firstname"/></td>
+											</tr>
+											<tr>
+												<td>Last Name:</td>
+												<td><input type="surname" name="surname" id="surname"/></td>
+											</tr>
+											<tr>
+												<td>E-Mail:</td>
+												<td><input type="email" name="emailaddress" id="newemail"/></td>
+											</tr>
+											<tr>
+												<td>Username:</td>
+												<td><input type="text" name="username" /></td>
+											</tr>
+											<tr>
+												<td>Password:</td>
+												<td><input type="password" name="password" id="password" /></td>
+											</tr>
+											<tr>
+												<td><input type="submit" value="Submit" id="submit" /><input type="reset" value="Reset" id="reset" onclick="clearsettings()" /></td>
+											</tr>
+										</table>
+									</form>
+								</p>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside id="sidebar">
+			<img src="{{ STATIC_URL }}images/NMS.png"/>
+			{% include "_nav.html" %}
+			<span class="shadow"></span>
+		</aside>
+	</div>
+</body>
+</html>
