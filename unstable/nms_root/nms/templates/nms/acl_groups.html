@@ -98,8 +98,8 @@
 												<tr>
 													<td><b>Group</b></td>
 													<td><b>Permissions</b></td>
-													<td></td>
-													<td></td>
+													<td>Info</td>
+													<td>Delete</td>
 												</tr>
 												<tr>		
 												{% for group in usr_groups %}
@@ -108,7 +108,7 @@
 													<td>{% for permissions in group.permissions.all %}
 													{{ permissions.name }}<br>
 													{% endfor %}</td>
-													<td>{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}<img src="{{ STATIC_URL }}images/lockedButton.png" width="16px" />{% else %}<a href="{% url 'nms:acl_groups_manage' group.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="16px"/></a>{% endif %}</td>
+													<td>{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}<img src="{{ STATIC_URL }}images/lockedButton.png" width="20px" />{% else %}<a href="{% url 'nms:acl_groups_manage' group.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px"/></a>{% endif %}</td>
 													<td>{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}<input type="checkbox" disabled />{% else %}<input type="checkbox" name="delete" value="{{ group.id }}" />{% endif %}</td>
 										
 												</tr>
