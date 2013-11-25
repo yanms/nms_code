@@ -45,12 +45,11 @@
 									{% endfor %}
 								</ul>
 								<h2>Add User</h2>
+								<br />
 								<p>
 									<form action="{% url 'nms:acl_user_add_handler' %}" method="POST">
 										{% csrf_token %}
-										<input type="hidden" name="task" id="task" value="user_add" />
 										<table border="0">
-										<br>
 											<tr>
 												<td>First Name:</td>
 												<td><input type="name" name="firstname" id="firstname"/></td>
