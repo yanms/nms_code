@@ -2,7 +2,7 @@
 {% url 'nms:index' as index %}
 
 <ul class="tabset buttons">
-	<li class="{% if request.path == index %}active{% endif %}">
+	<li "{% if request.path == index %}class="active"{% endif %}">
 		<a href="{{ index }}" class="ico4"><span>Dashboard</span><em></em></a>
 		<span class="tooltip"><span>Dashboard</span></span>
 	</li>
