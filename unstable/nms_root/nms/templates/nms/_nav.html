@@ -1,10 +1,8 @@
 <!-- navigation -->
 {% load menu_tags %}
 
-{% url index as index %}
-
 <ul class="tabset buttons">
-	<li class="{% active request index %}">
+	<li class="{% active request "index" %}">
 		<a href="/" class="ico4"><span>Dashboard</span><em></em></a>
 		<span class="tooltip"><span>Dashboard</span></span>
 	</li>
