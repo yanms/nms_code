@@ -49,6 +49,16 @@
 										{% else %}
 										<input type="checkbox" name="groups" value="{{ item }}" />{{ item }}<br />
 										{% endif %}
+										Permissions: </br>
+										{% for iter in item.permissions.all %}
+										{{ iter.name }} <br/>
+										{% endfor %}
+										<br/>
+										Users: <br/>
+										{% for usr_item in item.user_set.all %}
+										{{ usr_item }} <br/>
+										{% endfor %}
+										<br/>
 									{% endfor %}
 									<input type="hidden" name="task" value="usr_group_update" />
 									<input type="submit" value="Update" />
