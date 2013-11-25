@@ -1,6 +1,10 @@
 <!-- navigation -->
 {% load menu_tags %}
 {% url 'nms:devices' as devices %}
+{% url 'nms:index' as index %}
+{% url 'nms:device_add' as device_add %}
+{% url 'nms:acl' as acl %}
+{% url 'nms:user_settings' as user_settings %}
 
 <ul class="tabset buttons">
 	<li class="{% active request index %}">
