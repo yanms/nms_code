@@ -95,29 +95,33 @@
 										<td>{{ user_obj.date_joined }}</td>
 									</tr>
 								</table>
-																
+								<br />								
 								*** USER IS ADDED IN THE FOLLOWING DEVICE GROUPS ***
 								{% for iter in device_groups %}
 								<li>{{ iter }}</li>
 								{% endfor %}
+								
 								<br/>
 								
 								*** USER IS ADDED IN THE FOLLOWING USER GROUPS ***
 								{% for iter in user_groups %}
 								<li>{{ iter }}</li>
 								{% endfor %}
+								
 								<br/>
 								
 								*** USER HAS THE FOLLOWING PERMISSIONS ***
 								{% for iter in user_obj.user_permissions.all %}
 								<li>{{ iter }}</li>
 								{% endfor %}
+								
 								<br/>
 								
 								*** EXISTING PERMISSIONS ***
 								{% for iter in existing_permissions %}
 								<li>{{ iter.codename }}</li>
 								{% endfor %}
+								
 								<br/>
 								
 								*** GROUPS NOT ASSIGNED TO ***
