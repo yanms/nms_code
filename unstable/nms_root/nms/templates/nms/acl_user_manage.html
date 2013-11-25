@@ -58,10 +58,10 @@
 											{% endif %}
 											<td><ul>{% for usr_item in item.user_set.all %}
 												<li>{{ usr_item }}</li>
-											</ul>{% endfor %}</td>
+											{% endfor %}</ul></td>
 											<td><ul>{% for iter in item.permissions.all %}
 												<li>{{ iter.name }}</li>
-											</ul>{% endfor %}</td>
+											{% endfor %}</ul></td>
 										</tr>
 									{% endfor %}
 									</table>
