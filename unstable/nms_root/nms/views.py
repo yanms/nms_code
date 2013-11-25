@@ -313,7 +313,7 @@ def device_add(request):
 		return HttpResponseRedirect(reverse('nms:device_add'))
 	else:
 		return render(request, 'nms/add_device.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view,
-		 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev})
+		 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev, 'request':request})
 		
 @login_required
 def device_manager(request, device_id_request):
