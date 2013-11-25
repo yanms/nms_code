@@ -57,8 +57,12 @@
 											{% else %}
 												<td><input type="checkbox" name="groups" value="{{ group.id }}" /> {{ group }}</td>
 											{% endif %}
-												<td>{% for iter in group.user_set.all %} {{ iter }} {% endfor %}</td>
-												<td>{% for iter in group.permissions.all %} {{ iter.name }} {% endfor %}</td>
+												<td>{% for iter in group.user_set.all %} 
+														{{ iter }}
+													{% endfor %}</td>
+												<td>{% for iter in group.permissions.all %}
+														{{ iter.name }}
+													{% endfor %}</td>
 											</tr>
 										{% endfor %}
 										</table>
