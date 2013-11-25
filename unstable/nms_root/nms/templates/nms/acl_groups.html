@@ -40,77 +40,83 @@
 									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
 									{% endfor %}
 								</ul>
-								<h2>Device Groups: </h2>
-								<form action="{% url 'nms:acl_groups_handler' %}" method ="POST">
-								{% csrf_token %}
-								<table border ="0">
+								<table border="0">
 									<tr>
-										<td>Add group:</td>
-										<td><input type="group" name="group" /> <input type="hidden" value="dev" name="task" /> <input type="submit" value="Submit"></td>
-									</tr>
-								</table>
-								</form>
-								<br>
-								<form name="devices" action="{% url 'nms:acl_groups_handler' %}" method="POST">
-									{% csrf_token %}
-								<table class="TFtable">
-									<tr>
-										<td><b>Group</b></td>
-										<td></td>
-										<td><b>Delete</b></td>
-									</tr>
-									{% for group in dev_groups %}
-									<tr>
-										<td><a href="{% url 'nms:acl_groups_manage' group.id %}">{{ group }}</a></td>
-										<td class="button"><a href="{% url 'nms:acl_groups_manage' group.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a></td>
-										<td><input type="checkbox" name="delete" value="{{ group.id }}" /></td>
-									</tr>
-									{% endfor %}
-									</tr>
-								</table>
-								<input type="hidden" name="task" value="delete" />
-								<input type="submit" value="Delete" id="delete" />
-							</form>
-								
-								{% if user_perm %}
-								<br>
-								<h2>User groups:</h2>
-								<form action="{% url 'nms:acl_groups_handler' %}" method ="POST">
-								{% csrf_token %}
-								<table border ="0">
-									<tr>
-										<td>Add group:</td>
-										<td><input type="group" name="group" /> <input type="hidden" value="usr" name="task" /> <input type="submit" value="Submit"></td>
-									</tr>
-								</table>
-								</form>
-								<br>
-								<form name="devices" action="{% url 'nms:acl_groups_handler' %}" method="POST">
-									{% csrf_token %}
-								<table class="TFtable">
-									<tr>
-										<td><b>Group</b></td>
-										<td><b>Permissions</b></td>
-										<td></td>
-									</tr>
-									<tr>		
-									{% for group in usr_groups %}
-										<td>{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}{{ group }}{% else %}<a href="{% url 'nms:acl_groups_manage' group.id %}">{{ group }}</a>{% endif %}</td> 
-										<br />
-										<td>{% for permissions in group.permissions.all %}
-										{{ permissions.name }}<br>
-										{% endfor %}</td>
-										<td>{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}<input type="checkbox" disabled />{% else %}<input type="checkbox" name="delete" value="{{ group.id }}" />{% endif %}</td>
+										<td>
+											<h2>Device Groups: </h2>
+											<form action="{% url 'nms:acl_groups_handler' %}" method ="POST">
+											{% csrf_token %}
+											<table border ="0">
+												<tr>
+													<td>Add group:</td>
+													<td><input type="group" name="group" /> <input type="hidden" value="dev" name="task" /> <input type="submit" value="Submit"></td>
+												</tr>
+											</table>
+											</form>
+											<br>
+											<form name="devices" action="{% url 'nms:acl_groups_handler' %}" method="POST">
+												{% csrf_token %}
+											<table class="TFtable">
+												<tr>
+													<td><b>Group</b></td>
+													<td></td>
+													<td><b>Delete</b></td>
+												</tr>
+												{% for group in dev_groups %}
+												<tr>
+													<td><a href="{% url 'nms:acl_groups_manage' group.id %}">{{ group }}</a></td>
+													<td class="button"><a href="{% url 'nms:acl_groups_manage' group.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a></td>
+													<td><input type="checkbox" name="delete" value="{{ group.id }}" /></td>
+												</tr>
+												{% endfor %}
+												</tr>
+											</table>
+											<input type="hidden" name="task" value="delete" />
+											<input type="submit" value="Delete" id="delete" />
+										</form>
+										</td>
+										<td>
+											{% if user_perm %}
+											<h2>User groups:</h2>
+											<form action="{% url 'nms:acl_groups_handler' %}" method ="POST">
+											{% csrf_token %}
+											<table border ="0">
+												<tr>
+													<td>Add group:</td>
+													<td><input type="group" name="group" /> <input type="hidden" value="usr" name="task" /> <input type="submit" value="Submit"></td>
+												</tr>
+											</table>
+											</form>
+											<br>
+											<form name="devices" action="{% url 'nms:acl_groups_handler' %}" method="POST">
+												{% csrf_token %}
+											<table class="TFtable">
+												<tr>
+													<td><b>Group</b></td>
+													<td><b>Permissions</b></td>
+													<td></td>
+												</tr>
+												<tr>		
+												{% for group in usr_groups %}
+													<td>{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}{{ group }}{% else %}<a href="{% url 'nms:acl_groups_manage' group.id %}">{{ group }}</a>{% endif %}</td> 
+													<br />
+													<td>{% for permissions in group.permissions.all %}
+													{{ permissions.name }}<br>
+													{% endfor %}</td>
+													<td>{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}<input type="checkbox" disabled />{% else %}<input type="checkbox" name="delete" value="{{ group.id }}" />{% endif %}</td>
 										
+												</tr>
+											{% endfor %}
+								
+								
+											</table>
+											<input type="hidden" name="task" value="delete" />
+											<input type="submit" value="Delete" id="delete" />
+											</form>
+											{% endif %}
+										</td>
 									</tr>
-								{% endfor %}
-								
-								
 								</table>
-								<input type="hidden" name="task" value="delete" />
-								<input type="submit" value="Delete" id="delete" />
-								</form>
-								{% endif %}	
 							</div>
 						</article>
 					</div>
