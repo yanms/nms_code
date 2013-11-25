@@ -41,23 +41,27 @@
 									{% endfor %}
 								</ul>
 								<h2>Account Control List: Users: </h2>
+								<form name="devices" action="{% url 'nms:acl_groups_handler' %}" method="POST">
+									{% csrf_token %}
 								<table class="TFtable">
 									<tr>
 										<td><b>User</b></td>
 										<td><b>Is superuser?</b></td>
 										<td></td>
-										<td></td>
+										<td>Delete</td>
 									</tr>
 								{% for user in user_list %}
 									<tr>
 										<td> {{ user }} </td>
 										<td> {{ user.is_superuser }}</td>
 										<td> <a href="{% url 'nms:acl_user_manage' user.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a> </td>
-										<td> <img src="{{ STATIC_URL }}images/deleteButton.png" /> </td>
+										<td>{% if user.username == 'root' %}<input type="checkbox" disabled />{% else %}<input type="checkbox" name="delete" value="{{ user.id }}" />{% endif %}</td>
 									</tr>
 								{% endfor %}
 								</table>
-								
+								<input type="hidden" name="task" value="del_user" />
+								<input type="submit" value="Delete" id="delete" />
+							</form>
 							</div>
 						</article>
 					</div>
