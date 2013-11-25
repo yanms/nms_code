@@ -2,9 +2,8 @@ from Crypto.Cipher import AES
 from Crypto import Random
 import base64
 from multiprocessing import Lock
-from nms.models import Devices
 
-masterPassword = ''
+masterPassword = bytes()
 masterPasswordLock = Lock()
 
 class AESCipher:
@@ -27,6 +26,8 @@ class AESCipher:
 		return unpad(cipher.decrypt(enc[16:]))
 
 def storeMasterPassword(password):
+	global masterPasswordLock
+	global masterPassword
 	masterPasswordLock.acquire()
 	masterPassword = password
 	masterPasswordLock.release()
