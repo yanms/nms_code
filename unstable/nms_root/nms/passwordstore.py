@@ -48,4 +48,4 @@ def getEnablePassword(device):
 
 def getRemotePassword(device):
 	cipher = AESCipher(masterPassword)
-	return cipher.decrypt(device.password_enable)
+	return cipher.decrypt(device.password_remote)
