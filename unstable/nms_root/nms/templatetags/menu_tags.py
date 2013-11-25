@@ -8,6 +8,6 @@ register = template.Library()
 def active(request, pattern):
     if pattern == '/':
         pattern += '$'
-    if re.search(pattern, request.path):
+    if re.match(pattern, request.path):
         return 'active'
     return ''
