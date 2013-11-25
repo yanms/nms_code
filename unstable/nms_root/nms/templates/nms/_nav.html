@@ -1,9 +1,9 @@
 <!-- navigation -->
-{% url 'nms:index' as index %}
+{% load menu_tags %}
 
 <ul class="tabset buttons">
-	<li {% if request.path == index %}class="active"{% endif %}>
-		<a href="{{ index }}" class="ico4"><span>Dashboard</span><em></em></a>
+	<li class="{% active request index %}">
+		<a href="{% url 'nms:index %}" class="ico4"><span>Dashboard</span><em></em></a>
 		<span class="tooltip"><span>Dashboard</span></span>
 	</li>
 	<li class="">

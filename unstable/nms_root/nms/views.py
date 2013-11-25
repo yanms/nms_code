@@ -15,7 +15,7 @@ import traceback
 
 @login_required
 def index(request):
-	return render(request, 'nms/index.html', {'user': request.user.get_username()})
+	return render(request, 'nms/index.html', {'user': request.user.get_username(), 'request':request})
 
 def install(request):
     if Settings.objects.filter(known_name='install complete').exists():
