@@ -56,7 +56,7 @@ def acl(request):
 
 @login_required
 def acl_groups(request):
-    if request.user.has_perm('auth.list_group') or request.user.has_perm('auth.add_group') or request.user.has_perm('auth.change_group') or request.user.has_perm('auth.delete_group'):
+    if request.user.has_perm('auth.list_user') or request.user.has_perm('auth.add_group') or request.user.has_perm('auth.change_group') or request.user.has_perm('auth.delete_group'):
         user = request.user
         user_perm = user.has_perm('auth.list_group')
         dev_groups = Group.objects.filter(name__startswith='dev:')
@@ -67,10 +67,13 @@ def acl_groups(request):
         return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
-@permission_required('auth.list_user', login_url='/permissions/?per=list_user')
 def acl_user(request):
-    user_list = User.objects.all() 
-    return render(request, 'nms/acl_users.html', {'user_list': user_list,'request':request})
+    if request.user.has_perm('auth.list_user') or request.user.has_perm('auth.add_user') or request.user.has_perm('auth.delete_user') or request.user.has_perm('auth.change_user'):
+        user_list = User.objects.all() 
+        return render(request, 'nms/acl_users.html', {'user_list': user_list,'request':request})
+    else:
+        messages.error(request, 'You do not have the right permissions to access this page')
+        return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 @permission_required('auth.add_user', login_url='/permissions/?per=add_user')
@@ -111,12 +114,15 @@ def acl_user_add_handler(request):
         return HttpResponseRedirect(reverse('nms:acl_user_add'))
 
 @login_required
-@permission_required('auth.change_user', login_url='/permissions/?per=change_user')
 def acl_user_manage(request, acl_user):
-    user_obj = get_object_or_404(User, pk=acl_user)
-    groups = Group.objects.all()
-    is_active_check = 'checked' if user_obj.is_active else ''
-    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'groups': groups, 'request':request, 'is_active_check': is_active_check})
+    if request.user.has_perm('auth.change_user'):
+        user_obj = get_object_or_404(User, pk=acl_user)
+        groups = Group.objects.all()
+        is_active_check = 'checked' if user_obj.is_active else ''
+        return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'groups': groups, 'request':request, 'is_active_check': is_active_check})
+    else:
+        messages.error(request, 'You do not have the right permissions to access this page')
+        return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 @permission_required('auth.change_user', login_url='/permissions/?per=change_user')
