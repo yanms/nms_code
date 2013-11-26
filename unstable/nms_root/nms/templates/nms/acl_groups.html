@@ -115,7 +115,7 @@
 													<td>{% for permissions in group.permissions.all %}
 													{{ permissions.name }}<br />
 													{% endfor %}</td>
-													<td>{% if perms.auth.change_group %}{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}<img src="{{ STATIC_URL }}images/lockedButton.png" width="20px" />{% else %}<a href="{% url 'nms:acl_groups_manage' group.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px"/></a>{% endif %}</td>{% else %}<td>N/A</td>{% endif %}
+													<td>{% if perms.auth.change_group %}{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}<img src="{{ STATIC_URL }}images/lockedButton.png" width="20px" />{% else %}<a href="{% url 'nms:acl_groups_manage' group.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px"/></a>{% endif %}</td>{% else %}<td>N/A{% endif %}</td>
 													<td>{% if perms.auth.delete_group %}{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}<input type="checkbox" disabled />{% else %}<input type="checkbox" name="delete" value="{{ group.id }}" />{% endif %}</td>{% else %}<td>N/A{% endif %}</td>
 										
 												</tr>
