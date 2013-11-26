@@ -273,6 +273,8 @@ def acl_groups_manage(request, acl_id):
     change_group = None
     delete_group = None
     list_group = None
+    add_devices = None
+    delete_devices = None
     if dev_check:
         devices = Devices.objects.all()
         checked = []
@@ -291,10 +293,12 @@ def acl_groups_manage(request, acl_id):
         change_group = 'checked' if group.permissions.filter(codename='change_group').exists() else ''
         delete_group = 'checked' if group.permissions.filter(codename='delete_group').exists() else ''
         list_group = 'checked' if group.permissions.filter(codename='list_group').exists() else ''
+        add_devices = 'checked' if group.permissions.filter(codename='add_devices').exists() else ''
+        delete_devices = 'checked' if group.permissions.filter(codename='delete_devices').exists() else ''
     
     
     return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check,
-                                                        'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request, 'groups_usr': groups_usr, 'users': users, 'groups_dev': groups_dev})
+                                                        'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request, 'groups_usr': groups_usr, 'users': users, 'groups_dev': groups_dev, 'add_devices': add_devices, 'delete_devices': delete_devices})
 
 @login_required
 def acl_groups_handler(request):
