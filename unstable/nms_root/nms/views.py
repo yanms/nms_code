@@ -207,7 +207,7 @@ def acl_handler(request, acl_id):
                 devices = request.POST.getlist('devices')
                 rights = request.POST.getlist('rights')
                 group.permissions = []
-                group.user_set.all = []
+                group.user_set.clear()
                 if Dev_group.objects.filter(gid=group).exists():
                     Dev_group.objects.filter(gid=group).delete()
                 for iter in devices:
