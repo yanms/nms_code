@@ -6,6 +6,6 @@
 
 <ul>
 	{% if perms.auth.list_group or perms.auth.add_group or perms.auth.delete_group or perms.auth.change_group %}<li><a href="/acl/groups" class="ico1">ACL Groups<span class="num">HERE</span></a></li>{% endif %}
-	<li><a href="/acl/users" class="ico2">ACL Users<span class="num">HERE</span></a></li>
-	<li><a href="/acl/devices" class="ico3">ACL Devices<span class="num">HERE</span></a></li>
+	{% if perms.auth.add_user or perms.auth.change_user or perms.auth.delete_user or perms.auth.list_user %}<li><a href="/acl/users" class="ico2">ACL Users<span class="num">HERE</span></a></li>{% endif %}
+	{% if perms.auth.add_devices or perms.auth.change_devices or perms.auth.delete_devices or perms.auth.manage_devices or perms.auth.list_devices}<li><a href="/acl/devices" class="ico3">ACL Devices<span class="num">HERE</span></a></li>{% endif %}
 </ul>
