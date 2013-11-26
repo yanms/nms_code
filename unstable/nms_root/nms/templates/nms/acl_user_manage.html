@@ -67,7 +67,8 @@
 									</tr>
 								</table>
 								<br />
-								<form method="POST" action="{% url 'nms:acl_user_add_handler' %}">
+								<form method="POST" action="{% url 'nms:acl_user_manage_handler' user_obj.id %}">
+									{% csrf_token %}
 									<table border="0">
 										<tr>
 											<td>Username</td>
@@ -87,7 +88,7 @@
 										</tr>
 										<tr>
 											<td>Active User?</td>
-											<td><input type="checkbox" name="is_active" {{ active_check }} /></td>
+											<td><input type="checkbox" name="is_active" {{ is_active_check }}/></td>
 										</tr>
 										<tr>
 											<td>Password</td>

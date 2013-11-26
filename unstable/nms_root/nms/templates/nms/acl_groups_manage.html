@@ -56,24 +56,41 @@
 									<input type="checkbox" name="rights" value="list" {{ list_check }}/>List Devices<br />
 									<input type="checkbox" name="rights" value="manage" {{ manage_check }}/>Manage Devices<br />
 									<input type="checkbox" name="rights" value="change" {{ change_check }} />Change Devices<br />
-									<input type="hidden" value="ch_per_dev_group" name="task" /><br/>
-									
-									*** INHERIT OPTIONS: *** <br />
-									{% for item in groups_dev %}
-									{{ item }} <br/>
-									{% for iter in item.user_set.all %}
-									+ {{ iter }} <br/>
-									{% endfor %}
-									{% endfor %}<br/>
-									
-									*** INDIVIDUAL USERS *** <br/>
-									{% for item in users %}
-									{% if item in group.user_set.all %}
-									+{{ item }} THIS USER IS NOT ADDED TO THIS GROUP<br/>
-									{% else %}
-									-{{item}} ALREADY ADDED<br/>
-									{% endif %}
-									{% endfor %}
+									<br/>
+									<h2>INHERIT OPTIONS</h2>
+									<table class="TFtable">
+										<tr>
+											<td></td>
+											<td><strong>Users in Group</strong></td>
+										</tr>
+										{% for item in groups_dev %}
+										<tr>
+											<td><input type="checkbox" name="groups" value="{{ item.id }}" {{ group_checked }} />{{ item }}</td>
+											<td>{% for iter in item.user_set.all %}{{ iter }}<br />{% endfor %}</td>
+										</tr>
+										{% endfor %}
+									</table>
+									<br />
+									<h2>INDIVIDUAL USERS</h2>
+									<table class="TFtable">
+										<tr>
+											<td>User</td>
+											<td>Added to group?</td>
+										</tr>
+										{% for item in users %}
+										{% if item in group.user_set.all %}
+										<tr>
+											<td><input type="checkbox" name="users" value="{{ item.id }}" checked> {{ item }}</td>
+											<td><img src="{{ STATIC_URL }}images/addButton.png" width="16px" /></td>
+										</tr>
+										{% else %}
+										<tr>
+											<td><input type="checkbox" name="users" value="{{ item.id }}"> {{ item }}</td>
+											<td><img src="{{ STATIC_URL }}images/deleteButton.png" width="16px" /></td>
+										</tr>
+										{% endif %}
+										{% endfor %}
+									</table>
 								{% else %}
 									<h2>User Group Rights</h2>
 									<input type="checkbox" name="rights" value="add_user" {{ add_user }}/>Add user to group<br />
@@ -87,24 +104,44 @@
 									<input type="checkbox" name="rights" value="list_group" {{ list_group }}/>List group<br />
 									<input type="hidden" value="ch_per_usr_group" name="task">
 									
-									*** INHERIT OPTIONS: *** <br />
-									{% for item in groups_usr %}
-									{{ item }} <br/>
-									{% for iter in item.user_set.all %}
-									+ {{ iter }} <br/>
-									{% endfor %}
-									{% endfor %}<br/>
-									
-									*** INDIVIDUAL USERS *** <br/>
-									{% for item in users %}
-									{% if item in group.user_set.all %}
-									+{{ item }} THIS USER IS NOT ADDED TO THIS GROUP<br/>
-									{% else %}
-									-{{item}} ALREADY ADDED<br/>
-									{% endif %}
-									{% endfor %}
-									
+									<h2>INHERIT OPTIONS</h2>
+									<table class="TFtable">
+										<tr>
+											<td></td>
+											<td><strong>Users in Group</strong></td>
+										</tr>
+										{% for item in groups_usr %}
+										<tr>
+											<td><input type="checkbox" name="groups" value="{{ item.id }}" {{ usr_checked }} />{{ item }}</td>
+											{% for iter in item.user_set.all %}
+											<td>{{ iter }}<br /></td>
+											{% endfor %}
+										</tr>
+										{% endfor %}
+									</table>
+									<br />
+									<h2>INDIVIDUAL USERS</h2>
+									<table class="TFtable">
+										<tr>
+											<td>User</td>
+											<td>Added to group?</td>
+										</tr>
+										{% for item in users %}
+										{% if item in group.user_set.all %}
+										<tr>
+											<td><input type="checkbox" name="users" value="{{ item.id }}" checked> {{ item }}</td>
+											<td><img src="{{ STATIC_URL }}images/addButton.png" width="16px" /></td>
+										</tr>
+										{% else %}
+										<tr>
+											<td><input type="checkbox" name="users" value="{{ item.id }}"> {{ item }}</td>
+											<td><img src="{{ STATIC_URL }}images/deleteButton.png" width="16px" /></td>
+										</tr>
+										{% endif %}
+										{% endfor %}
+									</table>									
 								{% endif %}
+									<input type="hidden" value="ch_per_dev_group" name="task" />
 									<input type="submit" value="Update" id="update" />
 								</form>
 								<br />
