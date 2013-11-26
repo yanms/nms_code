@@ -118,9 +118,7 @@
 										{% else %}
 										<tr>
 											<td><input type="checkbox" name="groups" value="{{ item.id }}" {{ usr_checked }} />{{ item }}</td>
-											{% for iter in item.user_set.all %}
-											<td>{{ iter }}<br /></td>
-											{% endfor %}
+											<td>{% for iter in item.user_set.all %}{{ iter }}<br />{% endfor %}</td>
 										</tr>
 										{% endif %}
 										{% endfor %}
