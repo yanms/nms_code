@@ -393,7 +393,7 @@ def device_manager(request, device_id_request):
 		messages.error(request, 'Failed to connect to device')
 		return HttpResponseRedirect(reverse('nms:devices'))
 	
-	taskhtml = xmlparser.getAvailableTasksHtml(root, devices.dev_id, interfaces, devices.password_enable)
+	taskhtml = xmlparser.getAvailableTasksHtml(root, devices.dev_id, interfaces, passwordstore.getEnablePassword(devices))
 	return render(request, 'nms/manage_device.html', {'devices': devices, 'taskhtml': taskhtml, 'request':request})
 
 @login_required
@@ -420,9 +420,9 @@ def device_modify(request, device_id_request):
 			device.ip = ip_recv
 			device.port = port
 			device.login_name = login_name
-			device.password_remote = password_remote
-			device.password_enable = password_enable
 			device.save()
+			passwordstore.storeRemotePassword(device, password_remote)
+			passwordstore.storeEnablePassword(device, password_enable)
 			messages.success(request, 'Database updated successfully.')
 			return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
 		except (KeyError, ValueError):
@@ -574,6 +574,11 @@ def query(request):
 		elif query == 'del':
 			commands.removeSSHConnection(request.user, device)
 			return HttpResponse('Connection closed', content_type='text/plain')
+		elif query == 'priv':
+			connection = commands.getSSHConnection(request.user, device)
+			text = passwordstore.getEnablePassword(device).decode() + '\n'
+			connection.chan.send(text.encode())
+			return HttpResponse('', content_type='text/plain')
 	return HttpResponse('<Unkown query type>!', content_type='text/plain')
 
 def logout_handler(request):
