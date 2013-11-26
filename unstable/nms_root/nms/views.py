@@ -576,7 +576,7 @@ def query(request):
 			return HttpResponse('Connection closed', content_type='text/plain')
 		elif query == 'priv':
 			connection = commands.getSSHConnection(request.user, device)
-			text = passwordstore.getEnablePassword(device) + '\n'
+			text = passwordstore.getEnablePassword(device).decode() + '\n'
 			connection.chan.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
 	return HttpResponse('<Unkown query type>!', content_type='text/plain')
