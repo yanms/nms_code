@@ -35,6 +35,17 @@ def storeMasterPassword(password):
 	masterPasswordLock.release()
 	return 0
 
+def hasMasterPassword():
+	masterPasswordLock.acquire()
+	try:
+		if not (len(masterPassword) == 16 or len(masterPassword) == 24 or len(masterPassword) == 32):
+			return False
+		return True
+	except:
+		return False
+	finally:
+		masterPasswordLock.release()
+
 def storeEnablePassword(device, password):
 	cipher = AESCipher(masterPassword)
 	device.password_enable = cipher.encrypt(password)
@@ -46,9 +57,16 @@ def storeRemotePassword(device, password):
 	device.save()
 
 def getEnablePassword(device):
-	cipher = AESCipher(masterPassword)
-	return cipher.decrypt(device.password_enable)
+	try:
+		cipher = AESCipher(masterPassword)
+		return cipher.decrypt(device.password_enable)
+	except:
+		return b''
+		
 
 def getRemotePassword(device):
-	cipher = AESCipher(masterPassword)
-	return cipher.decrypt(device.password_remote)
+	try:
+		cipher = AESCipher(masterPassword)
+		return cipher.decrypt(device.password_remote)
+	except:
+		return b''

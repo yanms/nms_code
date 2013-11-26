@@ -411,6 +411,8 @@ def device_add(request):
 		
 @login_required
 def device_manager(request, device_id_request):
+	if not passwordstore.hasMasterPassword():
+		return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_manager', args=(device_id_request,)))
 	devices = get_object_or_404(Devices, pk=device_id_request)
 	if request.method == 'GET' and 'refresh' in request.GET:
 		xmlparser.removeTaskCache(xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location))
@@ -423,12 +425,14 @@ def device_manager(request, device_id_request):
 	if interfaces == -1:
 		messages.error(request, 'Failed to connect to device')
 		return HttpResponseRedirect(reverse('nms:devices'))
-	
+
 	taskhtml = xmlparser.getAvailableTasksHtml(root, devices.dev_id, interfaces, passwordstore.getEnablePassword(devices))
 	return render(request, 'nms/manage_device.html', {'devices': devices, 'taskhtml': taskhtml, 'request':request})
 
 @login_required
 def device_modify(request, device_id_request):
+	if not passwordstore.hasMasterPassword():
+		return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_modify', args=(device_id_request,)))
 	device = get_object_or_404(Devices, pk=device_id_request)
 	gen_dev = Gen_dev.objects.all()
 	os_dev = OS_dev.objects.all()
@@ -626,7 +630,13 @@ def init(request):
 	if request.method == 'POST' and 'master' in request.POST:
 		master = request.POST['master']
 		if passwordstore.storeMasterPassword(master) != -1:
-			return HttpResponse('Success', content_type='text/plain')
+			messages.success(request, 'Successfully updated master password')
+			if 'next' in request.POST:
+				return HttpResponseRedirect(request.POST['next'])
 		else:
-			return HttpResponse('Invalid key length', content_type='text/plain')
+			messages.error(request, 'Invalid key length')
+			if 'next' in request.POST:
+				return render(request, 'nms/init.html', {'request':request, 'next':request.POST['next']})
+	if request.method == 'GET' and 'next' in request.GET:
+		return render(request, 'nms/init.html', {'request':request, 'next':request.GET['next']})
 	return render(request, 'nms/init.html', {'request':request})
