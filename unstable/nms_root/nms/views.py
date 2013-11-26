@@ -185,14 +185,25 @@ def acl_handler(request, acl_id):
             elif task == 'ch_per_usr_group':
                 group = get_object_or_404(Group, pk=acl_id)
                 rights = request.POST.getlist('rights')
+                groups_received = request.POST.getlist('groups')
+                users_received = request.POST.getlist('users')
                 group.permissions = []
+                group.user_set.clear()
                 for iter in rights:
                     right = iter
                     permission = Permission.objects.get(codename=right)
                     group.permissions.add(permission)
                 
+                for iter in groups_received:
+                    group_recv = get_object_or_404(Group, pk=iter)
+                    for item in group_recv.user_set.all():
+                        group.user_set.add(item)
+                for iter in users_received:
+                    user_recv = get_object_or_404(User, pk=iter)
+                    group.user_set.add(user_recv)
+                
                 messages.success(request, 'Database updated successfully')
-                return HttpResponseRedirect(reverse('nms:acl_groups'))
+                return HttpResponseRedirect(reverse('nms:acl_groups_manage', args=(acl_id,)))
             
             elif task == 'dev_group_update':
                 device = get_object_or_404(Devices, pk=acl_id)
