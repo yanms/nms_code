@@ -126,7 +126,7 @@ def acl_user_manage_handler(request, acl_user):
             last_name = request.POST['last_name']
             email = request.POST['email']
             if 'is_active' in request.POST:
-                user_obj.is_active = request.POST['is_active']
+                is_active = request.POST['is_active']
             else:
                 is_active=False
             password = request.POST['password']
