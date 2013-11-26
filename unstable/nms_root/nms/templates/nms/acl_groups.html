@@ -79,7 +79,7 @@
 												</tr>
 											</table>
 											<input type="hidden" name="task" value="delete" />
-											<input type="submit" value="Delete" id="delete" />
+											{% if perms.auth.delete_group %}<input type="submit" value="Delete" id="delete" />{% endif %}
 										</form>
 										{% endif %}
 										</td>
