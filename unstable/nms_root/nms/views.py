@@ -600,7 +600,10 @@ def init(request):
 		master = request.POST['master']
 		if passwordstore.storeMasterPassword(master) != -1:
 			messages.success(request, 'Successfully updated master password')
-			return HttpResponseRedirect(request.POST['next'])
+			if 'next' in request.POST:
+				return HttpResponseRedirect(request.POST['next'])
 		else:
 			messages.error(request, 'Invalid key length')
+	if request.method == 'GET' and 'next' in request.GET:
+		return render(request, 'nms/init.html', {'request':request, 'next':request.GET['next']})
 	return render(request, 'nms/init.html', {'request':request})
