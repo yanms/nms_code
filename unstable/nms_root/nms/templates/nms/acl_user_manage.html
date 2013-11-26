@@ -104,6 +104,7 @@
 									</table>
 								</form>
 								<br />
+								{% if perms.auth.list_group %}
 								<h2>Manage User: {{ user_obj.username }}</h2>
 								<form name="usr_group" action="{% url 'nms:acl_handler' user_obj.id %}" method="POST">
 									{% csrf_token %}
@@ -132,7 +133,8 @@
 									<br />
 									<input type="hidden" name="task" value="usr_group_update" />
 									<input type="submit" value="Update" />
-								</form>							
+								</form>	
+								{% endif %}						
 							</div>
 						</article>
 					</div>
