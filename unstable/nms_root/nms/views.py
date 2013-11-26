@@ -202,9 +202,12 @@ def acl_handler(request, acl_id):
             
             elif task == 'ch_per_dev_group':
                 group = get_object_or_404(Group, pk=acl_id)
+                groups_received = request.POST.getlist('groups')
+                users_received = request.POST.getlist('users')
                 devices = request.POST.getlist('devices')
                 rights = request.POST.getlist('rights')
                 group.permissions = []
+                group.user_set.all = []
                 if Dev_group.objects.filter(gid=group).exists():
                     Dev_group.objects.filter(gid=group).delete()
                 for iter in devices:
@@ -215,8 +218,15 @@ def acl_handler(request, acl_id):
                     right += '_devices'
                     permission = Permission.objects.get(codename=right)
                     group.permissions.add(permission)
+                for iter in groups_received:
+                    group_recv = get_object_or_404(Group, pk=iter)
+                    for item in group_recv.user_set.all():
+                        group.user_set.add(item)
+                for iter in users_received:
+                    user_recv = get_object_or_404(User, pk=iter)
+                    group.user_set.add(user_recv)
                 messages.success(request, 'Database updated successfully')
-                return HttpResponseRedirect(reverse('nms:acl_groups'))
+                return HttpResponseRedirect(reverse('nms:acl_groups_manage', args=(acl_id,)))
                 
         except:
             messages.error(request, 'Not all required fields are set')
