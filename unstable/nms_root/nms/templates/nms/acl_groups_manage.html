@@ -94,6 +94,7 @@
 										{% endif %}
 										{% endfor %}
 									</table>
+									<input type="hidden" value="ch_per_dev_group" name="task" />
 								{% else %}
 									<h2>User Group Rights</h2>
 									<input type="checkbox" name="rights" value="add_user" {{ add_user }}/>Add user to group<br />
@@ -105,7 +106,6 @@
 									<input type="checkbox" name="rights" value="change_group" {{ change_group }}/>Change group<br />
 									<input type="checkbox" name="rights" value="delete_group" {{ delete_group }}/>Delete group<br />
 									<input type="checkbox" name="rights" value="list_group" {{ list_group }}/>List group<br />
-									<input type="hidden" value="ch_per_usr_group" name="task">
 									
 									<h2>INHERIT OPTIONS</h2>
 									<table class="TFtable">
@@ -143,9 +143,9 @@
 										</tr>
 										{% endif %}
 										{% endfor %}
-									</table>									
+									</table>
+									<input type="hidden" value="ch_per_usr_group" name="task" />								
 								{% endif %}
-									<input type="hidden" value="ch_per_dev_group" name="task" />
 									<input type="submit" value="Update" id="update" />
 								</form>
 								<br />
