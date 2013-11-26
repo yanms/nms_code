@@ -80,12 +80,12 @@
 										{% for item in users %}
 										{% if item in group.user_set.all %}
 										<tr>
-											<td><input type="checkbox" name="users" value="{{ item.user_id }}" checked> {{ item }}</td>
+											<td><input type="checkbox" name="users" value="{{ item.id }}" checked> {{ item }}</td>
 											<td><img src="{{ STATIC_URL }}images/addButton.png" width="16px" /></td>
 										</tr>
 										{% else %}
 										<tr>
-											<td><input type="checkbox" name="users" value="{{ item.user_id }}"> {{ item }}</td>
+											<td><input type="checkbox" name="users" value="{{ item.id }}"> {{ item }}</td>
 											<td><img src="{{ STATIC_URL }}images/deleteButton.png" width="16px" /></td>
 										</tr>
 										{% endif %}
@@ -112,7 +112,7 @@
 										</tr>
 										{% for item in groups_usr %}
 										<tr>
-											<td><input type="checkbox" name="groups" value="{{ item.user_id }}" {{ usr_checked }} />{{ item }}</td>
+											<td><input type="checkbox" name="groups" value="{{ item.id }}" {{ usr_checked }} />{{ item }}</td>
 											{% for iter in item.user_set.all %}
 											<td>{{ iter }}<br /></td>
 											{% endfor %}
@@ -129,12 +129,12 @@
 										{% for item in users %}
 										{% if item in group.user_set.all %}
 										<tr>
-											<td><input type="checkbox" name="users" value="{{ item.user_id }}" checked> {{ item }}</td>
+											<td><input type="checkbox" name="users" value="{{ item.id }}" checked> {{ item }}</td>
 											<td><img src="{{ STATIC_URL }}images/addButton.png" width="16px" /></td>
 										</tr>
 										{% else %}
 										<tr>
-											<td><input type="checkbox" name="users" value="{{ item.user_id }}"> {{ item }}</td>
+											<td><input type="checkbox" name="users" value="{{ item.id }}"> {{ item }}</td>
 											<td><img src="{{ STATIC_URL }}images/deleteButton.png" width="16px" /></td>
 										</tr>
 										{% endif %}
