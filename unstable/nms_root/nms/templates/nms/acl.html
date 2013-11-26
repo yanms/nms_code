@@ -45,24 +45,20 @@
  									<tr>
  										<td>Username</td>
  										<td>Last Login</td>
- 										<td>Superuser?</td>
  										<td>First Name</td>
  										<td>Last Name</td>
  										<td>E-mail address</td>
- 										<td>Staff?</td>
  										<td>Active?</td>
  										<td>Date joined</td>
  									</tr>
  									<tr>
- 										<td>{{ user_obj.username }}</td>
- 										<td>{{ user_obj.last_login }}</td>
- 										<td>{{ user_obj.is_superuser }}</td>
- 										<td>{{ user_obj.first_name }}</td>
- 										<td>{{ user_obj.last_name }}</td>
- 										<td>{{ user_obj.email }}</td>
- 										<td>{{ user_obj.is_staff }}</td>
- 										<td>{{ user_obj.is_active }}</td>
- 										<td>{{ user_obj.date_joined }}</td>
+ 										<td>{{ user.username }}</td>
+ 										<td>{{ user.last_login }}</td>
+ 										<td>{{ user.first_name }}</td>
+ 										<td>{{ user.last_name }}</td>
+ 										<td>{{ user.email }}</td>
+ 										<td>{{ user.is_active }}</td>
+ 										<td>{{ user.date_joined }}</td>
  									</tr>
  								</table>
 							</div>
