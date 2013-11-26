@@ -64,7 +64,7 @@
 											<td><strong>Users in Group</strong></td>
 										</tr>
 										{% for item in groups_dev %}
-										{% if item == group.id %}
+										{% if item.id == group.id %}
 										{% else %}
 										<tr>
 											<td><input type="checkbox" name="groups" value="{{ item.id }}" {{ group_checked }} />{{ item }}</td>
@@ -114,12 +114,15 @@
 											<td><strong>Users in Group</strong></td>
 										</tr>
 										{% for item in groups_usr %}
+										{% if item.id == group.id %}
+										{% else %}
 										<tr>
 											<td><input type="checkbox" name="groups" value="{{ item.id }}" {{ usr_checked }} />{{ item }}</td>
 											{% for iter in item.user_set.all %}
 											<td>{{ iter }}<br /></td>
 											{% endfor %}
 										</tr>
+										{% endif %}
 										{% endfor %}
 									</table>
 									<br />
