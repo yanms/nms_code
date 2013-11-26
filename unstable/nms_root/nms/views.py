@@ -105,7 +105,7 @@ def acl_user_add_handler(request):
             messages.error(request, err)
             return HttpResponseRedirect(reverse('nms:acl_user_add'))
     else:
-        messages.success(request, "Invalid method")
+        messages.error(request, "Invalid method")
         return HttpResponseRedirect(reverse('nms:acl_user_add'))
 
 @login_required
@@ -113,7 +113,38 @@ def acl_user_add_handler(request):
 def acl_user_manage(request, acl_user):
     user_obj = get_object_or_404(User, pk=acl_user)
     groups = Group.objects.all()
-    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'groups': groups, 'request':request})
+    is_active_check = 'checked' if user_obj.is_active else ''
+    return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'groups': groups, 'request':request, 'is_active_check': is_active_check})
+
+@login_required
+@permission_required('auth.change_user', login_url='/permissions/?per=change_user')
+def acl_user_manage_handler(request, acl_user):
+    user_obj = get_object_or_404(User, pk=acl_user)
+    if request.method == 'POST':
+        try:
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            email = request.POST['email']
+            is_active = request.POST['is_active']
+            password = request.POST['password']
+            password2 = request.POST['password2']
+            if password == password2:
+                user_obj.first_name = first_name
+                user_obj.last_name = last_name
+                user_obj.email = email
+                user_obj.is_active = is_active
+                user_obj.set_password(password)
+                user_obj.save()
+                messages.success(request, "Database successfully updated.")
+                return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,)))
+            else:
+               messages.error(request, "Passwords are not the same")
+               return HttpResponseRedirect(reverse('nms:acl_user_add')) 
+        except KeyError:
+            messages.error(request, "Not all fields are set")
+            return HttpResponseRedirect(reverse('nms:acl_user_add'))
+    messages.error(request, "Invalid method")
+    return HttpResponseRedirect(reverse('nms:acl_user_add'))
 
 @login_required
 @permission_required('nms.list_devices', login_url='/permissions/?per=list_devices')
