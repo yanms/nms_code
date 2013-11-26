@@ -40,6 +40,7 @@
 									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
 									{% endfor %}
 								</ul>
+								{% if perms.auth.add_group %}
 								<table border="0" width="100%">
 									<tr>
 										<td width="50%" style="vertical-align: top;">
@@ -48,7 +49,6 @@
 											{% csrf_token %}
 											<table border="0">
 												<tr>
-													{% if perms.auth.add_group %}
 													<td>Add group:</td>
 													<td><input type="group" name="group" /> <input type="hidden" value="dev" name="task" /> <input type="submit" value="Submit"></td>{% endif %}
 												</tr>
@@ -62,7 +62,7 @@
 												<tr>
 													<td><b>Group</b></td>
 													<td>Permissions</td>
-													<td>Change group</td>
+													<td>Change Group</td>
 													<td><b>Delete</b></td>
 												</tr>
 												{% for group in dev_groups %}
@@ -84,6 +84,7 @@
 										{% endif %}
 										</td>
 										<td width="50%" style="vertical-align: top;">
+											{% if perms.auth.add_group %}
 											{% if user_perm %}
 											<h2>User Groups:</h2>
 											<form action="{% url 'nms:acl_groups_handler' %}" method ="POST">
@@ -96,13 +97,15 @@
 											</table>
 											</form>
 											<br />
+											{% endif %}
+											{% if perms.auth.list_group %}
 											<form name="devices" action="{% url 'nms:acl_groups_handler' %}" method="POST">
 												{% csrf_token %}
 											<table class="TFtable">
 												<tr>
 													<td><b>Group</b></td>
 													<td><b>Permissions</b></td>
-													<td>Info</td>
+													<td>Change Group</td>
 													<td>Delete</td>
 												</tr>
 												<tr>		
@@ -112,8 +115,8 @@
 													<td>{% for permissions in group.permissions.all %}
 													{{ permissions.name }}<br />
 													{% endfor %}</td>
-													<td>{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}<img src="{{ STATIC_URL }}images/lockedButton.png" width="20px" />{% else %}<a href="{% url 'nms:acl_groups_manage' group.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px"/></a>{% endif %}</td>
-													<td>{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}<input type="checkbox" disabled />{% else %}<input type="checkbox" name="delete" value="{{ group.id }}" />{% endif %}</td>
+													<td>{% if perms.auth.change_group %}{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}<img src="{{ STATIC_URL }}images/lockedButton.png" width="20px" />{% else %}<a href="{% url 'nms:acl_groups_manage' group.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px"/></a>{% endif %}</td>{% else %}<td>N/A{% endif %}</td>
+													<td>{% if perms.auth.delete_group %}{% if group.name == 'usr:admin' or group.name == 'usr:staff' %}<input type="checkbox" disabled />{% else %}<input type="checkbox" name="delete" value="{{ group.id }}" />{% endif %}</td>{% else %}<td>N/A{% endif %}</td>
 										
 												</tr>
 											{% endfor %}
@@ -127,6 +130,7 @@
 										</td>
 									</tr>
 								</table>
+								{% endif %}
 							</div>
 						</article>
 					</div>
