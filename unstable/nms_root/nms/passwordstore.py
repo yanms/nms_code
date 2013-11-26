@@ -57,9 +57,16 @@ def storeRemotePassword(device, password):
 	device.save()
 
 def getEnablePassword(device):
-	cipher = AESCipher(masterPassword)
-	return cipher.decrypt(device.password_enable)
+	try:
+		cipher = AESCipher(masterPassword)
+		return cipher.decrypt(device.password_enable)
+	except:
+		return b''
+		
 
 def getRemotePassword(device):
-	cipher = AESCipher(masterPassword)
-	return cipher.decrypt(device.password_remote)
+	try:
+		cipher = AESCipher(masterPassword)
+		return cipher.decrypt(device.password_remote)
+	except:
+		return b''
