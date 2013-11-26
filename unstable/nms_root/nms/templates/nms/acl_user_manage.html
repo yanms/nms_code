@@ -40,6 +40,70 @@
 									<li class="{{message.tags}}">{{ message.tags.title }} : {{ message }}</li>
 									{% endfor %}
 								</ul>
+								<h2>ACL MANAGE USER </h2>
+								*** USER {{ user_obj.username }} ***
+								<table class="TFtable">
+									<tr>
+										<td>Username</td>
+										<td>Last Login</td>
+										<td>Superuser?</td>
+										<td>First Name</td>
+										<td>Last Name</td>
+										<td>E-mail address</td>
+										<td>Staff?</td>
+										<td>Active?</td>
+										<td>Date joined</td>
+									</tr>
+									<tr>
+										<td>{{ user_obj.username }}</td>
+										<td>{{ user_obj.last_login }}</td>
+										<td>{{ user_obj.is_superuser }}</td>
+										<td>{{ user_obj.first_name }}</td>
+										<td>{{ user_obj.last_name }}</td>
+										<td>{{ user_obj.email }}</td>
+										<td>{{ user_obj.is_staff }}</td>
+										<td>{{ user_obj.is_active }}</td>
+										<td>{{ user_obj.date_joined }}</td>
+									</tr>
+								</table>
+								<br />
+								<form method="POST" action="{% url 'nms:acl_user_add_handler' %}">
+									<table border="0">
+										<tr>
+											<td>Username</td>
+											<td><input type="text" name="username" value="{{ user_obj.username }}" disabled="true" /></td>
+										</tr>
+										<tr>
+											<td>First Name</td>
+											<td><input type="text" name="first_name" value="{{ user_obj.first_name }}" /></td>
+										</tr>
+										<tr>
+											<td>Last Name</td>
+											<td><input type="text" name="last_name" value="{{ user_obj.last_name }}" /></td>
+										</tr>
+										<tr>
+											<td>E-mail address</td>
+											<td><input type="e-mail" name="email" value="{{ user_obj.email }}" /></td>
+										</tr>
+										<tr>
+											<td>Active User?</td>
+											<td><input type="checkbox" name="is_active" {{ active_check }} /></td>
+										</tr>
+										<tr>
+											<td>Password</td>
+											<td><input type="password" name="password" /></td>
+										</tr>
+										<tr>
+											<td>Password Check</td>
+											<td><input type="password" name="password2" /></td>
+										</tr>
+										<tr>
+											<td><input type="submit" value="Update" name="usr_update" /></td>
+											<td><input type="reset" value="Reset" /></td>
+										</tr>
+									</table>
+								</form>
+								<br />
 								<h2>Manage User: {{ user_obj.username }}</h2>
 								<form name="usr_group" action="{% url 'nms:acl_handler' user_obj.id %}" method="POST">
 									{% csrf_token %}
@@ -68,71 +132,7 @@
 									<br />
 									<input type="hidden" name="task" value="usr_group_update" />
 									<input type="submit" value="Update" />
-								</form>
-								<h2>ACL MANAGE USER </h2>
-								*** USER {{ user_obj.username }} ***
-								<table class="TFtable">
-									<tr>
-										<td>Username</td>
-										<td>Last Login</td>
-										<td>Superuser?</td>
-										<td>First Name</td>
-										<td>Last Name</td>
-										<td>E-mail address</td>
-										<td>Staff?</td>
-										<td>Active?</td>
-										<td>Date joined</td>
-									</tr>
-									<tr>
-										<td>{{ user_obj.username }}</td>
-										<td>{{ user_obj.last_login }}</td>
-										<td>{{ user_obj.is_superuser }}</td>
-										<td>{{ user_obj.first_name }}</td>
-										<td>{{ user_obj.last_name }}</td>
-										<td>{{ user_obj.email }}</td>
-										<td>{{ user_obj.is_staff }}</td>
-										<td>{{ user_obj.is_active }}</td>
-										<td>{{ user_obj.date_joined }}</td>
-									</tr>
-								</table>
-								<br />								
-								*** USER IS ADDED IN THE FOLLOWING DEVICE GROUPS ***
-								{% for iter in device_groups %}
-								<li>{{ iter }}</li>
-								{% endfor %}
-								
-								<br/>
-								
-								*** USER IS ADDED IN THE FOLLOWING USER GROUPS ***
-								{% for iter in user_groups %}
-								<li>{{ iter }}</li>
-								{% endfor %}
-								
-								<br/>
-								
-								*** USER HAS THE FOLLOWING PERMISSIONS ***
-								{% for iter in user_obj.user_permissions.all %}
-								<li>{{ iter }}</li>
-								{% endfor %}
-								
-								<br/>
-								
-								*** EXISTING PERMISSIONS ***
-								{% for iter in existing_permissions %}
-								<li>{{ iter.codename }}</li>
-								{% endfor %}
-								
-								<br/>
-								
-								*** GROUPS NOT ASSIGNED TO ***
-								{% for iter in groups %}
-								{% if iter in device_groups or iter in user_groups %}
-								{% else %}
-								<li>{{ iter }}</li>
-								{% endif %}
-								{% endfor %}
-								<br/>
-								
+								</form>							
 							</div>
 						</article>
 					</div>
