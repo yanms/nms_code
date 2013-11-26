@@ -48,30 +48,32 @@
 											{% csrf_token %}
 											<table border="0">
 												<tr>
+													{% if perms.auth.add_group %}
 													<td>Add group:</td>
-													<td><input type="group" name="group" /> <input type="hidden" value="dev" name="task" /> <input type="submit" value="Submit"></td>
+													<td><input type="group" name="group" /> <input type="hidden" value="dev" name="task" /> <input type="submit" value="Submit"></td>{% endif %}
 												</tr>
 											</table>
 											</form>
 											<br/>
+											{% if perms.auth.list_group %}
 											<form name="devices" action="{% url 'nms:acl_groups_handler' %}" method="POST">
 												{% csrf_token %}
 											<table class="TFtable">
 												<tr>
 													<td><b>Group</b></td>
 													<td>Permissions</td>
-													<td>Info</td>
+													<td>Change group</td>
 													<td><b>Delete</b></td>
 												</tr>
 												{% for group in dev_groups %}
 												<tr>
-													<td><a href="{% url 'nms:acl_groups_manage' group.id %}">{{ group }}</a></td>
+													<td>{{ group }}</td>
 													<td>{% for permission in group.permissions.all %} 
 														{{ permission.name }}<br/>
 														{% endfor %}
 													</td>
-													<td class="button"><a href="{% url 'nms:acl_groups_manage' group.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a></td>
-													<td><input type="checkbox" name="delete" value="{{ group.id }}" /></td>
+													{% if perms.auth.change_group %}<td class="button"><a href="{% url 'nms:acl_groups_manage' group.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a>{% else %}<td>N/A{% endif %}</td>
+													<td>{% if perms.auth.delete_group %}<input type="checkbox" name="delete" value="{{ group.id }}" />{% else %}N/A {% endif %}</td>
 												</tr>
 												{% endfor %}
 												</tr>
@@ -79,6 +81,7 @@
 											<input type="hidden" name="task" value="delete" />
 											<input type="submit" value="Delete" id="delete" />
 										</form>
+										{% endif %}
 										</td>
 										<td width="50%" style="vertical-align: top;">
 											{% if user_perm %}
