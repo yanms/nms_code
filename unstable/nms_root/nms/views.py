@@ -152,21 +152,28 @@ def acl_user_manage_handler(request, acl_user):
     return HttpResponseRedirect(reverse('nms:acl_user_add'))
 
 @login_required
-@permission_required('nms.list_devices', login_url='/permissions/?per=list_devices')
 def acl_device(request):
-    devices = Devices.objects.all() 
-    return render(request, 'nms/acl_devices.html', {'devices': devices,'request':request})
+    if request.user.has_perm('nms.add_devices') or request.user.has_perm('nms.delete_devices') or request.user.has_perm('auth.list_group'):
+        devices = Devices.objects.all() 
+        return render(request, 'nms/acl_devices.html', {'devices': devices,'request':request})
+    else:
+        messages.error(request, 'You do not have the right permissions to access this page')
+        return HttpResponseRedirect(reverse('nms:acl'))
+    
 
 @login_required
-@permission_required('nms.list_devices', login_url='/permissions/?per=list_devices')
 def acl_device_manage(request, acl_id):
-    dev_obj = get_object_or_404(Devices, pk=acl_id)
-    dev_groups = Group.objects.filter(name__startswith='dev:')
-    check = Dev_group.objects.filter(devid=dev_obj)
-    checked = []
-    for iter in check:
-        checked.append(iter.gid)
-    return render(request, 'nms/acl_devices_manage.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups, 'checked': checked, 'request':request})
+    if request.user.has_perm('auth.list_group'):
+        dev_obj = get_object_or_404(Devices, pk=acl_id)
+        dev_groups = Group.objects.filter(name__startswith='dev:')
+        check = Dev_group.objects.filter(devid=dev_obj)
+        checked = []
+        for iter in check:
+            checked.append(iter.gid)
+        return render(request, 'nms/acl_devices_manage.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups, 'checked': checked, 'request':request})
+    else:
+        messages.error(request, 'You do not have the right permissions to access this page')
+        return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 def acl_handler(request, acl_id):
