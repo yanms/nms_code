@@ -50,7 +50,6 @@ def install(request):
         return HttpResponse('Finished installing NMS.')
 
 @login_required
-@permission_required('auth.list_group', login_url='/permissions/?per=list_group')
 def acl(request):
     user_obj = request.user
     return render(request, 'nms/acl.html', {'request':request})
