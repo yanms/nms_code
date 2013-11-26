@@ -158,14 +158,14 @@
 														<input type="hidden" name="qtype" value="add_devtype" />
 														<input type="text" name="name" /><input type="submit" value="Add" />
 													</form>
+													<form action="{% url 'nms:manage_gendev' %}" method="post">
+													{% csrf_token %}
+													<input type="hidden" name="qtype" value="del_devtype" />
 													<table>
-														<form action="{% url 'nms:manage_gendev' %}" method="post">
-															{% csrf_token %}
-															<input type="hidden" name="qtype" value="del_devtype" />
-															<b><tr>
-																<td>Name</td>
-																<td>Delete</td>
-															</tr></b>
+															<tr>
+																<td><b>Name</b></td>
+																<td><b>Delete</b></td>
+															</tr>
 															{% for record in dev_types %}
 																<tr>
 																	<td>{{ record }}</td>
@@ -173,8 +173,8 @@
 																</tr>
 															{% endfor %}
 															<input type="submit" value="Delete" />
-														</form>
 													</table>
+													</form>
 												</td>
 												<td width="50%">
 													<h3>Vendors</h3>
@@ -183,14 +183,14 @@
 														<input type="hidden" name="qtype" value="add_vendor" />
 														<input type="text" name="name" /><input type="submit" value="Add" />
 													</form>
+													<form action="{% url 'nms:manage_gendev' %}" method="post">
+													{% csrf_token %}
+													<input type="hidden" name="qtype" value="del_vendor" />
 													<table>
-														<form action="{% url 'nms:manage_gendev' %}" method="post">
-															{% csrf_token %}
-															<input type="hidden" name="qtype" value="del_vendor" />
-															<b><tr>
-																<td>Name</td>
-																<td>Delete</td>
-															</tr></b>
+															<tr>
+																<td><b>Name</b></td>
+																<td><b>Delete</b></td>
+															</tr>
 															{% for record in vendors %}
 																<tr>
 																	<td>{{ record }}</td>
@@ -198,8 +198,8 @@
 																</tr>
 															{% endfor %}
 															<input type="submit" value="Delete" />
-														</form>
 													</table>
+													</form>
 												</td>
 											<tr>
 												<td width="50%">
@@ -209,14 +209,14 @@
 														<input type="hidden" name="qtype" value="add_model" />
 														<input type="text" name="name" /><input type="submit" value="Add" />
 													</form>
+													<form action="{% url 'nms:manage_gendev' %}" method="post">
+													{% csrf_token %}
+													<input type="hidden" name="qtype" value="del_model" />
 													<table>
-														<form action="{% url 'nms:manage_gendev' %}" method="post">
-															{% csrf_token %}
-															<input type="hidden" name="qtype" value="del_model" />
-															<b><tr>
-																<td>Name</td>
-																<td>Delete</td>
-															</tr></b>
+															<tr>
+																<td><b>Name</b></td>
+																<td><b>Delete</b></td>
+															</tr>
 															{% for record in models %}
 																<tr>
 																	<td>{{ record }}</td>
@@ -224,8 +224,8 @@
 																</tr>
 															{% endfor %}
 															<input type="submit" value="Delete" />
-														</form>
 													</table>
+													</form>
 												</td>
 												<td width="50%">
 													<h3>XML Files</h3>
@@ -234,14 +234,14 @@
 														<input type="hidden" name="qtype" value="add_xml" />
 														<input type="text" name="name" /><input type="submit" value="Add" />
 													</form>
+													<form action="{% url 'nms:manage_gendev' %}" method="post">
+													{% csrf_token %}
+													<input type="hidden" name="qtype" value="del_xml" />
 													<table>
-														<form action="{% url 'nms:manage_gendev' %}" method="post">
-															{% csrf_token %}
-															<input type="hidden" name="qtype" value="del_xml" />
-															<b><tr>
-																<td>Name</td>
-																<td>Delete</td>
-															</tr></b>
+															<tr>
+																<td><b>Name</b></td>
+																<td><b>Delete</b></td>
+															</tr>
 															{% for record in xml_files %}
 																<tr>
 																	<td>{{ record }}</td>
@@ -249,8 +249,8 @@
 																</tr>
 															{% endfor %}
 															<input type="submit" value="Delete" />
-														</form>
 													</table>
+													</form>
 												</td>
 											<tr>
 											<tr>
