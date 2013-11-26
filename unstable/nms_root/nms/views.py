@@ -128,7 +128,7 @@ def acl_user_manage_handler(request, acl_user):
             if 'is_active' in request.POST:
                 user_obj.is_active = request.POST['is_activate']
             else:
-                user_obj.is_active=False
+                is_active=False
             password = request.POST['password']
             password2 = request.POST['password2']
             if password == password2:
