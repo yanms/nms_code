@@ -55,13 +55,16 @@ def acl(request):
     return render(request, 'nms/acl.html', {'request':request})
 
 @login_required
-@permission_required('auth.list_group', login_url='/permissions/?per=list_group')
 def acl_groups(request):
-    user = request.user
-    user_perm = user.has_perm('auth.list_group')
-    dev_groups = Group.objects.filter(name__startswith='dev:')
-    usr_groups = Group.objects.filter(name__startswith='usr:')
-    return render(request, 'nms/acl_groups.html', {'user_perm': user_perm, 'dev_groups': dev_groups, 'usr_groups': usr_groups, 'request':request})
+    if request.user.has_perm('auth.list_group') or request.user.has_perm('auth.add_group') or request.user.has_perm('auth.change_group') or request.user.has_perm('auth.delete_group'):
+        user = request.user
+        user_perm = user.has_perm('auth.list_group')
+        dev_groups = Group.objects.filter(name__startswith='dev:')
+        usr_groups = Group.objects.filter(name__startswith='usr:')
+        return render(request, 'nms/acl_groups.html', {'user_perm': user_perm, 'dev_groups': dev_groups, 'usr_groups': usr_groups, 'request':request})
+    else:
+        messages.error(request, 'You do not have the right permissions to access this page')
+        return HttpResponseRedirect(reverse('nms:acl_user_add'))
 
 @login_required
 @permission_required('auth.list_user', login_url='/permissions/?per=list_user')
