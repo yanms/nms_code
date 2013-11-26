@@ -158,7 +158,7 @@
 														<input type="hidden" name="qtype" value="add_devtype" />
 														<input type="text" name="name" /><input type="submit" value="Add" />
 													</form>
-													<table border="0">
+													<table>
 														<form action="{% url 'nms:manage_gendev' %}" method="post">
 															{% csrf_token %}
 															<input type="hidden" name="qtype" value="del_devtype" />
@@ -183,7 +183,7 @@
 														<input type="hidden" name="qtype" value="add_vendor" />
 														<input type="text" name="name" /><input type="submit" value="Add" />
 													</form>
-													<table border="0">
+													<table>
 														<form action="{% url 'nms:manage_gendev' %}" method="post">
 															{% csrf_token %}
 															<input type="hidden" name="qtype" value="del_vendor" />
@@ -209,7 +209,7 @@
 														<input type="hidden" name="qtype" value="add_model" />
 														<input type="text" name="name" /><input type="submit" value="Add" />
 													</form>
-													<table border="0">
+													<table>
 														<form action="{% url 'nms:manage_gendev' %}" method="post">
 															{% csrf_token %}
 															<input type="hidden" name="qtype" value="del_model" />
@@ -234,7 +234,7 @@
 														<input type="hidden" name="qtype" value="add_xml" />
 														<input type="text" name="name" /><input type="submit" value="Add" />
 													</form>
-													<table border="0">
+													<table>
 														<form action="{% url 'nms:manage_gendev' %}" method="post">
 															{% csrf_token %}
 															<input type="hidden" name="qtype" value="del_xml" />
