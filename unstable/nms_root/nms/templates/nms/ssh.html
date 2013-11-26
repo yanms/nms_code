@@ -28,7 +28,29 @@
 		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
 		xmlhttp.send();
 	}
-	
+
+	function sshPriv()
+	{
+		var xmlhttp;
+		if (window.XMLHttpRequest)
+		{
+			// IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		}
+		else
+		{
+			// IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		var textElement = document.getElementById("sshinput");
+		var text = textElement.value;
+		textElement.value = "";
+
+		var args = "?type=ssh&q=priv&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
+		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
+		xmlhttp.send();
+	}
+
 	function sshReceive()
 	{
 		var xmlhttp;
@@ -130,7 +152,7 @@
 									{% endfor %}
 								</ul>
 								<h2>SSH Connection: {{ device }}</h2>
-								<form action="#" onsubmit="sshSend();"><input type="text" id="sshinput"></input> <button id="sendssh" type="button" onclick="sshSend();">send</button><button id="sshclose" type="button" onclick="sshClose();">close</button></form>
+								<form action="#" onsubmit="sshSend();"><input type="text" id="sshinput"></input> <button id="sendssh" type="button" onclick=;"sshSend();">send</button><button id="sshpriv" type="button" onclick="sshPriv();">enable password</button><button id="sshclose" type="button" onclick="sshClose();">close</button></form>
 								<div id="sshtext" style="height:400px; width:800px; border:1px solid #ccc; overflow:auto; line-height:70%;">
 								</div>
 							</div>
