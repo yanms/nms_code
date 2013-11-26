@@ -40,7 +40,7 @@
 									<li class="{{message.tags}}">{{ message.tags.title }} : {{ message }}</li>
 									{% endfor %}
 								</ul>
-								<h2>Manage User: {{ user }}</h2>
+								<h2>Manage User: {{ user_obj.username }}</h2>
 								<form name="usr_group" action="{% url 'nms:acl_handler' user_obj.id %}" method="POST">
 									{% csrf_token %}
 									<table class="TFtable">
