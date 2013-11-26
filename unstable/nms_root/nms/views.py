@@ -64,7 +64,7 @@ def acl_groups(request):
         return render(request, 'nms/acl_groups.html', {'user_perm': user_perm, 'dev_groups': dev_groups, 'usr_groups': usr_groups, 'request':request})
     else:
         messages.error(request, 'You do not have the right permissions to access this page')
-        return HttpResponseRedirect(reverse('nms:acl_user_add'))
+        return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 @permission_required('auth.list_user', login_url='/permissions/?per=list_user')
