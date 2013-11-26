@@ -66,9 +66,7 @@
 										{% for item in groups_dev %}
 										<tr>
 											<td><input type="checkbox" name="groups" value="{{ item.group_id }}" {{ group_checked }} />{{ item }}</td>
-											{% for iter in item.user_set.all %}
-											<td>{{ iter }}<br /></td>
-											{% endfor %}
+											<td>{% for iter in item.user_set.all %}{{ iter }}<br />{% endfor %}</td>
 										</tr>
 										{% endfor %}
 									</table>
