@@ -1,5 +1,6 @@
 import nms.sshconnection as sshconnection
 import nms.xmlparser as xmlparser
+import nms.passwordstore as passwordstore
 from multiprocessing import Lock
 
 interfaces = {}
@@ -23,7 +24,7 @@ def getInterfaces(command, parser, device):
 	interfacesLock.acquire()
 	try:
 		if not device in interfaces.keys():
-			s = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
+			s = sshconnection.SSHConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
 			if s.connect() == -1:
 				return -1
 			ret = b''
@@ -50,7 +51,7 @@ def executeTask(taskpath, device):
 		commands = commands[key]
 	args, parser = commands
 
-	s = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
+	s = sshconnection.SSHConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
 	if s.connect() == -1:
 		return -1
 	ret = b''
@@ -63,7 +64,7 @@ def executeTask(taskpath, device):
 	return parser.parse(ret)
 
 def __createSSHConnection__(device):
-	connection = sshconnection.SSHConnection(device.ip, device.login_name, device.password_remote, device.port)
+	connection = sshconnection.SSHConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
 	connection.connect()
 	connection.chan.setblocking(0)
 	return connection
