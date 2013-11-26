@@ -40,8 +40,9 @@
                                                                         <li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
                                                                         {% endfor %}
                                                                 </ul>
+																{% if perms.auth.list_group %}
                                                                 <h2>Account Control List: Devices</h2>
-																<form name="devices" action="{% url 'nms:acl_groups_handler' %}" method="POST">
+																{% if perms.nms.delete_devices %}<form name="devices" action="{% url 'nms:acl_groups_handler' %}" method="POST">{% endif %}
 																	{% csrf_token %}
                                                                 <table class="TFtable">
                                                                         <tr>
@@ -57,15 +58,16 @@
                                                                                 <td> {{ device.gen_dev_id.dev_type_id }} </td>
                                                                                 <td> {{ device.gen_dev_id }}</td>
 																				<td> {{ device.ip}}</td>
-                                                                                <td> <a href="{% url 'nms:acl_device_manage' device.dev_id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a> </td>
-																				<td><input type="checkbox" name="delete" value="{{ device.dev_id }}" /></td>
+                                                                                <td><a href="{% url 'nms:acl_device_manage' device.dev_id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a></td>
+																				<td>{% if perms.nms.delete_devices %}<input type="checkbox" name="delete" value="{{ device.dev_id }}" />{% else %} N/A {% endif %}</td>
                                                                                 
                                                                         </tr>
                                                                 {% endfor %}
                                                                 </table>
-																<input type="hidden" name="task" value="del_device" />
-																<input type="submit" value="Delete" id="delete" />
+																{% if perms.nms.delete_devices %}<input type="hidden" name="task" value="del_device" />{% endif %}
+																{% if perms.nms.delete_devices %}<input type="submit" value="Delete" id="delete" />{% endif %}
 															</form>
+															{% endif %}
                                                                 
                                                         </div>
                                                 </article>
