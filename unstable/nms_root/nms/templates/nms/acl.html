@@ -40,7 +40,31 @@
 									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
 									{% endfor %}
 								</ul>
-								 <h2>Welcome to the Access control list. Please select one of the options from the top menu.</h2>
+								<h2>Welcome to the Access control list. Please select one of the options from the top menu.</h2>
+ 								<table class="TFtable">
+ 									<tr>
+ 										<td>Username</td>
+ 										<td>Last Login</td>
+ 										<td>Superuser?</td>
+ 										<td>First Name</td>
+ 										<td>Last Name</td>
+ 										<td>E-mail address</td>
+ 										<td>Staff?</td>
+ 										<td>Active?</td>
+ 										<td>Date joined</td>
+ 									</tr>
+ 									<tr>
+ 										<td>{{ user_obj.username }}</td>
+ 										<td>{{ user_obj.last_login }}</td>
+ 										<td>{{ user_obj.is_superuser }}</td>
+ 										<td>{{ user_obj.first_name }}</td>
+ 										<td>{{ user_obj.last_name }}</td>
+ 										<td>{{ user_obj.email }}</td>
+ 										<td>{{ user_obj.is_staff }}</td>
+ 										<td>{{ user_obj.is_active }}</td>
+ 										<td>{{ user_obj.date_joined }}</td>
+ 									</tr>
+ 								</table>
 							</div>
 						</article>
 					</div>
