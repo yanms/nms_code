@@ -65,7 +65,7 @@
 										</tr>
 										{% for item in groups_dev %}
 										<tr>
-											<td><input type="checkbox" name="groups" value="{{ item.group_id }}" {{ group_checked }} />{{ item }}</td>
+											<td><input type="checkbox" name="groups" value="{{ item.id }}" {{ group_checked }} />{{ item }}</td>
 											<td>{% for iter in item.user_set.all %}{{ iter }}<br />{% endfor %}</td>
 										</tr>
 										{% endfor %}
@@ -112,7 +112,7 @@
 										</tr>
 										{% for item in groups_usr %}
 										<tr>
-											<td><input type="checkbox" name="group" value="{{ item.user_id }}" {{ usr_checked }} />{{ item }}</td>
+											<td><input type="checkbox" name="groups" value="{{ item.user_id }}" {{ usr_checked }} />{{ item }}</td>
 											{% for iter in item.user_set.all %}
 											<td>{{ iter }}<br /></td>
 											{% endfor %}
