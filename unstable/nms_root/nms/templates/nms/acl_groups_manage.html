@@ -56,7 +56,6 @@
 									<input type="checkbox" name="rights" value="list" {{ list_check }}/>List Devices<br />
 									<input type="checkbox" name="rights" value="manage" {{ manage_check }}/>Manage Devices<br />
 									<input type="checkbox" name="rights" value="change" {{ change_check }} />Change Devices<br />
-									<input type="hidden" value="ch_per_dev_group" name="task" />
 									<br/>
 									<h2>INHERIT OPTIONS</h2>
 									<table class="TFtable">
@@ -66,7 +65,7 @@
 										</tr>
 										{% for item in groups_dev %}
 										<tr>
-											<td><input type="checkbox" name="group" value="{{ item.group_id }}" {{ group_checked }} />{{ item }}</td>
+											<td><input type="checkbox" name="groups" value="{{ item.group_id }}" {{ group_checked }} />{{ item }}</td>
 											{% for iter in item.user_set.all %}
 											<td>{{ iter }}<br /></td>
 											{% endfor %}
@@ -132,18 +131,19 @@
 										{% for item in users %}
 										{% if item in group.user_set.all %}
 										<tr>
-											<td>{{ item }}</td>
+											<td><input type="checkbox" name="users" value="{{ item.user_id }}" checked>{{ item }}</td>
 											<td><img src="{{ STATIC_URL }}images/addButton.png" width="16px" /></td>
 										</tr>
 										{% else %}
 										<tr>
-											<td>{{ item }}</td>
+											<td><input type="checkbox" name="users" value="{{ item.user_id }}">{{ item }}</td>
 											<td><img src="{{ STATIC_URL }}images/deleteButton.png" width="16px" /></td>
 										</tr>
 										{% endif %}
 										{% endfor %}
 									</table>									
 								{% endif %}
+									<input type="hidden" value="ch_per_dev_group" name="task" />
 									<input type="submit" value="Update" id="update" />
 								</form>
 								<br />
