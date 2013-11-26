@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - AdminPanel: Devices</title>
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<script type="text/javascript">
+	function loadDropDownItems()
+	{
+		var xmlhttp;
+		if (window.XMLHttpRequest)
+		{
+			// IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		}
+		else
+		{
+			// IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange = function()
+		{
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+			{
+				var ret = xmlhttp.responseText.split('|');
+				if (ret.length == 0)
+				{
+					return;
+				}
+				if (ret[0] == "<Error>")
+				{
+					document.getElementById("selectModel").disabled = true;
+					return;
+				}
+
+				var selectElement = document.getElementById("selectModel");
+				selectElement.innerHTML = "";
+				for (var i = 0; i < ret.length; i++)
+				{
+					var option = document.createElement("option");
+					option.text = ret[i];
+					try
+					{
+						selectElement.add(option, null);
+					}
+					catch (e)
+					{
+						selectElement.add(option, selectElement.options[null]);
+					}
+				}
+				document.getElementById("selectModel").disabled = false;
+			}
+		}
+		var selectType = document.getElementById("selectType");
+		var selectVendor = document.getElementById("selectVendor");
+		var dtype = selectType.options[selectType.selectedIndex].text;
+		var dvendor = selectVendor.options[selectVendor.selectedIndex].text;
+
+		var args = "?type=models&q=".concat(dtype, "|", dvendor, "&t=", Math.random().toString(36).substring(7));
+		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
+		xmlhttp.send();
+	}
+	window.onload = function() {
+		document.getElementById("selectVendor").onchange = function() {
+			loadDropDownItems();
+		}
+	}
+	</script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+						<ul>
+							<li><a href="#" class="ico1">Messages <span class="num">26</span></a></li>
+							<li><a href="#" class="ico2">Alerts <span class="num">5</span></a></li>
+							<li><a href="#" class="ico3">Documents <span class="num">3</span></a></li>
+						</ul>
+					</nav>
+					<div class="profile-box">
+						<span class="profile">
+							<a href="#" class="section">
+								<!-- <img class="image" src="{{ STATIC_URL }}images/img1.png" alt="image description" width="26" height="26" /> -->
+								<span class="text-box">
+									You are logged in as:
+									<strong class="name">{{ user }}</strong>
+								</span>
+							</a>
+							<a href="#" class="opener">opener</a>
+						</span>
+						<a href="{% url 'nms:logout_handler' %}" class="btn-on">On</a>
+					</div>
+				</div>
+				<div class="tabs">
+					<div id="tab-7" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<ul class="states">
+									{% for message in messages %}
+									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+									{% endfor %}
+								</ul>
+								<h2>Manage Device Templates</h2>
+								<p>
+									<form action="{% url 'nms:manage_gendev' %}" method="POST">
+										{% csrf_token %}
+										<input type="hidden" name="qtype" value="add_gendev" />
+										<table border="0">
+											<tr>
+												<td>Type:</td>
+												<td><select id="selectType" name="dev_type">
+													{% for record in dev_types %}
+														<option value="{{ record }}">{{ record }}</option>
+													{% endfor %}
+												</select></td>
+											</tr>
+											<tr>
+												<td>Vendor:</td>
+												<td><select id="selectVendor" name="vendor">
+													{% for record in vendors %}
+														<option value="{{ record }}">{{ record }}</option>
+													{% endfor %}
+												</select></td>
+											</tr>
+											<tr>
+												<td>Model:</td>
+												<td><select id="selectModel" name="model">
+													{% for record in models %}
+														<option value="{{ record }}">{{ record }}</option>
+													{% endfor %}
+												</select>
+												</td>
+											</tr>
+											<tr>
+												<td>XML:</td>
+												<td><select id="selectXMLFile" name="xml_files">
+													{% for record in xml_files %}
+														<option value="{{ record }}">{{ record }}</option>
+													{% endfor %}
+												</select></td>
+											</tr>
+											<tr>
+												<td><input type="submit" value="Add Template"/></td>
+											</tr>
+										</table>
+										<table border="0" width="100%">
+											<tr>
+												<td width="50%">
+													<h3>Types</h3>
+													<form action="{% url 'nms:manage_gendev' %}" method="POST">
+														{% csrf_token %}
+														<input type="hidden" name="qtype" value="add_devtype" />
+														<input type="text" name="name" /><input type="submit" value="Add" />
+													</form>
+													<table border="0">
+														<form action="{% url 'nms:manage_gendev' %}" method="post">
+															{% csrf_token %}
+															<input type="hidden" name="qtype" value="del_devtype" />
+															<b><tr>
+																<td>Name</td>
+																<td>Delete</td>
+															</tr></b>
+															{% for record in dev_types %}
+																<tr>
+																	<td>{{ record }}</td>
+																	<td><input type="checkbox" name="items" value="{{ record }}" /></td>
+																</tr>
+															{% endfor %}
+															<input type="submit" value="Delete" />
+														</form>
+													</table>
+												</td>
+												<td width="50%">
+													<h3>Vendors</h3>
+													<form action="{% url 'nms:manage_gendev' %}" method="POST">
+														{% csrf_token %}
+														<input type="hidden" name="qtype" value="add_vendor" />
+														<input type="text" name="name" /><input type="submit" value="Add" />
+													</form>
+													<table border="0">
+														<form action="{% url 'nms:manage_gendev' %}" method="post">
+															{% csrf_token %}
+															<input type="hidden" name="qtype" value="del_vendor" />
+															<b><tr>
+																<td>Name</td>
+																<td>Delete</td>
+															</tr></b>
+															{% for record in vendors %}
+																<tr>
+																	<td>{{ record }}</td>
+																	<td><input type="checkbox" name="items" value="{{ record }}" /></td>
+																</tr>
+															{% endfor %}
+															<input type="submit" value="Delete" />
+														</form>
+													</table>
+												</td>
+											<tr>
+												<td width="50%">
+													<h3>Models</h3>
+													<form action="{% url 'nms:manage_gendev' %}" method="POST">
+														{% csrf_token %}
+														<input type="hidden" name="qtype" value="add_model" />
+														<input type="text" name="name" /><input type="submit" value="Add" />
+													</form>
+													<table border="0">
+														<form action="{% url 'nms:manage_gendev' %}" method="post">
+															{% csrf_token %}
+															<input type="hidden" name="qtype" value="del_model" />
+															<b><tr>
+																<td>Name</td>
+																<td>Delete</td>
+															</tr></b>
+															{% for record in models %}
+																<tr>
+																	<td>{{ record }}</td>
+																	<td><input type="checkbox" name="items" value="{{ record }}" /></td>
+																</tr>
+															{% endfor %}
+															<input type="submit" value="Delete" />
+														</form>
+													</table>
+												</td>
+												<td width="50%">
+													<h3>XML Files</h3>
+													<form action="{% url 'nms:manage_gendev' %}" method="POST">
+														{% csrf_token %}
+														<input type="hidden" name="qtype" value="add_xml" />
+														<input type="text" name="name" /><input type="submit" value="Add" />
+													</form>
+													<table border="0">
+														<form action="{% url 'nms:manage_gendev' %}" method="post">
+															{% csrf_token %}
+															<input type="hidden" name="qtype" value="del_xml" />
+															<b><tr>
+																<td>Name</td>
+																<td>Delete</td>
+															</tr></b>
+															{% for record in xml_files %}
+																<tr>
+																	<td>{{ record }}</td>
+																	<td><input type="checkbox" name="items" value="{{ record }}" /></td>
+																</tr>
+															{% endfor %}
+															<input type="submit" value="Delete" />
+														</form>
+													</table>
+												</td>
+											<tr>
+											<tr>
+										</table>
+									</form>
+								</p>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside id="sidebar">
+			<img src="{{ STATIC_URL }}images/NMS.png"/>
+			{% include "_nav.html" %}
+			<span class="shadow"></span>
+		</aside>
+	</div>
+</body>
+</html>
