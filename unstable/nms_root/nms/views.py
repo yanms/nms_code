@@ -605,7 +605,7 @@ def init(request):
 		else:
 			messages.error(request, 'Invalid key length')
 			if 'next' in request.POST:
-				return render(request, 'nms/init.html', {'request':request, 'next':request.GET['next']})
+				return render(request, 'nms/init.html', {'request':request, 'next':request.POST['next']})
 	if request.method == 'GET' and 'next' in request.GET:
 		return render(request, 'nms/init.html', {'request':request, 'next':request.GET['next']})
 	return render(request, 'nms/init.html', {'request':request})
