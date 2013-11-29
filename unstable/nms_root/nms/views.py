@@ -783,7 +783,6 @@ def manage_gendev(request):
 					messages.error(request, 'Error adding XML')
 		elif p['qtype'] == 'del_xml':
 			if 'items' in p:
-				messages.info(request, p['items'])
 				for i in p.getlist('items'):
 					try:
 						File_location.objects.get(pk=int(i)).delete()
