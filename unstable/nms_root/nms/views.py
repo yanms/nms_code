@@ -731,7 +731,7 @@ def manage_gendev(request):
 					messages.error(request, 'Error adding device template')
 		elif p['qtype'] == 'del_gendev':
 			if 'items' in p:
-				for i in p['items']:
+				for i in p.getlist('items'):
 					try:
 						Gen_dev.objects.get(pk=int(i)).delete()
 					except:
@@ -744,7 +744,7 @@ def manage_gendev(request):
 					messages.error(request, 'Error adding device type')
 		elif p['qtype'] == 'del_devtype':
 			if 'items' in p:
-				for i in p['items']:
+				for i in p.getlist('items'):
 					try:
 						Dev_type.objects.get(pk=int(i)).delete()
 					except:
@@ -757,7 +757,7 @@ def manage_gendev(request):
 					messages.error(request, 'Error adding vendor')
 		elif p['qtype'] == 'del_vendor':
 			if 'items' in p:
-				for i in p['items']:
+				for i in p.getlist('items'):
 					try:
 						Vendor.objects.get(pk=int(i)).delete()
 					except:
@@ -770,7 +770,7 @@ def manage_gendev(request):
 					messages.error(request, 'Error adding model')
 		elif p['qtype'] == 'del_model':
 			if 'items' in p:
-				for i in p['items']:
+				for i in p.getlist('items'):
 					try:
 						Dev_model.objects.get(pk=int(i)).delete()
 					except:
@@ -784,7 +784,7 @@ def manage_gendev(request):
 		elif p['qtype'] == 'del_xml':
 			if 'items' in p:
 				messages.info(request, p['items'])
-				for i in p['items']:
+				for i in p.getlist('items'):
 					try:
 						File_location.objects.get(pk=int(i)).delete()
 					except:
