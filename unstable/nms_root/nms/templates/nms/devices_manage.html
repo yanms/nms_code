@@ -5,6 +5,12 @@
 	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript">
+		function showLoadingImage(num)
+		{
+			document.getElementById('loadingImage'.concat(num)).style.visibility='visible';
+		}
+	</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>
@@ -41,7 +47,24 @@
 								{% endfor %}
 							</ul>
 								<h2>Devices</h2>
-								<p>Welcome to the devices page. Please choose one of the options in the upper menu.</p>
+								<table class="TFtable">
+									<tr>
+										<td><b>Type</b></td>
+										<td><b>Device</b></td>
+										<td><b>IP address</b></td>
+										<td><b>State</b></td>
+										<td><b>Manage</b></td>
+									</tr>
+								{% for device in devices %}
+									<tr>
+										<td>{{ device.gen_dev_id.dev_type_id }}</td>
+										<td>{{ device.gen_dev_id }}</td>
+										<td>{{ device.ip }}</td>
+										<td>## UP/DOWN ##</td>
+										<td><a href="{% url 'nms:device_manager' device.dev_id %}" onclick="showLoadingImage({{ device.dev_id }});"><img src="{{ STATIC_URL }}images/editButton.png" width="25px" /></a> <img id="loadingImage{{ device.dev_id }}" src="{{ STATIC_URL }}images/loading.gif" style="visibility:hidden"/></td>
+									</tr>
+								{% endfor %}
+								</table>
 							</div>
 						</article>
 					</div>

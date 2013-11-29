@@ -406,8 +406,25 @@ def login_handler(request):
 
 @login_required
 def devices(request):
-	devices = Devices.objects.all()
-	return render(request, 'nms/devices.html', {'devices': devices, 'request':request})
+    return render(request, 'nms/devices.html', {'request':request})
+
+@login_required
+def devices_manage(request):
+    user_obj = request.user
+    groups = user_obj.groups.all()
+    try:
+        groups_list_devices = [x for x in groups if x.permissions.filter(codename='list_devices').exists()]
+        dev_group = [x.dev_group_set.all() for x in groups_list_devices][0]
+        devices = {x.devid for x in dev_group}
+        devices = list(devices)
+        if groups_list_devices != []:
+    	    return render(request, 'nms/devices_manage.html', {'devices': devices, 'request':request})
+        else:
+            messages.error(request, "You are not added to any devices yet with the right permission.")
+            return HttpResponseRedirect(reverse('nms:index'))
+    except IndexError:
+        messages.error(request, "You are not added to any devices yet.")
+        return HttpResponseRedirect(reverse('nms:index'))
 
 @login_required
 def device_add(request):
