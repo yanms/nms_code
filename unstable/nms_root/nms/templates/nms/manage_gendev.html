@@ -160,11 +160,11 @@
 													</form>
 													<form action="{% url 'nms:manage_gendev' %}" method="post">
 													{% csrf_token %}
-													<input type="hidden" name="qtype" value="del_devtype" />
-													<table class="TFtable" width="100%">
+													<input type="hidden" name="qtype" value="del_devtype" /><br />
+													<table class="TFtable" width="70%">
 															<tr>
-																<td><b>Name</b></td>
-																<td width="10px"><b>Delete</b></td>
+																<td width="95%"><b>Name</b></td>
+																<td width="5%"><b>Delete</b></td>
 															</tr>
 															{% for record in dev_types %}
 																<tr>
@@ -173,7 +173,12 @@
 																</tr>
 															{% endfor %}
 													</table>
-													<input type="submit" value="Delete" />
+													<table border="0" width="70%">
+														<tr>
+															<td width="95%"></td>
+															<td width="5%"><input type="submit" value="Delete"/></td>
+														</tr>
+													</table>
 													</form>
 												</td>
 												<td width="50%">
@@ -185,11 +190,11 @@
 													</form>
 													<form action="{% url 'nms:manage_gendev' %}" method="post">
 													{% csrf_token %}
-													<input type="hidden" name="qtype" value="del_vendor" />
-													<table class="TFtable" width="100%">
+													<input type="hidden" name="qtype" value="del_vendor" /><br />
+													<table class="TFtable" width="70%">
 															<tr>
-																<td><b>Name</b></td>
-																<td width="10px"><b>Delete</b></td>
+																<td width="95%"><b>Name</b></td>
+																<td width="5%"><b>Delete</b></td>
 															</tr>
 															{% for record in vendors %}
 																<tr>
@@ -198,7 +203,12 @@
 																</tr>
 															{% endfor %}
 													</table>
-													<input type="submit" value="Delete" />
+													<table border="0" width="70%">
+														<tr>
+															<td width="95%"></td>
+															<td width="5%"><input type="submit" value="Delete"/></td>
+														</tr>
+													</table>
 													</form>
 												</td>
 											<tr>
@@ -211,11 +221,11 @@
 													</form>
 													<form action="{% url 'nms:manage_gendev' %}" method="post">
 													{% csrf_token %}
-													<input type="hidden" name="qtype" value="del_model" />
-													<table class="TFtable" width="100%">
+													<input type="hidden" name="qtype" value="del_model" /><br />
+													<table class="TFtable" width="70%">
 															<tr>
-																<td><b>Name</b></td>
-																<td width="10px"><b>Delete</b></td>
+																<td width="95%"><b>Name</b></td>
+																<td width="5%"><b>Delete</b></td>
 															</tr>
 															{% for record in models %}
 																<tr>
@@ -224,7 +234,12 @@
 																</tr>
 															{% endfor %}
 													</table>
-													<input type="submit" value="Delete" />
+													<table border="0" width="70%">
+														<tr>
+															<td width="95%"></td>
+															<td width="5%"><input type="submit" value="Delete"/></td>
+														</tr>
+													</table>
 													</form>
 												</td>
 												<td width="50%">
@@ -236,11 +251,11 @@
 													</form>
 													<form action="{% url 'nms:manage_gendev' %}" method="post">
 													{% csrf_token %}
-													<input type="hidden" name="qtype" value="del_xml" />
-													<table class="TFtable" width="100%">
+													<input type="hidden" name="qtype" value="del_xml" /><br />
+													<table class="TFtable" width="70%">
 															<tr>
-																<td><b>Name</b></td>
-																<td width="10px"><b>Delete</b></td>
+																<td width="95%"><b>Name</b></td>
+																<td width="5%"><b>Delete</b></td>
 															</tr>
 															{% for record in xml_files %}
 																<tr>
@@ -248,8 +263,17 @@
 																	<td><input type="checkbox" name="items" value="{{ record }}" /></td>
 																</tr>
 															{% endfor %}
+																<!--<tr>
+																	<td></td>
+																	<td></td>
+																</tr>-->
 													</table>
-													<input type="submit" value="Delete" />
+													<table border="0" width="70%">
+														<tr>
+															<td width="95%"></td>
+															<td width="5%"><input type="submit" value="Delete"/></td>
+														</tr>
+													</table>
 													</form>
 												</td>
 											<tr>
