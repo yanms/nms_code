@@ -69,13 +69,13 @@
 <script type="text/javascript">
 jQuery(window).load(function() {
 
-    $("#nav > li > a").click(function (e) { // binding onclick
+    $("#usrnav > li > a").click(function (e) { // binding onclick
         if ($(this).parent().hasClass('selected')) {
-            $("#nav .selected div div").slideUp(100); // hiding popups
-            $("#nav .selected").removeClass("selected");
+            $("#usrnav .selected div div").slideUp(100); // hiding popups
+            $("#usrnav .selected").removeClass("selected");
         } else {
-            $("#nav .selected div div").slideUp(100); // hiding popups
-            $("#nav .selected").removeClass("selected");
+            $("#usrnav .selected div div").slideUp(100); // hiding popups
+            $("#usrnav .selected").removeClass("selected");
 
             if ($(this).next(".subs").length) {
                 $(this).parent().addClass("selected"); // display popup
@@ -86,8 +86,8 @@ jQuery(window).load(function() {
     }); 
 
     $("body").click(function () { // binding onclick to body
-        $("#nav .selected div div").slideUp(100); // hiding popups
-        $("#nav .selected").removeClass("selected");
+        $("#usrnav .selected div div").slideUp(100); // hiding popups
+        $("#usrnav .selected").removeClass("selected");
     }); 
 
 });
