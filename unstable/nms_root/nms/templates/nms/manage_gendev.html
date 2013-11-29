@@ -160,7 +160,7 @@
 													</form>
 													<form action="{% url 'nms:manage_gendev' %}" method="post">
 													{% csrf_token %}
-													<input type="hidden" name="qtype" value="del_devtype" />
+													<input type="hidden" name="qtype" value="del_devtype" /><br />
 													<table class="TFtable" width="70%">
 															<tr>
 																<td width="95%"><b>Name</b></td>
@@ -173,7 +173,12 @@
 																</tr>
 															{% endfor %}
 													</table>
-													<input type="submit" value="Delete" />
+													<table border="0" width="70%">
+														<tr>
+															<td width="95%"></td>
+															<td width="5%"><input type="submit" value="Delete"/></td>
+														</tr>
+													</table>
 													</form>
 												</td>
 												<td width="50%">
@@ -185,7 +190,7 @@
 													</form>
 													<form action="{% url 'nms:manage_gendev' %}" method="post">
 													{% csrf_token %}
-													<input type="hidden" name="qtype" value="del_vendor" />
+													<input type="hidden" name="qtype" value="del_vendor" /><br />
 													<table class="TFtable" width="70%">
 															<tr>
 																<td width="95%"><b>Name</b></td>
@@ -198,7 +203,12 @@
 																</tr>
 															{% endfor %}
 													</table>
-													<input type="submit" value="Delete" />
+													<table border="0" width="70%">
+														<tr>
+															<td width="95%"></td>
+															<td width="5%"><input type="submit" value="Delete"/></td>
+														</tr>
+													</table>
 													</form>
 												</td>
 											<tr>
@@ -211,7 +221,7 @@
 													</form>
 													<form action="{% url 'nms:manage_gendev' %}" method="post">
 													{% csrf_token %}
-													<input type="hidden" name="qtype" value="del_model" />
+													<input type="hidden" name="qtype" value="del_model" /><br />
 													<table class="TFtable" width="70%">
 															<tr>
 																<td width="95%"><b>Name</b></td>
@@ -224,7 +234,12 @@
 																</tr>
 															{% endfor %}
 													</table>
-													<input type="submit" value="Delete" />
+													<table border="0" width="70%">
+														<tr>
+															<td width="95%"></td>
+															<td width="5%"><input type="submit" value="Delete"/></td>
+														</tr>
+													</table>
 													</form>
 												</td>
 												<td width="50%">
@@ -256,7 +271,7 @@
 													<table border="0" width="70%">
 														<tr>
 															<td width="95%"></td>
-															<td width="5%"><input type="submit" value="Delete" style="text-align: right;"/></td>
+															<td width="5%"><input type="submit" value="Delete"/></td>
 														</tr>
 													</table>
 													</form>
