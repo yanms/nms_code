@@ -769,4 +769,5 @@ def manage_gendev(request):
 	vendors = Vendor.objects.all()
 	models = Dev_model.objects.all()
 	xml_files = File_location.objects.all()
-	return render(request, 'nms/manage_gendev.html', {'request':request, 'dev_types':dev_types, 'vendors':vendors, 'models':models, 'xml_files':xml_files})
+	gen_devs = Gen_dev.objects.all()
+	return render(request, 'nms/manage_gendev.html', {'request':request, 'dev_types':dev_types, 'vendors':vendors, 'models':models, 'xml_files':xml_files, 'gen_devs':gen_devs})
