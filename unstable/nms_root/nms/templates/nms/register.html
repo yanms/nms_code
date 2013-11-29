@@ -32,11 +32,28 @@
 								<h2>Register</h2>
 								<form action="{% url 'nms:register' %}" method="POST">
 									{% csrf_token %}
-									Username: <input type="text" name="username" id="username" /><br />
-									Password: <input type="password" name="password" id="password" /><br />
-									Repeat password: <input type="password" name="password1" id="password1" /><br />
-									Email Address: <input type="email" name="email" id="email" /><br />
-									<input type="submit" value="Register" id="register" />
+									<table border="0">
+										<tr>
+											<td>Username:</td>
+											<td><input type="text" name="username" id="username" /></td>
+										</tr>
+										<tr>
+											<td>Password:</td>
+											<td><input type="password" name="password" id="password" /></td>
+										</tr>
+										<tr>
+											<td>Repeat password:</td>
+											<td><input type="password" name="password1" id="password1" /></td>
+										</tr>
+										<tr>
+											<td>Email Address:</td>
+											<td><input type="email" name="email" id="email" /></td>
+										</tr>
+										<tr>
+											<td><input type="submit" value="Register" id="register" /></td>
+											<td><input type="reset" value="Reset" id="reset" /></td>
+										</tr>
+									</table>
 								</form>
 							</div>
 						</article>
