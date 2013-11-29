@@ -674,11 +674,11 @@ def query(request):
 		dev = request.GET['dev']
 		try:
 			device = Devices.objects.get(pk=dev)
- 			groups = request.user.groups.all()
-  			group_device = [group for group in groups if group.dev_group_set.filter(devid=device).exists()]
-    		group_rights = [groups for groups in group_device if groups.permissions.filter(codename='manage_devices').exists()]
-      		if len(group_rights) == 0:
-      			return HttpResponse('<Error>', content_type='text/plain')
+			groups = request.user.groups.all()
+			group_device = [group for group in groups if group.dev_group_set.filter(devid=device).exists()]
+			group_rights = [groups for groups in group_device if groups.permissions.filter(codename='manage_devices').exists()]
+			if len(group_rights) == 0:
+				return HttpResponse('<Error>', content_type='text/plain')
 		except:
 			return HttpResponse('<Error>', content_type='text/plain')
 		if query == 'receive':
