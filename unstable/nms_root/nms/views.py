@@ -708,10 +708,10 @@ def manage_gendev(request):
 		p = request.POST
 		if p['qtype'] == 'add_gendev':
 			if 'dev_type' in p and 'vendor' in p and 'model' in p and 'xml_files' in p:
-				try:
-					Gen_dev(dev_type_id=int(p['dev_type']), vendor_id_id=int(p['vendor']), model_id_id=int(p['model']), file_location_id_id=int(p['xml_files'])).save()
-				except:
-					messages.error(request, 'Error adding device template')
+				#try:
+				Gen_dev(dev_type_id=int(p['dev_type']), vendor_id_id=int(p['vendor']), model_id_id=int(p['model']), file_location_id_id=int(p['xml_files'])).save()
+				#except:
+					#messages.error(request, 'Error adding device template')
 		elif p['qtype'] == 'add_devtype':
 			if 'name' in p:
 				try:
