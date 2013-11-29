@@ -704,6 +704,67 @@ def init(request):
 
 @login_required
 def manage_gendev(request):
+	if request.method == 'POST' and 'qtype' in request.POST:
+		p = request.POST
+		if p['qtype'] == 'add_gendev':
+			if 'dev_type' in p and 'vendor' in p and 'model' in p and 'xml_files' in p:
+				try:
+					Gen_dev(dev_type_id=int(p['dev_type']), vendor_id_id=int(p['vendor']), model_id_id=int(p['model']), file_location_id_id=int(p['xml_files'])).save()
+				except:
+					messages.error(request, 'Error adding device template')
+		elif p['qtype'] == 'add_devtype':
+			if 'name' in p:
+				try:
+					Dev_type(dev_type_name=p['name']).save()
+				except:
+					messages.error(request, 'Error adding device type')
+		elif p['qtype'] == 'del_devtype':
+			if 'items' in p:
+				for i in p['items']:
+					try:
+						Dev_type.objects.get(pk=int(i)).delete()
+					except:
+						messages.error(request, 'Error deleting device type')
+		elif p['qtype'] == 'add_vendor':
+			if 'name' in p:
+				try:
+					Vendor(vendor_name=p['name']).save()
+				except:
+					messages.error(request, 'Error adding vendor')
+		elif p['qtype'] == 'del_vendor':
+			if 'items' in p:
+				for i in p['items']:
+					try:
+						Vendor.objects.get(pk=int(i)).delete()
+					except:
+						messages.error(request, 'Error deleting vendor')
+		elif p['qtype'] == 'add_model':
+			if 'name' in p:
+				try:
+					Dev_model(model_name=p['name']).save()
+				except:
+					messages.error(request, 'Error adding model')
+		elif p['qtype'] == 'del_model':
+			if 'items' in p:
+				for i in p['items']:
+					try:
+						Dev_model.objects.get(pk=int(i)).delete()
+					except:
+						messages.error(request, 'Error deleting model')
+		elif p['qtype'] == 'add_xml':
+			if 'name' in p:
+				try:
+					File_location(location=p['name']).save()
+				except:
+					messages.error(request, 'Error adding XML')
+		elif p['qtype'] == 'del_xml':
+			if 'items' in p:
+				for i in p['items']:
+					try:
+						File_location.objects.get(pk=int(i)).delete()
+					except:
+						messages.error(request, 'Error deleting XML')
+
 	dev_types = Dev_type.objects.all()
 	vendors = Vendor.objects.all()
 	models = Dev_model.objects.all()
