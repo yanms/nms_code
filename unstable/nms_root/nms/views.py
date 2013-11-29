@@ -653,7 +653,7 @@ def query(request):
 	else:
 		return HttpResponse('<Error>', content_type='text/plain')
 
-	if type == 'models' && request.user.has_perm('nms.add_devices'):
+	if type == 'models' and request.user.has_perm('nms.add_devices'):
 		ret_list = []
 		ret_string = ''
 		dtype, dvendor = query.split('|')
