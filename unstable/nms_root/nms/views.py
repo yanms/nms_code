@@ -187,76 +187,92 @@ def acl_handler(request, acl_id):
         try:
             task = request.POST['task']
             if task == 'usr_group_update':
-                user_obj = get_object_or_404(User, pk=acl_id)
-                groups = request.POST.getlist('groups')
-                user_obj.groups = []
-                for iter in groups:
-                    group = get_object_or_404(Group, name=iter)
-                    user_obj.groups.add(group)
-                messages.success(request, 'Database updated successfully')
-                return HttpResponseRedirect(reverse('nms:acl_user'))
+                if request.user.has_perm('auth.list_group'):
+                    user_obj = get_object_or_404(User, pk=acl_id)
+                    groups = request.POST.getlist('groups')
+                    user_obj.groups = []
+                    for iter in groups:
+                        group = get_object_or_404(Group, name=iter)
+                        user_obj.groups.add(group)
+                    messages.success(request, 'Database updated successfully')
+                    return HttpResponseRedirect(reverse('nms:acl_user'))
+                else:
+                    messages.error(request, "You don't have the right permissions")
+                    return HttpResponseRedirect(reverse('nms:acl'))
             elif task == 'ch_per_usr_group':
-                group = get_object_or_404(Group, pk=acl_id)
-                rights = request.POST.getlist('rights')
-                groups_received = request.POST.getlist('groups')
-                users_received = request.POST.getlist('users')
-                group.permissions = []
-                group.user_set.clear()
-                for iter in rights:
-                    right = iter
-                    permission = Permission.objects.get(codename=right)
-                    group.permissions.add(permission)
-                
-                for iter in groups_received:
-                    group_recv = get_object_or_404(Group, pk=iter)
-                    for item in group_recv.user_set.all():
-                        group.user_set.add(item)
-                for iter in users_received:
-                    user_recv = get_object_or_404(User, pk=iter)
-                    group.user_set.add(user_recv)
-                
-                messages.success(request, 'Database updated successfully')
-                return HttpResponseRedirect(reverse('nms:acl_groups_manage', args=(acl_id,)))
+                if request.user.has_perm('auth.change_group'):
+                    group = get_object_or_404(Group, pk=acl_id)
+                    rights = request.POST.getlist('rights')
+                    groups_received = request.POST.getlist('groups')
+                    users_received = request.POST.getlist('users')
+                    group.permissions = []
+                    group.user_set.clear()
+                    for iter in rights:
+                        right = iter
+                        permission = Permission.objects.get(codename=right)
+                        group.permissions.add(permission)
             
+                    for iter in groups_received:
+                        group_recv = get_object_or_404(Group, pk=iter)
+                        for item in group_recv.user_set.all():
+                            group.user_set.add(item)
+                    for iter in users_received:
+                        user_recv = get_object_or_404(User, pk=iter)
+                        group.user_set.add(user_recv)
+            
+                    messages.success(request, 'Database updated successfully')
+                    return HttpResponseRedirect(reverse('nms:acl_groups_manage', args=(acl_id,)))
+                else:
+                    messages.error(request, "You don't have the right permissions")
+                    return HttpResponseRedirect(reverse('nms:acl'))
+        
             elif task == 'dev_group_update':
-                device = get_object_or_404(Devices, pk=acl_id)
-                groups = request.POST.getlist('groups')
-                if Dev_group.objects.filter(devid=device).exists():
-                    Dev_group.objects.filter(devid=device).delete()
-                for group in groups:
-                    group_obj = get_object_or_404(Group, pk=group)
-                    Dev_group.objects.get_or_create(gid=group_obj, devid=device)
-                messages.success(request, 'Database updated successfully')
-                return HttpResponseRedirect(reverse('nms:acl_groups'))    
-            
+                if request.user.has_perm('auth.list_group'):
+                    device = get_object_or_404(Devices, pk=acl_id)
+                    groups = request.POST.getlist('groups')
+                    if Dev_group.objects.filter(devid=device).exists():
+                        Dev_group.objects.filter(devid=device).delete()
+                    for group in groups:
+                        group_obj = get_object_or_404(Group, pk=group)
+                        Dev_group.objects.get_or_create(gid=group_obj, devid=device)
+                    messages.success(request, 'Database updated successfully')
+                    return HttpResponseRedirect(reverse('nms:acl_groups')
+                else:
+                    messages.error(request, "You don't have the right permissions")
+                    return HttpResponseRedirect(reverse('nms:acl'))    
+        
             elif task == 'ch_per_dev_group':
-                group = get_object_or_404(Group, pk=acl_id)
-                groups_received = request.POST.getlist('groups')
-                users_received = request.POST.getlist('users')
-                devices = request.POST.getlist('devices')
-                rights = request.POST.getlist('rights')
-                group.permissions = []
-                group.user_set.clear()
-                if Dev_group.objects.filter(gid=group).exists():
-                    Dev_group.objects.filter(gid=group).delete()
-                for iter in devices:
-                    dev = Devices.objects.get(pk=iter)
-                    Dev_group.objects.get_or_create(gid=group, devid=dev)
-                for iter in rights:
-                    right = iter
-                    right += '_devices'
-                    permission = Permission.objects.get(codename=right)
-                    group.permissions.add(permission)
-                for iter in groups_received:
-                    group_recv = get_object_or_404(Group, pk=iter)
-                    for item in group_recv.user_set.all():
-                        group.user_set.add(item)
-                for iter in users_received:
-                    user_recv = get_object_or_404(User, pk=iter)
-                    group.user_set.add(user_recv)
-                messages.success(request, 'Database updated successfully')
-                return HttpResponseRedirect(reverse('nms:acl_groups_manage', args=(acl_id,)))
-                
+                if request.user.has_perm('auth.change_group'):
+                    group = get_object_or_404(Group, pk=acl_id)
+                    groups_received = request.POST.getlist('groups')
+                    users_received = request.POST.getlist('users')
+                    devices = request.POST.getlist('devices')
+                    rights = request.POST.getlist('rights')
+                    group.permissions = []
+                    group.user_set.clear()
+                    if Dev_group.objects.filter(gid=group).exists():
+                        Dev_group.objects.filter(gid=group).delete()
+                    for iter in devices:
+                        dev = Devices.objects.get(pk=iter)
+                        Dev_group.objects.get_or_create(gid=group, devid=dev)
+                    for iter in rights:
+                        right = iter
+                        right += '_devices'
+                        permission = Permission.objects.get(codename=right)
+                        group.permissions.add(permission)
+                    for iter in groups_received:
+                        group_recv = get_object_or_404(Group, pk=iter)
+                        for item in group_recv.user_set.all():
+                            group.user_set.add(item)
+                    for iter in users_received:
+                        user_recv = get_object_or_404(User, pk=iter)
+                        group.user_set.add(user_recv)
+                    messages.success(request, 'Database updated successfully')
+                    return HttpResponseRedirect(reverse('nms:acl_groups_manage', args=(acl_id,)))
+                else:
+                    messages.error(request, "You don't have the right permissions")
+                    return HttpResponseRedirect(reverse('nms:acl'))
+            
         except:
             messages.error(request, 'Not all required fields are set')
             messages.error(request, traceback.format_exc()) #debug code
@@ -266,96 +282,121 @@ def acl_handler(request, acl_id):
         messages.error(request, 'Not a POST method')
         return HttpResponseRedirect(reverse('nms:index'))
 
+
 @login_required
 def acl_groups_manage(request, acl_id):
-    group = get_object_or_404(Group, pk=acl_id)
-    dev_check = True if group.name[:4] == 'dev:' else False
-    groups_usr = Group.objects.filter(name__startswith='usr:')
-    groups_dev = Group.objects.filter(name__startswith='dev:')
-    users = User.objects.all()
-    devices = None
-    list_check = None
-    manage_check = None
-    change_check = None
-    checked = None
-    add_user = None
-    change_user = None
-    delete_user = None
-    list_user = None
-    add_group = None
-    change_group = None
-    delete_group = None
-    list_group = None
-    add_devices = None
-    delete_devices = None
-    if dev_check:
-        devices = Devices.objects.all()
-        checked = []
-        for iter in devices:
-            if Dev_group.objects.filter(devid=iter, gid=group).exists():
-                checked.append(iter)
-        list_check = 'checked' if group.permissions.filter(codename='list_devices').exists() else ''
-        manage_check = 'checked' if group.permissions.filter(codename='manage_devices').exists() else ''
-        change_check = 'checked' if group.permissions.filter(codename='change_devices').exists() else ''
+    if request.user.has_perm('auth.change_group'):
+        group = get_object_or_404(Group, pk=acl_id)
+        dev_check = True if group.name[:4] == 'dev:' else False
+        groups_usr = Group.objects.filter(name__startswith='usr:')
+        groups_dev = Group.objects.filter(name__startswith='dev:')
+        users = User.objects.all()
+        devices = None
+        list_check = None
+        manage_check = None
+        change_check = None
+        checked = None
+        add_user = None
+        change_user = None
+        delete_user = None
+        list_user = None
+        add_group = None
+        change_group = None
+        delete_group = None
+        list_group = None
+        add_devices = None
+        delete_devices = None
+        if dev_check:
+            devices = Devices.objects.all()
+            checked = []
+            for iter in devices:
+                if Dev_group.objects.filter(devid=iter, gid=group).exists():
+                    checked.append(iter)
+            list_check = 'checked' if group.permissions.filter(codename='list_devices').exists() else ''
+            manage_check = 'checked' if group.permissions.filter(codename='manage_devices').exists() else ''
+            change_check = 'checked' if group.permissions.filter(codename='change_devices').exists() else ''
+        else:
+            add_user = 'checked' if group.permissions.filter(codename='add_user').exists() else ''
+            change_user = 'checked' if group.permissions.filter(codename='change_user').exists() else ''
+            delete_user = 'checked' if group.permissions.filter(codename='delete_user').exists() else ''
+            list_user = 'checked' if group.permissions.filter(codename='list_user').exists() else ''
+            add_group = 'checked' if group.permissions.filter(codename='add_group').exists() else ''
+            change_group = 'checked' if group.permissions.filter(codename='change_group').exists() else ''
+            delete_group = 'checked' if group.permissions.filter(codename='delete_group').exists() else ''
+            list_group = 'checked' if group.permissions.filter(codename='list_group').exists() else ''
+            add_devices = 'checked' if group.permissions.filter(codename='add_devices').exists() else ''
+            delete_devices = 'checked' if group.permissions.filter(codename='delete_devices').exists() else ''
+    
+    
+        return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check,
+                                                            'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request, 'groups_usr': groups_usr, 'users': users, 'groups_dev': groups_dev, 'add_devices': add_devices, 'delete_devices': delete_devices})
     else:
-        add_user = 'checked' if group.permissions.filter(codename='add_user').exists() else ''
-        change_user = 'checked' if group.permissions.filter(codename='change_user').exists() else ''
-        delete_user = 'checked' if group.permissions.filter(codename='delete_user').exists() else ''
-        list_user = 'checked' if group.permissions.filter(codename='list_user').exists() else ''
-        add_group = 'checked' if group.permissions.filter(codename='add_group').exists() else ''
-        change_group = 'checked' if group.permissions.filter(codename='change_group').exists() else ''
-        delete_group = 'checked' if group.permissions.filter(codename='delete_group').exists() else ''
-        list_group = 'checked' if group.permissions.filter(codename='list_group').exists() else ''
-        add_devices = 'checked' if group.permissions.filter(codename='add_devices').exists() else ''
-        delete_devices = 'checked' if group.permissions.filter(codename='delete_devices').exists() else ''
-    
-    
-    return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check,
-                                                        'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request, 'groups_usr': groups_usr, 'users': users, 'groups_dev': groups_dev, 'add_devices': add_devices, 'delete_devices': delete_devices})
+        messages.error(request, "You don't have the right permissions")
+        return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 def acl_groups_handler(request):
     if request.method == 'POST':
         if request.POST['task'] == 'usr':
-            name = 'usr:'
-            name += request.POST['group']
-            Group.objects.get_or_create(name=name)
-            messages.success(request, "Database updated succesfully")
-            return HttpResponseRedirect(reverse('nms:acl_groups'))
+            if request.user.has_perm('auth.add_user'):
+                name = 'usr:'
+                name += request.POST['group']
+                Group.objects.get_or_create(name=name)
+                messages.success(request, "Database updated succesfully")
+                return HttpResponseRedirect(reverse('nms:acl_groups'))
+            else:
+                messages.error(request, "You don't have the right permissions")
+                return HttpResponseRedirect(reverse('nms:acl'))
         elif request.POST['task'] == 'dev':
-            name = 'dev:'
-            name += request.POST['group']
-            Group.objects.get_or_create(name=name)
-            messages.success(request, "Database updated succesfully")
-            return HttpResponseRedirect(reverse('nms:acl_groups'))
+            if request.user.has_perm('nms.add_devices'):
+                name = 'dev:'
+                name += request.POST['group']
+                Group.objects.get_or_create(name=name)
+                messages.success(request, "Database updated succesfully")
+                return HttpResponseRedirect(reverse('nms:acl_groups'))
+            else:
+                messages.error(request, "You don't have the right permissions")
+                return HttpResponseRedirect(reverse('nms:acl'))
         elif request.POST['task'] == 'delete':
-            groups = request.POST.getlist('delete')
-            for iter in groups:
-                group = get_object_or_404(Group, pk=iter)
-                if group.name == 'usr:admin' or group.name == 'usr:staff':
-                    messages.error(request, "Can't remove group: " + group.name)
-                    return HttpResponseRedirect(reverse('nms:acl_groups'))
-                group.delete()  
-            messages.success(request, "Database updated succesfully")
-            return HttpResponseRedirect(reverse('nms:acl_groups'))
+            if request.user.has_perm('auth.delete_group'):
+                groups = request.POST.getlist('delete')
+                for iter in groups:
+                    group = get_object_or_404(Group, pk=iter)
+                    if group.name == 'usr:admin' or group.name == 'usr:staff':
+                        messages.error(request, "Can't remove group: " + group.name)
+                        return HttpResponseRedirect(reverse('nms:acl_groups'))
+                    group.delete()  
+                messages.success(request, "Database updated succesfully")
+                return HttpResponseRedirect(reverse('nms:acl_groups'))
+            else:
+                messages.error(request, "You don't have the right permissions")
+                return HttpResponseRedirect(reverse('nms:acl'))
         elif request.POST['task'] == 'del_user':
-            users = request.POST.getlist('delete')
-            for item in users:
-                user = get_object_or_404(User, pk=item)
-                if user.username == 'root':
-                    messages.error(request, "Can't remove user: root")
-                    return HttpResponseRedirect(reverse('nms:acl_user'))
-                user.delete()
-            messages.success(request, "Database updated succesfully")
-            return HttpResponseRedirect(reverse('nms:acl_user'))
+            if request.user.has_perm('auth.delete_user'):
+                users = request.POST.getlist('delete')
+                for item in users:
+                    user = get_object_or_404(User, pk=item)
+                    if user.username == 'root':
+                        messages.error(request, "Can't remove user: root")
+                        return HttpResponseRedirect(reverse('nms:acl_user'))
+                    user.delete()
+                messages.success(request, "Database updated succesfully")
+                return HttpResponseRedirect(reverse('nms:acl_user'))
+            else:
+                messages.error(request, "You don't have the right permissions")
+                return HttpResponseRedirect(reverse('nms:acl'))
         
         elif request.POST['task'] == 'del_device':
-            devices = request.POST.getlist('delete')
-            for item in devices:
-                device = get_object_or_404(Devices, pk=item)
-                device.delete()
-                messages.success(request, "Database updated succesfully")
-                return HttpResponseRedirect(reverse('nms:acl_device'))
+            if request.user.has_perm('nsm.delete_devices'):
+                devices = request.POST.getlist('delete')
+                for item in devices:
+                    device = get_object_or_404(Devices, pk=item)
+                    device.delete()
+                    messages.success(request, "Database updated succesfully")
+                    return HttpResponseRedirect(reverse('nms:acl_device'))
+            else:
+                messages.error(request, "You don't have the right permissions")
+                return HttpResponseRedirect(reverse('nms:acl'))
         
         else:
             messages.error(request, "Some fields are not set")
