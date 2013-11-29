@@ -23,18 +23,18 @@
 									<strong class="name">{{ user }}</strong>
 								</span>
 							</a>
-							<a href="#" class="opener">opener</a>
-								<div class="subs">
-									<div>
+							<div class="click-nav">
+								<ul class="no-js">
+									<li>
+										<a href="#" class="opener clicker">opener</a>
 										<ul>
-											<li><h3>User Menu</h3>
-												<ul>
-													<li><a href="/settings">User Settings</a></li>
-												</ul>
-											</li>
+											<li><a href="#">Dashboard</a></li>
+											<li><a href="#">Settings</a></li>
+											<li><a href="#">Sign out</a></li>
 										</ul>
-									</div>
-								</div>
+									</li>
+								</ul>
+							</div>
 						</span>
 						<a href="/logout" class="btn-on">On</a>
 					</div>
@@ -67,28 +67,19 @@
 </html>
 
 <script type="text/javascript">
-jQuery(window).load(function() {
-
-    $("#usrnav > li > a").click(function (e) { // binding onclick
-        if ($(this).parent().hasClass('selected')) {
-            $("#usrnav .selected div div").slideUp(100); // hiding popups
-            $("#usrnav .selected").removeClass("selected");
-        } else {
-            $("#usrnav .selected div div").slideUp(100); // hiding popups
-            $("#usrnav .selected").removeClass("selected");
-
-            if ($(this).next(".subs").length) {
-                $(this).parent().addClass("selected"); // display popup
-                $(this).next(".subs").children().slideDown(200);
-            }
-        }
+$(function () {
+    $('.click-nav > ul').toggleClass('no-js js');
+    $('.click-nav .js ul').hide();
+    $('.click-nav .js').click(function(e) {
+        $('.click-nav .js ul').slideToggle(200);
+        $('.clicker').toggleClass('active');
         e.stopPropagation();
-    }); 
-
-    $("body").click(function () { // binding onclick to body
-        $("#usrnav .selected div div").slideUp(100); // hiding popups
-        $("#usrnav .selected").removeClass("selected");
-    }); 
-
+    });
+    $(document).click(function() {
+        if ($('.click-nav .js ul').is(':visible')) {
+            $('.click-nav .js ul', this).slideUp();
+            $('.clicker').removeClass('active');
+        }
+    });
 });
 </script>
