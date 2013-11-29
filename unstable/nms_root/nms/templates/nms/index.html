@@ -7,32 +7,6 @@
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
-	<script type="text/javascript">
-	jQuery(window).load(function() {
-
-	    $("#usrnav > li > a").click(function (e) { // binding onclick
-	        if ($(this).parent().hasClass('selected')) {
-	            $("#usrnav .selected div div").slideUp(100); // hiding popups
-	            $("#usrnav .selected").removeClass("selected");
-	        } else {
-	            $("#usrnav .selected div div").slideUp(100); // hiding popups
-	            $("#usrnav .selected").removeClass("selected");
-
-	            if ($(this).next(".subs").length) {
-	                $(this).parent().addClass("selected"); // display popup
-	                $(this).next(".subs").children().slideDown(200);
-	            }
-	        }
-	        e.stopPropagation();
-	    }); 
-
-	    $("body").click(function () { // binding onclick to body
-	        $("#usrnav .selected div div").slideUp(100); // hiding popups
-	        $("#usrnav .selected").removeClass("selected");
-	    }); 
-
-	});
-	</script>
 </head>
 <body>
 	<div id="wrapper">
@@ -49,24 +23,18 @@
 									<strong class="name">{{ user }}</strong>
 								</span>
 							</a>
-							<div class="menu">
-								<span>
-									<ul id="usrnav">
-										<a href="#" class="opener">opener</a>
-											<div class="subs">
-												<div>
-													<ul>
-														<li><h3>User Menu</h3>
-															<ul>
-																<li><a href="/settings">User Settings</a></li>
-															</ul>
-														</li>
-													</ul>
-												</div>
-											</div>
+							<a href="#" class="opener">opener</a>
+								<div class="subs">
+									<div>
+										<ul>
+											<li><h3>User Menu</h3>
+												<ul>
+													<li><a href="/settings">User Settings</a></li>
+												</ul>
+											</li>
 										</ul>
-								</span>
-							</div>
+									</div>
+								</div>
 						</span>
 						<a href="/logout" class="btn-on">On</a>
 					</div>
