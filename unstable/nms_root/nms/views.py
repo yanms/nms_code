@@ -26,7 +26,7 @@ def install(request):
         content_type = ContentType.objects.get_for_model(User)
         list_user, created = Permission.objects.get_or_create(codename='list_user', name='Can list users', content_type=content_type)
         content_type = ContentType.objects.get_for_model(Group)
-        list_group, created = Permission.objects.get_or_create(codename='list_group', name='Can list (dev) groups', content_type=content_type)
+        list_group, created = Permission.objects.get_or_create(codename='list_group', name='Can list (dev/usr) groups', content_type=content_type)
         content_type = ContentType.objects.get_for_model(Devices)
         manage_devices, created = Permission.objects.get_or_create(codename='manage_devices', name='Can manage devices (perform action)', content_type=content_type)
         content_type = ContentType.objects.get_for_model(Devices)
@@ -479,24 +479,29 @@ def device_add(request):
 		
 @login_required
 def device_manager(request, device_id_request):
-    if request.user.has_perm('nms.manage_devices'):
-    	if not passwordstore.hasMasterPassword():
-    		return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_manager', args=(device_id_request,)))
-    	devices = get_object_or_404(Devices, pk=device_id_request)
-    	if request.method == 'GET' and 'refresh' in request.GET:
-    		xmlparser.removeTaskCache(xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location))
-    		xmlparser.removeXmlStruct(devices.gen_dev_id.file_location_id.location)
-    		commands.removeInterfaces(devices)
-    	root = xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location)
-    	cmd, parser = xmlparser.getInterfaceQuery(root)
-    	interfaces = commands.getInterfaces(cmd, parser, devices) #Use if the device is online
-    	#interfaces = ['FastEthernet0/0', 'FastEthernet0/1'] #Use if no connection to the device is possible for dummy interfaces
-    	if interfaces == -1:
-    		messages.error(request, 'Failed to connect to device')
-    		return HttpResponseRedirect(reverse('nms:devices'))
 
-    	taskhtml = xmlparser.getAvailableTasksHtml(root, devices.dev_id, interfaces, passwordstore.getEnablePassword(devices))
-    	return render(request, 'nms/devices_manager', {'devices': devices, 'taskhtml': taskhtml, 'request':request})
+    devices = get_object_or_404(Devices, pk=device_id_request)
+    groups = request.user.groups.all()
+    group_device = [group for group in groups if group.dev_group_set.filter(devid=devices).exists()]
+    group_rights = [groups for groups in group_device if groups.permissions.filter(codename='manage_devices').exists()]
+    if len(group_rights) > 0:
+        if not passwordstore.hasMasterPassword():
+            return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_manager', args=(device_id_request,)))
+
+        if request.method == 'GET' and 'refresh' in request.GET:
+            xmlparser.removeTaskCache(xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location))
+            xmlparser.removeXmlStruct(devices.gen_dev_id.file_location_id.location)
+            commands.removeInterfaces(devices)
+        root = xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location)
+        cmd, parser = xmlparser.getInterfaceQuery(root)
+        interfaces = commands.getInterfaces(cmd, parser, devices) #Use if the device is online
+        #interfaces = ['FastEthernet0/0', 'FastEthernet0/1'] #Use if no connection to the device is possible for dummy interfaces
+        if interfaces == -1:
+            messages.error(request, 'Failed to connect to device')
+            return HttpResponseRedirect(reverse('nms:devices'))
+
+        taskhtml = xmlparser.getAvailableTasksHtml(root, devices.dev_id, interfaces, passwordstore.getEnablePassword(devices))
+        return render(request, 'devices_manager.html', {'devices': devices, 'taskhtml': taskhtml, 'request':request})
     else:
         messages.error(request, "You don't have the right permissions")
         return HttpResponseRedirect(reverse('nms:devices'))
