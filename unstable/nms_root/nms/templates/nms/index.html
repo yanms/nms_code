@@ -7,6 +7,32 @@
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+	<script type="text/javascript">
+	jQuery(window).load(function() {
+
+	    $("#usrnav > li > a").click(function (e) { // binding onclick
+	        if ($(this).parent().hasClass('selected')) {
+	            $("#usrnav .selected div div").slideUp(100); // hiding popups
+	            $("#usrnav .selected").removeClass("selected");
+	        } else {
+	            $("#usrnav .selected div div").slideUp(100); // hiding popups
+	            $("#usrnav .selected").removeClass("selected");
+
+	            if ($(this).next(".subs").length) {
+	                $(this).parent().addClass("selected"); // display popup
+	                $(this).next(".subs").children().slideDown(200);
+	            }
+	        }
+	        e.stopPropagation();
+	    }); 
+
+	    $("body").click(function () { // binding onclick to body
+	        $("#usrnav .selected div div").slideUp(100); // hiding popups
+	        $("#usrnav .selected").removeClass("selected");
+	    }); 
+
+	});
+	</script>
 </head>
 <body>
 	<div id="wrapper">
@@ -65,30 +91,3 @@
 	</div>
 </body>
 </html>
-
-<script type="text/javascript">
-jQuery(window).load(function() {
-
-    $("#usrnav > li > a").click(function (e) { // binding onclick
-        if ($(this).parent().hasClass('selected')) {
-            $("#usrnav .selected div div").slideUp(100); // hiding popups
-            $("#usrnav .selected").removeClass("selected");
-        } else {
-            $("#usrnav .selected div div").slideUp(100); // hiding popups
-            $("#usrnav .selected").removeClass("selected");
-
-            if ($(this).next(".subs").length) {
-                $(this).parent().addClass("selected"); // display popup
-                $(this).next(".subs").children().slideDown(200);
-            }
-        }
-        e.stopPropagation();
-    }); 
-
-    $("body").click(function () { // binding onclick to body
-        $("#usrnav .selected div div").slideUp(100); // hiding popups
-        $("#usrnav .selected").removeClass("selected");
-    }); 
-
-});
-</script>
