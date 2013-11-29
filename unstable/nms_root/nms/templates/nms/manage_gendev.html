@@ -166,7 +166,7 @@
 														</tr>
 														{% for record in gen_devs %}
 														<tr>
-															<td>{{ record.dev_type_id }} - {{ record.vendor_id }} - {{ record.model_id }} - {{ record.file_location_id.location }}</td>
+															<td>{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</td>
 															<td><input type="checkbox" name="items" value="{{ record.gen_dev_id }}" /></td>
 														</tr>
 														{% endfor %}
