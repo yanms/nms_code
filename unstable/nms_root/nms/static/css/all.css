@@ -150,9 +150,7 @@ form,fieldset{
 	text-indent:-9999px;
 	border-left:1px solid #dde2e8;
 }
-.tabs {
-	border-top:1px solid #fff;
-}
+.tabs {border-top:1px solid #fff;}
 .tabs .text-section {
 	background:#f9f9f9;
 	padding:19px 0 8px 36px;
@@ -359,9 +357,9 @@ form,fieldset{
 }
 
 /* MENU */
-*,
-*:after,
-*:before {
+.click-nav *,
+.click-nav *:after,
+.click-nav *:before {
 	margin:0;
 	padding:0;
 	box-sizing:border-box;
