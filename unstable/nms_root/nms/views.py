@@ -501,7 +501,7 @@ def device_manager(request, device_id_request):
             return HttpResponseRedirect(reverse('nms:devices'))
 
         taskhtml = xmlparser.getAvailableTasksHtml(root, devices.dev_id, interfaces, passwordstore.getEnablePassword(devices))
-        return render(request, 'devices_manager', {'devices': devices, 'taskhtml': taskhtml, 'request':request})
+        return render(request, 'devices_manager.html', {'devices': devices, 'taskhtml': taskhtml, 'request':request})
     else:
         messages.error(request, "You don't have the right permissions")
         return HttpResponseRedirect(reverse('nms:devices'))
