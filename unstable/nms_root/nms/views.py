@@ -508,40 +508,47 @@ def device_manager(request, device_id_request):
 
 @login_required
 def device_modify(request, device_id_request):
-	if not passwordstore.hasMasterPassword():
-		return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_modify', args=(device_id_request,)))
 	device = get_object_or_404(Devices, pk=device_id_request)
-	gen_dev = Gen_dev.objects.all()
-	os_dev = OS_dev.objects.all()
-	if request.method == 'POST':
-		try:
-			device = get_object_or_404(Devices, pk=device_id_request)
-			dev_type = get_object_or_404(Gen_dev, pk=request.POST['gen_dev_id'])
-			os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
-			pref_remote_prot = request.POST['pref_remote_prot']
-			ipprot = request.POST['ipprot']
-			ip_recv = request.POST['ipaddr']
-			port = request.POST['port']
-			login_name = request.POST['login_name']
-			password_remote = request.POST['password_remote']
-			password_enable = request.POST['password_enable']
-			device.gen_dev_id = dev_type
-			device.os_dev_id = os
-			device.pref_remote_prot = pref_remote_prot
-			device.ip_version = ipprot
-			device.ip = ip_recv
-			device.port = port
-			device.login_name = login_name
-			device.save()
-			passwordstore.storeRemotePassword(device, password_remote)
-			passwordstore.storeEnablePassword(device, password_enable)
-			messages.success(request, 'Database updated successfully.')
-			return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
-		except (KeyError, ValueError):
-			messages.error(request, 'Not all fields are are set or an other error occured')
-			return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
+	groups = request.user.groups.all()
+	group_device = [group for group in groups if group.dev_group_set.filter(devid=device).exists()]
+	group_rights = [groups for groups in group_device if groups.permissions.filter(codename='change_devices').exists()]
+	if len(group_rights) > 0:
+		if not passwordstore.hasMasterPassword():
+			return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_modify', args=(device_id_request,)))
+		gen_dev = Gen_dev.objects.all()
+		os_dev = OS_dev.objects.all()
+		if request.method == 'POST':
+			try:
+				device = get_object_or_404(Devices, pk=device_id_request)
+				dev_type = get_object_or_404(Gen_dev, pk=request.POST['gen_dev_id'])
+				os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
+				pref_remote_prot = request.POST['pref_remote_prot']
+				ipprot = request.POST['ipprot']
+				ip_recv = request.POST['ipaddr']
+				port = request.POST['port']
+				login_name = request.POST['login_name']
+				password_remote = request.POST['password_remote']
+				password_enable = request.POST['password_enable']
+				device.gen_dev_id = dev_type
+				device.os_dev_id = os
+				device.pref_remote_prot = pref_remote_prot
+				device.ip_version = ipprot
+				device.ip = ip_recv
+				device.port = port
+				device.login_name = login_name
+				device.save()
+				passwordstore.storeRemotePassword(device, password_remote)
+				passwordstore.storeEnablePassword(device, password_enable)
+				messages.success(request, 'Database updated successfully.')
+				return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
+			except (KeyError, ValueError):
+				messages.error(request, 'Not all fields are are set or an other error occured')
+				return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
+		else:
+			return render(request, 'nms/modify_device.html', {'devices': device, 'gen_dev': gen_dev, 'os_dev': os_dev, 'request':request})
 	else:
-		return render(request, 'nms/modify_device.html', {'devices': device, 'gen_dev': gen_dev, 'os_dev': os_dev, 'request':request})
+		messages.error(request, "You don't have the right permissions")
+		return HttpResponseRedirect(reverse('nms:devices'))
 
 @login_required
 def user_settings(request):
