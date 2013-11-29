@@ -24,6 +24,17 @@
 								</span>
 							</a>
 							<a href="#" class="opener">opener</a>
+								<div class="subs">
+									<div>
+										<ul>
+											<li><h3>User Menu</h3>
+												<ul>
+													<li><a href="{% url nms:user_setings' %}">User Settings</a></li>
+												</ul>
+											</li>
+										</ul>
+									</div>
+								</div>
 						</span>
 						<a href="/logout" class="btn-on">On</a>
 					</div>
@@ -54,3 +65,30 @@
 	</div>
 </body>
 </html>
+
+<script type="text/javascript">
+jQuery(window).load(function() {
+
+    $("#nav > li > a").click(function (e) { // binding onclick
+        if ($(this).parent().hasClass('selected')) {
+            $("#nav .selected div div").slideUp(100); // hiding popups
+            $("#nav .selected").removeClass("selected");
+        } else {
+            $("#nav .selected div div").slideUp(100); // hiding popups
+            $("#nav .selected").removeClass("selected");
+
+            if ($(this).next(".subs").length) {
+                $(this).parent().addClass("selected"); // display popup
+                $(this).next(".subs").children().slideDown(200);
+            }
+        }
+        e.stopPropagation();
+    }); 
+
+    $("body").click(function () { // binding onclick to body
+        $("#nav .selected div div").slideUp(100); // hiding popups
+        $("#nav .selected").removeClass("selected");
+    }); 
+
+});
+</script>
