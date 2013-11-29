@@ -589,21 +589,29 @@ def user_settings(request):
 
 @login_required
 def send_command(request, device_id_request):
-	if request.method == 'GET' and 'command' in request.GET:
-		command = request.GET['command']
-	else:
-		return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
+    device = Devices.objects.get(pk=device_id_request)
+    groups = request.user.groups.all()
+    group_device = [group for group in groups if group.dev_group_set.filter(devid=device).exists()]
+    group_rights = [groups for groups in group_device if groups.permissions.filter(codename='manage_devices').exists()]
+    if len(group_rights) > 0:
+    	if request.method == 'GET' and 'command' in request.GET:
+    		command = request.GET['command']
+    	else:
+    		return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
 	
-	device = Devices.objects.get(pk=device_id_request)
-	ret = commands.executeTask(command, device)
-	if ret == -1:
-		messages.error(request, 'Failed to connect to device')
-	else:
-		msg_text = ''
-		for line in ret:
-			msg_text += line + '<br />'
-		messages.info(request, msg_text)
-	return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
+    	
+    	ret = commands.executeTask(command, device)
+    	if ret == -1:
+    		messages.error(request, 'Failed to connect to device')
+    	else:
+    		msg_text = ''
+    		for line in ret:
+    			msg_text += line + '<br />'
+    		messages.info(request, msg_text)
+    	return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
+    else:
+        messages.error(request, "You don't have the right permissions")
+        return HttpResponseRedirect(reverse('nms:devices'))
 
 def session_handler(request):
 	if request.method == 'POST':
@@ -645,7 +653,7 @@ def query(request):
 	else:
 		return HttpResponse('<Error>', content_type='text/plain')
 
-	if type == 'models':
+	if type == 'models' && request.user.has_perm('nms.add_devices'):
 		ret_list = []
 		ret_string = ''
 		dtype, dvendor = query.split('|')
@@ -666,8 +674,13 @@ def query(request):
 		dev = request.GET['dev']
 		try:
 			device = Devices.objects.get(pk=dev)
+ 			groups = request.user.groups.all()
+  			group_device = [group for group in groups if group.dev_group_set.filter(devid=device).exists()]
+    		group_rights = [groups for groups in group_device if groups.permissions.filter(codename='manage_devices').exists()]
+      		if len(group_rights) == 0:
+      			return HttpResponse('<Error>', content_type='text/plain')
 		except:
-			return HttpResponse('<No such device>', content_type='text/plain')
+			return HttpResponse('<Error>', content_type='text/plain')
 		if query == 'receive':
 			connection = commands.getSSHConnection(request.user, device)
 			try:
