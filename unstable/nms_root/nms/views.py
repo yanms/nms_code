@@ -42,7 +42,7 @@ def install(request):
         add_user = Permission.objects.get(codename='add_user')
         change_user = Permission.objects.get(codename='change_user')
         delete_user = Permission.objects.get(codename='delete_user')
-        group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, manage_devices, list_devices]
+        group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group]
         
         
         
@@ -413,17 +413,17 @@ def devices_manage(request):
     user_obj = request.user
     groups = user_obj.groups.all()
     try:
-        groups_list_devices = [x for x in groups if x.permissions.filter(codename='list_devices').exists()]
-        dev_group = [x.dev_group_set.all() for x in groups_list_devices][0]
+        groups_list = [x for x in groups if x.permissions.filter(codename='list_devices').exists()]
+        dev_group = [x.dev_group_set.all() for x in groups_list][0]
         devices = {x.devid for x in dev_group}
         devices = list(devices)
-        if groups_list_devices != []:
+        if groups_list != []:
     	    return render(request, 'nms/devices_manage.html', {'devices': devices, 'request':request})
         else:
             messages.error(request, "You are not added to any devices yet with the right permission.")
             return HttpResponseRedirect(reverse('nms:index'))
     except IndexError:
-        messages.error(request, "You are not added to any devices yet.")
+        messages.error(request, "You are not added to any groups yet.")
         return HttpResponseRedirect(reverse('nms:index'))
 
 @login_required
