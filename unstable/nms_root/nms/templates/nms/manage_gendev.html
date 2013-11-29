@@ -108,48 +108,79 @@
 								</ul>
 								<h2>Manage Device Templates</h2>
 								<p>
-									<form action="{% url 'nms:manage_gendev' %}" method="POST">
-										{% csrf_token %}
-										<input type="hidden" name="qtype" value="add_gendev" />
-										<table border="0">
-											<tr>
-												<td>Type:</td>
-												<td><select id="selectType" name="dev_type">
-													{% for record in dev_types %}
-														<option value="{{ record.dev_type_id }}">{{ record }}</option>
-													{% endfor %}
-												</select></td>
-											</tr>
-											<tr>
-												<td>Vendor:</td>
-												<td><select id="selectVendor" name="vendor">
-													{% for record in vendors %}
-														<option value="{{ record.vendor_id }}">{{ record }}</option>
-													{% endfor %}
-												</select></td>
-											</tr>
-											<tr>
-												<td>Model:</td>
-												<td><select id="selectModel" name="model">
-													{% for record in models %}
-														<option value="{{ record.model_id }}">{{ record }}</option>
-													{% endfor %}
-												</select>
-												</td>
-											</tr>
-											<tr>
-												<td>XML:</td>
-												<td><select id="selectXMLFile" name="xml_files">
-													{% for record in xml_files %}
-														<option value="{{ record.file_location_id }}">{{ record.location }}</option>
-													{% endfor %}
-												</select></td>
-											</tr>
-											<tr>
-												<td><input type="submit" value="Add Template"/></td>
-											</tr>
-										</table>
-									</form>
+									<table border="0" width="100%">
+										<tr>
+											<td width="50%">
+												<form action="{% url 'nms:manage_gendev' %}" method="POST">
+													{% csrf_token %}
+													<input type="hidden" name="qtype" value="add_gendev" />
+													<table border="0">
+														<tr>
+															<td>Type:</td>
+															<td><select id="selectType" name="dev_type">
+																{% for record in dev_types %}
+																	<option value="{{ record.dev_type_id }}">{{ record }}</option>
+																{% endfor %}
+															</select></td>
+														</tr>
+														<tr>
+															<td>Vendor:</td>
+															<td><select id="selectVendor" name="vendor">
+																{% for record in vendors %}
+																	<option value="{{ record.vendor_id }}">{{ record }}</option>
+																{% endfor %}
+															</select></td>
+														</tr>
+														<tr>
+															<td>Model:</td>
+															<td><select id="selectModel" name="model">
+																{% for record in models %}
+																	<option value="{{ record.model_id }}">{{ record }}</option>
+																{% endfor %}
+															</select>
+															</td>
+														</tr>
+														<tr>
+															<td>XML:</td>
+															<td><select id="selectXMLFile" name="xml_files">
+																{% for record in xml_files %}
+																	<option value="{{ record.file_location_id }}">{{ record.location }}</option>
+																{% endfor %}
+															</select></td>
+														</tr>
+														<tr>
+															<td><input type="submit" value="Add Template"/></td>
+														</tr>
+													</table>
+												</form>
+											</td>
+											<td width="50%">
+												<h3>Templates</h3>
+												<form action="{% url 'nms:manage_gendev' %}" method="POST">
+													{% csrf_token %}
+													<input type="hidden" name="qtype" value="del_gendev" />
+													<table class="TFtable" width="70%">
+														<tr>
+															<td width="95%"><b>Name</b></td>
+															<td width="5%"><b>Delete</b></td>
+														</tr>
+														{% for record in gen_devs %}
+														<tr>
+															<td>{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</td>
+															<td><input type="checkbox" name="items" value="{{ record.gen_dev_id }}" /></td>
+														</tr>
+														{% endfor %}
+													</table>
+													<table border="0" width="70%">
+														<tr>
+															<td width="95%"></td>
+															<td width="5%"><input type="submit" value="Delete" /></td>
+														</tr>
+													</table>
+												</form>
+											</td>
+										</tr>
+									</table>
 									<table border="0" width="100%">
 										<tr>
 											<td width="50%">

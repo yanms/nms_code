@@ -724,6 +724,13 @@ def manage_gendev(request):
 					Gen_dev(dev_type_id_id=int(p['dev_type']), vendor_id_id=int(p['vendor']), model_id_id=int(p['model']), file_location_id_id=int(p['xml_files'])).save()
 				except:
 					messages.error(request, 'Error adding device template')
+		elif p['qtype'] == 'del_gendev':
+			if 'items' in p:
+				for i in p['items']:
+					try:
+						Gen_dev.objects.get(pk=int(i)).delete()
+					except:
+						messages.error(request, 'Error deleting device template')
 		elif p['qtype'] == 'add_devtype':
 			if 'name' in p:
 				try:
@@ -781,4 +788,5 @@ def manage_gendev(request):
 	vendors = Vendor.objects.all()
 	models = Dev_model.objects.all()
 	xml_files = File_location.objects.all()
-	return render(request, 'nms/manage_gendev.html', {'request':request, 'dev_types':dev_types, 'vendors':vendors, 'models':models, 'xml_files':xml_files})
+	gen_devs = Gen_dev.objects.all()
+	return render(request, 'nms/manage_gendev.html', {'request':request, 'dev_types':dev_types, 'vendors':vendors, 'models':models, 'xml_files':xml_files, 'gen_devs':gen_devs})
