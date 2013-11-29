@@ -65,3 +65,30 @@
 	</div>
 </body>
 </html>
+
+<script type="text/javascript">
+jQuery(window).load(function() {
+
+    $("#usrnav > li > a").click(function (e) { // binding onclick
+        if ($(this).parent().hasClass('selected')) {
+            $("#usrnav .selected div div").slideUp(100); // hiding popups
+            $("#usrnav .selected").removeClass("selected");
+        } else {
+            $("#usrnav .selected div div").slideUp(100); // hiding popups
+            $("#usrnav .selected").removeClass("selected");
+
+            if ($(this).next(".subs").length) {
+                $(this).parent().addClass("selected"); // display popup
+                $(this).next(".subs").children().slideDown(200);
+            }
+        }
+        e.stopPropagation();
+    }); 
+
+    $("body").click(function () { // binding onclick to body
+        $("#usrnav .selected div div").slideUp(100); // hiding popups
+        $("#usrnav .selected").removeClass("selected");
+    }); 
+
+});
+</script>
