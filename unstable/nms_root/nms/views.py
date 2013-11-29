@@ -410,84 +410,96 @@ def devices(request):
 
 @login_required
 def devices_manage(request):
-    user_obj = request.user
-    groups = user_obj.groups.all()
-    try:
-        groups_list = [x for x in groups if x.permissions.filter(codename='list_devices').exists()]
-        dev_group = [x.dev_group_set.all() for x in groups_list][0]
-        devices = {x.devid for x in dev_group}
-        devices = list(devices)
-        if groups_list != []:
-    	    return render(request, 'nms/devices_manage.html', {'devices': devices, 'request':request})
-        else:
-            messages.error(request, "You are not added to any devices yet with the right permission.")
+    if request.user.has_perm('nms.list_devices'):
+        user_obj = request.user
+        groups = user_obj.groups.all()
+        try:
+            groups_list = [x for x in groups if x.permissions.filter(codename='list_devices').exists()]
+            dev_group = [x.dev_group_set.all() for x in groups_list][0]
+            devices = {x.devid for x in dev_group}
+            devices = list(devices)
+            if groups_list != []:
+        	    return render(request, 'nms/devices_manage.html', {'devices': devices, 'request':request})
+            else:
+                messages.error(request, "You are not added to any devices yet with the right permission.")
+                return HttpResponseRedirect(reverse('nms:index'))
+        except IndexError:
+            messages.error(request, "You are not added to any groups yet.")
             return HttpResponseRedirect(reverse('nms:index'))
-    except IndexError:
-        messages.error(request, "You are not added to any groups yet.")
-        return HttpResponseRedirect(reverse('nms:index'))
+    else:
+        messages.error(request, "You don't have the right permissions")
+        return HttpResponseRedirect(reverse('nms:devices'))
 
 @login_required
 def device_add(request):
-	dev_type_view = Dev_type.objects.all()
-	vendor_view = Vendor.objects.all()
-	dev_model_view = Dev_model.objects.all()
-	os_view = OS_dev.objects.all()
-	gen_dev = Gen_dev.objects.all()
-	if request.method == 'POST':
-		#return HttpResponse('Received post method.')
-		q = Devices()
+    if request.user.has_perm('nms.add_devices'):
+    	dev_type_view = Dev_type.objects.all()
+    	vendor_view = Vendor.objects.all()
+    	dev_model_view = Dev_model.objects.all()
+    	os_view = OS_dev.objects.all()
+    	gen_dev = Gen_dev.objects.all()
+    	if request.method == 'POST':
+    		#return HttpResponse('Received post method.')
+    		q = Devices()
 		
-		try:
-			dev = None
-			for i in gen_dev:
-				if str(i.model_id) == request.POST['selectModel'] and str(i.vendor_id) == request.POST['selectVendor'] and str(i.dev_type_id) == request.POST['selectType']:
-					dev = i
-			if dev == None:
-				return HttpResponseNotFound('<h1>Page not found</h1>')
-			os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
-			pref_remote_prot = request.POST['pref_remote_prot']
-			ipprot = request.POST['ipprot']
-			ip_recv = request.POST['ipaddr']
-			port = request.POST['port']
-			login_name = request.POST['login_name']
-			password_remote = request.POST['password_remote']
-			password_enable = request.POST['password_enable']
-			device = Devices(gen_dev_id=dev, os_dev_id=os, ip=ip_recv, pref_remote_prot=pref_remote_prot, 
-			ip_version = ipprot, login_name = login_name, password_remote=password_remote, password_enable=password_enable, port=port)
-			device.save()
+    		try:
+    			dev = None
+    			for i in gen_dev:
+    				if str(i.model_id) == request.POST['selectModel'] and str(i.vendor_id) == request.POST['selectVendor'] and str(i.dev_type_id) == request.POST['selectType']:
+    					dev = i
+    			if dev == None:
+    				return HttpResponseNotFound('<h1>Page not found</h1>')
+    			os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
+    			pref_remote_prot = request.POST['pref_remote_prot']
+    			ipprot = request.POST['ipprot']
+    			ip_recv = request.POST['ipaddr']
+    			port = request.POST['port']
+    			login_name = request.POST['login_name']
+    			password_remote = request.POST['password_remote']
+    			password_enable = request.POST['password_enable']
+    			device = Devices(gen_dev_id=dev, os_dev_id=os, ip=ip_recv, pref_remote_prot=pref_remote_prot, 
+    			ip_version = ipprot, login_name = login_name, password_remote=password_remote, password_enable=password_enable, port=port)
+    			device.save()
 			
-		except (KeyError, ValueError, NameError, UnboundLocalError) as err:
-			messages.error(request, 'Not all fields are set or an other error occured')
-			messages.error(request, err)
-			print(err)
-			#return HttpResponse(request.POST.items())
-			return HttpResponseRedirect(reverse('nms:device_add'))
+    		except (KeyError, ValueError, NameError, UnboundLocalError) as err:
+    			messages.error(request, 'Not all fields are set or an other error occured')
+    			messages.error(request, err)
+    			print(err)
+    			#return HttpResponse(request.POST.items())
+    			return HttpResponseRedirect(reverse('nms:device_add'))
 		
-		messages.success(request, 'Database updated')
-		return HttpResponseRedirect(reverse('nms:device_add'))
-	else:
-		return render(request, 'nms/add_device.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view,
-		 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev, 'request':request})
+    		messages.success(request, 'Database updated')
+    		return HttpResponseRedirect(reverse('nms:device_add'))
+    	else:
+    		return render(request, 'nms/devices_add.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view,
+    		 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev, 'request':request})
+    else:
+        messages.error(request, "You don't have the permission to access this page.")
+        return HttpResponseRedirect(reverse('nms:devices'))
 		
 @login_required
 def device_manager(request, device_id_request):
-	if not passwordstore.hasMasterPassword():
-		return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_manager', args=(device_id_request,)))
-	devices = get_object_or_404(Devices, pk=device_id_request)
-	if request.method == 'GET' and 'refresh' in request.GET:
-		xmlparser.removeTaskCache(xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location))
-		xmlparser.removeXmlStruct(devices.gen_dev_id.file_location_id.location)
-		commands.removeInterfaces(devices)
-	root = xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location)
-	cmd, parser = xmlparser.getInterfaceQuery(root)
-	interfaces = commands.getInterfaces(cmd, parser, devices) #Use if the device is online
-	#interfaces = ['FastEthernet0/0', 'FastEthernet0/1'] #Use if no connection to the device is possible for dummy interfaces
-	if interfaces == -1:
-		messages.error(request, 'Failed to connect to device')
-		return HttpResponseRedirect(reverse('nms:devices'))
+    if request.user.has_perm('nms.manage_devices'):
+    	if not passwordstore.hasMasterPassword():
+    		return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_manager', args=(device_id_request,)))
+    	devices = get_object_or_404(Devices, pk=device_id_request)
+    	if request.method == 'GET' and 'refresh' in request.GET:
+    		xmlparser.removeTaskCache(xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location))
+    		xmlparser.removeXmlStruct(devices.gen_dev_id.file_location_id.location)
+    		commands.removeInterfaces(devices)
+    	root = xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location)
+    	cmd, parser = xmlparser.getInterfaceQuery(root)
+    	interfaces = commands.getInterfaces(cmd, parser, devices) #Use if the device is online
+    	#interfaces = ['FastEthernet0/0', 'FastEthernet0/1'] #Use if no connection to the device is possible for dummy interfaces
+    	if interfaces == -1:
+    		messages.error(request, 'Failed to connect to device')
+    		return HttpResponseRedirect(reverse('nms:devices'))
 
-	taskhtml = xmlparser.getAvailableTasksHtml(root, devices.dev_id, interfaces, passwordstore.getEnablePassword(devices))
-	return render(request, 'nms/manage_device.html', {'devices': devices, 'taskhtml': taskhtml, 'request':request})
+    	taskhtml = xmlparser.getAvailableTasksHtml(root, devices.dev_id, interfaces, passwordstore.getEnablePassword(devices))
+    	return render(request, 'nms/devices_manager', {'devices': devices, 'taskhtml': taskhtml, 'request':request})
+    else:
+        messages.error(request, "You don't have the right permissions")
+        return HttpResponseRedirect(reverse('nms:devices'))
 
 @login_required
 def device_modify(request, device_id_request):
