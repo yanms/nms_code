@@ -186,9 +186,9 @@
 													<form action="{% url 'nms:manage_gendev' %}" method="post">
 													{% csrf_token %}
 													<input type="hidden" name="qtype" value="del_vendor" />
-													<table class="TFtable" width="100%">
+													<table class="TFtable" width="70%">
 															<tr>
-																<td width="30%"><b>Name</b></td>
+																<td width="95%"><b>Name</b></td>
 																<td width="5%"><b>Delete</b></td>
 															</tr>
 															{% for record in vendors %}
@@ -212,9 +212,9 @@
 													<form action="{% url 'nms:manage_gendev' %}" method="post">
 													{% csrf_token %}
 													<input type="hidden" name="qtype" value="del_model" />
-													<table class="TFtable" width="100%">
+													<table class="TFtable" width="70%">
 															<tr>
-																<td width="30%"><b>Name</b></td>
+																<td width="95%"><b>Name</b></td>
 																<td width="5%"><b>Delete</b></td>
 															</tr>
 															{% for record in models %}
@@ -237,9 +237,9 @@
 													<form action="{% url 'nms:manage_gendev' %}" method="post">
 													{% csrf_token %}
 													<input type="hidden" name="qtype" value="del_xml" />
-													<table class="TFtable" width="100%">
+													<table class="TFtable" width="70%">
 															<tr>
-																<td width="30%"><b>Name</b></td>
+																<td width="95%"><b>Name</b></td>
 																<td width="5%"><b>Delete</b></td>
 															</tr>
 															{% for record in xml_files %}
