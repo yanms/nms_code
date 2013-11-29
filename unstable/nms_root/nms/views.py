@@ -406,7 +406,7 @@ def login_handler(request):
 
 @login_required
 def devices(request):
-    return render(request, 'nms/devices.html')
+    return render(request, 'nms/devices.html', {'request':request})
 
 @login_required
 def devices_manage(request):
