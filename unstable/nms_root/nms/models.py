@@ -20,8 +20,8 @@ class OS_type(models.Model):
 
 class OS(models.Model):
 	os_id = models.AutoField(primary_key=True)
-	vendor_id = models.ForeignKey(Vendor)
-	os_type_id = models.ForeignKey(OS_type)
+	vendor_id = models.ForeignKey(Vendor, on_delete=models.PROTECT)
+	os_type_id = models.ForeignKey(OS_type, on_delete=models.PROTECT)
 	build = models.CharField(max_length=255)
 	short_info = models.CharField(max_length=255)
 	name = models.CharField(max_length=255)
@@ -50,26 +50,26 @@ class File_location(models.Model):
 
 class Gen_dev(models.Model):
 	gen_dev_id = models.AutoField(primary_key=True)
-	vendor_id = models.ForeignKey(Vendor)
-	model_id = models.ForeignKey(Dev_model)
-	dev_type_id = models.ForeignKey(Dev_type)
-	file_location_id = models.ForeignKey(File_location)
+	vendor_id = models.ForeignKey(Vendor, on_delete=models.PROTECT)
+	model_id = models.ForeignKey(Dev_model, on_delete=models.PROTECT)
+	dev_type_id = models.ForeignKey(Dev_type, on_delete=models.PROTECT)
+	file_location_id = models.ForeignKey(File_location, on_delete=models.PROTECT)
 
 	def __str__(self):
 		return str(self.dev_type_id) + ' ' + str(self.vendor_id) + ' ' + str(self.model_id) #Making use of the defined __str__ methods of these classes
 	
 class OS_dev(models.Model):
 	os_dev_id = models.AutoField(primary_key=True)
-	os_id = models.ForeignKey(OS)
-	gen_dev_id = models.ForeignKey(Gen_dev)
+	os_id = models.ForeignKey(OS, on_delete=models.PROTECT)
+	gen_dev_id = models.ForeignKey(Gen_dev, on_delete=models.PROTECT)
 
 	def __str__(self):
 		return str(self.gen_dev_id) + ' ' + str(self.os_id)
 	
 class Devices(models.Model):
 	dev_id = models.AutoField(primary_key=True)
-	gen_dev_id = models.ForeignKey(Gen_dev)
-	os_dev_id = models.ForeignKey(OS_dev)
+	gen_dev_id = models.ForeignKey(Gen_dev, on_delete=models.PROTECT)
+	os_dev_id = models.ForeignKey(OS_dev, on_delete=models.PROTECT)
 	ip = models.GenericIPAddressField(protocol='both', unpack_ipv4=False)
 	ip_version = models.PositiveIntegerField()
 	port = models.PositiveIntegerField(default=22)
@@ -85,7 +85,7 @@ class Devices(models.Model):
 class History(models.Model):
     history_id = models.AutoField(primary_key=True)
     action = models.CharField(max_length=255)
-    user_id = models.ForeignKey(User)
+    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
     
 class Settings(models.Model):
     settings_id = models.AutoField(primary_key=True)
@@ -95,8 +95,8 @@ class Settings(models.Model):
 
 class Dev_group(models.Model):
     dev_group_id = models.AutoField(primary_key=True)
-    gid = models.ForeignKey(Group)
-    devid = models.ForeignKey(Devices)
+    gid = models.ForeignKey(Group, on_delete=models.PROTECT)
+    devid = models.ForeignKey(Devices, on_delete=models.PROTECT)
     
     def __str__(self):
         return str(self.gid) + ' ' + str(self.devid)
