@@ -56,7 +56,10 @@ def __addItemSingle__(e, od, privPassword):
 	for child in e.getchildren():
 			if child.tag == 'command':
 				cmd = child
-				uargs = child.get('userArgs').split(':')
+				if child.get('userArgs') != None:
+					uargs = child.get('userArgs').split(':')
+				else:
+					uargs = []
 			elif child.tag == 'returnParsing':
 				rp = child
 	od['i:' + e.get('name')] = (uargs, __getCommand__(cmd, privPassword=privPassword), __getParser__(rp))
@@ -67,7 +70,10 @@ def __addItemPerInterface__(e, od, interfaces, privPassword):
 		for child in e.getchildren():
 			if child.tag == 'command':
 				cmd = child
-				uargs = child.get('userArgs').split(':')
+				if child.get('userArgs') != None:
+					uargs = child.get('userArgs').split(':')
+				else:
+					uargs = []
 			elif child.tag == 'returnParsing':
 				rp = child
 		od['i:' + name] = (uargs, __getCommand__(cmd, interface=interface, privPassword=privPassword), __getParser__(rp))
