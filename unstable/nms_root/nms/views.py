@@ -51,117 +51,143 @@ def install(request):
 
 @login_required
 def acl(request):
-	user_obj = request.user
-	return render(request, 'nms/acl.html', {'request':request})
+	group_count = Group.objects.count()
+	user_count = User.objects.count()
+	devices_count = Devices.objects.count()
+	return render(request, 'nms/acl.html', {'request':request, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 
 @login_required
 def acl_groups(request):
+	group_count = Group.objects.count()
+	user_count = User.objects.count()
+	devices_count = Devices.objects.count()
 	if request.user.has_perm('auth.list_user') or request.user.has_perm('auth.add_group') or request.user.has_perm('auth.change_group') or request.user.has_perm('auth.delete_group'):
 		user = request.user
 		user_perm = user.has_perm('auth.list_group')
 		dev_groups = Group.objects.filter(name__startswith='dev:')
 		usr_groups = Group.objects.filter(name__startswith='usr:')
-		return render(request, 'nms/acl_groups.html', {'user_perm': user_perm, 'dev_groups': dev_groups, 'usr_groups': usr_groups, 'request':request})
+		return render(request, 'nms/acl_groups.html', {'user_perm': user_perm, 'dev_groups': dev_groups, 'usr_groups': usr_groups, 'request':request, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
 		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 def acl_user(request):
+	group_count = Group.objects.count()
+	user_count = User.objects.count()
+	devices_count = Devices.objects.count()
 	if request.user.has_perm('auth.list_user') or request.user.has_perm('auth.add_user') or request.user.has_perm('auth.delete_user') or request.user.has_perm('auth.change_user'):
 		user_list = User.objects.all() 
-		return render(request, 'nms/acl_users.html', {'user_list': user_list,'request':request})
+		return render(request, 'nms/acl_users.html', {'user_list': user_list,'request':request, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
 		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
-@permission_required('auth.add_user', login_url='/permissions/?per=add_user')
 def acl_user_add(request):
-	return render(request, 'nms/acl_user_add.html', {'request':request})
+	group_count = Group.objects.count()
+	user_count = User.objects.count()
+	devices_count = Devices.objects.count()
+	if request.user.has_perm('auth.add_user'):
+		return render(request, 'nms/acl_user_add.html', {'request':request})
+	else:
+		return render(request, 'nms/acl_user_add.html', {'request':request, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 
 @login_required
-@permission_required('auth.add_user', login_url='/permissions/?per=add_user')
 def acl_user_add_handler(request):
-	if request.method == 'POST':
-		try:
-			username = request.POST['username']
-			firstname = request.POST['firstname']
-			lastname = request.POST['surname']
-			email = request.POST['emailaddress']
-			password = request.POST['password']
-			password_check = request.POST['password2']
-			check = User.objects.filter(username=username).exists()
-			if check:
-				messages.error(request, 'User already exists.')
+	if request.user.has_perm('auth.add_user'):
+		if request.method == 'POST':
+			try:
+				username = request.POST['username']
+				firstname = request.POST['firstname']
+				lastname = request.POST['surname']
+				email = request.POST['emailaddress']
+				password = request.POST['password']
+				password_check = request.POST['password2']
+				check = User.objects.filter(username=username).exists()
+				if check:
+					messages.error(request, 'User already exists.')
+					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+				if password == password_check:
+					user = User.objects.create()
+					user.username = username
+					user.first_name = firstname
+					user.last_name = lastname
+					user.email = email
+					user.set_password(password)
+					user.save()
+					messages.success(request, "Database updated successfully.")
+					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+			except KeyError as err:
+				messages.error(request, "Not all fields are set")
+				messages.error(request, err)
 				return HttpResponseRedirect(reverse('nms:acl_user_add'))
-			if password == password_check:
-				user = User.objects.create()
-				user.username = username
-				user.first_name = firstname
-				user.last_name = lastname
-				user.email = email
-				user.set_password(password)
-				user.save()
-				messages.success(request, "Database updated successfully.")
-				return HttpResponseRedirect(reverse('nms:acl_user_add'))
-		except KeyError as err:
-			messages.error(request, "Not all fields are set")
-			messages.error(request, err)
+		else:
+			messages.error(request, "Invalid method")
 			return HttpResponseRedirect(reverse('nms:acl_user_add'))
 	else:
-		messages.error(request, "Invalid method")
-		return HttpResponseRedirect(reverse('nms:acl_user_add'))
+		messages.error(request, 'You do not have the right permissions to access this page')
+		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 def acl_user_manage(request, acl_user):
+	group_count = Group.objects.count()
+	user_count = User.objects.count()
+	devices_count = Devices.objects.count()
 	if request.user.has_perm('auth.change_user'):
 		user_obj = get_object_or_404(User, pk=acl_user)
 		groups = Group.objects.all()
 		is_active_check = 'checked' if user_obj.is_active else ''
-		return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'groups': groups, 'request':request, 'is_active_check': is_active_check})
+		return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'groups': groups, 'request':request, 'is_active_check': is_active_check, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
 		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
-@permission_required('auth.change_user', login_url='/permissions/?per=change_user')
 def acl_user_manage_handler(request, acl_user):
-	user_obj = get_object_or_404(User, pk=acl_user)
-	if request.method == 'POST':
-		try:
-			first_name = request.POST['first_name']
-			last_name = request.POST['last_name']
-			email = request.POST['email']
-			if 'is_active' in request.POST:
-				is_active = request.POST['is_active']
-			else:
-				is_active=False
-			password = request.POST['password']
-			password2 = request.POST['password2']
-			if password == password2:
-				user_obj.first_name = first_name
-				user_obj.last_name = last_name
-				user_obj.email = email
-				user_obj.is_active = is_active
-				user_obj.set_password(password)
-				user_obj.save()
-				messages.success(request, "Database successfully updated.")
-				return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,)))
-			else:
-			   messages.error(request, "Passwords are not the same")
-			   return HttpResponseRedirect(reverse('nms:acl_user_add')) 
-		except KeyError:
-			messages.error(request, "Not all fields are set")
-			return HttpResponseRedirect(reverse('nms:acl_user_add'))
-	messages.error(request, "Invalid method")
-	return HttpResponseRedirect(reverse('nms:acl_user_add'))
+	if request.user.has_perm('auth.change_user'):
+		user_obj = get_object_or_404(User, pk=acl_user)
+		if request.method == 'POST':
+			try:
+				first_name = request.POST['first_name']
+				last_name = request.POST['last_name']
+				email = request.POST['email']
+				if 'is_active' in request.POST:
+					is_active = request.POST['is_active']
+				else:
+					is_active=False
+				password = request.POST['password']
+				password2 = request.POST['password2']
+				if password == password2:
+					user_obj.first_name = first_name
+					user_obj.last_name = last_name
+					user_obj.email = email
+					user_obj.is_active = is_active
+					if password != '':
+						user_obj.set_password(password)
+					user_obj.save()
+					messages.success(request, "Database successfully updated.")
+					return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,)))
+				else:
+				   messages.error(request, "Passwords are not the same")
+				   return HttpResponseRedirect(reverse('nms:acl_user_add')) 
+			except KeyError:
+				messages.error(request, "Not all fields are set")
+				return HttpResponseRedirect(reverse('nms:acl_user_add'))
+		messages.error(request, "Invalid method")
+		return HttpResponseRedirect(reverse('nms:acl_user_add'))
+	else:
+		messages.error(request, 'You do not have the right permissions to access this page')
+		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 def acl_device(request):
+	group_count = Group.objects.count()
+	user_count = User.objects.count()
+	devices_count = Devices.objects.count()
 	if request.user.has_perm('nms.add_devices') or request.user.has_perm('nms.delete_devices') or request.user.has_perm('auth.list_group'):
 		devices = Devices.objects.all() 
-		return render(request, 'nms/acl_devices.html', {'devices': devices,'request':request})
+		return render(request, 'nms/acl_devices.html', {'devices': devices,'request':request, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
 		return HttpResponseRedirect(reverse('nms:acl'))
@@ -169,6 +195,9 @@ def acl_device(request):
 
 @login_required
 def acl_device_manage(request, acl_id):
+	group_count = Group.objects.count()
+	user_count = User.objects.count()
+	devices_count = Devices.objects.count()
 	if request.user.has_perm('auth.list_group'):
 		dev_obj = get_object_or_404(Devices, pk=acl_id)
 		dev_groups = Group.objects.filter(name__startswith='dev:')
@@ -176,7 +205,7 @@ def acl_device_manage(request, acl_id):
 		checked = []
 		for iter in check:
 			checked.append(iter.gid)
-		return render(request, 'nms/acl_devices_manage.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups, 'checked': checked, 'request':request})
+		return render(request, 'nms/acl_devices_manage.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups, 'checked': checked, 'request':request, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
 		return HttpResponseRedirect(reverse('nms:acl'))
@@ -285,6 +314,9 @@ def acl_handler(request, acl_id):
 
 @login_required
 def acl_groups_manage(request, acl_id):
+	group_count = Group.objects.count()
+	user_count = User.objects.count()
+	devices_count = Devices.objects.count()
 	if request.user.has_perm('auth.change_group'):
 		group = get_object_or_404(Group, pk=acl_id)
 		dev_check = True if group.name[:4] == 'dev:' else False
@@ -329,7 +361,7 @@ def acl_groups_manage(request, acl_id):
 	
 	
 		return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check,
-															'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request, 'groups_usr': groups_usr, 'users': users, 'groups_dev': groups_dev, 'add_devices': add_devices, 'delete_devices': delete_devices})
+															'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request, 'groups_usr': groups_usr, 'users': users, 'groups_dev': groups_dev, 'add_devices': add_devices, 'delete_devices': delete_devices, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 	else:
 		messages.error(request, "You don't have the right permissions")
 		return HttpResponseRedirect(reverse('nms:acl'))
@@ -401,19 +433,6 @@ def acl_groups_handler(request):
 		else:
 			messages.error(request, "Some fields are not set")
 			return HttpResponseRedirect(reverse('nms:acl_groups'))
-
-@login_required
-def permissions(request):
-	if request.method == 'GET':
-		try:
-			per = request.GET['per']
-			return HttpResponse('Permission required for: '+ per)
-		except KeyError:
-			messages.error(request, 'Invalid URL')
-			return HttpResponseRedirect(reverse('nms:index'))
-	else:
-		messages.error(request, 'Invalid URL')
-		return HttpResponseRedirect(reverse('nms:index'))
 
 def register(request):
 	if request.method == 'POST':
