@@ -97,7 +97,10 @@ form,fieldset{
 	-moz-border-radius: 12px;
 	border-radius: 12px;
 }
-.links .ico1 {background:#fff url(../images/sprite.png) no-repeat 14px -445px;}
+.links .ico1 {
+	/*background:#fff url(../images/sprite.png) no-repeat 14px -445px; */
+	background:url(../images/deviceBlack.png);
+}
 .links .ico2 {background:#fff url(../images/sprite.png) no-repeat 13px -528px;}
 .links .ico3 {background:#fff url(../images/sprite.png) no-repeat 11px -637px;}
 .profile-box {float:right;}
@@ -284,7 +287,10 @@ form,fieldset{
 	height:18px;
 	background-position:0 0;
 }
-.buttons .active .ico1 span {background-position:0 -23px;}
+.buttons .active .ico1 span {
+	background:url(../images/deviceWhite.png);
+	/* background-position:0 -23px; */
+}
 .buttons .ico2 span {
 	height:19px;
 	background-position:-1px -47px;
