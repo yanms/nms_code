@@ -49,8 +49,10 @@ def executeTask(taskpath, device, uargs):
 		if not key in commands.keys():
 			return ['Invalid command']
 		commands = commands[key]
-	uarg_names, args, parser = commands
-	
+	uarg_names, raw_args, parser = commands
+	args = []
+	for raw_arg in raw_args:
+		args.append(raw_arg)
 	for uarg_name in uarg_names:
 		if not uarg_name in uargs.keys():
 			return 'User arguments not supplied'
