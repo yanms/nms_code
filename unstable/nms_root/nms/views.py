@@ -668,7 +668,7 @@ def send_command(request, device_id_request):
 		if request.method == 'GET' and 'command' in request.GET:
 			command = request.GET['command']
 			for key in request.GET.keys():
-				if key.startsiwith('arg:') and len(key) > 4:
+				if key.startswith('arg:') and len(key) > 4:
 					uargs[key[4:]] = request.GET[key]
 		else:
 			return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
