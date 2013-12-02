@@ -108,7 +108,7 @@ def acl_user_add_handler(request):
 				if check:
 					messages.error(request, 'User already exists.')
 					return HttpResponseRedirect(reverse('nms:acl_user_add'))
-				if password == password_check:
+				if password == password_check and password != '':
 					user = User.objects.create()
 					user.username = username
 					user.first_name = firstname
@@ -117,6 +117,9 @@ def acl_user_add_handler(request):
 					user.set_password(password)
 					user.save()
 					messages.success(request, "Database updated successfully.")
+					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+				else:
+					messages.error(request, 'Password fields may not be empty.')
 					return HttpResponseRedirect(reverse('nms:acl_user_add'))
 			except KeyError as err:
 				messages.error(request, "Not all fields are set")

@@ -97,9 +97,21 @@ form,fieldset{
 	-moz-border-radius: 12px;
 	border-radius: 12px;
 }
-.links .ico1 {background:#fff url(../images/sprite.png) no-repeat 14px -445px;}
-.links .ico2 {background:#fff url(../images/sprite.png) no-repeat 13px -528px;}
-.links .ico3 {background:#fff url(../images/sprite.png) no-repeat 11px -637px;}
+.links .ico1 {
+	/* background:#fff url(../images/sprite.png) no-repeat 14px -445px; */
+	background:#fff url(../images/groups.png) no-repeat 14px;
+}
+.links .ico2 {
+	/* background:#fff url(../images/sprite.png) no-repeat 13px -528px; */
+	background:#fff url(../images/user.png) no-repeat 14px;
+}
+.links .ico3 {
+	/* background:#fff url(../images/sprite.png) no-repeat 11px -637px; */
+	background:#fff url(../images/deviceBlack.png) no-repeat 13px;
+}
+.links .ico4 {
+	background:#fff url(../images/add.png) no-repeat 10px 0.5px;
+}
 .profile-box {float:right;}
 .btn-on {
 	background:url(../images/sprite.png) no-repeat -230px -5px;
@@ -280,11 +292,15 @@ form,fieldset{
 	text-indent:-9999px;
 }
 .buttons .ico1 span {
-	width:19px;
-	height:18px;
-	background-position:0 0;
+	width:20px;
+	height:20px;
+	background:url(../images/deviceBlack.png);
+	/* background-position:0 0; */
 }
-.buttons .active .ico1 span {background-position:0 -23px;}
+.buttons .active .ico1 span {
+	background:url(../images/deviceWhite.png);
+	/* background-position:0 -23px; */
+}
 .buttons .ico2 span {
 	height:19px;
 	background-position:-1px -47px;
@@ -376,7 +392,7 @@ form,fieldset{
 }
 
 .click-nav {
-	width:200px;
+	width:250px;
 	height:39px;
 }
 
