@@ -45,7 +45,7 @@
 										<td> {{ user.is_superuser }}</td>
 										{% if perms.auth.change_user %}
 										{% if user.is_superuser %}
-										<td><a href="#"><img src="{{ STATIC_URL }}images/lockedButton.png" width="20px" /></a> </td>
+										<td><img src="{{ STATIC_URL }}images/lockedButton.png" width="20px" /></td>
 										{% else %}
 										<td><a href="{% url 'nms:acl_user_manage' user.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a> </td>
 										
