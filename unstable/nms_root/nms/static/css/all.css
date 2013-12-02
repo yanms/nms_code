@@ -284,7 +284,8 @@ form,fieldset{
 .buttons .ico1 span {
 	width:19px;
 	height:18px;
-	background-position:0 0;
+	background:url(../images/deviceBlack.png);
+	/* background-position:0 0; */
 }
 .buttons .active .ico1 span {
 	background:url(../images/deviceWhite.png);
