@@ -11,6 +11,33 @@
 		{
 			document.getElementById('loadingImage'.concat(num)).style.visibility='visible';
 		}
+		function muteurl(id)
+		{
+			var e = document.getElementById(id);
+			var start_i = e.href.indexOf('&arg:');
+			var arg_array = new Array();
+			while (start_i != -1)
+			{
+				var end_i = e.href.indexOf('&', start_i+1); 
+				var name;
+				if (end_i != -1)
+				{
+					name = e.href.substring(start_i, end_i);
+				}
+				else
+				{
+					name = e.href.substring(start_i);
+				}
+				var uinput = prompt(name.substring(5));
+				arg_array.push(name + "=" + uinput);
+				start_i = e.href.indexOf('&arg:', start_i+1);
+			}
+			for (i = 0; i < arg_array.length; i++)
+			{
+				e.href = e.href.replace(arg_array[i].substring(0, arg_array[i].indexOf('=')), arg_array[i]);
+			}	
+			return true;
+		}
 	</script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>

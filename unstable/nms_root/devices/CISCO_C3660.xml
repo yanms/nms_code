@@ -42,7 +42,7 @@
             <returnParsing delimiter="\n" type="regex">(^.*?\(config-[(sub)]*if\)#shutdown)</returnParsing>
          </item>
 		 <item name="Set IP configuration %if%" type="per-interface">
-			<command userArgs="IP:subnet mask">
+			<command userArgs="ip:subnet_mask">
 				<argElement position="0" type="plaintext">enable</argElement>
 				<argElement position="1" type="privpasswd" />
 				<argElement position="2" type="plaintext">configure terminal</argElement>

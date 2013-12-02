@@ -10,6 +10,11 @@
 		{
 			document.getElementById('loadingImage'.concat(num)).style.visibility='visible';
 		}
+		function changeurl(id)
+		{
+			e = document.getElementById(id);
+			e.href = e.href + '&uargs=lololol'
+		}
 	</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->

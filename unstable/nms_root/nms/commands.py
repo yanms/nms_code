@@ -41,7 +41,7 @@ def getInterfaces(command, parser, device):
 		interfacesLock.release()
 	return interfaces[device]
 
-def executeTask(taskpath, device):
+def executeTask(taskpath, device, uargs):
 	xmlroot = xmlparser.get_xml_struct(device.gen_dev_id.file_location_id.location)
 	taskpath = taskpath.split('|')
 	commands = xmlparser.getAvailableTasks(xmlroot)
@@ -49,7 +49,14 @@ def executeTask(taskpath, device):
 		if not key in commands.keys():
 			return ['Invalid command']
 		commands = commands[key]
-	args, parser = commands
+	uarg_names, args, parser = commands
+	
+	for uarg_name in uarg_names:
+		if not uarg_name in uargs.keys():
+			return 'User arguments not supplied'
+	for i in range(args):
+		for uarg_key in uargs.keys():
+			args[i].replace('%arg:uarg_key%', uargs[uarg_key])
 
 	s = sshconnection.SSHConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
 	if s.connect() == -1:
