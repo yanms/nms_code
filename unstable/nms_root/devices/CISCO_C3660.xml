@@ -41,6 +41,18 @@
             </command>
             <returnParsing delimiter="\n" type="regex">(^.*?\(config-[(sub)]*if\)#shutdown)</returnParsing>
          </item>
+		 <item name="Set IP configuration %if%" type="per-interface">
+			<command userArgs="IP:subnet mask">
+				<argElement position="0" type="plaintext">enable</argElement>
+				<argElement position="1" type="privpasswd" />
+				<argElement position="2" type="plaintext">configure terminal</argElement>
+				<argElement position="3" type="plaintext">interface %if%</argElement>
+				<argElement position="4" type="plaintext">ip %arg:IP% %arg:subnet mask%</argElement>
+				<argElement position="5" type="plaintext">end</argElement>
+				<argElement position="6" type="plaintext">disable</argElement>
+			</command>
+			<returnParsing delimiter="\n" type="regex">(^.*?\(config-[(sub)]*if\)#ip .*$)</returnParsing>
+		 </item>
          <item name="Get interface status" type="single">
             <command>
                <argElement position="0" type="plaintext">show ip interface brief</argElement>
