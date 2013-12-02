@@ -163,7 +163,8 @@ def acl_user_manage_handler(request, acl_user):
 					user_obj.last_name = last_name
 					user_obj.email = email
 					user_obj.is_active = is_active
-					user_obj.set_password(password)
+					if password != '':
+						user_obj.set_password(password)
 					user_obj.save()
 					messages.success(request, "Database successfully updated.")
 					return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,)))
