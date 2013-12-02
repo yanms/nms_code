@@ -188,7 +188,7 @@ def __addToHTML__(curpath, od, id):
 			url = reverse('nms:device_command_handler', kwargs={'device_id_request':id})
 			uargs = ''
 			for uarg in od[key][0]:
-				args += '&arg:' + uarg
+				uargs += '&arg:' + uarg
 			s += '<li><a id="%s" href="%s?command=%s%s" onclick="muteurl(\'%s\');">%s</a></li>' % (curpath + '|' + key, url, curpath + '|' + key, uargs, curpath + '|' + 'key', key[2:])
 	return s
 
