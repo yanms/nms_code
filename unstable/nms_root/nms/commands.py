@@ -54,7 +54,7 @@ def executeTask(taskpath, device, uargs):
 	for uarg_name in uarg_names:
 		if not uarg_name in uargs.keys():
 			return 'User arguments not supplied'
-	for i in range(args):
+	for i in range(len(args)):
 		for uarg_key in uargs.keys():
 			args[i].replace('%arg:uarg_key%', uargs[uarg_key])
 
