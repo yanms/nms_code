@@ -29,6 +29,7 @@ class RegexWrapper():
 
 def __getCommand__(element, interface = '', privPassword = ''):
 	ret = []
+	
 	for i in range(0, len(element.getchildren())):
 		for c in element.getchildren():
 			if int(c.get('position')) == i:
@@ -55,9 +56,13 @@ def __addItemSingle__(e, od, privPassword):
 	for child in e.getchildren():
 			if child.tag == 'command':
 				cmd = child
+				if child.get('userArgs') != None:
+					uargs = child.get('userArgs').split(':')
+				else:
+					uargs = []
 			elif child.tag == 'returnParsing':
 				rp = child
-	od['i:' + e.get('name')] = (__getCommand__(cmd, privPassword=privPassword), __getParser__(rp))
+	od['i:' + e.get('name')] = (uargs, __getCommand__(cmd, privPassword=privPassword), __getParser__(rp))
 
 def __addItemPerInterface__(e, od, interfaces, privPassword):
 	for interface in interfaces:
@@ -65,9 +70,13 @@ def __addItemPerInterface__(e, od, interfaces, privPassword):
 		for child in e.getchildren():
 			if child.tag == 'command':
 				cmd = child
+				if child.get('userArgs') != None:
+					uargs = child.get('userArgs').split(':')
+				else:
+					uargs = []
 			elif child.tag == 'returnParsing':
 				rp = child
-		od['i:' + name] = (__getCommand__(cmd, interface=interface, privPassword=privPassword), __getParser__(rp))
+		od['i:' + name] = (uargs, __getCommand__(cmd, interface=interface, privPassword=privPassword), __getParser__(rp))
 
 def __addCategory__(e, od, interfaces, privPassword):
 	od['c:' + e.get('name')] = OrderedDict()
