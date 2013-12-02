@@ -56,7 +56,8 @@ def executeTask(taskpath, device, uargs):
 			return 'User arguments not supplied'
 	for i in range(len(args)):
 		for uarg_key in uargs.keys():
-			args[i].replace('%arg:uarg_key%', uargs[uarg_key])
+			if hasattr(arg[i], replace):
+				args[i] = args[i].replace('%arg:' + uarg_key + '%', uargs[uarg_key])
 
 	s = sshconnection.SSHConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
 	if s.connect() == -1:
