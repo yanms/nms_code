@@ -13,22 +13,7 @@
                 <div id="content">
                         <div class="c1">
                                 <div class="controls">
-                                        <nav class="links">
-                                                {% include "_navup.html" %}
-                                        </nav>
-                                        <div class="profile-box">
-                                                <span class="profile">
-                                                        <a href="#" class="section">
-                                                                <!-- <img class="image" src="images/img1.png" alt="image description" width="26" height="26" /> -->
-                                                                <span class="text-box">
-                                                                        You are logged in as:
-                                                                        <strong class="name">{{ user }}</strong>
-                                                                </span>
-                                                        </a>
-                                                        <a href="#" class="opener">opener</a>
-                                                </span>
-                                                <a href="{% url 'nms:logout_handler' %}" class="btn-on">On</a>
-                                        </div>
+									{% include "_navuser.html" %}
                                 </div>
                                 <div class="tabs">
                                         <div id="tab-8" class="tab">

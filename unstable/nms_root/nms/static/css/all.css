@@ -43,7 +43,9 @@ form,fieldset{
 .c1 {margin:0 0 0 77px;}
 .controls {
 	height:1%;
-	overflow:hidden;
+	/* overflow:hidden; */
+	width: auto;
+	height: 39px;
 	padding:26px 13px 0 34px;
 	background:url(../images/bg-controls.png);
 }
@@ -150,7 +152,10 @@ form,fieldset{
 	text-indent:-9999px;
 	border-left:1px solid #dde2e8;
 }
-.tabs {border-top:1px solid #fff;}
+.tabs {
+	border-top:1px
+	solid #fff;
+}
 .tabs .text-section {
 	background:#f9f9f9;
 	padding:19px 0 8px 36px;
@@ -354,6 +359,20 @@ form,fieldset{
 /*  Define the background color for all the EVEN background rows  */
 .TFtable tr:nth-child(even){
 	background: #dae5f4;
+}
+
+/* MENU */
+.click-nav *,
+.click-nav *:after,
+.click-nav *:before {
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-font-smoothing:antialiased;
+	font-smoothing:antialiased;
+	text-rendering:optimizeLegibility;
 }
 
 .click-nav {
