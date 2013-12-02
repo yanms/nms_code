@@ -76,42 +76,47 @@ def acl_user(request):
 		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
-@permission_required('auth.add_user', login_url='/permissions/?per=add_user')
 def acl_user_add(request):
-	return render(request, 'nms/acl_user_add.html', {'request':request})
+	if request.user.has_perm('auth.add_user'):
+		return render(request, 'nms/acl_user_add.html', {'request':request})
+	else:
+		return render(request, 'nms/acl_user_add.html', {'request':request})
 
 @login_required
-@permission_required('auth.add_user', login_url='/permissions/?per=add_user')
 def acl_user_add_handler(request):
-	if request.method == 'POST':
-		try:
-			username = request.POST['username']
-			firstname = request.POST['firstname']
-			lastname = request.POST['surname']
-			email = request.POST['emailaddress']
-			password = request.POST['password']
-			password_check = request.POST['password2']
-			check = User.objects.filter(username=username).exists()
-			if check:
-				messages.error(request, 'User already exists.')
+	if request.user.has_perm('auth.add_user'):
+		if request.method == 'POST':
+			try:
+				username = request.POST['username']
+				firstname = request.POST['firstname']
+				lastname = request.POST['surname']
+				email = request.POST['emailaddress']
+				password = request.POST['password']
+				password_check = request.POST['password2']
+				check = User.objects.filter(username=username).exists()
+				if check:
+					messages.error(request, 'User already exists.')
+					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+				if password == password_check:
+					user = User.objects.create()
+					user.username = username
+					user.first_name = firstname
+					user.last_name = lastname
+					user.email = email
+					user.set_password(password)
+					user.save()
+					messages.success(request, "Database updated successfully.")
+					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+			except KeyError as err:
+				messages.error(request, "Not all fields are set")
+				messages.error(request, err)
 				return HttpResponseRedirect(reverse('nms:acl_user_add'))
-			if password == password_check:
-				user = User.objects.create()
-				user.username = username
-				user.first_name = firstname
-				user.last_name = lastname
-				user.email = email
-				user.set_password(password)
-				user.save()
-				messages.success(request, "Database updated successfully.")
-				return HttpResponseRedirect(reverse('nms:acl_user_add'))
-		except KeyError as err:
-			messages.error(request, "Not all fields are set")
-			messages.error(request, err)
+		else:
+			messages.error(request, "Invalid method")
 			return HttpResponseRedirect(reverse('nms:acl_user_add'))
 	else:
-		messages.error(request, "Invalid method")
-		return HttpResponseRedirect(reverse('nms:acl_user_add'))
+		messages.error(request, 'You do not have the right permissions to access this page')
+		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 def acl_user_manage(request, acl_user):
@@ -125,37 +130,40 @@ def acl_user_manage(request, acl_user):
 		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
-@permission_required('auth.change_user', login_url='/permissions/?per=change_user')
 def acl_user_manage_handler(request, acl_user):
-	user_obj = get_object_or_404(User, pk=acl_user)
-	if request.method == 'POST':
-		try:
-			first_name = request.POST['first_name']
-			last_name = request.POST['last_name']
-			email = request.POST['email']
-			if 'is_active' in request.POST:
-				is_active = request.POST['is_active']
-			else:
-				is_active=False
-			password = request.POST['password']
-			password2 = request.POST['password2']
-			if password == password2:
-				user_obj.first_name = first_name
-				user_obj.last_name = last_name
-				user_obj.email = email
-				user_obj.is_active = is_active
-				user_obj.set_password(password)
-				user_obj.save()
-				messages.success(request, "Database successfully updated.")
-				return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,)))
-			else:
-			   messages.error(request, "Passwords are not the same")
-			   return HttpResponseRedirect(reverse('nms:acl_user_add')) 
-		except KeyError:
-			messages.error(request, "Not all fields are set")
-			return HttpResponseRedirect(reverse('nms:acl_user_add'))
-	messages.error(request, "Invalid method")
-	return HttpResponseRedirect(reverse('nms:acl_user_add'))
+	if request.user.has_perm('auth.change_user'):
+		user_obj = get_object_or_404(User, pk=acl_user)
+		if request.method == 'POST':
+			try:
+				first_name = request.POST['first_name']
+				last_name = request.POST['last_name']
+				email = request.POST['email']
+				if 'is_active' in request.POST:
+					is_active = request.POST['is_active']
+				else:
+					is_active=False
+				password = request.POST['password']
+				password2 = request.POST['password2']
+				if password == password2:
+					user_obj.first_name = first_name
+					user_obj.last_name = last_name
+					user_obj.email = email
+					user_obj.is_active = is_active
+					user_obj.set_password(password)
+					user_obj.save()
+					messages.success(request, "Database successfully updated.")
+					return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,)))
+				else:
+				   messages.error(request, "Passwords are not the same")
+				   return HttpResponseRedirect(reverse('nms:acl_user_add')) 
+			except KeyError:
+				messages.error(request, "Not all fields are set")
+				return HttpResponseRedirect(reverse('nms:acl_user_add'))
+		messages.error(request, "Invalid method")
+		return HttpResponseRedirect(reverse('nms:acl_user_add'))
+	else:
+		messages.error(request, 'You do not have the right permissions to access this page')
+		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 def acl_device(request):
