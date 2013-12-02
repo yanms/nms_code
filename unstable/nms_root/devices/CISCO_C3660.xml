@@ -47,7 +47,7 @@
 				<argElement position="1" type="privpasswd" />
 				<argElement position="2" type="plaintext">configure terminal</argElement>
 				<argElement position="3" type="plaintext">interface %if%</argElement>
-				<argElement position="4" type="plaintext">ip %ip% %subnet_mask%</argElement>
+				<argElement position="4" type="plaintext">ip %arg:ip% %arg:subnet_mask%</argElement>
 				<argElement position="5" type="plaintext">end</argElement>
 				<argElement position="6" type="plaintext">disable</argElement>
 			</command>
