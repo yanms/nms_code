@@ -98,8 +98,7 @@ form,fieldset{
 	border-radius: 12px;
 }
 .links .ico1 {
-	/*background:#fff url(../images/sprite.png) no-repeat 14px -445px; */
-	background:url(../images/deviceBlack.png);
+	background:#fff url(../images/sprite.png) no-repeat 14px -445px;
 }
 .links .ico2 {background:#fff url(../images/sprite.png) no-repeat 13px -528px;}
 .links .ico3 {background:#fff url(../images/sprite.png) no-repeat 11px -637px;}
