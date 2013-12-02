@@ -664,13 +664,17 @@ def send_command(request, device_id_request):
 	group_device = [group for group in groups if group.dev_group_set.filter(devid=device).exists()]
 	group_rights = [groups for groups in group_device if groups.permissions.filter(codename='manage_devices').exists()]
 	if len(group_rights) > 0:
+		uargs = {}
 		if request.method == 'GET' and 'command' in request.GET:
 			command = request.GET['command']
+			for key in request.GET.keys():
+				if key.startsiwith('arg:') and len(key) > 4:
+					uargs[key[4:]] = request.GET[key]
 		else:
 			return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
 	
 		
-		ret = commands.executeTask(command, device)
+		ret = commands.executeTask(command, device, uargs)
 		if ret == -1:
 			messages.error(request, 'Failed to connect to device')
 		else:
