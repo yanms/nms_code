@@ -233,6 +233,38 @@
 										<tr>
 										<tr>
 									</table>
+									<table border="0" width="100%">
+										<tr>
+											<td width="50%">
+												<form action="{% url 'nms:manage_gendev' %}" method="POST">
+													{% csrf_token %}
+													<input type="hidden" name="qtype" value="add_osdev" />
+													<table border="0">
+														<tr>
+															<td>OS:</td>
+															<td><select id="selectOS" name="os">
+																{% for record in os %}
+																	<option value="{{ record.os_id_id }}">{{ record }}</option>
+																{% endfor %}
+															</select></td>
+														</tr>
+														<tr>
+															<td>Device template:</td>
+															<td><select id="selectVendor" name="vendor">
+																{% for record in gen_devs %}
+																	<option value="{{ record.gen_dev_id }}">{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</option>
+																{% endfor %}
+															</select></td>
+														</tr>
+														<tr>
+															<td><input type="submit" value="Add Template"/></td>
+														</tr>
+													</table>
+												</form>
+											</td>
+											<td width="50%"></td>
+										</tr>
+									</table>
 								</p>
 							</div>
 						</article>
