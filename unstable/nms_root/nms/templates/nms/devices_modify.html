@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - AdminPanel: Devices</title>
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<script type="text/javascript">
+	function loadDropDownItems()
+	{
+		var xmlhttp;
+		if (window.XMLHttpRequest)
+		{
+			// IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		}
+		else
+		{
+			// IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange = function()
+		{
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+			{
+				var ret = xmlhttp.responseText.split('|');
+				if (ret.length == 0)
+				{
+					return;
+				}
+				if (ret[0] == "<Error>")
+				{
+					document.getElementById("selectModel").disabled = true;
+					return;
+				}
+
+				var selectElement = document.getElementById("selectModel");
+				selectElement.innerHTML = "";
+				for (var i = 0; i < ret.length; i++)
+				{
+					var option = document.createElement("option");
+					option.text = ret[i];
+					try
+					{
+						selectElement.add(option, null);
+					}
+					catch (e)
+					{
+						selectElement.add(option, selectElement.options[null]);
+					}
+				}
+				document.getElementById("selectModel").disabled = false;
+			}
+		}
+		var selectType = document.getElementById("selectType");
+		var selectVendor = document.getElementById("selectVendor");
+		var dtype = selectType.options[selectType.selectedIndex].text;
+		var dvendor = selectVendor.options[selectVendor.selectedIndex].text;
+
+		var args = "?type=models&q=".concat(dtype, "|", dvendor, "&t=", Math.random().toString(36).substring(7));
+		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
+		xmlhttp.send();
+	}
+	window.onload = function() {
+		document.getElementById("selectVendor").onchange = function() {
+			loadDropDownItems();
+		}
+	}
+	</script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+						{% include "_navupdev.html" %}
+					</nav>
+					{% include "_navuser.html" %}
+				</div>
+				<div class="tabs">
+					<div id="tab-7" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<ul class="states">
+									{% for message in messages %}
+									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+									{% endfor %}
+								</ul>
+								<h2>Add Device</h2>
+								<p>
+									<form action="{% url 'nms:device_add' %}" method="POST">
+									{% csrf_token %}
+										<table border="0">
+											<tr>
+												<td>Type:</td>
+												<td><select id="selectType" name="selectType">
+													<option>{{ device.gen_dev_id.dev_type_id.dev_type_name }}</option>
+													{% for record in dev_type_view %}
+													{% if device.gen_dev_id.dev_type_id.dev_type_name == record.dev_type_name %}
+													{% else %}
+													<option>{{ record }}</option>
+													{% endif %}
+													{% endfor %}
+													</select></td>
+											</tr>
+											<tr>
+												<td>Vendor:</td>
+												<td><select id="selectVendor" name="selectVendor">
+													<option value="NoSelection">{{ device.gen_dev_id.vendor_id.vendor_name }}</option>
+													{% for record in vendor_view %}
+													{% if device.gen_dev_id.vendor_id.vendor_name == record.vendor_name %}
+													{% else %}	
+													<option value="{{ record }}">{{ record }}</option>
+													{% endif %}
+													{% endfor %}
+												</select></td>
+											</tr>
+											<tr>
+												<td>Model:</td>
+												<td><select id="selectModel" name="selectModel" disabled>
+													<option>{{ device.gen_dev_id.model_id.model_name }}</option>
+												</select>
+												</td>
+											</tr>
+											<tr>
+												<td>OS:</td>
+												<td><select id="os_dev_id" name="os_dev_id">
+													{% for record in os_view %}
+														<option value="{{ record.os_dev_id }}">{{ record }}</option>
+													{% endfor %}
+												</select></td>
+											</tr>
+											<tr>
+												<td>Preferred protocol:</td>
+												<td><select id="pref_remote_prot" name="pref_remote_prot">
+													<option>SSH2</option>
+													<option>SSH1</option>
+													<option>Telnet</option>
+												</select></td>
+											</tr>
+											<tr>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td><strong>Network settings</strong></td>
+											</tr>
+											<tr>
+												<td><input type="radio" name="ipprot" value="4"> IPv4</td>
+											</tr>
+											<tr>
+												<td><input type="radio" name="ipprot" value="6"> IPv6</td>
+											</tr>
+											<tr>
+												<td>IP address:</td>
+												<td><input type="text" name="ipaddr" id="ipaddr" /></td>
+											</tr>
+											<tr>
+												<td>Port:</td>
+												<td><input type="text" name="port" id="port" /></td>
+											</tr>
+											<tr>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td><strong>Login Settings</strong></td>
+											</tr>
+											<tr>
+												<td>Username:</td>
+												<td><input type="text" name="login_name" id="login_name" /></td>
+											</tr>
+											<tr>
+												<td>Password:</td>
+												<td><input type="password" name="password_remote" id="password_remote" /></td>
+											</tr>
+											<tr>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>Privileged EXEC (enable) password:</td>
+												<td><input type="password" name="password_enable" id="password_enable" /></td>
+											</tr>
+											<tr>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td><input type="submit" value="Test Connection" id="testconn" /></td>
+												<td><input type="submit" value="Add Device" id="add_device" /></td>
+											</tr>
+										</table>
+									</form>
+								</p>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside id="sidebar">
+			<img src="{{ STATIC_URL }}images/NMS.png"/>
+			{% include "_nav.html" %}
+			<span class="shadow"></span>
+		</aside>
+	</div>
+</body>
+</html>

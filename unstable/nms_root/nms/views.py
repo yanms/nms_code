@@ -495,6 +495,8 @@ def devices_manage(request):
 
 @login_required
 def device_add(request):
+	if not passwordstore.hasMasterPassword():
+			return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_add'))
 	if request.user.has_perm('nms.add_devices'):
 		dev_type_view = Dev_type.objects.all()
 		vendor_view = Vendor.objects.all()
@@ -578,8 +580,11 @@ def device_modify(request, device_id_request):
 	if len(group_rights) > 0:
 		if not passwordstore.hasMasterPassword():
 			return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_modify', args=(device_id_request,)))
+		dev_type_view = Dev_type.objects.all()
+		vendor_view = Vendor.objects.all()
+		dev_model_view = Dev_model.objects.all()
+		os_view = OS_dev.objects.all()
 		gen_dev = Gen_dev.objects.all()
-		os_dev = OS_dev.objects.all()
 		if request.method == 'POST':
 			try:
 				device = get_object_or_404(Devices, pk=device_id_request)
@@ -608,7 +613,7 @@ def device_modify(request, device_id_request):
 				messages.error(request, 'Not all fields are are set or an other error occured')
 				return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
 		else:
-			return render(request, 'nms/modify_device.html', {'devices': device, 'gen_dev': gen_dev, 'os_dev': os_dev, 'request':request})
+			return render(request, 'nms/devices_modify.html', {'device': device, 'dev_type_view': dev_type_view, 'vendor_view': vendor_view, 'dev_model_view': dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev, 'request':request})
 	else:
 		messages.error(request, "You don't have the right permissions")
 		return HttpResponseRedirect(reverse('nms:devices'))
