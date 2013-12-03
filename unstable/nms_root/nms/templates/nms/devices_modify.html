@@ -66,6 +66,9 @@
 		document.getElementById("selectVendor").onchange = function() {
 			loadDropDownItems();
 		}
+		document.getElementById("selectType").onchange = function() {
+			loadDropDownItems();
+		}
 	}
 	</script>
 	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
@@ -121,7 +124,7 @@
 											</tr>
 											<tr>
 												<td>Model:</td>
-												<td><select id="selectModel" name="selectModel" disabled>
+												<td><select id="selectModel" name="selectModel">
 													<option>{{ device.gen_dev_id.model_id.model_name }}</option>
 												</select>
 												</td>
