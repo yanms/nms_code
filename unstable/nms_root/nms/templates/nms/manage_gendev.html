@@ -257,12 +257,38 @@
 															</select></td>
 														</tr>
 														<tr>
-															<td><input type="submit" value="Add Template"/></td>
+															<td><input type="submit" value="Add OS-Template"/></td>
 														</tr>
 													</table>
 												</form>
 											</td>
-											<td width="50%"></td>
+											<td width="50%">
+												<h3>OS per Device</h3>
+												<form action="{% url 'nms:manage_gendev' %}" method="POST">
+													{% csrf_token %}
+													<input type="hidden" name="qtype" value="del_osdev" />
+													<table class="TFtable" width="70%">
+														<tr>
+															<td width="45%"><b>OS</b></td>
+															<td width="45%"><b>Device</b></td>
+															<td width="5%"><b>Delete</b></td>
+														</tr>
+														{% for record in os_devs %}
+														<tr>
+															<td>{{ record.os_id }}</td>
+															<td>{{ record.gen_dev_id.dev_type_id }}: {{ record.gen_dev_id.vendor_id }} {{ record.gen_dev_id.model_id }}</td>
+															<td><input type="checkbox" name="items" value="{{ record.os_dev_id }}" /></td>
+														</tr>
+														{% endfor %}
+													</table>
+													<table border="0" width="70%">
+														<tr>
+															<td width="95%"></td>
+															<td width="5%"><input type="submit" value="Delete" /></td>
+														</tr>
+													</table>
+												</form>
+											</td>
 										</tr>
 									</table>
 								</p>

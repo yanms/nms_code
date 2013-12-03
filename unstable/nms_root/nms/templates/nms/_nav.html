@@ -6,6 +6,7 @@
 {% url 'nms:acl' as acl %}
 {% url 'nms:user_settings' as user_settings %}
 
+{% if user.is_authenticated %}
 <ul class="tabset buttons">
 	<li class="{% active request index %}">
 		<a href="{% url 'nms:index' %}" class="ico4"><span>Dashboard</span><em></em></a>
@@ -20,3 +21,4 @@
 			<span class="tooltip"><span>ACL</span></span>
 	</li>
 </ul>
+{% endif %}
