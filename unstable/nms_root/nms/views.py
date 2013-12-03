@@ -523,7 +523,7 @@ def device_add(request):
 				password_remote = request.POST['password_remote']
 				password_enable = request.POST['password_enable']
 				device = Devices(gen_dev_id=dev, os_dev_id=os, ip=ip_recv, pref_remote_prot=pref_remote_prot, 
-				ip_version = ipprot, login_name = login_name, port=port)
+				ip_version = ipprot, login_name = login_name, password_enable='', password_remote='', port=port)
 				device.save()
 				passwordstore.storeEnablePassword(device, password_enable)
 				passwordstore.storeRemotePassword(device, password_remote)
