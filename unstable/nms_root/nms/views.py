@@ -528,13 +528,13 @@ def device_add(request):
 				passwordstore.storeEnablePassword(device, password_enable)
 				passwordstore.storeRemotePassword(device, password_remote)
 			
-			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
+			"""except (KeyError, ValueError, NameError, UnboundLocalError) as err:
 				messages.error(request, 'Not all fields are set or an other error occured')
 				messages.error(request, err)
 				print(err)
 				#return HttpResponse(request.POST.items())
 				return HttpResponseRedirect(reverse('nms:device_add'))
-		
+			"""
 			messages.success(request, 'Database updated')
 			return HttpResponseRedirect(reverse('nms:device_add'))
 		else:
