@@ -95,13 +95,13 @@
 								</ul>
 								<h2>Add Device</h2>
 								<p>
-									<form action="{% url 'nms:device_add' %}" method="POST">
+									<form action="{% url 'nms:device_modify' device.dev_id %}" method="POST">
 									{% csrf_token %}
 										<table border="0">
 											<tr>
 												<td>Type:</td>
 												<td><select id="selectType" name="selectType">
-													<option>{{ device.gen_dev_id.dev_type_id.dev_type_name }}</option>
+													<option>{{ device.gen_dev_id.dev_type_id}}</option>
 													{% for record in dev_type_view %}
 													{% if device.gen_dev_id.dev_type_id.dev_type_name == record.dev_type_name %}
 													{% else %}
@@ -113,7 +113,7 @@
 											<tr>
 												<td>Vendor:</td>
 												<td><select id="selectVendor" name="selectVendor">
-													<option value="NoSelection">{{ device.gen_dev_id.vendor_id.vendor_name }}</option>
+													<option value="NoSelection">{{ device.gen_dev_id.vendor_id }}</option>
 													{% for record in vendor_view %}
 													{% if device.gen_dev_id.vendor_id.vendor_name == record.vendor_name %}
 													{% else %}	
@@ -125,15 +125,19 @@
 											<tr>
 												<td>Model:</td>
 												<td><select id="selectModel" name="selectModel">
-													<option>{{ device.gen_dev_id.model_id.model_name }}</option>
+													<option>{{ device.gen_dev_id.model_id }}</option>
 												</select>
 												</td>
 											</tr>
 											<tr>
 												<td>OS:</td>
 												<td><select id="os_dev_id" name="os_dev_id">
+													<option>{{ device.os_dev_id }}</option>
 													{% for record in os_view %}
+													{% if device.os_dev_id == record %}
+													{% else %}
 														<option value="{{ record.os_dev_id }}">{{ record }}</option>
+													{% endif %}
 													{% endfor %}
 												</select></td>
 											</tr>
@@ -151,19 +155,30 @@
 											<tr>
 												<td><strong>Network settings</strong></td>
 											</tr>
+											{% if device.ip_version == 4 %}
 											<tr>
-												<td><input type="radio" name="ipprot" value="4"> IPv4</td>
+												
+												<td><input type="radio" name="ipprot" value="4" checked> IPv4</td>
 											</tr>
 											<tr>
 												<td><input type="radio" name="ipprot" value="6"> IPv6</td>
 											</tr>
+											{% else %}
+											<tr>
+												
+												<td><input type="radio" name="ipprot" value="4"> IPv4</td>
+											</tr>
+											<tr>
+												<td><input type="radio" name="ipprot" value="6" checked> IPv6</td>
+											</tr>
+											{% endif %}
 											<tr>
 												<td>IP address:</td>
-												<td><input type="text" name="ipaddr" id="ipaddr" /></td>
+												<td><input type="text" name="ipaddr" id="ipaddr" value="{{ device.ip}}" /></td>
 											</tr>
 											<tr>
 												<td>Port:</td>
-												<td><input type="text" name="port" id="port" /></td>
+												<td><input type="text" name="port" id="port" value="{{ device.port }}" /></td>
 											</tr>
 											<tr>
 												<td>&nbsp;</td>
@@ -173,7 +188,7 @@
 											</tr>
 											<tr>
 												<td>Username:</td>
-												<td><input type="text" name="login_name" id="login_name" /></td>
+												<td><input type="text" name="login_name" id="login_name" value="{{ device.login_name }}" /></td>
 											</tr>
 											<tr>
 												<td>Password:</td>

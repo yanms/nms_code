@@ -605,8 +605,10 @@ def device_modify(request, device_id_request):
 				device.port = port
 				device.login_name = login_name
 				device.save()
-				passwordstore.storeRemotePassword(device, password_remote)
-				passwordstore.storeEnablePassword(device, password_enable)
+				if password_remote != '':
+					passwordstore.storeRemotePassword(device, password_remote)
+				if password_enable != '':
+					passwordstore.storeEnablePassword(device, password_enable)
 				messages.success(request, 'Database updated successfully.')
 				return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
 			except (KeyError, ValueError):
