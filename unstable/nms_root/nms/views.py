@@ -505,7 +505,6 @@ def device_add(request):
 		gen_dev = Gen_dev.objects.all()
 		if request.method == 'POST':
 			#return HttpResponse('Received post method.')
-			q = Devices()
 		
 			try:
 				try:
@@ -586,34 +585,36 @@ def device_modify(request, device_id_request):
 		os_view = OS_dev.objects.all()
 		gen_dev = Gen_dev.objects.all()
 		if request.method == 'POST':
+			#return HttpResponse('Received post method.')
+		
 			try:
-				device = get_object_or_404(Devices, pk=device_id_request)
-				dev_type = get_object_or_404(Gen_dev, pk=request.POST['gen_dev_id'])
-				os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
-				pref_remote_prot = request.POST['pref_remote_prot']
-				ipprot = request.POST['ipprot']
-				ip_recv = request.POST['ipaddr']
-				port = request.POST['port']
-				login_name = request.POST['login_name']
+				try:
+					device.gen_dev = Gen_dev.objects.get(model_id=Dev_model.objects.get(model_name=request.POST['selectModel']), vendor_id=Vendor.objects.get(vendor_name=request.POST['selectVendor']), dev_type_id=Dev_type.objects.get(dev_type_name=request.POST['selectType']))
+				except:
+					messages.error(request, "No gendev found")
+					return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+				device.os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
+				device.pref_remote_prot = request.POST['pref_remote_prot']
+				device.ipprot = request.POST['ipprot']
+				device.ip_recv = request.POST['ipaddr']
+				device.port = request.POST['port']
+				device.login_name = request.POST['login_name']
 				password_remote = request.POST['password_remote']
 				password_enable = request.POST['password_enable']
-				device.gen_dev_id = dev_type
-				device.os_dev_id = os
-				device.pref_remote_prot = pref_remote_prot
-				device.ip_version = ipprot
-				device.ip = ip_recv
-				device.port = port
-				device.login_name = login_name
 				device.save()
-				if password_remote != '':
-					passwordstore.storeRemotePassword(device, password_remote)
 				if password_enable != '':
 					passwordstore.storeEnablePassword(device, password_enable)
-				messages.success(request, 'Database updated successfully.')
-				return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
-			except (KeyError, ValueError):
-				messages.error(request, 'Not all fields are are set or an other error occured')
-				return HttpResponseRedirect(reverse('nms:device_add', args=(device_id_request,)))
+				if password_remote != '':
+					passwordstore.storeRemotePassword(device, password_remote)
+			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
+				messages.error(request, 'Not all fields are set or an other error occured')
+				messages.error(request, err)
+				print(err)
+				#return HttpResponse(request.POST.items())
+				return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+			
+			messages.success(request, 'Database updated')
+			return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
 		else:
 			return render(request, 'nms/devices_modify.html', {'device': device, 'dev_type_view': dev_type_view, 'vendor_view': vendor_view, 'dev_model_view': dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev, 'request':request})
 	else:

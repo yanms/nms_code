@@ -102,10 +102,10 @@
 												<td>Type:</td>
 												<td><select id="selectType" name="selectType">
 													<option>{{ device.gen_dev_id.dev_type_id}}</option>
-													{% for record in dev_type_view %}
+													{% for record in dev_type_view.dev_type_name %}
 													{% if device.gen_dev_id.dev_type_id.dev_type_name == record.dev_type_name %}
 													{% else %}
-													<option>{{ record }}</option>
+													<option value='{{ record.dev_type_name }}'>{{ record }}</option>
 													{% endif %}
 													{% endfor %}
 													</select></td>
@@ -113,11 +113,11 @@
 											<tr>
 												<td>Vendor:</td>
 												<td><select id="selectVendor" name="selectVendor">
-													<option value="NoSelection">{{ device.gen_dev_id.vendor_id }}</option>
+													<option value='{{ device.gen_dev_id.vendor_id.vendor_name }}'>{{ device.gen_dev_id.vendor_id }}</option>
 													{% for record in vendor_view %}
 													{% if device.gen_dev_id.vendor_id.vendor_name == record.vendor_name %}
 													{% else %}	
-													<option value="{{ record }}">{{ record }}</option>
+													<option value='{{ record.vendor_name }}'>{{ record }}</option>
 													{% endif %}
 													{% endfor %}
 												</select></td>
@@ -125,14 +125,14 @@
 											<tr>
 												<td>Model:</td>
 												<td><select id="selectModel" name="selectModel">
-													<option>{{ device.gen_dev_id.model_id }}</option>
+													<option value='{{ device.gen_dev_id.model_id.model_name }}'>{{ device.gen_dev_id.model_id }}</option>
 												</select>
 												</td>
 											</tr>
 											<tr>
 												<td>OS:</td>
 												<td><select id="os_dev_id" name="os_dev_id">
-													<option>{{ device.os_dev_id }}</option>
+													<option value='{{ device.os_dev_id.os_dev_id }}'>{{ device.os_dev_id }}</option>
 													{% for record in os_view %}
 													{% if device.os_dev_id == record %}
 													{% else %}
@@ -206,7 +206,7 @@
 											</tr>
 											<tr>
 												<td><input type="submit" value="Test Connection" id="testconn" /></td>
-												<td><input type="submit" value="Add Device" id="add_device" /></td>
+												<td><input type="submit" value="Update Device" id="update_device" /></td>
 											</tr>
 										</table>
 									</form>
