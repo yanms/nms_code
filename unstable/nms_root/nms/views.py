@@ -508,12 +508,6 @@ def device_add(request):
 			q = Devices()
 		
 			try:
-				dev = None
-				for i in gen_dev:
-					if str(i.model_id) == request.POST['selectModel'] and str(i.vendor_id) == request.POST['selectVendor'] and str(i.dev_type_id) == request.POST['selectType']:
-						dev = i
-				if dev == None:
-					return HttpResponseNotFound('<h1>Page not found</h1>')
 				os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
 				pref_remote_prot = request.POST['pref_remote_prot']
 				ipprot = request.POST['ipprot']
