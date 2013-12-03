@@ -32,6 +32,13 @@
 		<div id="content">
 			<div class="c1">
 				<div class="controls">
+					{% if not user.is_authenticated %}
+					<nav class="links">
+						<ul>
+							<li><a href="{% url 'nms:login_handler' %}" class="ico5">Login</a></li>
+						</ul>
+					</nav>
+					{% endif %}
 					<!-- Upper Menu -->
 					{% include "_navuser.html" %}
 				</div>
