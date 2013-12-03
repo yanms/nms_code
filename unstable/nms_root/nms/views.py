@@ -527,7 +527,8 @@ def device_add(request):
 				device.save()
 				passwordstore.storeEnablePassword(device, password_enable)
 				passwordstore.storeRemotePassword(device, password_remote)
-			
+			except:
+				raise
 			"""except (KeyError, ValueError, NameError, UnboundLocalError) as err:
 				messages.error(request, 'Not all fields are set or an other error occured')
 				messages.error(request, err)
