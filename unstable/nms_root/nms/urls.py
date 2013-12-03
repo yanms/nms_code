@@ -31,5 +31,6 @@ urlpatterns = patterns('',
 	url(r'^query/', views.query, name='query'),
 	url(r'^devices/(?P<device_id_request>\d+)/manage/ssh/$', views.device_ssh, name='device_ssh'),
 	url(r'^init/$', views.init, name='init'),
+    url(r'^license/$', views.license, name='license'),
 	url(r'^manage_gendev', views.manage_gendev, name='manage_gendev'),
 )

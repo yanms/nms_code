@@ -16,7 +16,7 @@ import traceback
 
 @login_required
 def index(request):
-	return render(request, 'nms/index.html', {'user': request.user.get_username(), 'request':request})
+	return render(request, 'nms/index.html', {'request':request})
 
 def install(request):
 	if Settings.objects.filter(known_name='install complete').exists():
@@ -794,6 +794,9 @@ def logout_handler(request):
 def device_ssh(request, device_id_request):
 	device = get_object_or_404(Devices, pk=device_id_request)
 	return render(request, 'nms/ssh.html', {'device': device, 'request':request})
+
+def license(request):
+	return render(request, 'nms/license.html', {'request':request})
 
 @login_required
 def init(request):
