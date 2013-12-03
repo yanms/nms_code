@@ -881,7 +881,8 @@ def manage_gendev(request):
 	models = Dev_model.objects.all()
 	xml_files = File_location.objects.all()
 	gen_devs = Gen_dev.objects.all()
+	os = OS.objects.all()
 	if request.method == 'POST':
 		return HttpResponseRedirect(reverse('nms:manage_gendev'))
 	else:
-		return render(request, 'nms/manage_gendev.html', {'request':request, 'dev_types':dev_types, 'vendors':vendors, 'models':models, 'xml_files':xml_files, 'gen_devs':gen_devs})
+		return render(request, 'nms/manage_gendev.html', {'request':request, 'dev_types':dev_types, 'vendors':vendors, 'models':models, 'xml_files':xml_files, 'gen_devs':gen_devs, 'os':os})
