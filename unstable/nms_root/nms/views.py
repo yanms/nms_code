@@ -508,11 +508,9 @@ def device_add(request):
 			q = Devices()
 		
 			try:
-				dev = None
-				for i in gen_dev:
-					if str(i.model_id) == request.POST['selectModel'] and str(i.vendor_id) == request.POST['selectVendor'] and str(i.dev_type_id) == request.POST['selectType']:
-						dev = i
-				if dev == None:
+				try:
+					gen_dev = Gen_dev.objects.get(model_id=Dev_model.objects.get(model_name=request.POST['selectModel']), vendor_id=Vendor.objects.get(vendor_name=request.POST['selectVendor']), dev_type_id=Dev_type.objects.get(dev_type_name=request.POST['selectType']))
+				except:
 					messages.error(request, "No gendev found")
 					return HttpResponseRedirect(reverse('nms:device_add'))
 				os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
