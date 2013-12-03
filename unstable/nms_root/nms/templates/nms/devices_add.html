@@ -99,7 +99,7 @@
 												<td>Type:</td>
 												<td><select id="selectType" name="selectType">
 													{% for record in dev_type_view %}
-														<option>{{ record }}</option>
+														<option value='{{ record.dev_type_name }}'>{{ record }}</option>
 													{% endfor %}
 												</select></td>
 											</tr>
@@ -108,7 +108,7 @@
 												<td><select id="selectVendor" name="selectVendor">
 													<option value="NoSelection">Please select a vendor</option>
 													{% for record in vendor_view %}
-														<option value="{{ record }}">{{ record }}</option>
+														<option value="{{ record.vendor_name }}">{{ record }}</option>
 													{% endfor %}
 												</select></td>
 											</tr>
