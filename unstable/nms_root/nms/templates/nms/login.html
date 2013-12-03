@@ -13,11 +13,6 @@
 		<div id="content">
 			<div class="c1">
 				<div class="controls">
-					<nav class="links">
-						<ul>
-							<li><a href="#" class="ico1">Welcome to the Network Management System</a></li>
-						</ul>
-					</nav>
 				</div>
 				<div class="tabs">
 					<div id="tab-1" class="tab">
@@ -30,6 +25,7 @@
 									{% endfor %}
 								</ul>
 								<h2>Login</h2>
+								<h3>Welcome to the Network Management System</h3>
 								<form action="{% url 'nms:session_handler' %}" method="POST">
 									{% csrf_token %}
 									<table border="0">
@@ -49,7 +45,7 @@
 									</table>
 								</form>
 								<p>If you don't have an account yet, please click <a href="/register">here</a> to register for an account.</p>
-								<p>Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Click <a href="{% url 'nms:license' %}">here</a> for more information.</p>
+								<p><i>Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Click <a href="{% url 'nms:license' %}">here</a> for more information.</i></p>
 							</div>
 						</article>
 					</div>
