@@ -53,7 +53,7 @@ def storeEnablePassword(device, password):
 	device.save()
 
 def storeRemotePassword(device, password):
-    salt = base64.b64encode(Random.new().read(16))[:16].decode()
+	salt = base64.b64encode(Random.new().read(16))[:16].decode()
 	cipher = AESCipher(masterPassword)
 	device.password_remote = salt + '$' + cipher.encrypt(password).decode()
 	device.save()
