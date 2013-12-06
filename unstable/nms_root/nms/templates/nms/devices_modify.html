@@ -102,7 +102,7 @@
 												<td>Type:</td>
 												<td><select id="selectType" name="selectType">
 													<option>{{ device.gen_dev_id.dev_type_id}}</option>
-													{% for record in dev_type_view.dev_type_name %}
+													{% for record in dev_type_view %}
 													{% if device.gen_dev_id.dev_type_id.dev_type_name == record.dev_type_name %}
 													{% else %}
 													<option value='{{ record.dev_type_name }}'>{{ record }}</option>
