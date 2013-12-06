@@ -596,9 +596,18 @@ def device_modify(request, device_id_request):
 		if request.method == 'POST':
 			#return HttpResponse('Received post method.')
 		
+			
+			
 			try:
 				try:
-					device.gen_dev = Gen_dev.objects.get(model_id=Dev_model.objects.get(model_name=request.POST['selectModel']), vendor_id=Vendor.objects.get(vendor_name=request.POST['selectVendor']), dev_type_id=Dev_type.objects.get(dev_type_name=request.POST['selectType']))
+					models = Dev_model.objects.all()
+					model_version_name = [[(x.model_name + ' ' + x.version), x.model_id] for x in models]
+					model_id = [x[1] for x in model_version_name if x[0] == request.POST['selectModel']]
+					if len(model_id) == 1:
+						device.gen_dev = Gen_dev.objects.get(model_id=model_id[0], vendor_id=Vendor.objects.get(vendor_name=request.POST['selectVendor']), dev_type_id=Dev_type.objects.get(dev_type_name=request.POST['selectType']))
+					else:
+						messages.error(request, "Received multiple models, not unique")
+						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
 				except:
 					messages.error(request, "No gendev found")
 					return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
