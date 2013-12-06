@@ -422,7 +422,7 @@ def acl_groups_handler(request):
 				return HttpResponseRedirect(reverse('nms:acl'))
 		
 		elif request.POST['task'] == 'del_device':
-			if request.user.has_perm('nsm.delete_devices'):
+			if request.user.has_perm('nms.delete_devices'):
 				devices = request.POST.getlist('delete')
 				for item in devices:
 					device = get_object_or_404(Devices, pk=item)
@@ -508,9 +508,18 @@ def device_add(request):
 		
 			try:
 				try:
-					gen_dev = Gen_dev.objects.get(model_id=Dev_model.objects.get(model_name=request.POST['selectModel']), vendor_id=Vendor.objects.get(vendor_name=request.POST['selectVendor']), dev_type_id=Dev_type.objects.get(dev_type_name=request.POST['selectType']))
+					models = Dev_model.objects.all()
+					model_version_name = [[(x.model_name + ' ' + x.version), x.model_id] for x in models]
+					model_id = [x[1] for x in model_version_name if x[0] == request.POST['selectModel']]
+					if len(model_id) == 1:
+						gen_dev = Gen_dev.objects.get(model_id=model_id[0], vendor_id=Vendor.objects.get(vendor_name=request.POST['selectVendor']), dev_type_id=Dev_type.objects.get(dev_type_name=request.POST['selectType']))
+					else:
+						messages.error(request, "Received multiple models, not unique")
+						return HttpResponseRedirect(reverse('nms:device_add'))
 				except:
+					messages.error(request, list(request.POST.items()))
 					messages.error(request, "No gendev found")
+					messages.error(request, traceback.format_exc())
 					return HttpResponseRedirect(reverse('nms:device_add'))
 				os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
 				pref_remote_prot = request.POST['pref_remote_prot']
