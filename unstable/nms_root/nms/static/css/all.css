@@ -1,4 +1,5 @@
-header, footer, article, section, hgroup, nav, figure, aside {display: block;}
+header, article, section, hgroup, nav, figure, aside {display: block;}
+
 figure {
 	margin:0;
 	padding:0;
@@ -39,6 +40,10 @@ form,fieldset{
 #content {
 	float:left;
 	width:100%;
+}
+#footer, .push {
+	position:absolute;
+	bottom: 0;
 }
 .c1 {margin:0 0 0 77px;}
 .controls {
