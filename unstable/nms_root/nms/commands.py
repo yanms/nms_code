@@ -43,11 +43,11 @@ def getInterfaces(command, parser, device, user):
 					ret += s.send_and_receive(arg)
 			s.close()
 			interfaces[device] = parser.parse(ret)
+			return interfaces[device]
 	except:
 		raise
 	finally:
 		interfacesLock.release()
-	return interfaces[device]
 
 def executeTask(taskpath, device, uargs, user):
 	xmlroot = xmlparser.get_xml_struct(device.gen_dev_id.file_location_id.location)
