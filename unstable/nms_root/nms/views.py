@@ -572,7 +572,7 @@ def device_manager(request, device_id_request):
 			commands.removeInterfaces(devices)
 		root = xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location)
 		cmd, parser = xmlparser.getInterfaceQuery(root)
-		interfaces = commands.getInterfaces(cmd, parser, devices) #Use if the device is online
+		interfaces = commands.getInterfaces(cmd, parser, devices, request.user) #Use if the device is online
 		#interfaces = ['FastEthernet0/0', 'FastEthernet0/1'] #Use if no connection to the device is possible for dummy interfaces
 		if interfaces == -1:
 			messages.error(request, 'Failed to connect to device')
@@ -706,7 +706,7 @@ def send_command(request, device_id_request):
 			return HttpResponseRedirect(reverse('nms:device_manager', args=(device_id_request,)))
 	
 		
-		ret = commands.executeTask(command, device, uargs)
+		ret = commands.executeTask(command, device, uargs, request.user)
 		if ret == -1:
 			messages.error(request, 'Failed to connect to device')
 		else:
@@ -788,9 +788,9 @@ def query(request):
 		except:
 			return HttpResponse('<Error>', content_type='text/plain')
 		if query == 'receive':
-			connection = commands.getSSHConnection(request.user, device)
+			connection = commands.getConnection(request.user, device)
 			try:
-				ret = connection.chan.recv(4096)
+				ret = connection.receive()
 			except:
 				return HttpResponse('', content_type='text/plain')
 			return HttpResponse(ret.decode(), content_type='text/plain')
@@ -798,17 +798,19 @@ def query(request):
 			if not 'text' in request.GET:
 				return HttpResponse('', content_type='text/plain')
 			text = request.GET['text']
-			connection = commands.getSSHConnection(request.user, device)
+			connection = commands.getConnection(request.user, device)
 			text = text + '\n'
-			connection.chan.send(text.encode())
+			History(user_id = request.user, action = '[dev%i] %s' % (device.dev_id, text)).save()
+			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
 		elif query == 'del':
 			commands.removeSSHConnection(request.user, device)
 			return HttpResponse('Connection closed', content_type='text/plain')
 		elif query == 'priv':
-			connection = commands.getSSHConnection(request.user, device)
+			connection = commands.getConnection(request.user, device)
 			text = passwordstore.getEnablePassword(device).decode() + '\n'
-			connection.chan.send(text.encode())
+			History(user_id = request.user, action = '[dev%i] %s' % (device.dev_id, text)).save()
+			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
 	return HttpResponse('<Unkown query type>!', content_type='text/plain')
 
