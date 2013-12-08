@@ -26,7 +26,7 @@ def getInterfaces(command, parser, device, user):
 	interfacesLock.acquire()
 	try:
 		if not device in interfaces.keys():
-			if device.pref_remote_prot == 'SSH2' or device.pref_remote_prot == 'SSH1':
+			if device.pref_remote_prot == 'SSH2':
 				s = sshconnection.SSHConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
 			elif device.pref_remote_prot == 'Telnet':
 				s = telnetconnection.TelnetConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
@@ -69,7 +69,7 @@ def executeTask(taskpath, device, uargs, user):
 			if type(args[i]) == type(str()):
 				args[i] = args[i].replace('%arg:' + uarg_key + '%', uargs[uarg_key])
 
-	if device.pref_remote_prot == 'SSH2' or device.pref_remote_prot == 'SSH1':
+	if device.pref_remote_prot == 'SSH2':
 		s = sshconnection.SSHConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
 	elif device.pref_remote_prot == 'Telnet':
 		s = telnetconnection.TelnetConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
@@ -107,7 +107,7 @@ def getConnection(user, device):
 		if not user in connections.keys():
 			sshconnections[user] = {}
 		if not device in connections[user].keys():
-			if device.pref_remote_prot == 'SSH1' or device.pref_remote_prot == 'SSH2':
+			if device.pref_remote_prot == 'SSH2':
 				connections[user][device] = __createSSHConnection__(device)
 			elif device.pref_remote_prot == 'Telnet':
 				connections[user][device] = __createTelnetConnection__(device)
