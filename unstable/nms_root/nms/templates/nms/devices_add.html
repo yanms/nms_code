@@ -176,9 +176,24 @@
 												<td>Privileged EXEC (enable) password:</td>
 												<td><input type="password" name="password_enable" id="password_enable" /></td>
 											</tr>
+											{% if user_dev_groups == None %}
+											{% else %}
 											<tr>
 												<td>&nbsp;</td>
 											</tr>
+											<tr>
+												<td>Add to group</td>
+												<td><select id="dev_groups" name="dev_groups">
+													{% for record in user_dev_groups %}
+													<option value="{{ record.id }}">{{ record }}</option>
+													{% endfor %}
+												</select></td>
+											</tr>
+											{% endif %}
+											<tr>
+												<td>&nbsp;</td>
+											</tr>
+											
 											<tr>
 												<td><input type="submit" value="Test Connection" id="testconn" /></td>
 												<td><input type="submit" value="Add Device" id="add_device" /></td>

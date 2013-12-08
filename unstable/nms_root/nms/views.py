@@ -505,9 +505,9 @@ def device_add(request):
 		dev_model_view = Dev_model.objects.all()
 		os_view = OS_dev.objects.all()
 		gen_dev = Gen_dev.objects.all()
-		user_obj = request.user
-		user_groups = user_obj.groups.all()
-		dev_add_group = [x for x in user_groups if x.permissions.filter(codename='add_devices').exists()]
+		user_dev_groups = None
+		if request.user.has_perm('nms.add_devices') and request.user.has_perm('auth.list_group'):
+			user_dev_groups = request.user.groups.filter(name__startswith='dev:')
 		if request.method == 'POST':
 			#return HttpResponse('Received post method.')
 		
@@ -534,11 +534,14 @@ def device_add(request):
 				login_name = request.POST['login_name']
 				password_remote = request.POST['password_remote']
 				password_enable = request.POST['password_enable']
+				dev_groups = request.POST['dev_groups']
 				device = Devices(gen_dev_id=gen_dev, os_dev_id=os, ip=ip_recv, pref_remote_prot=pref_remote_prot, 
 				ip_version = ipprot, login_name = login_name, password_enable='', password_remote='', port=port)
 				device.save()
 				passwordstore.storeEnablePassword(device, password_enable)
 				passwordstore.storeRemotePassword(device, password_remote)
+				group_dev_add = get_object_or_404(Group, pk=dev_groups)
+				Dev_group.objects.create(gid=group_dev_add, devid=device)
 			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
 				messages.error(request, 'Not all fields are set or an other error occured')
 				messages.error(request, err)
@@ -550,7 +553,7 @@ def device_add(request):
 			return HttpResponseRedirect(reverse('nms:device_add'))
 		else:
 			return render(request, 'nms/devices_add.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view,
-			 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev, 'request':request, dev_add_group: 'dev_add_group'})
+			 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev, 'request':request, 'user_dev_groups': user_dev_groups})
 	else:
 		messages.error(request, "You don't have the permission to access this page.")
 		return HttpResponseRedirect(reverse('nms:devices'))
