@@ -36,13 +36,15 @@ def install(request):
 		add_group = Permission.objects.get(codename='add_group')
 		change_group = Permission.objects.get(codename='change_group')
 		delete_group = Permission.objects.get(codename='delete_group')
-		group.permissions = [add_group, change_group, delete_group, list_group]
+		add_devices = Permission.objects.get(codename='add_devices')
+		delete_devices = Permission.objects.get(codename='delete_devices')
+		group.permissions = [add_group, change_group, delete_group, list_group, add_devices, delete_devices]
 		
 		group, created = Group.objects.get_or_create(name='usr:admin')
 		add_user = Permission.objects.get(codename='add_user')
 		change_user = Permission.objects.get(codename='change_user')
 		delete_user = Permission.objects.get(codename='delete_user')
-		group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group]
+		group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, add_devices, delete_devices]
 		
 		
 		
@@ -503,6 +505,9 @@ def device_add(request):
 		dev_model_view = Dev_model.objects.all()
 		os_view = OS_dev.objects.all()
 		gen_dev = Gen_dev.objects.all()
+		user_obj = request.user
+		user_groups = user_obj.groups.all()
+		dev_add_group = [x for x in user_groups if x.permissions.filter(codename='add_devices').exists()]
 		if request.method == 'POST':
 			#return HttpResponse('Received post method.')
 		
@@ -545,7 +550,7 @@ def device_add(request):
 			return HttpResponseRedirect(reverse('nms:device_add'))
 		else:
 			return render(request, 'nms/devices_add.html', {'dev_type_view': dev_type_view, 'vendor_view': vendor_view,
-			 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev, 'request':request})
+			 'dev_model_view' : dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev, 'request':request, dev_add_group: 'dev_add_group'})
 	else:
 		messages.error(request, "You don't have the permission to access this page.")
 		return HttpResponseRedirect(reverse('nms:devices'))
