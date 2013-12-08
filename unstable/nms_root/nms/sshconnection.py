@@ -69,7 +69,13 @@ class SSHConnection:
 		self.chan.send(command)
 		time.sleep(delay)
 		return self.chan.recv(4096)
+
+	def receive(self):
+		return self.chan.recv(4096)
 	
+	def send(self, text):
+		return self.chan.send(text)
+		
 	def close(self):
 		self.chan.close()
 		self.t.close()

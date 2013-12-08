@@ -785,7 +785,7 @@ def query(request):
 		if query == 'receive':
 			connection = commands.getSSHConnection(request.user, device)
 			try:
-				ret = connection.chan.recv(4096)
+				ret = connection.receive()
 			except:
 				return HttpResponse('', content_type='text/plain')
 			return HttpResponse(ret.decode(), content_type='text/plain')
@@ -795,7 +795,7 @@ def query(request):
 			text = request.GET['text']
 			connection = commands.getSSHConnection(request.user, device)
 			text = text + '\n'
-			connection.chan.send(text.encode())
+			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
 		elif query == 'del':
 			commands.removeSSHConnection(request.user, device)
@@ -803,7 +803,7 @@ def query(request):
 		elif query == 'priv':
 			connection = commands.getSSHConnection(request.user, device)
 			text = passwordstore.getEnablePassword(device).decode() + '\n'
-			connection.chan.send(text.encode())
+			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
 	return HttpResponse('<Unkown query type>!', content_type='text/plain')
 
