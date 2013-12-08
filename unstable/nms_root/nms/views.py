@@ -428,6 +428,7 @@ def acl_groups_handler(request):
 				devices = request.POST.getlist('delete')
 				for item in devices:
 					device = get_object_or_404(Devices, pk=item)
+					device.dev_group_set.filter().delete()
 					device.delete()
 					messages.success(request, "Database updated succesfully")
 					return HttpResponseRedirect(reverse('nms:acl_device'))
