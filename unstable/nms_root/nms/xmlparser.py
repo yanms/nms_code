@@ -106,11 +106,11 @@ def get_xml_struct(filepath):
 		if not filepath in cache.keys():
 			cache[filepath] = ET.parse(filepath).getroot()
 		xml_struct = cache[filepath]
+		return xml_struct
 	except:
 		raise
 	finally:
 		cacheLock.release()
-	return xml_struct
 
 def getDeviceInfo(root):
 	for child in root.getchildren():
@@ -168,11 +168,11 @@ def getAvailableTasks(root, interfaces=[], privPassword=''):
 				elif child.get('type') == 'single':
 					__addItemSingle__(child, ret, privPassword=privPassword)
 		taskcache[root] = ret
+		return ret
 	except:
 		raise
 	finally:
 		taskcacheLock.release()
-	return ret
 
 def __addToHTML__(curpath, od, id):
 	s = ''
