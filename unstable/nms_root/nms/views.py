@@ -430,8 +430,8 @@ def acl_groups_handler(request):
 					device = get_object_or_404(Devices, pk=item)
 					device.dev_group_set.filter().delete()
 					device.delete()
-					messages.success(request, "Database updated succesfully")
-					return HttpResponseRedirect(reverse('nms:acl_device'))
+				messages.success(request, "Database updated succesfully")
+				return HttpResponseRedirect(reverse('nms:acl_device'))
 			else:
 				messages.error(request, "You don't have the right permissions")
 				return HttpResponseRedirect(reverse('nms:acl'))
