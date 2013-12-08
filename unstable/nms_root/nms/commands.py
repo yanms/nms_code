@@ -36,7 +36,7 @@ def getInterfaces(command, parser, device, user):
 				return -1
 			ret = b''
 			for i, arg in enumerate(command):
-				History(user_id = user, action = '[dev%i] %s' % (device.dev_id, arg).save()
+				History(user_id = user, action = '[dev%i] %s' % (device.dev_id, arg)).save()
 				if i+1 == len(command):
 					ret += s.send_and_receive(arg, delay=0.5)
 				else:
@@ -79,7 +79,7 @@ def executeTask(taskpath, device, uargs, user):
 		return -1
 	ret = b''
 	for i, arg in enumerate(args):
-		History(user_id = user, action = '[dev%i] %s' % (device.dev_id, arg).save()
+		History(user_id = user, action = '[dev%i] %s' % (device.dev_id, arg)).save()
 		if i+1 == len(args):
 			ret += s.send_and_receive(arg, delay=0.5)
 		else:
