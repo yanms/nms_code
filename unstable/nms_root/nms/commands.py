@@ -30,10 +30,11 @@ def getInterfaces(command, parser, device, user):
 				s = sshconnection.SSHConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
 			elif device.pref_remote_prot == 'Telnet':
 				s = telnetconnection.TelnetConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
-			else:
-				return -1
+			#else:
+			#	return -1
 			if s.connect() == -1:
-				return -1
+				pass
+			#	return -1
 			ret = b''
 			for i, arg in enumerate(command):
 				History(user_id = user, action = '[dev%i] %s' % (device.dev_id, arg)).save()
