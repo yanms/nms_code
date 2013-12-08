@@ -783,7 +783,7 @@ def query(request):
 		except:
 			return HttpResponse('<Error>', content_type='text/plain')
 		if query == 'receive':
-			connection = commands.getSSHConnection(request.user, device)
+			connection = commands.getConnection(request.user, device)
 			try:
 				ret = connection.receive()
 			except:
@@ -793,7 +793,7 @@ def query(request):
 			if not 'text' in request.GET:
 				return HttpResponse('', content_type='text/plain')
 			text = request.GET['text']
-			connection = commands.getSSHConnection(request.user, device)
+			connection = commands.getConnection(request.user, device)
 			text = text + '\n'
 			History(user_id = request.user, action = '[dev%i] %s' % (device.dev_id, text).save()
 			connection.send(text.encode())
@@ -802,7 +802,7 @@ def query(request):
 			commands.removeSSHConnection(request.user, device)
 			return HttpResponse('Connection closed', content_type='text/plain')
 		elif query == 'priv':
-			connection = commands.getSSHConnection(request.user, device)
+			connection = commands.getConnection(request.user, device)
 			text = passwordstore.getEnablePassword(device).decode() + '\n'
 			History(user_id = request.user, action = '[dev%i] %s' % (device.dev_id, text).save()
 			connection.send(text.encode())
