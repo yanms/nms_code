@@ -69,7 +69,7 @@ def executeTask(taskpath, device, uargs, user):
 			if type(args[i]) == type(str()):
 				args[i] = args[i].replace('%arg:' + uarg_key + '%', uargs[uarg_key])
 
-	if device.pref_remote_prot == 'SSH2' or device.pref_remote_prot = 'SSH1':
+	if device.pref_remote_prot == 'SSH2' or device.pref_remote_prot == 'SSH1':
 		s = sshconnection.SSHConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
 	elif device.pref_remote_prot == 'Telnet':
 		s = telnetconnection.TelnetConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
