@@ -1,9 +1,3 @@
-<!-- <ul>
-	<li><a href="#" class="ico1">Messages <span class="num">26</span></a></li>
-	<li><a href="#" class="ico2">Alerts <span class="num">5</span></a></li>
-	<li><a href="#" class="ico3">Documents <span class="num">3</span></a></li>
-</ul> -->
-
 <ul>
 	{% if perms.auth.list_group or perms.auth.add_group or perms.auth.delete_group or perms.auth.change_group %}<li><a href="/acl/groups" class="ico1">ACL Groups<span class="num">{{ group_count }}</span></a></li>{% endif %}
 	{% if perms.auth.add_user or perms.auth.change_user or perms.auth.delete_user or perms.auth.list_user %}<li><a href="/acl/users" class="ico2">ACL Users<span class="num">{{ user_count }}</span></a></li>{% endif %}
