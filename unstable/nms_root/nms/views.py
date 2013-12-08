@@ -139,8 +139,8 @@ def acl_user_manage(request, acl_user):
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
-	if request.user.has_perm('auth.change_user'):
-		user_obj = get_object_or_404(User, pk=acl_user)
+	user_obj = get_object_or_404(User, pk=acl_user)
+	if request.user.has_perm('auth.change_user') and user_obj.username != 'root':
 		groups = Group.objects.all()
 		is_active_check = 'checked' if user_obj.is_active else ''
 		return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'groups': groups, 'request':request, 'is_active_check': is_active_check, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
