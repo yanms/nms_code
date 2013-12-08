@@ -3,6 +3,7 @@ import nms.telnetconnection as telnetconnection
 import nms.xmlparser as xmlparser
 import nms.passwordstore as passwordstore
 from multiprocessing import Lock
+from nms.models import History
 
 interfaces = {}
 interfacesLock = Lock()
@@ -19,7 +20,7 @@ def removeInterfaces(device):
 		del interfaces[device]
 	interfacesLock.release()
 
-def getInterfaces(command, parser, device):
+def getInterfaces(command, parser, device, user):
 	global interfacesLock
 	global interfaces
 	interfacesLock.acquire()
@@ -35,6 +36,7 @@ def getInterfaces(command, parser, device):
 				return -1
 			ret = b''
 			for i, arg in enumerate(command):
+				History(user_id = user, action = '[dev%i] %s' % (device.dev_id, arg).save()
 				if i+1 == len(command):
 					ret += s.send_and_receive(arg, delay=0.5)
 				else:
@@ -47,7 +49,7 @@ def getInterfaces(command, parser, device):
 		interfacesLock.release()
 	return interfaces[device]
 
-def executeTask(taskpath, device, uargs):
+def executeTask(taskpath, device, uargs, user):
 	xmlroot = xmlparser.get_xml_struct(device.gen_dev_id.file_location_id.location)
 	taskpath = taskpath.split('|')
 	commands = xmlparser.getAvailableTasks(xmlroot)
@@ -77,6 +79,7 @@ def executeTask(taskpath, device, uargs):
 		return -1
 	ret = b''
 	for i, arg in enumerate(args):
+		History(user_id = user, action = '[dev%i] %s' % (device.dev_id, arg).save()
 		if i+1 == len(args):
 			ret += s.send_and_receive(arg, delay=0.5)
 		else:

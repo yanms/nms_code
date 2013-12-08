@@ -795,6 +795,7 @@ def query(request):
 			text = request.GET['text']
 			connection = commands.getSSHConnection(request.user, device)
 			text = text + '\n'
+			History(user_id = request.user, action = '[dev%i] %s' % (device.dev_id, text).save()
 			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
 		elif query == 'del':
@@ -803,6 +804,7 @@ def query(request):
 		elif query == 'priv':
 			connection = commands.getSSHConnection(request.user, device)
 			text = passwordstore.getEnablePassword(device).decode() + '\n'
+			History(user_id = request.user, action = '[dev%i] %s' % (device.dev_id, text).save()
 			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
 	return HttpResponse('<Unkown query type>!', content_type='text/plain')
