@@ -1032,3 +1032,13 @@ def manage_gendev(request):
 	else:
 		messages.error(request, "You don't have the right permissions to access this page.")
 		return HttpResponseRedirect(reverse('nms:devices'))
+	
+@login_required
+def history(request, device_id_request):
+	if request.user.has_perm('nms.manage_devices'):
+        device = get_object_or_404(Devices, pk=device_id_request)
+        history = History.objects.filter(dev_id=device)
+		return render(request, 'nms/history.html', {'request': request, 'history': history})
+	else:
+		messages.error(request, "You don't have the right permissions")
+        return HttpResponseRedirect(reverse('nms:devices'))
