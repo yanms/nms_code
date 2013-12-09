@@ -323,11 +323,41 @@
 												</form>
 											</td>
 											<td width="50%">
-                                                <h3>Header for OS form</h3>
-                                                <form action="{% url 'nms:manage_gendev' %}" method="POST">
-                                                    {% csrf_token %}
-                                                    <input ...>
-                                                </form>
+												<h3>OS</h3>
+												<form action="{% url 'nms:manage_gendev' %}" method="POST">
+													{% csrf_token %}
+													<td>XML:</td>
+													<select id="selectXMLFile" name="xml_files">
+														{% for record in xml_files %}
+															<option value="{{ record.file_location_id }}">{{ record.location }}</option>
+														{% endfor %}
+													</select>
+													<input type="hidden" name="qtype" value="add_os" />
+													<input type="text" name="name" /><input type="submit" value="Add" />
+												</form>
+												<form action="{% url 'nms:manage_gendev' %}" method="post">
+												{% csrf_token %}
+												<input type="hidden" name="qtype" value="del_os" /><br />
+												<table class="TFtable" width="70%">
+														<tr>
+															<td width="95%"><b>Name</b></td>
+															<td width="5%"><b>Delete</b></td>
+														</tr>
+														{% for record in os %}
+															<tr>
+																<td>{{ record }}</td>
+																<td><input type="checkbox" name="items" value="{{ record.os_id }}" /></td>
+															</tr>
+														{% endfor %}
+												</table>
+												<table border="0" width="70%">
+													<tr>
+														<td width="95%"></td>
+														<td width="5%"><input type="submit" value="Delete"/></td>
+												
+													</tr>
+												</table>
+												</form>
                                             </td>
 										</tr>
 									</table>
