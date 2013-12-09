@@ -882,6 +882,8 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							Gen_dev.objects.get(pk=int(i)).delete()
+						except django_exception.ProtectedError:
+							messages.error(request, 'Cannot delete some instances of gen_dev because there is still a reference')
 						except:
 							messages.error(request, 'Error deleting device template')
 			elif p['qtype'] == 'add_devtype':
@@ -895,6 +897,8 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							Dev_type.objects.get(pk=int(i)).delete()
+						except django_exception.ProtectedError:
+							messages.error(request, 'Cannot delete some instances of dev_type because there is still a reference')
 						except:
 							messages.error(request, 'Error deleting device type')
 			elif p['qtype'] == 'add_vendor':
@@ -908,6 +912,8 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							Vendor.objects.get(pk=int(i)).delete()
+						except django_exception.ProtectedError:
+							messages.error(request, 'Cannot delete some instances of vendor because there is still a reference')
 						except:
 							messages.error(request, 'Error deleting vendor')
 			elif p['qtype'] == 'add_model':
@@ -921,6 +927,8 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							Dev_model.objects.get(pk=int(i)).delete()
+						except django_exception.ProtectedError:
+							messages.error(request, 'Cannot delete some instances of model because there is still a reference')
 						except:
 							messages.error(request, 'Error deleting model')
 			elif p['qtype'] == 'add_xml':
@@ -934,6 +942,8 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							File_location.objects.get(pk=int(i)).delete()
+						except django_exception.ProtectedError:
+							messages.error(request, 'Cannot delete some instances of xml because there is still a reference')
 						except:
 							messages.error(request, 'Error deleting XML')
 			elif p['qtype'] == 'add_os_type':
@@ -947,6 +957,8 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							OS_type.objects.get(pk=int(i)).delete()
+						except django_exception.ProtectedError:
+							messages.error(request, 'Cannot delete some instances of OS_type because there is still a reference')
 						except:
 							messages.error(request, 'Error deleting model')
 			elif p['qtype'] == 'add_os':
@@ -966,6 +978,8 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							OS.objects.get(pk=int(i)).delete()
+						except django_exception.ProtectedError:
+							messages.error(request, 'Cannot delete some instances of OS because there is still a reference')
 						except:
 							messages.error(request, 'Error deleting model')
 			elif p['qtype'] == 'del_osdev':
@@ -982,7 +996,6 @@ def manage_gendev(request):
 					try:
 						OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['gen_dev']))
 					except:
-						raise
 						messages.error(request, 'Error adding model')
 					
 						
