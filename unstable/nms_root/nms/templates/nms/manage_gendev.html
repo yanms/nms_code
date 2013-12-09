@@ -361,7 +361,7 @@
                                                     </tr>
                                                     {% for record in os %}
                                                     <tr>
-                                                        <td>{{ record.os_id }} {{ record.vendor_id }} {{ record.os_type_id}} {{ record.build }} {{ record.short_info }} {{ record.name }}</td>
+                                                        <td>{{ record.vendor_id }} (){{ record.os_type_id}}) {{ record.name }} {{ record.build }} {{ record.short_info }}</td>
                                                         <td><input type="checkbox" name="items" value="{{ record.os_id }}" /></td>
                                                     </tr>
                                                     {% endfor %}
