@@ -2,11 +2,11 @@
 <head>
 	<meta charset="utf-8">
 	<title>Network Management System - AdminPanel: ACL</title>
-	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" /><!--{{ STATIC_URL }}-->
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
-	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>
 <body>
 	<div id="wrapper">
@@ -125,11 +125,16 @@
 				</div>
 			</div>
 		</div>
+		
 		<aside id="sidebar">
 			<img src="{{ STATIC_URL }}images/NMS.png"/>
 			{% include "_nav.html" %}
 			<span class="shadow"></span>
 		</aside>
-	</div>
+		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
+	</div> <!-- Wrapper -->
+	<footer>
+		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+	</footer>
 </body>
 </html>
