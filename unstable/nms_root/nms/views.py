@@ -551,7 +551,8 @@ def device_add(request):
 				passwordstore.storeEnablePassword(device, password_enable)
 				passwordstore.storeRemotePassword(device, password_remote)
 				group_dev_add = get_object_or_404(Group, pk=dev_groups)
-				Dev_group.objects.create(gid=group_dev_add, devid=device)
+				if gid != '':
+					Dev_group.objects.create(gid=group_dev_add, devid=device)
 			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
 				messages.error(request, 'Not all fields are set or an other error occured')
 				messages.error(request, err)
