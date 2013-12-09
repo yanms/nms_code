@@ -506,6 +506,7 @@ def devices_manage(request):
 				messages.error(request, "You are not added to any device groups with the right permission.")
 				return HttpResponseRedirect(reverse('nms:index'))
 		except IndexError:
+			raise
 			messages.error(request, "You are not added to any groups yet.")
 			return HttpResponseRedirect(reverse('nms:index'))
 	else:
