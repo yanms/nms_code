@@ -107,13 +107,13 @@ def getConnection(user, device):
 	connectionsLock.acquire()
 	try:
 		if not user in connections.keys():
-			sshconnections[user] = {}
+			connections[user] = {}
 		if not device in connections[user].keys():
 			if device.pref_remote_prot == 'SSH2':
 				connections[user][device] = __createSSHConnection__(device)
 			elif device.pref_remote_prot == 'Telnet':
 				connections[user][device] = __createTelnetConnection__(device)
-		return sshconnections[user][device]
+		return connections[user][device]
 	except:
 		raise
 	finally:
@@ -129,7 +129,7 @@ def removeSSHConnection(user, device):
 			return
 		if not device in connections[user].keys():
 			return
-		connection = sshconnections[user][device]
+		connection = connections[user][device]
 		connection.close()
 		del connections[user][device]
 	except:
