@@ -245,21 +245,21 @@
                                                 <input type="hidden" name="qtype" value="add_osdev" />
                                                 <table border="0">
                                                     <tr>
-                                                        <td>OS:</td>
-                                                        <td>
-                                                            <select id="selectOS" name="os">
-                                                                {% for record in os %}
-                                                                <option value="{{ record.os_id }}">{{ record }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
                                                         <td>Device template:</td>
                                                         <td>
                                                             <select id="selectGen_dev" name="gen_dev">
                                                                 {% for record in gen_devs %}
                                                                 <option value="{{ record.gen_dev_id }}">{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>OS:</td>
+                                                        <td>
+                                                            <select id="selectOS" name="os">
+                                                                {% for record in os %}
+                                                                <option value="{{ record.os_id }}">{{ record }}</option>
                                                                 {% endfor %}
                                                             </select>
                                                         </td>
