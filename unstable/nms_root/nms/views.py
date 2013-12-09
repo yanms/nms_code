@@ -977,11 +977,12 @@ def manage_gendev(request):
 						except:
 							messages.error(request, 'Error deleting model')
 			elif p['qtype'] == 'add_osdev':
-				if 'os' in p and 'vendor' in p:
+				if 'os' in p and 'gen_dev' in p:
 					try:
-						OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['vendor']))
+						OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['gen_dev']))
 					except:
-						messages.error(request, 'Error deleting model')
+                        raise
+						messages.error(request, 'Error adding model')
 					
 						
 	
