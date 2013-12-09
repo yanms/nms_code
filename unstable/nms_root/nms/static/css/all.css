@@ -1,17 +1,15 @@
 header, article, section, hgroup, nav, figure, aside {display: block;}
-
 figure {
 	margin:0;
 	padding:0;
 }
-html {height:100%;}
+html, body{height: 100%;}
 body {
 	margin:0;
 	font:12px/15px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 	color:#8a8a8a;
 	min-width:1000px;
 	background:#fff;
-	height:100%;
 }
 img {border-style:none;}
 a {
@@ -34,20 +32,29 @@ form,fieldset{
 #wrapper {
 	position:relative;
 	min-height:100%;
+	height: auto !important;
+	height: 100%;
 	overflow:hidden;
 	background:url(../images/bg-wrapper.png) repeat-y;
+	margin: 0 auto -32px; /* the bottom margin is the negative value of the footer's height */
 }
 #content {
+	display: block;
 	float:left;
+	overflow-y: scroll;
 	width:100%;
 }
-#footer {
-	position:fixed;
-	bottom: 0;
-	padding: 5px 5px 5px 5px;
+.push{
+	height:32px; /* .push must be the same height as the footer (height+padding+margin+borders=push) */
+}
+footer{
+	display:block;
+	height:20px; 
+	padding:5px 5px 5px 80px;
 	border-top-style: solid;
 	border-top-width: 2px;
 	background:url(../images/bg-controls.png);
+	z-index:999;
 }
 .c1 {margin:0 0 0 77px;}
 .controls {
