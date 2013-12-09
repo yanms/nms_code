@@ -263,7 +263,7 @@
 												</form>
 											</td>
 											<td width="50%">
-												<h3>OS per Device</h3>
+												<h3>OS per generic device</h3>
 												<form action="{% url 'nms:manage_gendev' %}" method="POST">
 													{% csrf_token %}
 													<input type="hidden" name="qtype" value="del_osdev" />
@@ -289,6 +289,40 @@
 													</table>
 												</form>
 											</td>
+										</tr>
+										<tr>
+											<td width="50%">
+												<h3>OS type</h3>
+												<form action="{% url 'nms:manage_gendev' %}" method="POST">
+													{% csrf_token %}
+													<input type="hidden" name="qtype" value="add_os_type" />
+													<input type="text" name="name" /><input type="submit" value="Add" />
+												</form>
+												<form action="{% url 'nms:manage_gendev' %}" method="post">
+												{% csrf_token %}
+												<input type="hidden" name="qtype" value="del_os_type" /><br />
+												<table class="TFtable" width="70%">
+														<tr>
+															<td width="95%"><b>Name</b></td>
+															<td width="5%"><b>Delete</b></td>
+														</tr>
+														{% for record in os_type %}
+															<tr>
+																<td>{{ record }}</td>
+																<td><input type="checkbox" name="items" value="{{ record.os_type_id }}" /></td>
+															</tr>
+														{% endfor %}
+												</table>
+												<table border="0" width="70%">
+													<tr>
+														<td width="95%"></td>
+														<td width="5%"><input type="submit" value="Delete"/></td>
+												
+													</tr>
+												</table>
+												</form>
+											</td>
+											
 										</tr>
 									</table>
 								</p>

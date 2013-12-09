@@ -926,6 +926,20 @@ def manage_gendev(request):
 						File_location.objects.get(pk=int(i)).delete()
 					except:
 						messages.error(request, 'Error deleting XML')
+		elif p['qtype'] == 'add_os_type':
+			if 'name' in p:
+				try:
+					OS_type(type=p['name']).save()
+				except:
+					messages.error(request, 'Error adding model')
+		elif p['qtype'] == 'del_os_type':
+			if 'items' in p:
+				for i in p.getlist('items'):
+					try:
+						OS_type.objects.get(pk=int(i)).delete()
+					except:
+						messages.error(request, 'Error deleting model')
+					
 
 	dev_types = Dev_type.objects.all()
 	vendors = Vendor.objects.all()
@@ -934,7 +948,8 @@ def manage_gendev(request):
 	gen_devs = Gen_dev.objects.all()
 	os = OS.objects.all()
 	os_devs = OS_dev.objects.all()
+	os_type = OS_type.objects.all()
 	if request.method == 'POST':
 		return HttpResponseRedirect(reverse('nms:manage_gendev'))
 	else:
-		return render(request, 'nms/manage_gendev.html', {'request':request, 'dev_types':dev_types, 'vendors':vendors, 'models':models, 'xml_files':xml_files, 'gen_devs':gen_devs, 'os':os, 'os_devs':os_devs})
+		return render(request, 'nms/manage_gendev.html', {'request':request, 'dev_types':dev_types, 'vendors':vendors, 'models':models, 'xml_files':xml_files, 'gen_devs':gen_devs, 'os':os, 'os_devs':os_devs, 'os_type': os_type})
