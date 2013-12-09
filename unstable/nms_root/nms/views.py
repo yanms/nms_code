@@ -544,7 +544,8 @@ def device_add(request):
 				login_name = request.POST['login_name']
 				password_remote = request.POST['password_remote']
 				password_enable = request.POST['password_enable']
-				dev_groups = request.POST['dev_groups']
+				if gid in request.POST:
+					dev_groups = request.POST['dev_groups']
 				device = Devices(gen_dev_id=gen_dev, os_dev_id=os, ip=ip_recv, pref_remote_prot=pref_remote_prot, 
 				ip_version = ipprot, login_name = login_name, password_enable='', password_remote='', port=port)
 				device.save()
