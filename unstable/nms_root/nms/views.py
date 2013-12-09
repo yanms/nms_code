@@ -524,7 +524,7 @@ def device_add(request):
 		gen_dev = Gen_dev.objects.all()
 		user_dev_groups = None
 		if request.user.has_perm('nms.add_devices') and request.user.has_perm('auth.list_group'):
-			user_dev_groups = request.user.groups.filter(name__startswith='dev:')
+			user_dev_groups = request.user.groups.filter(name__startswith='dev:') if request.user.groups.filter(name__startswith='dev:').exists() else None
 		if request.method == 'POST':
 			#return HttpResponse('Received post method.')
 		
