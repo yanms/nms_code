@@ -531,7 +531,7 @@ def device_add(request):
 			try:
 				try:
 					models = Dev_model.objects.all()
-					model_version_name = [[(x.model_name + ' ' + x.version if len(x.version) >= 1 else x.model_name), x.model_id + ' '] for x in models]
+					model_version_name = [[(x.model_name + ' ' + x.version if len(x.version) >= 1 else x.model_name), x.model_id] for x in models]
 					model_id = [x[1] for x in model_version_name if x[0] == request.POST['selectModel']]
 					if len(model_id) == 1:
 						gen_dev = Gen_dev.objects.get(model_id=model_id[0], vendor_id=Vendor.objects.get(vendor_name=request.POST['selectVendor']), dev_type_id=Dev_type.objects.get(dev_type_name=request.POST['selectType']))
