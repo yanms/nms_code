@@ -999,7 +999,8 @@ def manage_gendev(request):
 						messages.error(request, 'Error adding model')
 					
 						
-	
+			messages.success(request, 'Database updated')
+			
 		dev_types = Dev_type.objects.all()
 		vendors = Vendor.objects.all()
 		models = Dev_model.objects.all()
