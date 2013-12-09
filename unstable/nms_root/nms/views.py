@@ -770,14 +770,14 @@ def session_handler(request):
 def query(request):
 	if request.method == 'GET':
 		if 'type' in request.GET and 'q' in request.GET:
-			type = request.GET['type']
+			qtype = request.GET['type']
 			query = request.GET['q']
 		else:
 			return HttpResponse('<Error>', content_type='text/plain')
 	else:
 		return HttpResponse('<Error>', content_type='text/plain')
 
-	if type == 'models' and request.user.has_perm('nms.add_devices'):
+	if qtype == 'models' and request.user.has_perm('nms.add_devices'):
 		ret_list = []
 		ret_string = ''
 		dtype, dvendor = query.split('|')
@@ -792,7 +792,7 @@ def query(request):
 			if i+1 < len(ret_list):
 				ret_string += '|'
 		return HttpResponse(ret_string, content_type='text/plain')
-	elif type == 'ssh':
+	elif qtype == 'ssh':
 		if not 'dev' in request.GET:
 			return HttpResponse('<Missing dev in GET>', content_type='text/plain')
 		dev = request.GET['dev']
