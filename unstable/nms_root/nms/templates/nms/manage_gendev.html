@@ -261,7 +261,7 @@
                                                     <tr>
                                                         <td>Device template:</td>
                                                         <td>
-                                                            <select id="selectVendor" name="vendor">
+                                                            <select id="selectGen_dev" name="gen_dev">
                                                                 {% for record in gen_devs %}
                                                                 <option value="{{ record.gen_dev_id }}">{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</option>
                                                                 {% endfor %}
