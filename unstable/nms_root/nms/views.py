@@ -784,7 +784,7 @@ def query(request):
 		gen_devs = Gen_dev.objects.all()
 		for gen_dev in gen_devs:
 			if gen_dev.dev_type_id.dev_type_name == dtype and gen_dev.vendor_id.vendor_name == dvendor:
-				ret_list.append(str(gen_dev.model_id).strip())
+				ret_list.append(str(gen_dev.model_id))
 		if len(ret_list) == 0:
 			return HttpResponse('<Error>', content_type='text/plain')
 		for i, item in enumerate(ret_list):
