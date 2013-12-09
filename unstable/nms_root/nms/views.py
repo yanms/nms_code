@@ -94,9 +94,9 @@ def acl_user_add(request):
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
 	if request.user.has_perm('auth.add_user'):
-		return render(request, 'nms/acl_user_add.html', {'request':request})
-	else:
 		return render(request, 'nms/acl_user_add.html', {'request':request, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
+	else:
+		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 def acl_user_add_handler(request):
