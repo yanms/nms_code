@@ -966,18 +966,20 @@ def manage_gendev(request):
 							OS.objects.get(pk=int(i)).delete()
 						except:
 							messages.error(request, 'Error deleting model')
-            elif p['qtype'] == 'del_osdev':
+			elif p['qtype'] == 'del_osdev':
 				if 'items' in p:
 					for i in p.getlist('items'):
 						try:
 							OS_dev.objects.get(pk=int(i)).delete()
 						except:
 							messages.error(request, 'Error deleting model')
-            elif p['qtype'] == 'add_osdev':
-                if 'os' in p and 'vendor' in p:
-                    try:
-                        OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['vendor']))
-                    
+			elif p['qtype'] == 'add_osdev':
+				if 'os' in p and 'vendor' in p:
+					try:
+						OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['vendor']))
+					except:
+						messages.error(request, 'Error deleting model')
+					
 						
 	
 		dev_types = Dev_type.objects.all()
