@@ -543,17 +543,15 @@ def device_add(request):
 				port = request.POST['port']
 				login_name = request.POST['login_name']
 				password_remote = request.POST['password_remote']
-				password_enable = request.POST['password_enable']
-				dev_groups = None
-				if dev_groups in request.POST:
-					dev_groups = request.POST['dev_groups']
+				password_enable = request.POST['password_enable']				
 				device = Devices(gen_dev_id=gen_dev, os_dev_id=os, ip=ip_recv, pref_remote_prot=pref_remote_prot, 
 				ip_version = ipprot, login_name = login_name, password_enable='', password_remote='', port=port)
 				device.save()
 				passwordstore.storeEnablePassword(device, password_enable)
 				passwordstore.storeRemotePassword(device, password_remote)
-				group_dev_add = get_object_or_404(Group, pk=dev_groups)
-				if dev_groups != None:
+				if 'dev_groups' in request.POST:
+					dev_groups = request.POST['dev_groups']
+					group_dev_add = get_object_or_404(Group, pk=dev_groups)
 					Dev_group.objects.create(gid=group_dev_add, devid=device)
 			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
 				messages.error(request, 'Not all fields are set or an other error occured')
