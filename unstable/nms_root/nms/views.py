@@ -950,7 +950,7 @@ def manage_gendev(request):
 						except:
 							messages.error(request, 'Error deleting model')
 			elif p['qtype'] == 'add_os':
-				if 'vendor_id' in name and 'os_type_id' in p:
+				if 'vendor_id' in p and 'os_type_id' in p:
 					try:
 						os = OS()
 						os.vendor_id = Vendor.objects.get(pk=request.POST['vendor_id'])
