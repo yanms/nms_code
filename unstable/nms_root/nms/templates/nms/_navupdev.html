@@ -1,5 +1,5 @@
 <ul>
-	{% if perms.nms.add_devices %}<li><a href="{% url 'nms:device_add %}" class="ico4">Add Device</a></li>{% endif %}
-	{% if perms.nms.add_gendev or perms.nms.delete_gendev %}<li><a href="{% url 'nms:manage_gendev' %}">Manage Generic Devices</a></li>{% endif %}
-	{% if perms.nms.list_devices %}<li><a href="/devices/manage" class="ico3">List & Manage Devices</a></li>{% endif %}
+	{% if perms.nms.add_devices %}<li><a href="{% url 'nms:device_add' %}" class="ico4">Add Device</a></li>{% endif %}
+	{% if perms.nms.add_gen_dev or perms.nms.delete_gen_dev %}<li><a href="{% url 'nms:manage_gendev' %}" class="ico3">Manage Generic Devices</a></li>{% endif %}
+	{% if perms.nms.list_devices %}<li><a href="{% url 'nms:device_manage' %}" class="ico3">List & Manage Devices</a></li>{% endif %}
 </ul>
