@@ -45,7 +45,7 @@
 										<td><b>Type</b></td>
 										<td><b>Device</b></td>
 										<td><b>IP address</b></td>
-										<td><b>State</b></td>
+										<!-- ><td><b>State</b></td> -->
 										<td><b>Manage</b></td>
 										<td><b>Modify</b></td>
 										<td><b>History</b></td>
@@ -55,10 +55,10 @@
 										<td>{{ device.gen_dev_id.dev_type_id }}</td>
 										<td>{{ device.gen_dev_id }}</td>
 										<td>{{ device.ip }}</td>
-										<td>## UP/DOWN ##</td>
-										<td>{% if perms.nms.manage_devices %}<a href="{% url 'nms:device_manager' device.dev_id %}" onclick="showLoadingImage({{ device.dev_id }});"><img src="{{ STATIC_URL }}images/editButton.png" width="25px" /></a> <img id="loadingImage{{ device.dev_id }}" src="{{ STATIC_URL }}images/loading.gif" style="visibility:hidden"/>{% else %}N/A{% endif %}</td>
-										<td>{% if perms.nms.change_devices %}<a href="{% url 'nms:device_modify' device.dev_id %}">Change</a>{% else %} N/A{% endif %}</td>
-										<td>{% if perms.nms.manage_devices %}<a href="{% url 'nms:history' device.dev_id %}">History</a>{% else %}N/A{% endif %}</td>
+										<!-- ><td>## UP/DOWN ##</td> -->
+										<td>{% if perms.nms.manage_devices %}<a href="{% url 'nms:device_manager' device.dev_id %}" onclick="showLoadingImage({{ device.dev_id }});"><img src="{{ STATIC_URL }}images/manageIcon.png" /></a> <img id="loadingImage{{ device.dev_id }}" src="{{ STATIC_URL }}images/loading.gif" style="visibility:hidden"/>{% else %}N/A{% endif %}</td>
+										<td>{% if perms.nms.change_devices %}<a href="{% url 'nms:device_modify' device.dev_id %}"><img src="{{ STATIC_URL }}images/editButton.png" width="20px" /></a>{% else %} N/A{% endif %}</td>
+										<td>{% if perms.nms.manage_devices %}<a href="{% url 'nms:history' device.dev_id %}"><img src="{{ STATIC_URL }}images/historyIcon.png" /></a>{% else %}N/A{% endif %}</td>
 									</tr>
 								{% endfor %}
 								</table>
