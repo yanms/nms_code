@@ -820,7 +820,7 @@ def query(request):
 			text = request.GET['text']
 			connection = commands.getConnection(request.user, device)
 			text = text + '\n'
-			if type(text) != type(bytes():
+			if type(text) != type(bytes()):
 				History.objects.create(user_id = request.user, dev_id = device, action = '[dev%i] %s' % (device.dev_id, text))
 			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
@@ -830,7 +830,7 @@ def query(request):
 		elif query == 'priv':
 			connection = commands.getConnection(request.user, device)
 			text = passwordstore.getEnablePassword(device).decode() + '\n'
-			if type(text) != type(bytes():
+			if type(text) != type(bytes()):
 				History.objects.create(user_id = request.user, dev_id = device, action = '[dev%i] %s' % (device.dev_id, text))
 			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
