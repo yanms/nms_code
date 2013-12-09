@@ -44,7 +44,7 @@
                                                                 {% for device in devices %}
                                                                         <tr>
                                                                                 <td> {{ device.gen_dev_id.dev_type_id }} </td>
-                                                                                <td> {{ device.gen_dev_id }}</td>
+                                                                                <td> {{ device.gen_dev_id.vendor_id }} {{ device.gen_dev_id.model_id }} </td>
 																				<td> {{ device.ip}}</td>
                                                                                 <td><a href="{% url 'nms:acl_device_manage' device.dev_id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a></td>
 																				<td>{% if perms.nms.delete_devices %}<input type="checkbox" name="delete" value="{{ device.dev_id }}" />{% else %} N/A {% endif %}</td>
