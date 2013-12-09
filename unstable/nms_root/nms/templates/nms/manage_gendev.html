@@ -243,6 +243,7 @@
                                 <table border="0" width="100%">
                                     <tr>
                                         <td width="50%">
+											<h3>OS - GenDev</h3>
                                             <form action="{% url 'nms:manage_gendev' %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="add_osdev" />
@@ -337,6 +338,37 @@
                                             <h3>Header for OS form</h3>
                                             <form action="{% url 'nms:manage_gendev' %}" method="POST">
                                                 {% csrf_token %}
+												<table border="0">
+                                                    <tr>
+                                                        <td>Item1:</td>
+                                                        <td>
+                                                            <select id="selectOS" name="os">
+                                                                {% for record in os %}
+                                                                <option value="{{ record.os_id_id }}">{{ record }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Item2:</td>
+                                                        <td>
+                                                            <select id="selectVendor" name="vendor">
+                                                                {% for record in gen_devs %}
+                                                                <option value="{{ record.gen_dev_id }}">{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+													<tr>
+														<td>Item3:</td>
+														<td>
+															<input type="text" name="name" />
+														</td>
+													</tr>
+                                                    <tr>
+                                                        <td><input type="submit" value="Add OS-Template" /></td>
+                                                    </tr>
+                                                </table>
                                             </form>
                                         </td>
                                     </tr>
