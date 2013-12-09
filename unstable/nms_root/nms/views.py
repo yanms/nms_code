@@ -12,7 +12,7 @@ import nms.commands as commands
 import nms.xmlparser as xmlparser
 import nms.passwordstore as passwordstore
 import traceback
-import django.core.exceptions as django_exception
+import  django.db.models as django_exception
 
 
 @login_required
@@ -972,7 +972,7 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							OS_dev.objects.get(pk=int(i)).delete()
-						except django_exception.models.ProtectedError:
+						except django_exception.ProtectedError:
 							messages.error(request, 'Cannot delete some instances of OS_dev because there is still a reference')
 						except:
 							messages.error(request, 'Error deleting model')
