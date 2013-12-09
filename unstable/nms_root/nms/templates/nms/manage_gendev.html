@@ -1,378 +1,389 @@
 <!DOCTYPE html>
+<html>
 <head>
-	<meta charset="utf-8">
-	<title>Network Management System - AdminPanel: Devices</title>
-	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
-	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
-	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+    <meta charset="utf-8">
+    <title>Network Management System - AdminPanel: Devices</title>
+    <link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+    <!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
 </head>
 <body>
-	<div id="wrapper">
-		<div id="content">
-			<div class="c1">
-				<div class="controls">
-					<nav class="links">
-						<ul>
-							<li><a href="#" class="ico1">Messages <span class="num">26</span></a></li>
-							<li><a href="#" class="ico2">Alerts <span class="num">5</span></a></li>
-							<li><a href="#" class="ico3">Documents <span class="num">3</span></a></li>
-						</ul>
-					</nav>
-					{% include "_navuser.html" %}
-				</div>
-				<div class="tabs">
-					<div id="tab-7" class="tab">
-						<article>
-							<div class="text-section">
-								<h1>Dashboard</h1>
-								<ul class="states">
-									{% for message in messages %}
-									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
-									{% endfor %}
-								</ul>
-								<h2>Manage Device Templates</h2>
-								<p>
-									<table border="0" width="100%">
-										<tr>
-											<td width="50%">
-												<form action="{% url 'nms:manage_gendev' %}" method="POST">
-													{% csrf_token %}
-													<input type="hidden" name="qtype" value="add_gendev" />
-													<table border="0">
-														<tr>
-															<td>Type:</td>
-															<td><select id="selectType" name="dev_type">
-																{% for record in dev_types %}
-																	<option value="{{ record.dev_type_id }}">{{ record }}</option>
-																{% endfor %}
-															</select></td>
-														</tr>
-														<tr>
-															<td>Vendor:</td>
-															<td><select id="selectVendor" name="vendor">
-																{% for record in vendors %}
-																	<option value="{{ record.vendor_id }}">{{ record }}</option>
-																{% endfor %}
-															</select></td>
-														</tr>
-														<tr>
-															<td>Model:</td>
-															<td><select id="selectModel" name="model">
-																{% for record in models %}
-																	<option value="{{ record.model_id }}">{{ record }}</option>
-																{% endfor %}
-															</select>
-															</td>
-														</tr>
-														<tr>
-															<td>XML:</td>
-															<td><select id="selectXMLFile" name="xml_files">
-																{% for record in xml_files %}
-																	<option value="{{ record.file_location_id }}">{{ record.location }}</option>
-																{% endfor %}
-															</select></td>
-														</tr>
-														<tr>
-															<td><input type="submit" value="Add Template"/></td>
-														</tr>
-													</table>
-												</form>
-											</td>
-											<td width="50%">
-												<h3>Templates</h3>
-												<form action="{% url 'nms:manage_gendev' %}" method="POST">
-													{% csrf_token %}
-													<input type="hidden" name="qtype" value="del_gendev" />
-													<table class="TFtable" width="70%">
-														<tr>
-															<td width="95%"><b>Name</b></td>
-															<td width="5%"><b>Delete</b></td>
-														</tr>
-														{% for record in gen_devs %}
-														<tr>
-															<td>{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</td>
-															<td><input type="checkbox" name="items" value="{{ record.gen_dev_id }}" /></td>
-														</tr>
-														{% endfor %}
-													</table>
-													<table border="0" width="70%">
-														<tr>
-															<td width="95%"></td>
-															<td width="5%"><input type="submit" value="Delete" /></td>
-														</tr>
-													</table>
-												</form>
-											</td>
-										</tr>
-									</table>
-									<table border="0" width="100%">
-										<tr>
-											<td width="50%">
-												<h3>Types</h3>
-												<form action="{% url 'nms:manage_gendev' %}" method="POST">
-													{% csrf_token %}
-													<input type="hidden" name="qtype" value="add_devtype" />
-													<input type="text" name="name" /><input type="submit" value="Add" />
-												</form>
-												<form action="{% url 'nms:manage_gendev' %}" method="post">
-												{% csrf_token %}
-												<input type="hidden" name="qtype" value="del_devtype" /><br />
-												<table class="TFtable" width="70%">
-														<tr>
-															<td width="95%"><b>Name</b></td>
-															<td width="5%"><b>Delete</b></td>
-														</tr>
-														{% for record in dev_types %}
-															<tr>
-																<td>{{ record }}</td>
-																<td><input type="checkbox" name="items" value="{{ record.dev_type_id }}" /></td>
-															</tr>
-														{% endfor %}
-												</table>
-												<table border="0" width="70%">
+    <div id="wrapper">
+        <div id="content">
+            <div class="c1">
+                <div class="controls">
+                    <nav class="links">
+                        <ul>
+                            <li><a href="#" class="ico1">Messages <span class="num">26</span></a></li>
+                            <li><a href="#" class="ico2">Alerts <span class="num">5</span></a></li>
+                            <li><a href="#" class="ico3">Documents <span class="num">3</span></a></li>
+                        </ul>
+                    </nav>
+                    {% include "_navuser.html" %}
+                </div>
+                <div class="tabs">
+                    <div id="tab-7" class="tab">
+                        <article>
+                            <div class="text-section">
+                                <h1>Dashboard</h1>
+                                <ul class="states">
+                                    {% for message in messages %}
+                                    <li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+                                    {% endfor %}
+                                </ul>
+                                <h2>Manage Device Templates</h2>
+                                <table border="0" width="100%">
+                                    <tr>
+                                        <td width="50%">
+                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="add_gendev" />
+                                                <table border="0">
+                                                    <tr>
+                                                        <td>Type:</td>
+                                                        <td>
+                                                            <select id="selectType" name="dev_type">
+                                                                {% for record in dev_types %}
+                                                                <option value="{{ record.dev_type_id }}">{{ record }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Vendor:</td>
+                                                        <td>
+                                                            <select id="selectVendor" name="vendor">
+                                                                {% for record in vendors %}
+                                                                <option value="{{ record.vendor_id }}">{{ record }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Model:</td>
+                                                        <td>
+                                                            <select id="selectModel" name="model">
+                                                                {% for record in models %}
+                                                                <option value="{{ record.model_id }}">{{ record }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>XML:</td>
+                                                        <td>
+                                                            <select id="selectXMLFile" name="xml_files">
+                                                                {% for record in xml_files %}
+                                                                <option value="{{ record.file_location_id }}">{{ record.location }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="submit" value="Add Template" /></td>
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                        </td>
+                                        <td width="50%">
+                                            <h3>Templates</h3>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="del_gendev" />
+                                                <table class="TFtable" width="70%">
+                                                    <tr>
+                                                        <td width="95%"><b>Name</b></td>
+                                                        <td width="5%"><b>Delete</b></td>
+                                                    </tr>
+                                                    {% for record in gen_devs %}
+                                                    <tr>
+                                                        <td>{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</td>
+                                                        <td><input type="checkbox" name="items" value="{{ record.gen_dev_id }}" /></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </table>
+                                                <table border="0" width="70%">
+                                                    <tr>
+                                                        <td width="95%"></td>
+                                                        <td width="5%"><input type="submit" value="Delete" /></td>
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table border="0" width="100%">
+                                    <tr>
+                                        <td width="50%">
+                                            <h3>Types</h3>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="add_devtype" />
+                                                <input type="text" name="name" /><input type="submit" value="Add" />
+                                            </form>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="del_devtype" /><br />
+                                                <table class="TFtable" width="70%">
+                                                    <tr>
+                                                        <td width="95%"><b>Name</b></td>
+                                                        <td width="5%"><b>Delete</b></td>
+                                                    </tr>
+                                                    {% for record in dev_types %}
+                                                    <tr>
+                                                        <td>{{ record }}</td>
+                                                        <td><input type="checkbox" name="items" value="{{ record.dev_type_id }}" /></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </table>
+                                                <table border="0" width="70%">
+                                                    <tr>
+                                                        <td width="95%"></td>
+                                                        <td width="5%"><input type="submit" value="Delete" /></td>
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                        </td>
+                                        <td width="50%">
+                                            <h3>Vendors</h3>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="add_vendor" />
+                                                <input type="text" name="name" /><input type="submit" value="Add" />
+                                            </form>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="del_vendor" /><br />
+                                                <table class="TFtable" width="70%">
+                                                    <tr>
+                                                        <td width="95%"><b>Name</b></td>
+                                                        <td width="5%"><b>Delete</b></td>
+                                                    </tr>
+                                                    {% for record in vendors %}
+                                                    <tr>
+                                                        <td>{{ record }}</td>
+                                                        <td><input type="checkbox" name="items" value="{{ record.vendor_id }}" /></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </table>
+                                                <table border="0" width="70%">
+                                                    <tr>
+                                                        <td width="95%"></td>
+                                                        <td width="5%"><input type="submit" value="Delete" /></td>
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="50%">
+                                            <h3>Models</h3>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="add_model" />
+                                                <input type="text" name="name" /><input type="submit" value="Add" />
+                                            </form>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="del_model" /><br />
+                                                <table class="TFtable" width="70%">
+                                                    <tr>
+                                                        <td width="95%"><b>Name</b></td>
+                                                        <td width="5%"><b>Delete</b></td>
+                                                    </tr>
+                                                    {% for record in models %}
+                                                    <tr>
+                                                        <td>{{ record }}</td>
+                                                        <td><input type="checkbox" name="items" value="{{ record.model_id }}" /></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </table>
+                                                <table border="0" width="70%">
+                                                    <tr>
+                                                        <td width="95%"></td>
+                                                        <td width="5%"><input type="submit" value="Delete" /></td>
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                        </td>
+                                        <td width="50%">
+                                            <h3>XML Files</h3>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="add_xml" />
+                                                <input type="text" name="name" /><input type="submit" value="Add" />
+                                            </form>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="del_xml" /><br />
+                                                <table class="TFtable" width="70%">
+                                                    <tr>
+                                                        <td width="95%"><b>Name</b></td>
+                                                        <td width="5%"><b>Delete</b></td>
+                                                    </tr>
+                                                    {% for record in xml_files %}
+                                                    <tr>
+                                                        <td>{{ record.location }}</td>
+                                                        <td><input type="checkbox" name="items" value="{{ record.file_location_id }}" /></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </table>
+                                                <table border="0" width="70%">
+                                                    <tr>
+                                                        <td width="95%"></td>
+                                                        <td width="5%"><input type="submit" value="Delete" /></td>
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table border="0" width="100%">
+                                    <tr>
+                                        <td width="50%">
+											<h3>OS - GenDev</h3>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="add_osdev" />
+                                                <table border="0">
+                                                    <tr>
+                                                        <td>OS:</td>
+                                                        <td>
+                                                            <select id="selectOS" name="os">
+                                                                {% for record in os %}
+                                                                <option value="{{ record.os_id_id }}">{{ record }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Device template:</td>
+                                                        <td>
+                                                            <select id="selectVendor" name="vendor">
+                                                                {% for record in gen_devs %}
+                                                                <option value="{{ record.gen_dev_id }}">{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="submit" value="Add OS-Template" /></td>
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                        </td>
+                                        <td width="50%">
+                                            <h3>OS per generic device</h3>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="del_osdev" />
+                                                <table class="TFtable" width="70%">
+                                                    <tr>
+                                                        <td width="45%"><b>OS</b></td>
+                                                        <td width="45%"><b>Device</b></td>
+                                                        <td width="5%"><b>Delete</b></td>
+                                                    </tr>
+                                                    {% for record in os_devs %}
+                                                    <tr>
+                                                        <td>{{ record.os_id }}</td>
+                                                        <td>{{ record.gen_dev_id.dev_type_id }}: {{ record.gen_dev_id.vendor_id }} {{ record.gen_dev_id.model_id }}</td>
+                                                        <td><input type="checkbox" name="items" value="{{ record.os_dev_id }}" /></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </table>
+                                                <table border="0" width="70%">
+                                                    <tr>
+                                                        <td width="95%"></td>
+                                                        <td width="5%"><input type="submit" value="Delete" /></td>
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="50%">
+                                            <h3>OS type</h3>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="add_os_type" />
+                                                <input type="text" name="name" /><input type="submit" value="Add" />
+                                            </form>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="qtype" value="del_os_type" /><br />
+                                                <table class="TFtable" width="70%">
+                                                    <tr>
+                                                        <td width="95%"><b>Name</b></td>
+                                                        <td width="5%"><b>Delete</b></td>
+                                                    </tr>
+                                                    {% for record in os_type %}
+                                                    <tr>
+                                                        <td>{{ record }}</td>
+                                                        <td><input type="checkbox" name="items" value="{{ record.os_type_id }}" /></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </table>
+                                                <table border="0" width="70%">
+                                                    <tr>
+                                                        <td width="95%"></td>
+                                                        <td width="5%"><input type="submit" value="Delete" /></td>
+
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                        </td>
+                                        <td width="50%">
+                                            <h3>Header for OS form</h3>
+                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                                {% csrf_token %}
+												<table border="0">
+                                                    <tr>
+                                                        <td>Item1:</td>
+                                                        <td>
+                                                            <select id="selectOS" name="os">
+                                                                {% for record in os %}
+                                                                <option value="{{ record.os_id_id }}">{{ record }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Item2:</td>
+                                                        <td>
+                                                            <select id="selectVendor" name="vendor">
+                                                                {% for record in gen_devs %}
+                                                                <option value="{{ record.gen_dev_id }}">{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                    </tr>
 													<tr>
-														<td width="95%"></td>
-														<td width="5%"><input type="submit" value="Delete"/></td>
+														<td>Item3:</td>
+														<td>
+															<input type="text" name="name" />
+														</td>
 													</tr>
-												</table>
-												</form>
-											</td>
-											<td width="50%">
-												<h3>Vendors</h3>
-												<form action="{% url 'nms:manage_gendev' %}" method="POST">
-													{% csrf_token %}
-													<input type="hidden" name="qtype" value="add_vendor" />
-													<input type="text" name="name" /><input type="submit" value="Add" />
-												</form>
-												<form action="{% url 'nms:manage_gendev' %}" method="post">
-												{% csrf_token %}
-												<input type="hidden" name="qtype" value="del_vendor" /><br />
-												<table class="TFtable" width="70%">
-														<tr>
-															<td width="95%"><b>Name</b></td>
-															<td width="5%"><b>Delete</b></td>
-														</tr>
-														{% for record in vendors %}
-															<tr>
-																<td>{{ record }}</td>
-																<td><input type="checkbox" name="items" value="{{ record.vendor_id }}" /></td>
-															</tr>
-														{% endfor %}
-												</table>
-												<table border="0" width="70%">
-													<tr>
-														<td width="95%"></td>
-														<td width="5%"><input type="submit" value="Delete"/></td>
-													</tr>
-												</table>
-												</form>
-											</td>
-                                        </tr>
-										<tr>
-											<td width="50%">
-												<h3>Models</h3>
-												<form action="{% url 'nms:manage_gendev' %}" method="POST">
-													{% csrf_token %}
-													<input type="hidden" name="qtype" value="add_model" />
-													<input type="text" name="name" /><input type="submit" value="Add" />
-												</form>
-												<form action="{% url 'nms:manage_gendev' %}" method="post">
-												{% csrf_token %}
-												<input type="hidden" name="qtype" value="del_model" /><br />
-												<table class="TFtable" width="70%">
-														<tr>
-															<td width="95%"><b>Name</b></td>
-															<td width="5%"><b>Delete</b></td>
-														</tr>
-														{% for record in models %}
-															<tr>
-																<td>{{ record }}</td>
-																<td><input type="checkbox" name="items" value="{{ record.model_id }}" /></td>
-															</tr>
-														{% endfor %}
-												</table>
-												<table border="0" width="70%">
-													<tr>
-														<td width="95%"></td>
-														<td width="5%"><input type="submit" value="Delete"/></td>
-													</tr>
-												</table>
-												</form>
-											</td>
-											<td width="50%">
-												<h3>XML Files</h3>
-												<form action="{% url 'nms:manage_gendev' %}" method="POST">
-													{% csrf_token %}
-													<input type="hidden" name="qtype" value="add_xml" />
-													<input type="text" name="name" /><input type="submit" value="Add" />
-												</form>
-												<form action="{% url 'nms:manage_gendev' %}" method="post">
-												{% csrf_token %}
-												<input type="hidden" name="qtype" value="del_xml" /><br />
-												<table class="TFtable" width="70%">
-														<tr>
-															<td width="95%"><b>Name</b></td>
-															<td width="5%"><b>Delete</b></td>
-														</tr>
-														{% for record in xml_files %}
-															<tr>
-																<td>{{ record.location }}</td>
-																<td><input type="checkbox" name="items" value="{{ record.file_location_id }}" /></td>
-															</tr>
-														{% endfor %}
-												</table>
-												<table border="0" width="70%">
-													<tr>
-														<td width="95%"></td>
-														<td width="5%"><input type="submit" value="Delete"/></td>
-													</tr>
-												</table>
-												</form>
-											</td>
-										</tr>
-									</table>
-									<table border="0" width="100%">
-										<tr>
-											<td width="50%">
-												<form action="{% url 'nms:manage_gendev' %}" method="POST">
-													{% csrf_token %}
-													<input type="hidden" name="qtype" value="add_osdev" />
-													<table border="0">
-														<tr>
-															<td>OS:</td>
-															<td><select id="selectOS" name="os">
-																{% for record in os %}
-																	<option value="{{ record.os_id_id }}">{{ record }}</option>
-																{% endfor %}
-															</select></td>
-														</tr>
-														<tr>
-															<td>Device template:</td>
-															<td><select id="selectVendor" name="vendor">
-																{% for record in gen_devs %}
-																	<option value="{{ record.gen_dev_id }}">{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</option>
-																{% endfor %}
-															</select></td>
-														</tr>
-														<tr>
-															<td><input type="submit" value="Add OS-Template"/></td>
-														</tr>
-													</table>
-												</form>
-											</td>
-											<td width="50%">
-												<h3>OS per generic device</h3>
-												<form action="{% url 'nms:manage_gendev' %}" method="POST">
-													{% csrf_token %}
-													<input type="hidden" name="qtype" value="del_osdev" />
-													<table class="TFtable" width="70%">
-														<tr>
-															<td width="45%"><b>OS</b></td>
-															<td width="45%"><b>Device</b></td>
-															<td width="5%"><b>Delete</b></td>
-														</tr>
-														{% for record in os_devs %}
-														<tr>
-															<td>{{ record.os_id }}</td>
-															<td>{{ record.gen_dev_id.dev_type_id }}: {{ record.gen_dev_id.vendor_id }} {{ record.gen_dev_id.model_id }}</td>
-															<td><input type="checkbox" name="items" value="{{ record.os_dev_id }}" /></td>
-														</tr>
-														{% endfor %}
-													</table>
-													<table border="0" width="70%">
-														<tr>
-															<td width="95%"></td>
-															<td width="5%"><input type="submit" value="Delete" /></td>
-														</tr>
-													</table>
-												</form>
-											</td>
-										</tr>
-										<tr>
-											<td width="50%">
-												<h3>OS type</h3>
-												<form action="{% url 'nms:manage_gendev' %}" method="POST">
-													{% csrf_token %}
-													<input type="hidden" name="qtype" value="add_os_type" />
-													<input type="text" name="name" /><input type="submit" value="Add" />
-												</form>
-												<form action="{% url 'nms:manage_gendev' %}" method="post">
-												{% csrf_token %}
-												<input type="hidden" name="qtype" value="del_os_type" /><br />
-												<table class="TFtable" width="70%">
-														<tr>
-															<td width="95%"><b>Name</b></td>
-															<td width="5%"><b>Delete</b></td>
-														</tr>
-														{% for record in os_type %}
-															<tr>
-																<td>{{ record }}</td>
-																<td><input type="checkbox" name="items" value="{{ record.os_type_id }}" /></td>
-															</tr>
-														{% endfor %}
-												</table>
-												<table border="0" width="70%">
-													<tr>
-														<td width="95%"></td>
-														<td width="5%"><input type="submit" value="Delete"/></td>
-												
-													</tr>
-												</table>
-												</form>
-											</td>
-											<td width="50%">
-												<h3>OS</h3>
-												<form action="{% url 'nms:manage_gendev' %}" method="POST">
-													{% csrf_token %}
-													<td>XML:</td>
-													<select id="selectXMLFile" name="xml_files">
-														{% for record in xml_files %}
-															<option value="{{ record.file_location_id }}">{{ record.location }}</option>
-														{% endfor %}
-													</select>
-													<input type="hidden" name="qtype" value="add_os" />
-													<input type="text" name="name" /><input type="submit" value="Add" />
-												</form>
-												<form action="{% url 'nms:manage_gendev' %}" method="post">
-												{% csrf_token %}
-												<input type="hidden" name="qtype" value="del_os" /><br />
-												<table class="TFtable" width="70%">
-														<tr>
-															<td width="95%"><b>Name</b></td>
-															<td width="5%"><b>Delete</b></td>
-														</tr>
-														{% for record in os %}
-															<tr>
-																<td>{{ record }}</td>
-																<td><input type="checkbox" name="items" value="{{ record.os_id }}" /></td>
-															</tr>
-														{% endfor %}
-												</table>
-												<table border="0" width="70%">
-													<tr>
-														<td width="95%"></td>
-														<td width="5%"><input type="submit" value="Delete"/></td>
-												
-													</tr>
-												</table>
-												</form>
-                                            </td>
-										</tr>
-									</table>
-								</p>
-							</div>
-						</article>
-					</div>
-				</div>
-			</div>
-		</div>
-		<aside id="sidebar">
-			<img src="{{ STATIC_URL }}images/NMS.png"/>
-			{% include "_nav.html" %}
-			<span class="shadow"></span>
-		</aside>
-	</div>
+                                                    <tr>
+                                                        <td><input type="submit" value="Add OS-Template" /></td>
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <aside id="sidebar">
+            <img src="{{ STATIC_URL }}images/NMS.png" />
+            {% include "_nav.html" %}
+            <span class="shadow"></span>
+        </aside>
+    </div>
 </body>
 </html>
