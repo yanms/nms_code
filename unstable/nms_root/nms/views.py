@@ -971,6 +971,8 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							OS_dev.objects.get(pk=int(i)).delete()
+						except django.db.models.deletion.ProtectedError:
+							messages.error(request, 'Cannot delete some instances of OS_dev because there is still a reference')
 						except:
 							messages.error(request, 'Error deleting model')
 			elif p['qtype'] == 'add_osdev':
