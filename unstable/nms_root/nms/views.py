@@ -38,13 +38,15 @@ def install(request):
 		delete_group = Permission.objects.get(codename='delete_group')
 		add_devices = Permission.objects.get(codename='add_devices')
 		delete_devices = Permission.objects.get(codename='delete_devices')
-		group.permissions = [add_group, change_group, delete_group, list_group, add_devices, delete_devices]
+		add_gen_dev = Permission.objects.get(codename='add_gen_dev')
+		delete_gen_dev = Permission.objects.get(codename='delete_gen_dev')
+		group.permissions = [add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
 		
 		group, created = Group.objects.get_or_create(name='usr:admin')
 		add_user = Permission.objects.get(codename='add_user')
 		change_user = Permission.objects.get(codename='change_user')
 		delete_user = Permission.objects.get(codename='delete_user')
-		group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, add_devices, delete_devices]
+		group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
 		
 		
 		
@@ -343,6 +345,8 @@ def acl_groups_manage(request, acl_id):
 		list_group = None
 		add_devices = None
 		delete_devices = None
+		add_gen_dev = None
+		delete_gen_dev = None
 		if dev_check:
 			devices = Devices.objects.all()
 			checked = []
@@ -363,10 +367,12 @@ def acl_groups_manage(request, acl_id):
 			list_group = 'checked' if group.permissions.filter(codename='list_group').exists() else ''
 			add_devices = 'checked' if group.permissions.filter(codename='add_devices').exists() else ''
 			delete_devices = 'checked' if group.permissions.filter(codename='delete_devices').exists() else ''
+			add_gen_dev = 'checked' if group.permissions.filter(codename='add_gen_dev').exists() else ''
+			delete_gen_dev = 'checked' if group.permissions.filter(codename='delete_gen_dev').exists() else ''
 	
 	
 		return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check,
-															'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request, 'groups_usr': groups_usr, 'users': users, 'groups_dev': groups_dev, 'add_devices': add_devices, 'delete_devices': delete_devices, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
+															'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request, 'groups_usr': groups_usr, 'users': users, 'groups_dev': groups_dev, 'add_devices': add_devices, 'delete_devices': delete_devices, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count, 'add_gen_dev': add_gen_dev, 'delete_gen_dev': delete_gen_dev})
 	else:
 		messages.error(request, "You don't have the right permissions")
 		return HttpResponseRedirect(reverse('nms:acl'))
@@ -859,97 +865,119 @@ def init(request):
 
 @login_required
 def manage_gendev(request):
-	if request.method == 'POST' and 'qtype' in request.POST:
-		p = request.POST
-		if p['qtype'] == 'add_gendev':
-			if 'dev_type' in p and 'vendor' in p and 'model' in p and 'xml_files' in p:
-				try:
-					Gen_dev(dev_type_id_id=int(p['dev_type']), vendor_id_id=int(p['vendor']), model_id_id=int(p['model']), file_location_id_id=int(p['xml_files'])).save()
-				except:
-					messages.error(request, 'Error adding device template')
-		elif p['qtype'] == 'del_gendev':
-			if 'items' in p:
-				for i in p.getlist('items'):
+	if request.user.has_perm('nms.add_gen_dev') or request.user.has_perm('nms.delete_gen_dev'):
+		if request.method == 'POST' and 'qtype' in request.POST:
+			p = request.POST
+			if p['qtype'] == 'add_gendev':
+				if 'dev_type' in p and 'vendor' in p and 'model' in p and 'xml_files' in p:
 					try:
-						Gen_dev.objects.get(pk=int(i)).delete()
+						Gen_dev(dev_type_id_id=int(p['dev_type']), vendor_id_id=int(p['vendor']), model_id_id=int(p['model']), file_location_id_id=int(p['xml_files'])).save()
 					except:
-						messages.error(request, 'Error deleting device template')
-		elif p['qtype'] == 'add_devtype':
-			if 'name' in p:
-				try:
-					Dev_type(dev_type_name=p['name']).save()
-				except:
-					messages.error(request, 'Error adding device type')
-		elif p['qtype'] == 'del_devtype':
-			if 'items' in p:
-				for i in p.getlist('items'):
+						messages.error(request, 'Error adding device template')
+			elif p['qtype'] == 'del_gendev':
+				if 'items' in p:
+					for i in p.getlist('items'):
+						try:
+							Gen_dev.objects.get(pk=int(i)).delete()
+						except:
+							messages.error(request, 'Error deleting device template')
+			elif p['qtype'] == 'add_devtype':
+				if 'name' in p:
 					try:
-						Dev_type.objects.get(pk=int(i)).delete()
+						Dev_type(dev_type_name=p['name']).save()
 					except:
-						messages.error(request, 'Error deleting device type')
-		elif p['qtype'] == 'add_vendor':
-			if 'name' in p:
-				try:
-					Vendor(vendor_name=p['name']).save()
-				except:
-					messages.error(request, 'Error adding vendor')
-		elif p['qtype'] == 'del_vendor':
-			if 'items' in p:
-				for i in p.getlist('items'):
+						messages.error(request, 'Error adding device type')
+			elif p['qtype'] == 'del_devtype':
+				if 'items' in p:
+					for i in p.getlist('items'):
+						try:
+							Dev_type.objects.get(pk=int(i)).delete()
+						except:
+							messages.error(request, 'Error deleting device type')
+			elif p['qtype'] == 'add_vendor':
+				if 'name' in p:
 					try:
-						Vendor.objects.get(pk=int(i)).delete()
+						Vendor(vendor_name=p['name']).save()
 					except:
-						messages.error(request, 'Error deleting vendor')
-		elif p['qtype'] == 'add_model':
-			if 'name' in p:
-				try:
-					Dev_model(model_name=p['name']).save()
-				except:
-					messages.error(request, 'Error adding model')
-		elif p['qtype'] == 'del_model':
-			if 'items' in p:
-				for i in p.getlist('items'):
+						messages.error(request, 'Error adding vendor')
+			elif p['qtype'] == 'del_vendor':
+				if 'items' in p:
+					for i in p.getlist('items'):
+						try:
+							Vendor.objects.get(pk=int(i)).delete()
+						except:
+							messages.error(request, 'Error deleting vendor')
+			elif p['qtype'] == 'add_model':
+				if 'name' in p:
 					try:
-						Dev_model.objects.get(pk=int(i)).delete()
+						Dev_model(model_name=p['name']).save()
 					except:
-						messages.error(request, 'Error deleting model')
-		elif p['qtype'] == 'add_xml':
-			if 'name' in p:
-				try:
-					File_location(location=p['name']).save()
-				except:
-					messages.error(request, 'Error adding XML')
-		elif p['qtype'] == 'del_xml':
-			if 'items' in p:
-				for i in p.getlist('items'):
+						messages.error(request, 'Error adding model')
+			elif p['qtype'] == 'del_model':
+				if 'items' in p:
+					for i in p.getlist('items'):
+						try:
+							Dev_model.objects.get(pk=int(i)).delete()
+						except:
+							messages.error(request, 'Error deleting model')
+			elif p['qtype'] == 'add_xml':
+				if 'name' in p:
 					try:
-						File_location.objects.get(pk=int(i)).delete()
+						File_location(location=p['name']).save()
 					except:
-						messages.error(request, 'Error deleting XML')
-		elif p['qtype'] == 'add_os_type':
-			if 'name' in p:
-				try:
-					OS_type(type=p['name']).save()
-				except:
-					messages.error(request, 'Error adding model')
-		elif p['qtype'] == 'del_os_type':
-			if 'items' in p:
-				for i in p.getlist('items'):
+						messages.error(request, 'Error adding XML')
+			elif p['qtype'] == 'del_xml':
+				if 'items' in p:
+					for i in p.getlist('items'):
+						try:
+							File_location.objects.get(pk=int(i)).delete()
+						except:
+							messages.error(request, 'Error deleting XML')
+			elif p['qtype'] == 'add_os_type':
+				if 'name' in p:
 					try:
-						OS_type.objects.get(pk=int(i)).delete()
+						OS_type(type=p['name']).save()
 					except:
-						messages.error(request, 'Error deleting model')
-					
-
-	dev_types = Dev_type.objects.all()
-	vendors = Vendor.objects.all()
-	models = Dev_model.objects.all()
-	xml_files = File_location.objects.all()
-	gen_devs = Gen_dev.objects.all()
-	os = OS.objects.all()
-	os_devs = OS_dev.objects.all()
-	os_type = OS_type.objects.all()
-	if request.method == 'POST':
-		return HttpResponseRedirect(reverse('nms:manage_gendev'))
+						messages.error(request, 'Error adding model')
+			elif p['qtype'] == 'del_os_type':
+				if 'items' in p:
+					for i in p.getlist('items'):
+						try:
+							OS_type.objects.get(pk=int(i)).delete()
+						except:
+							messages.error(request, 'Error deleting model')
+			elif p['qtype'] == 'add_os':
+				if 'name' in p:
+					try:
+						os = OS()
+						os.vendor_id = Vendor.objects.get(pk=request.POST['vendor_id'])
+						os.os_type_id =	OS_type.objects.get(pk=request.POST['os_type_id'])
+						os.build = request.POST['build']
+						os.short_info = request.POST['short_info']
+						os.name = request.POST['name']					
+					except:
+						messages.error(request, 'Error adding model')
+			elif p['qtype'] == 'del_os':
+				if 'items' in p:
+					for i in p.getlist('items'):
+						try:
+							OS.objects.get(pk=int(i)).delete()
+						except:
+							messages.error(request, 'Error deleting model')
+						
+	
+		dev_types = Dev_type.objects.all()
+		vendors = Vendor.objects.all()
+		models = Dev_model.objects.all()
+		xml_files = File_location.objects.all()
+		gen_devs = Gen_dev.objects.all()
+		os = OS.objects.all()
+		os_devs = OS_dev.objects.all()
+		os_type = OS_type.objects.all()
+		if request.method == 'POST':
+			return HttpResponseRedirect(reverse('nms:manage_gendev'))
+		else:
+			return render(request, 'nms/manage_gendev.html', {'request':request, 'dev_types':dev_types, 'vendors':vendors, 'models':models, 'xml_files':xml_files, 'gen_devs':gen_devs, 'os':os, 'os_devs':os_devs, 'os_type': os_type})
 	else:
-		return render(request, 'nms/manage_gendev.html', {'request':request, 'dev_types':dev_types, 'vendors':vendors, 'models':models, 'xml_files':xml_files, 'gen_devs':gen_devs, 'os':os, 'os_devs':os_devs, 'os_type': os_type})
+		messages.error(request, "You don't have the right permissions to access this page.")
+		return HttpResponseRedirect(reverse('nms:devices'))
