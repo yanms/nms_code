@@ -981,7 +981,7 @@ def manage_gendev(request):
 					try:
 						OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['gen_dev']))
 					except:
-                        raise
+						raise
 						messages.error(request, 'Error adding model')
 					
 						
