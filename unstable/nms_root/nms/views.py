@@ -950,14 +950,15 @@ def manage_gendev(request):
 						except:
 							messages.error(request, 'Error deleting model')
 			elif p['qtype'] == 'add_os':
-				if 'name' in p:
+				if 'vendor_id' in name and 'os_type_id' in p:
 					try:
 						os = OS()
 						os.vendor_id = Vendor.objects.get(pk=request.POST['vendor_id'])
 						os.os_type_id =	OS_type.objects.get(pk=request.POST['os_type_id'])
 						os.build = request.POST['build']
 						os.short_info = request.POST['short_info']
-						os.name = request.POST['name']					
+						os.name = request.POST['name']		
+                        os.save()			
 					except:
 						messages.error(request, 'Error adding model')
 			elif p['qtype'] == 'del_os':
