@@ -958,7 +958,7 @@ def manage_gendev(request):
 						os.build = request.POST['build']
 						os.short_info = request.POST['short_info']
 						os.name = request.POST['name']		
-                        os.save()			
+						os.save()			
 					except:
 						messages.error(request, 'Error adding model')
 			elif p['qtype'] == 'del_os':
