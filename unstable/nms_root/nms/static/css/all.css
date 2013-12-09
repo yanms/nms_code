@@ -41,16 +41,16 @@ form,fieldset{
 	float:left;
 	width:100%;
 }
-#footer, .push {
-	position:absolute;
+#footer {
+	position:fixed;
 	bottom: 0;
 	padding: 5px 5px 5px 5px;
 	border-top-style: solid;
 	border-top-width: 2px;
+	background:url(../images/bg-controls.png);
 }
 .c1 {margin:0 0 0 77px;}
 .controls {
-	height:1%;
 	/* overflow:hidden; */
 	width: auto;
 	height: 39px;

@@ -139,8 +139,8 @@ def acl_user_manage(request, acl_user):
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
-	if request.user.has_perm('auth.change_user'):
-		user_obj = get_object_or_404(User, pk=acl_user)
+	user_obj = get_object_or_404(User, pk=acl_user)
+	if request.user.has_perm('auth.change_user') and user_obj.username != 'root':
 		groups = Group.objects.all()
 		is_active_check = 'checked' if user_obj.is_active else ''
 		return render(request, 'nms/acl_user_manage.html', {'user_obj': user_obj, 'groups': groups, 'request':request, 'is_active_check': is_active_check, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
@@ -445,11 +445,17 @@ def register(request):
 		username = request.POST['username']
 		password = request.POST['password']
 		password_check = request.POST['password1']
+		first_name = request.POST['first_name']
+		last_name = request.POST['last_name']
+		email = request.POST['email']
 		check_username = User.objects.filter(username=username).exists()
 		if not check_username:
 			if password == password_check:
 				user = User.objects.create_user(username=username, password=password)
 				user.is_active = False
+				user.first_name = first_name
+				user.last_name = last_name
+				user.email = email
 				user.save()
 				messages.success(request, 'Your accounts is created. An administrator has to activate your account')
 				return HttpResponseRedirect(reverse('nms:register'))
@@ -484,10 +490,13 @@ def devices_manage(request):
 			dev_group = [x.dev_group_set.all() for x in groups_list][0]
 			devices = {x.devid for x in dev_group}
 			devices = list(devices)
-			if groups_list != []:
+			if groups_list != [] and devices != []:
 				return render(request, 'nms/devices_manage.html', {'devices': devices, 'request':request})
+			elif devices == []:
+				messages.error(request, "There is no device added to your device groups")
+				return HttpResponseRedirect(reverse('nms:devices'))
 			else:
-				messages.error(request, "You are not added to any devices yet with the right permission.")
+				messages.error(request, "You are not added to any device groups with the right permission.")
 				return HttpResponseRedirect(reverse('nms:index'))
 		except IndexError:
 			messages.error(request, "You are not added to any groups yet.")
@@ -542,7 +551,8 @@ def device_add(request):
 				passwordstore.storeEnablePassword(device, password_enable)
 				passwordstore.storeRemotePassword(device, password_remote)
 				group_dev_add = get_object_or_404(Group, pk=dev_groups)
-				Dev_group.objects.create(gid=group_dev_add, devid=device)
+				if gid != '':
+					Dev_group.objects.create(gid=group_dev_add, devid=device)
 			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
 				messages.error(request, 'Not all fields are set or an other error occured')
 				messages.error(request, err)

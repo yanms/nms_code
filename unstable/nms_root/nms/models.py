@@ -85,6 +85,8 @@ class Devices(models.Model):
 class History(models.Model):
     history_id = models.AutoField(primary_key=True)
     action = models.CharField(max_length=255)
+    action_type = models.PositiveIntegerField()
+    dev_id = models.ForeignKey(Devices, on_delete=models.PROTECT)
     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
     
 class Settings(models.Model):
