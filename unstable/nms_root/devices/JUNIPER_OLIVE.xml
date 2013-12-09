@@ -57,7 +57,7 @@
             <command>
                <argElement position="0" type="plaintext">show interfaces routing</argElement>
             </command>
-            <returnParsing delimiter="\n" type="regex">.*</returnParsing>
+            <returnParsing delimiter="\n" type="regex">(?=(^.*?$))(?=(?!^.*?>.*?$))(?=(?!^---))</returnParsing>
          </item>
       </category>
       <category name="General settings">
