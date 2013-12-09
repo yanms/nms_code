@@ -169,6 +169,7 @@
 												</table>
 												</form>
 											</td>
+                                        </tr>
 										<tr>
 											<td width="50%">
 												<h3>Models</h3>
@@ -230,8 +231,7 @@
 												</table>
 												</form>
 											</td>
-										<tr>
-										<tr>
+										</tr>
 									</table>
 									<table border="0" width="100%">
 										<tr>
@@ -322,7 +322,13 @@
 												</table>
 												</form>
 											</td>
-											
+											<td width="50%">
+                                                <h3>Header for OS form</h3>
+                                                <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <input ...>
+                                                </form>
+                                            </td>
 										</tr>
 									</table>
 								</p>
