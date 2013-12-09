@@ -12,7 +12,7 @@
       <command>
          <argElement position="0" type="plaintext">show interfaces routing</argElement>
       </command>
-      <returnParsing delimiter="\n" type="regex">(?=(^[0-9a-zA-Z/.]+))(?=(?!^Interface.*?$))(?=(?!^.*?>))(?=(?!^lo.*?))</returnParsing>
+      <returnParsing delimiter="\n" type="regex">(?=(^[0-9a-zA-Z/.]+))(?=(?!^Interface.*?$))(?=(?!^.*?>))(?=(?!^lo.*?))(?=(?!^show))</returnParsing>
    </interfaceQuery>
 
    <configurationItems>
