@@ -14,6 +14,7 @@ import nms.passwordstore as passwordstore
 import traceback
 import  django.db.models as django_exception
 from django.utils import timezone
+from django.db.models import Q
 
 
 @login_required
@@ -1042,3 +1043,9 @@ def history(request, device_id_request):
 	else:
 		messages.error(request, "You don't have the right permissions")
 		return HttpResponseRedirect(reverse('nms:devices'))
+		
+@login_required
+def user_history(request):
+	history_items = History.objects.filter(Q(user_id = request.user) | Q(user_performed_task = request.user ))
+	return render(request, 'nms/user_history.html', {'request': request, 'history': history_items})
+	
