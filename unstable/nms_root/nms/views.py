@@ -643,6 +643,8 @@ def device_modify(request, device_id_request):
 				device.ip = request.POST['ipaddr']
 				device.port = request.POST['port']
 				device.login_name = request.POST['login_name']
+				password_remote = request.POST['password_remote']
+				password_enable = request.POST['password_enable']
 				device.save()
 				if password_enable != '':
 					passwordstore.storeEnablePassword(device, password_enable)
