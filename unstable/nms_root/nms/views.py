@@ -637,14 +637,12 @@ def device_modify(request, device_id_request):
 				except:
 					messages.error(request, "No gendev found")
 					return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
-				device.os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
+				device.os_dev-id = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
 				device.pref_remote_prot = request.POST['pref_remote_prot']
-				device.ipprot = request.POST['ipprot']
-				device.ip_recv = request.POST['ipaddr']
+				device.ip_version = request.POST['ipprot']
+				device.ip = request.POST['ipaddr']
 				device.port = request.POST['port']
 				device.login_name = request.POST['login_name']
-				password_remote = request.POST['password_remote']
-				password_enable = request.POST['password_enable']
 				device.save()
 				if password_enable != '':
 					passwordstore.storeEnablePassword(device, password_enable)
