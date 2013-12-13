@@ -233,7 +233,7 @@ def acl_handler(request, acl_id):
 					for iter in groups:
 						group = get_object_or_404(Group, name=iter)
 						user_obj.groups.add(group)
-					History.objects.create(action_type = 'Modified user groups', user_id = user_obj, user_performed_task = request.user, action='Currently assigned groups: {0}'.format(user_obj.groups), date_time = timezone.now())
+					History.objects.create(action_type = 'Modified user groups', user_id = user_obj, user_performed_task = request.user, action='Currently assigned groups: {0}'.format(user_obj.groups.all()), date_time = timezone.now())
 					messages.success(request, 'Database updated successfully')
 					return HttpResponseRedirect(reverse('nms:acl_user'))
 				else:
