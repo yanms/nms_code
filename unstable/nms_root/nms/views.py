@@ -637,7 +637,7 @@ def device_modify(request, device_id_request):
 				except:
 					messages.error(request, "No gendev found")
 					return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
-				device.os_dev-id = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
+				device.os_dev_id = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
 				device.pref_remote_prot = request.POST['pref_remote_prot']
 				device.ip_version = request.POST['ipprot']
 				device.ip = request.POST['ipaddr']
