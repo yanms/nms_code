@@ -313,7 +313,7 @@ def acl_handler(request, acl_id):
 						user_recv = get_object_or_404(User, pk=iter)
 						group.user_set.add(user_recv)
 					History.objects.create(action_type='ACL: Changed permission device group', action='Current permissions {0}'.format(group.permissions.all()), group_id=group, user_performed_task = request.user, date_time = timezone.now())
-					History.objects.create(action_type='ACL: Changed users listed in device group', action='Current users listed in device group: {0}'.format(group.user_set.all()), group_id = group, user_performed_task = request.user, date_time = timezone.now()))
+					History.objects.create(action_type='ACL: Changed users listed in device group', action='Current users listed in device group: {0}'.format(group.user_set.all()), group_id = group, user_performed_task = request.user, date_time = timezone.now())
 					messages.success(request, 'Database updated successfully')
 					return HttpResponseRedirect(reverse('nms:acl_groups_manage', args=(acl_id,)))
 				else:
