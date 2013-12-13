@@ -13,6 +13,7 @@ import nms.xmlparser as xmlparser
 import nms.passwordstore as passwordstore
 import traceback
 import  django.db.models as django_exception
+from django.utils import timezone
 
 
 @login_required
@@ -821,7 +822,7 @@ def query(request):
 			connection = commands.getConnection(request.user, device)
 			text = text + '\n'
 			if type(text) != type(bytes()):
-				History.objects.create(user_performed_task = request.user, action_type='Manage device', dev_id = device, action = '[dev%i] %s' % (device.dev_id, text))
+				History.objects.create(user_performed_task = request.user, action_type='Manage device', dev_id = device, action = '[dev%i] %s' % (device.dev_id, text), date_time = timezone.now())
 			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
 		elif query == 'del':
@@ -831,7 +832,7 @@ def query(request):
 			connection = commands.getConnection(request.user, device)
 			text = passwordstore.getEnablePassword(device).decode() + '\n'
 			if type(text) != type(bytes()):
-				History.objects.create(user_performed_task = request.user, action_type='Elevate user (manage device)', dev_id = device, action = '[dev%i] Elevating user rights' % (device.dev_id))
+				History.objects.create(user_performed_task = request.user, action_type='Elevate user (manage device)', dev_id = device, action = '[dev%i] Elevating user rights' % (device.dev_id) date_time = timezone.now())
 			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
 	return HttpResponse('<Unkown query type>!', content_type='text/plain')
