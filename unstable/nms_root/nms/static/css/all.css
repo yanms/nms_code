@@ -370,7 +370,8 @@ footer{
 }
 
 .TFtable{
-	border-collapse:collapse; 
+	border-collapse:collapse;
+	padding-right: 10px; 
 }
 .TFtable td{ 
 	padding:7px; border:#4e95f4 1px solid;
