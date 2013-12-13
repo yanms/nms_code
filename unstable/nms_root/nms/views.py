@@ -859,7 +859,7 @@ def query(request):
 @login_required
 def logout_handler(request):
 	History.objects.create(user_performed_task=request.user, user_id=request.user, action_type='User: logged out', action='The user has been logged out', date_time=timezone.now())
-    logout(request)
+	logout(request)
 	messages.success(request, "You are logged out")
 	return HttpResponseRedirect(reverse('nms:login_handler'))
 
