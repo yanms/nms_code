@@ -38,7 +38,7 @@ def getInterfaces(command, parser, device, user):
 			ret = b''
 			for i, arg in enumerate(command):
 				if type(arg) != type(bytes()):
-					History.objects.create(user_performed_task = user, action_type='Manage device', dev_id = device, action = '[dev%i] %s' % (device.dev_id, arg) date_time = timezone.now())
+					History.objects.create(user_performed_task = user, action_type='Manage device', dev_id = device, action = '[dev%i] %s' % (device.dev_id, arg), date_time = timezone.now())
 				if i+1 == len(command):
 					ret += s.send_and_receive(arg, delay=4)
 				else:
@@ -82,7 +82,7 @@ def executeTask(taskpath, device, uargs, user):
 	ret = b''
 	for i, arg in enumerate(args):
 		if type(arg) != type(bytes()):
-			History.objects.create(user_performed_task = user, action_type='Manage device', dev_id = device, action = '[dev%i] %s' % (device.dev_id, arg) date_time = timezone.now())
+			History.objects.create(user_performed_task = user, action_type='Manage device', dev_id = device, action = '[dev%i] %s' % (device.dev_id, arg), date_time = timezone.now())
 		if i+1 == len(args):
 			ret += s.send_and_receive(arg, delay=4)
 		else:
