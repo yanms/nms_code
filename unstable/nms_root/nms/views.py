@@ -856,8 +856,10 @@ def query(request):
 			return HttpResponse('', content_type='text/plain')
 	return HttpResponse('<Unkown query type>!', content_type='text/plain')
 
+@login_required
 def logout_handler(request):
-	logout(request)
+	History.objects.create(user_performed_task=request.user, user_id=request.user, action_type='User: logged out', action='The user has been logged out', date_time=timezone.now())
+    logout(request)
 	messages.success(request, "You are logged out")
 	return HttpResponseRedirect(reverse('nms:login_handler'))
 
