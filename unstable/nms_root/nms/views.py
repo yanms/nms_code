@@ -123,6 +123,7 @@ def acl_user_add_handler(request):
 					user.email = email
 					user.set_password(password)
 					user.save()
+					History.objects.create(action_type='ACL: User', action='Added user', user_id=user, user_performed_task=request.user, date_time = timezone.now())
 					messages.success(request, "Database updated successfully.")
 					return HttpResponseRedirect(reverse('nms:acl_user_add'))
 				else:
@@ -177,6 +178,7 @@ def acl_user_manage_handler(request, acl_user):
 						user_obj.set_password(password)
 					user_obj.save()
 					messages.success(request, "Database successfully updated.")
+					History.objects.create(action_type='ACL: change user rights', action='Change user settings', user_performed_task=request.user, user_id=user_obj, date_time=timezone.now())
 					return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,)))
 				else:
 				   messages.error(request, "Passwords are not the same")
@@ -233,7 +235,7 @@ def acl_handler(request, acl_id):
 					for iter in groups:
 						group = get_object_or_404(Group, name=iter)
 						user_obj.groups.add(group)
-					History.objects.create(action_type = 'Modified user groups', user_id = user_obj, user_performed_task = request.user, action='Currently assigned groups: {0}'.format(user_obj.groups.all()), date_time = timezone.now())
+						History.objects.create(action_type = 'ACL: Modified user groups', user_id = user_obj, user_performed_task = request.user, action='Currently assigned groups: {0}'.format(group), group_id=group, date_time = timezone.now())
 					messages.success(request, 'Database updated successfully')
 					return HttpResponseRedirect(reverse('nms:acl_user'))
 				else:
@@ -260,8 +262,8 @@ def acl_handler(request, acl_id):
 						user_recv = get_object_or_404(User, pk=iter)
 						group.user_set.add(user_recv)
 					
-					History.objects.create(action_type='Changed permission user group', action='Current permissions {0}'.format(group.permissions.all(), user_performed_task = request.user, date_time = timezone.now())
-					History.objects.create(action_type='Changed users listed in user group', action='Current users listed in user group: {0}'.format(group.user_set.all(), user_performed_task = request.user, date_time = timezone.now()))
+					History.objects.create(action_type='ACL: Changed permission user group', action='Current permissions {0}'.format(group.permissions.all()), group_id=group, user_performed_task = request.user, date_time = timezone.now())
+					History.objects.create(action_type='ACL: Changed users listed in user group', action='Current users listed in user group: {0}'.format(group.user_set.all()), group_id=group, user_performed_task = request.user, date_time = timezone.now()))
 					messages.success(request, 'Database updated successfully')
 					return HttpResponseRedirect(reverse('nms:acl_groups_manage', args=(acl_id,)))
 				else:
@@ -277,7 +279,7 @@ def acl_handler(request, acl_id):
 					for group in groups:
 						group_obj = get_object_or_404(Group, pk=group)
 						Dev_group.objects.get_or_create(gid=group_obj, devid=device)
-					History.objects.create(action_type = 'Modified groups where device is listed', dev_id = device, user_performed_task = request.user, action='Currently assigned groups: {0}'.format(device.groups.all()), date_time = timezone.now())
+						History.objects.create(action_type = 'ACL: Modified groups where device is listed', dev_id = device, user_performed_task = request.user, action='Currently assigned groups: {0}'.format(group_obj), group_id=group_obj, date_time = timezone.now())
 					messages.success(request, 'Database updated successfully')
 					return HttpResponseRedirect(reverse('nms:acl_groups'))
 				else:
@@ -310,8 +312,8 @@ def acl_handler(request, acl_id):
 					for iter in users_received:
 						user_recv = get_object_or_404(User, pk=iter)
 						group.user_set.add(user_recv)
-					History.objects.create(action_type='Changed permission device group', action='Current permissions {0}'.format(group.permissions.all(), user_performed_task = request.user, date_time = timezone.now())
-					History.objects.create(action_type='Changed users listed in device group', action='Current users listed in device group: {0}'.format(group.user_set.all(), user_performed_task = request.user, date_time = timezone.now()))
+					History.objects.create(action_type='ACL: Changed permission device group', action='Current permissions {0}'.format(group.permissions.all()), group_id=group, user_performed_task = request.user, date_time = timezone.now())
+					History.objects.create(action_type='ACL: Changed users listed in device group', action='Current users listed in device group: {0}'.format(group.user_set.all()), group_id = group, user_performed_task = request.user, date_time = timezone.now()))
 					messages.success(request, 'Database updated successfully')
 					return HttpResponseRedirect(reverse('nms:acl_groups_manage', args=(acl_id,)))
 				else:
@@ -393,7 +395,8 @@ def acl_groups_handler(request):
 			if request.user.has_perm('auth.add_user'):
 				name = 'usr:'
 				name += request.POST['group']
-				Group.objects.get_or_create(name=name)
+				group = Group.objects.get_or_create(name=name)
+				History.objects.create(group_id=group, action_type='ACL: Created group', action='Create {0} group'.format(group), date_time=timezone.now(), user_performed_task=request.user)
 				messages.success(request, "Database updated succesfully")
 				return HttpResponseRedirect(reverse('nms:acl_groups'))
 			else:
@@ -404,6 +407,7 @@ def acl_groups_handler(request):
 				name = 'dev:'
 				name += request.POST['group']
 				Group.objects.get_or_create(name=name)
+				History.objects.create(group_id=group, action_type='ACL: Created group', action='Create {0} group'.format(group), date_time=timezone.now(), user_performed_task=request.user)
 				messages.success(request, "Database updated succesfully")
 				return HttpResponseRedirect(reverse('nms:acl_groups'))
 			else:
@@ -418,6 +422,7 @@ def acl_groups_handler(request):
 						messages.error(request, "Can't remove group: " + group.name)
 						return HttpResponseRedirect(reverse('nms:acl_groups'))
 					group.delete()  
+					History.objects.create(user_performed_task=request.user, date_time=timezone.now(), action_type='ACL: Removed group', action='Removed group {0}'.format(group))
 				messages.success(request, "Database updated succesfully")
 				return HttpResponseRedirect(reverse('nms:acl_groups'))
 			else:
@@ -431,6 +436,7 @@ def acl_groups_handler(request):
 					if user.username == 'root':
 						messages.error(request, "Can't remove user: root")
 						return HttpResponseRedirect(reverse('nms:acl_user'))
+					History.objects.create(user_performed_task=request.user, date_time=timezone.now(), action_type='ACL: Removed user', action='Removed user {0}'.format(user))
 					user.delete()
 				messages.success(request, "Database updated succesfully")
 				return HttpResponseRedirect(reverse('nms:acl_user'))
@@ -444,6 +450,7 @@ def acl_groups_handler(request):
 				for item in devices:
 					device = get_object_or_404(Devices, pk=item)
 					device.dev_group_set.filter().delete()
+					History.objects.create(user_performed_task=request.user, date_time=timezone.now(), action_type='ACL: Removed device', action='Removed device {0}'.format(device))
 					device.delete()
 				messages.success(request, "Database updated succesfully")
 				return HttpResponseRedirect(reverse('nms:acl_device'))
@@ -472,6 +479,7 @@ def register(request):
 				user.last_name = last_name
 				user.email = email
 				user.save()
+				History.objects.create(action_type='User', action='User created', user_performed_task=request.user, user_id=request.user user_performed_action=user, date_time=timezone.now())
 				messages.success(request, 'Your accounts is created. An administrator has to activate your account')
 				return HttpResponseRedirect(reverse('nms:register'))
 			else:
@@ -577,6 +585,7 @@ def device_add(request):
 				#return HttpResponse(request.POST.items())
 				return HttpResponseRedirect(reverse('nms:device_add'))
 			
+			History.objects.create(user_performed_task=request.user, dev_id=device, date_time=timezone.now(), action_type='Created device', action='Created device {0}'.format(device))
 			messages.success(request, 'Database updated')
 			return HttpResponseRedirect(reverse('nms:device_add'))
 		else:
@@ -664,7 +673,7 @@ def device_modify(request, device_id_request):
 				print(err)
 				#return HttpResponse(request.POST.items())
 				return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
-			
+			History.objects.create(user_performed_task=request.user, dev_id=device, date_time=timezone.now(), action_type='Modified device', action='Modified device {0}'.format(device))
 			messages.success(request, 'Database updated')
 			return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
 		else:
@@ -686,6 +695,7 @@ def user_settings(request):
 						if new_password == check_new_password:
 							request.user.set_password(new_password)
 							request.user.save()
+							History.objects.create(action_type='User: Modify passwords', action='Password has been changed', user_performed_action=request.user, user_id=request.user, date_time=timezone.now())
 							messages.success(request, 'Your password has been updated')
 							#debug = list(request.POST.items())
 							#messages.error(request, debug)
@@ -709,6 +719,7 @@ def user_settings(request):
 					request.user.email = newemail
 					request.user.save()
 					messages.success(request, 'Attributes updated')
+					History.objects.create(action_type='User: Modify settings', action='Settings modified', user_performed_task=request.user, user_id=request.user, date_time=timezone.now())
 				else:
 					messages.error(request, 'Not all fields were filled')
 				return HttpResponseRedirect(reverse('nms:user_settings'))
@@ -757,6 +768,7 @@ def session_handler(request):
 			if user is not None:
 				if user.is_active:
 					login(request, user)
+					History.objects.create(user_performed_task=request.user, action_type='User: logged in', action='User succesfully logged in', date_time=timezone.now(), user_id=request.user)
 					messages.success(request, "Successfully logged in")
 					if url == "":
 						return HttpResponseRedirect(reverse('nms:index'))
@@ -882,6 +894,7 @@ def manage_gendev(request):
 				if 'dev_type' in p and 'vendor' in p and 'model' in p and 'xml_files' in p:
 					try:
 						Gen_dev(dev_type_id_id=int(p['dev_type']), vendor_id_id=int(p['vendor']), model_id_id=int(p['model']), file_location_id_id=int(p['xml_files'])).save()
+						History.objects.create(action_type='Gendev: add', action='Added gendev', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding device template')
@@ -890,6 +903,7 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							Gen_dev.objects.get(pk=int(i)).delete()
+							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
 							messages.error(request, 'Cannot delete some instances of gen_dev because there is still a reference')
@@ -899,6 +913,7 @@ def manage_gendev(request):
 				if 'name' in p:
 					try:
 						Dev_type(dev_type_name=p['name']).save()
+						History.objects.create(action_type='Gendev: add', action='Added gendev device type', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding device type')
@@ -907,6 +922,8 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							Dev_type.objects.get(pk=int(i)).delete()
+							
+							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev device type', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
 							messages.error(request, 'Cannot delete some instances of dev_type because there is still a reference')
@@ -916,6 +933,7 @@ def manage_gendev(request):
 				if 'name' in p:
 					try:
 						Vendor(vendor_name=p['name']).save()
+						History.objects.create(action_type='Gendev: add', action='Added gendev vendor', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding vendor')
@@ -924,6 +942,7 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							Vendor.objects.get(pk=int(i)).delete()
+							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev vendor', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
 							messages.error(request, 'Cannot delete some instances of vendor because there is still a reference')
@@ -933,6 +952,7 @@ def manage_gendev(request):
 				if 'name' in p:
 					try:
 						Dev_model(model_name=p['name']).save()
+						History.objects.create(action_type='Gendev: add', action='Added gendev model', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding model')
@@ -941,6 +961,7 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							Dev_model.objects.get(pk=int(i)).delete()
+							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev model', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
 							messages.error(request, 'Cannot delete some instances of model because there is still a reference')
@@ -950,6 +971,7 @@ def manage_gendev(request):
 				if 'name' in p:
 					try:
 						File_location(location=p['name']).save()
+						History.objects.create(action_type='Gendev: add', action='Added gendev XML', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding XML')
@@ -958,6 +980,7 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							File_location.objects.get(pk=int(i)).delete()
+							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev XML', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
 							messages.error(request, 'Cannot delete some instances of xml because there is still a reference')
@@ -967,6 +990,7 @@ def manage_gendev(request):
 				if 'name' in p:
 					try:
 						OS_type(type=p['name']).save()
+						History.objects.create(action_type='Gendev: add', action='Added gendev OS type', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding model')
@@ -975,6 +999,7 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							OS_type.objects.get(pk=int(i)).delete()
+							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev OS type', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
 							messages.error(request, 'Cannot delete some instances of OS_type because there is still a reference')
@@ -990,6 +1015,7 @@ def manage_gendev(request):
 						os.short_info = request.POST['short_info']
 						os.name = request.POST['name']		
 						os.save()
+						History.objects.create(action_type='Gendev: add', action='Added gendev OS', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding model')
@@ -998,6 +1024,7 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							OS.objects.get(pk=int(i)).delete()
+							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev OS', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
 							messages.error(request, 'Cannot delete some instances of OS because there is still a reference')
@@ -1008,6 +1035,7 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							OS_dev.objects.get(pk=int(i)).delete()
+							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev OS device', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
 							messages.error(request, 'Cannot delete some instances of OS_dev because there is still a reference')
@@ -1017,6 +1045,7 @@ def manage_gendev(request):
 				if 'os' in p and 'gen_dev' in p:
 					try:
 						OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['gen_dev']))
+						History.objects.create(action_type='Gendev: add', action='Added gendev OS device', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding model')
