@@ -233,7 +233,7 @@ def acl_handler(request, acl_id):
 					for iter in groups:
 						group = get_object_or_404(Group, name=iter)
 						user_obj.groups.add(group)
-						History.objects.create(action_type = 'Modified user groups', action='test', date_time = timezone.now())
+						History.objects.create(action_type = 'Modified user groups', user_id = user_obj, user_performed_task = request.user, action='test', date_time = timezone.now())
 					messages.success(request, 'Database updated successfully')
 					return HttpResponseRedirect(reverse('nms:acl_user'))
 				else:
@@ -1039,8 +1039,8 @@ def manage_gendev(request):
 def history(request, device_id_request):
 	if request.user.has_perm('nms.manage_devices'):
 		device = get_object_or_404(Devices, pk=device_id_request)
-		history = History.objects.filter(dev_id=device)
-		return render(request, 'nms/history.html', {'request': request, 'history': history})
+		history_items = History.objects.filter(dev_id=device)
+		return render(request, 'nms/history.html', {'request': request, 'history': history_items})
 	else:
 		messages.error(request, "You don't have the right permissions")
 		return HttpResponseRedirect(reverse('nms:devices'))
