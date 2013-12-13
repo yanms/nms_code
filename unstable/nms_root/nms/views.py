@@ -832,7 +832,7 @@ def query(request):
 			connection = commands.getConnection(request.user, device)
 			text = passwordstore.getEnablePassword(device).decode() + '\n'
 			if type(text) != type(bytes()):
-				History.objects.create(user_performed_task = request.user, action_type='Elevate user (manage device)', dev_id = device, action = '[dev%i] Elevating user rights' % (device.dev_id) date_time = timezone.now())
+				History.objects.create(user_performed_task = request.user, action_type='Elevate user (manage device)', dev_id = device, action = '[dev%i] Elevating user rights' % (device.dev_id), date_time = timezone.now())
 			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
 	return HttpResponse('<Unkown query type>!', content_type='text/plain')
