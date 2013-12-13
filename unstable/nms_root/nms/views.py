@@ -259,7 +259,9 @@ def acl_handler(request, acl_id):
 					for iter in users_received:
 						user_recv = get_object_or_404(User, pk=iter)
 						group.user_set.add(user_recv)
-			
+					
+					History.objects.create(action_type='Changed permission user group', action='Current permissions {0}'.format(group.permissions.all(), user_performed_task = request.user, date_time = timezone.now())
+					History.objects.create(action_type='Changed users listed in user group', action='Current users listed in user group: {0}'.format(group.user_set.all(), user_performed_task = request.user, date_time = timezone.now()))
 					messages.success(request, 'Database updated successfully')
 					return HttpResponseRedirect(reverse('nms:acl_groups_manage', args=(acl_id,)))
 				else:
@@ -275,6 +277,7 @@ def acl_handler(request, acl_id):
 					for group in groups:
 						group_obj = get_object_or_404(Group, pk=group)
 						Dev_group.objects.get_or_create(gid=group_obj, devid=device)
+					History.objects.create(action_type = 'Modified groups where device is listed', dev_id = device, user_performed_task = request.user, action='Currently assigned groups: {0}'.format(device.groups.all()), date_time = timezone.now())
 					messages.success(request, 'Database updated successfully')
 					return HttpResponseRedirect(reverse('nms:acl_groups'))
 				else:
@@ -307,6 +310,8 @@ def acl_handler(request, acl_id):
 					for iter in users_received:
 						user_recv = get_object_or_404(User, pk=iter)
 						group.user_set.add(user_recv)
+					History.objects.create(action_type='Changed permission device group', action='Current permissions {0}'.format(group.permissions.all(), user_performed_task = request.user, date_time = timezone.now())
+					History.objects.create(action_type='Changed users listed in device group', action='Current users listed in device group: {0}'.format(group.user_set.all(), user_performed_task = request.user, date_time = timezone.now()))
 					messages.success(request, 'Database updated successfully')
 					return HttpResponseRedirect(reverse('nms:acl_groups_manage', args=(acl_id,)))
 				else:
