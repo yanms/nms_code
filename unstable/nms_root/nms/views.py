@@ -479,7 +479,7 @@ def register(request):
 				user.last_name = last_name
 				user.email = email
 				user.save()
-				History.objects.create(action_type='User', action='User created', user_performed_task=request.user, user_id=request.user user_performed_action=request.user, date_time=timezone.now())
+				History.objects.create(action_type='User', action='User created', user_performed_task=user, user_id=user, date_time=timezone.now())
 				messages.success(request, 'Your accounts is created. An administrator has to activate your account')
 				return HttpResponseRedirect(reverse('nms:register'))
 			else:
