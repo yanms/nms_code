@@ -89,6 +89,7 @@ class History(models.Model):
     dev_id = models.ForeignKey(Devices, blank=True, null=True)
     user_id = models.ForeignKey(User, blank=True, null=True)
     user_performed_task = models.ForeignKey(User, related_name='user_performed_task', blank=True, null=True)
+    date_time = models.DateTimeField()
     
 class Settings(models.Model):
     settings_id = models.AutoField(primary_key=True)
