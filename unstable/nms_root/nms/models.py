@@ -90,6 +90,7 @@ class History(models.Model):
     user_id = models.ForeignKey(User, blank=True, null=True)
     user_performed_task = models.ForeignKey(User, related_name='user_performed_task', blank=True, null=True)
     date_time = models.DateTimeField()
+    group_id = models.ForeignKey(Group, blank=True, null=True)
     
 class Settings(models.Model):
     settings_id = models.AutoField(primary_key=True)
