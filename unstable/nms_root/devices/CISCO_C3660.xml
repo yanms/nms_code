@@ -62,7 +62,7 @@
       </category>
       <category name="General settings">
 		 <item name="Set OSPF configuration" type="single">
-			<command userArgs="ip:subnet_mask">
+			<command userArgs="process_id:ip:subnet_mask:area_id">
 				<argElement position="0" type="plaintext">enable</argElement>
 				<argElement position="1" type="privpasswd" />
 				<argElement position="2" type="plaintext">configure terminal</argElement>
@@ -74,7 +74,7 @@
 			<returnParsing delimiter="\n" type="regex">????</returnParsing>
 		 </item>
 		 <item name="Show ospf neighbours" type="single">
-			<command userArgs="ip:subnet_mask">
+			<command>
 				<argElement position="0" type="plaintext">enable</argElement>
 				<argElement position="1" type="privpasswd" />
 				<argElement position="2" type="plaintext">show ip ospf neighbor</argElement>
