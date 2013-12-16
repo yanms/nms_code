@@ -48,7 +48,7 @@
                                                                                 <td> {{ device.gen_dev_id.vendor_id }} {{ device.gen_dev_id.model_id }} </td>
 																				<td> {{ device.ip}}</td>
                                                                                 <td><a href="{% url 'nms:acl_device_manage' device.dev_id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a></td>
-																				{% if perms.nms.list_group %}
+																				{% if perms.auth.list_group %}
 																				<td><a href="{% url 'nms:acl_device_history' %} device.dev_id %}"><img src="{{ STATIC_URL }}images/historyIcon.png" width="20px"></a></td>
 																				{% else %}
 																				<td>N/A</td>
