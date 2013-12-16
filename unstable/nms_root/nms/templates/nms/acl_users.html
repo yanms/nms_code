@@ -54,7 +54,11 @@
 										{% else %}
 										<td>N/A</td>
 										{% endif %}
-										<td><a href="{% url 'nms:user_history' %}"><img src="{{ STATIC_URL }}images/historyIcon.png" width="20px"></a></td>
+										{% if perms.auth.list_user %}
+										<td><a href="{% url 'nms:acl_user_history' user.id %}"><img src="{{ STATIC_URL }}images/historyIcon.png" width="20px"></a></td>
+										{% else %}
+										<td>N/A</td>
+										{% endif %}
 										{% if perms.auth.delete_user %}
 										<td>{% if user.username == 'root' %}<input type="checkbox" disabled />{% else %}<input type="checkbox" name="delete" value="{{ user.id }}" />{% endif %}</td>
 										{% else %}
