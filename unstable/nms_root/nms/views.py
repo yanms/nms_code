@@ -1164,6 +1164,7 @@ def acl_kick_user(request, user_id):
 	user_obj = get_object_or_404(User, pk=user_id)
 	if request.user.has_perm('auth.change_user') and user_obj.username != 'root':
 		[x.delete() for x in Session.objects.all() if x.get_decoded().get('_auth_user_id') == user_obj.id]
+		History.objects.create(action_type='ACL: Kick user', action='Kicked user {0}'.format(user_obj), user_id = user_obj, user_performed_action = request.user, date_time = timezone.now())
 		messages.success(request, 'User {0} is kicked out of the current sessions.'.format(user_obj))
 		return HttpResponseRedirect(reverse('nms:acl_user'))
 	else:
