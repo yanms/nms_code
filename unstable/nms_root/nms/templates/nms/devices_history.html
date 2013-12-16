@@ -40,6 +40,13 @@
 								{% endfor %}
 							</ul>
 								<h2>Devices</h2>
+								{% if history.has_previous %}
+									<a href="?page={{ history_items.previous_page_number }}">previous</a>
+									{% endif %}
+								Page {{ history.number }} of {{ history.paginator.num_pages }}.
+								{% if history.has_next %}
+									<a href="?page={{ history.next_page_number }}">next</a>
+									{% endif %}
 								<table class="TFtable">
 									<tr>
 										<td><b>History id</b></td>
