@@ -1078,7 +1078,7 @@ def history(request, device_id_request):
 	if request.user.has_perm('nms.manage_devices'):
 		device = get_object_or_404(Devices, pk=device_id_request)
 		history_items_list = History.objects.filter(dev_id=device)
-		history_items_list = history_items.extra(order_by = ['history_id'])
+		history_items_list = history_items_list.extra(order_by = ['history_id'])
 		paginator = Paginator(history_items_list, 25)
 	
 		page = request.GET.get('page')
