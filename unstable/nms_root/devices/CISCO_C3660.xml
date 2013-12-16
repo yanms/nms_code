@@ -59,6 +59,8 @@
             </command>
             <returnParsing delimiter="\n" type="regex">(?=(^.*?$))(?=(?!^.*?>.*?$))</returnParsing>
          </item>
+      </category>
+      <category name="General settings">
 		 <item name="Set OSPF configuration" type="single">
 			<command userArgs="ip:subnet_mask">
 				<argElement position="0" type="plaintext">enable</argElement>
@@ -80,8 +82,6 @@
 			</command>
 			<returnParsing delimiter="\n" type="regex">????</returnParsing>
 		 </item>
-      </category>
-      <category name="General settings">
          <item name="Shutdown" type="single">
             <command>
                <argElement position="0" type="plaintext">shutdown</argElement>
