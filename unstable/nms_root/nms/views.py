@@ -1161,8 +1161,8 @@ def acl_device_history(request, acl_id):
 
 @login_required
 def acl_kick_user(request, user_id):
-	if request.user.has_perm('auth.change_user'):
-		user_obj = get_object_or_404(User, pk=user_id)
+	user_obj = get_object_or_404(User, pk=user_id)
+	if request.user.has_perm('auth.change_user') and user_obj.username != 'root':
 		[x.delete() for x in Session.objects.all() if x.get_decoded().get('_auth_user_id') == user_obj.id]
 		messages.success(request, 'User {0} is kicked out of the current sessions.'.format(user_obj))
 		return HttpResponseRedirect(reverse('nms:acl_user'))
