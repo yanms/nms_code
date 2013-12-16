@@ -15,6 +15,7 @@ import traceback
 import  django.db.models as django_exception
 from django.utils import timezone
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 @login_required
@@ -1084,8 +1085,18 @@ def history(request, device_id_request):
 		
 @login_required
 def user_history(request):
-	history_items = History.objects.filter(Q(user_id = request.user) | Q(user_performed_task = request.user ))
-	history_items = history_items.extra(order_by = ['history_id'])
+	history_items_list = History.objects.filter(Q(user_id = request.user) | Q(user_performed_task = request.user ))
+	history_items_list = history_items_list.extra(order_by = ['history_id'])
+	paginator = Paginator(history_items_list, 25)
+	
+	page = request.GET.get('page')
+	try:
+		history_items = paginator.page(page)
+	except PageNotAnInteger:
+		# If page is not an integer, deliver first page.
+		history_items = paginator.page(1)
+	except EmptyPage:
+		history_items = paginator.page(paginator.num_pages)
 	return render(request, 'nms/user_history.html', {'request': request, 'history': history_items})
 
 @login_required
