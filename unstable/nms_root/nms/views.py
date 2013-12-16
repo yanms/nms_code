@@ -396,7 +396,7 @@ def acl_groups_handler(request):
 			if request.user.has_perm('auth.add_user'):
 				name = 'usr:'
 				name += request.POST['group']
-				group = Group.objects.get_or_create(name=name)
+				group, checked = Group.objects.get_or_create(name=name)
 				History.objects.create(group_id=group, action_type='ACL: Created group', action='Create {0} group'.format(group), date_time=timezone.now(), user_performed_task=request.user)
 				messages.success(request, "Database updated succesfully")
 				return HttpResponseRedirect(reverse('nms:acl_groups'))
