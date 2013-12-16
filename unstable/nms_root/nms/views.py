@@ -1084,5 +1084,6 @@ def history(request, device_id_request):
 @login_required
 def user_history(request):
 	history_items = History.objects.filter(Q(user_id = request.user) | Q(user_performed_task = request.user ))
+	history_items = history_items.extra(order_by = ['history_id'])
 	return render(request, 'nms/user_history.html', {'request': request, 'history': history_items})
 	
