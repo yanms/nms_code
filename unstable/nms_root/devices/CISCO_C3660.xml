@@ -59,7 +59,7 @@
             </command>
             <returnParsing delimiter="\n" type="regex">(?=(^.*?$))(?=(?!^.*?>.*?$))</returnParsing>
          </item>
-		 <item name="Set OSPF configuration" type="per-interface">
+		 <item name="Set OSPF configuration" type="plaintext">
 			<command userArgs="ip:subnet_mask">
 				<argElement position="0" type="plaintext">enable</argElement>
 				<argElement position="1" type="privpasswd" />
@@ -68,6 +68,15 @@
 				<argElement position="4" type="plaintext">network %arg:ip% %arg:subnet_mask% area %arg:area_id%</argElement>
 				<argElement position="5" type="plaintext">end</argElement>
 				<argElement position="6" type="plaintext">disable</argElement>
+			</command>
+			<returnParsing delimiter="\n" type="regex">????</returnParsing>
+		 </item>
+		 <item name="Show ospf neighbours" type="plaintext">
+			<command userArgs="ip:subnet_mask">
+				<argElement position="0" type="plaintext">enable</argElement>
+				<argElement position="1" type="privpasswd" />
+				<argElement position="2" type="plaintext">show ip ospf neighbor</argElement>
+				<argElement position="3" type="plaintext">disable</argElement>
 			</command>
 			<returnParsing delimiter="\n" type="regex">????</returnParsing>
 		 </item>
