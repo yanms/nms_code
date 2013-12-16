@@ -37,6 +37,7 @@
 										<td><b>User</b></td>
 										<td><b>Is superuser?</b></td>
 										<td>Change user</td>
+										<td>History</td>
 										<td>Delete</td>
 									</tr>
 								{% for user in user_list %}
@@ -53,6 +54,7 @@
 										{% else %}
 										<td>N/A</td>
 										{% endif %}
+										<td><a href="{% url 'nms:user_history' %}"><img src="{{ STATIC_URL }}images/historyIcon.png" width="20px"></a></td>
 										{% if perms.auth.delete_user %}
 										<td>{% if user.username == 'root' %}<input type="checkbox" disabled />{% else %}<input type="checkbox" name="delete" value="{{ user.id }}" />{% endif %}</td>
 										{% else %}
