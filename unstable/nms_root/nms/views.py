@@ -1076,6 +1076,7 @@ def history(request, device_id_request):
 	if request.user.has_perm('nms.manage_devices'):
 		device = get_object_or_404(Devices, pk=device_id_request)
 		history_items = History.objects.filter(dev_id=device)
+		history_items = history_items.extra(order_by = ['history_id'])
 		return render(request, 'nms/history.html', {'request': request, 'history': history_items})
 	else:
 		messages.error(request, "You don't have the right permissions")
@@ -1086,4 +1087,14 @@ def user_history(request):
 	history_items = History.objects.filter(Q(user_id = request.user) | Q(user_performed_task = request.user ))
 	history_items = history_items.extra(order_by = ['history_id'])
 	return render(request, 'nms/user_history.html', {'request': request, 'history': history_items})
+
+@login_required
+def acl_user_history(request, acl_user):
+	if request.user.has_perm('auth.list_user'):
+		user_obj = get_object_or_404(User, pk=acl_user)
+		history_items = History.objects.filter(Q(user_id = user_obj ) | Q(user_performed_task = user_obj ))
+		history_items = history_items.extra(order_by = ['history_id'])
+		return render(request, 'nms/acl_user_history.html', {'request': request, 'history': history_items})
+	else:
+		return HttpResponseRedirect(reverse('nms:acl'))
 	
