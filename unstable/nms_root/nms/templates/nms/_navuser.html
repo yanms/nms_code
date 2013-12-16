@@ -6,10 +6,10 @@
 				<a class="clicker"><img src="{{ STATIC_URL }}images/i-1.png" alt="Icon">Profile: {{ user }}</a>
 				<ul>
 					<li><a href="{% url 'nms:index' %}"><img src="{{ STATIC_URL }}images/i-2.png" alt="Icon">Dashboard</a></li>
+					<li><a href="{% url 'nms:history' %}"><img src="{{ STATIC_URL }}images/i-5.png" alt="Icon">User History</a></li>
 					<li><a href="{% url 'nms:user_settings' %}"><img src="{{ STATIC_URL }}images/i-3.png" alt="Icon">Settings</a></li>
 					<!-- ><li><a href="#"><img src="{{ STATIC_URL }}images/i-4.png" alt="Icon">Privacy</a></li> -->
 					<li><a href="{% url 'nms:license' %}"><img src="{{ STATIC_URL }}images/i-5.png" alt="Icon">License</a></li>
-					<li><a href="{% url 'nms:history' %}"><img src="{{ STATIC_URL }}images/i-5.png" alt="Icon">User History</a></li>
 					<li><a href="{% url 'nms:logout_handler' %}"><img src="{{ STATIC_URL }}images/i-6.png" alt="Icon">Sign out</a></li>
 				</ul>
 			</li>
