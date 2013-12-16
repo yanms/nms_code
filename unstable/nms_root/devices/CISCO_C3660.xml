@@ -71,7 +71,7 @@
 				<argElement position="5" type="plaintext">end</argElement>
 				<argElement position="6" type="plaintext">disable</argElement>
 			</command>
-			<returnParsing delimiter="\n" type="regex">????</returnParsing>
+			<returnParsing delimiter="\n" type="regex"></returnParsing>
 		 </item>
 		 <item name="Show ospf neighbours" type="single">
 			<command>
@@ -80,7 +80,7 @@
 				<argElement position="2" type="plaintext">show ip ospf neighbor</argElement>
 				<argElement position="3" type="plaintext">disable</argElement>
 			</command>
-			<returnParsing delimiter="\n" type="regex">????</returnParsing>
+			<returnParsing delimiter="\n" type="regex"></returnParsing>
 		 </item>
 	  </category>
       <category name="General settings">
