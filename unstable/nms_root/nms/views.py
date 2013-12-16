@@ -1102,10 +1102,23 @@ def user_history(request):
 @login_required
 def acl_user_history(request, acl_user):
 	if request.user.has_perm('auth.list_user'):
+		group_count = Group.objects.count()
+		user_count = User.objects.count()
+		devices_count = Devices.objects.count()
 		user_obj = get_object_or_404(User, pk=acl_user)
-		history_items = History.objects.filter(Q(user_id = user_obj ) | Q(user_performed_task = user_obj ))
-		history_items = history_items.extra(order_by = ['history_id'])
-		return render(request, 'nms/acl_user_history.html', {'request': request, 'history': history_items})
+		history_items_list = History.objects.filter(Q(user_id = user_obj ) | Q(user_performed_task = user_obj ))
+		history_items_list = history_items_list.extra(order_by = ['history_id'])
+		paginator = Paginator(history_items_list, 25)
+	
+		page = request.GET.get('page')
+		try:
+			history_items = paginator.page(page)
+		except PageNotAnInteger:
+			# If page is not an integer, deliver first page.
+			history_items = paginator.page(1)
+		except EmptyPage:
+			history_items = paginator.page(paginator.num_pages)
+		return render(request, 'nms/acl_user_history.html', {'request': request, 'history': history_items, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 	else:
 		return HttpResponseRedirect(reverse('nms:acl'))
 	
