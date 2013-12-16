@@ -1076,9 +1076,22 @@ def manage_gendev(request):
 def history(request, device_id_request):
 	if request.user.has_perm('nms.manage_devices'):
 		device = get_object_or_404(Devices, pk=device_id_request)
-		history_items = History.objects.filter(dev_id=device)
-		history_items = history_items.extra(order_by = ['history_id'])
-		return render(request, 'nms/history.html', {'request': request, 'history': history_items})
+		history_items_list = History.objects.filter(dev_id=device)
+		history_items_list = history_items.extra(order_by = ['history_id'])
+		paginator = Paginator(history_items_list, 25)
+	
+		page = request.GET.get('page')
+		try:
+			history_items = paginator.page(page)
+		except PageNotAnInteger:
+			# If page is not an integer, deliver first page.
+			history_items = paginator.page(1)
+		except EmptyPage:
+			history_items = paginator.page(paginator.num_pages)
+			
+		
+		
+		return render(request, 'nms/devices_history.html', {'request': request, 'history': history_items})
 	else:
 		messages.error(request, "You don't have the right permissions")
 		return HttpResponseRedirect(reverse('nms:devices'))
