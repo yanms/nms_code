@@ -59,6 +59,18 @@
             </command>
             <returnParsing delimiter="\n" type="regex">(?=(^.*?$))(?=(?!^.*?>.*?$))</returnParsing>
          </item>
+		 <item name="Set OSPF configuration" type="per-interface">
+			<command userArgs="ip:subnet_mask">
+				<argElement position="0" type="plaintext">enable</argElement>
+				<argElement position="1" type="privpasswd" />
+				<argElement position="2" type="plaintext">configure terminal</argElement>
+				<argElement position="3" type="plaintext">router ospf %arg:process_id%</argElement>
+				<argElement position="4" type="plaintext">network %arg:ip% %arg:subnet_mask% area %arg:area_id%</argElement>
+				<argElement position="5" type="plaintext">end</argElement>
+				<argElement position="6" type="plaintext">disable</argElement>
+			</command>
+			<returnParsing delimiter="\n" type="regex">????</returnParsing>
+		 </item>
       </category>
       <category name="General settings">
          <item name="Shutdown" type="single">
