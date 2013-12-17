@@ -382,10 +382,11 @@ def acl_groups_manage(request, acl_id):
 			delete_devices = 'checked' if group.permissions.filter(codename='delete_devices').exists() else ''
 			add_gen_dev = 'checked' if group.permissions.filter(codename='add_gen_dev').exists() else ''
 			delete_gen_dev = 'checked' if group.permissions.filter(codename='delete_gen_dev').exists() else ''
+			change_gen_dev = 'checked' if group.permissions.filter(codename='change_gen_dev').exists() else ''
 	
 	
 		return render(request, 'nms/acl_groups_manage.html', {'devices': devices, 'group':group, 'list_check': list_check, 'manage_check': manage_check, 'change_check': change_check, 'checked': checked, 'dev_check': dev_check,
-															'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request, 'groups_usr': groups_usr, 'users': users, 'groups_dev': groups_dev, 'add_devices': add_devices, 'delete_devices': delete_devices, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count, 'add_gen_dev': add_gen_dev, 'delete_gen_dev': delete_gen_dev})
+															'add_user': add_user, 'change_user': change_user, 'delete_user': delete_user, 'list_user': list_user, 'add_group': add_group, 'change_group': change_group, 'delete_group': delete_group, 'list_group': list_group, 'request':request, 'groups_usr': groups_usr, 'users': users, 'groups_dev': groups_dev, 'add_devices': add_devices, 'delete_devices': delete_devices, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count, 'add_gen_dev': add_gen_dev, 'delete_gen_dev': delete_gen_dev, 'change_gen_dev': change_gen_dev})
 	else:
 		messages.error(request, "You don't have the right permissions")
 		return HttpResponseRedirect(reverse('nms:acl'))
@@ -1167,5 +1168,18 @@ def acl_kick_user(request, user_id):
 		History.objects.create(action_type='ACL: Kick user', action='Kicked user {0}'.format(user_obj), user_id = user_obj, user_performed_task = request.user, date_time = timezone.now())
 		messages.success(request, 'User {0} is kicked out of the current sessions.'.format(user_obj))
 		return HttpResponseRedirect(reverse('nms:acl_user'))
+	else:
+		return HttpResponseRedirect(reverse('nms:index'))
+
+@login_required
+def manage_gendev_change(request, gendev_id):
+	if request.user.has_perm('change_gen_dev') and 'qtype' in request.POST:
+		p = request.POST
+		if p['qtype'] == 'change_os':
+			pass
+		else:
+			messages.error(request, 'No valid qtype defined in POST')
+		messages.success(request, 'Database successfully updated')
+		return HttpResponseRedirect(reverse('nms:manage_gendev'))
 	else:
 		return HttpResponseRedirect(reverse('nms:index'))
