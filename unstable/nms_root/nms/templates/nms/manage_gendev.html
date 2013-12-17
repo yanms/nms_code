@@ -33,6 +33,7 @@
                                 <table border="0" width="100%">
                                     <tr>
                                         <td width="50%">
+											{% if perms.nms.add_gen_dev %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="add_gendev" />
@@ -82,6 +83,7 @@
                                                     </tr>
                                                 </table>
                                             </form>
+											{% endif %}
                                         </td>
                                         <td width="50%">
                                             <h3>Templates</h3>
