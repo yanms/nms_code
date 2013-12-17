@@ -1035,6 +1035,15 @@ def manage_gendev(request):
 							messages.error(request, 'Cannot delete some instances of OS because there is still a reference')
 						except:
 							messages.error(request, 'Error deleting model')
+			
+			elif p['qtype'] == 'add_osdev':
+				if 'os' in p and 'gen_dev' in p:
+					try:
+						OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['gen_dev']))
+						History.objects.create(action_type='Gendev: add', action='Added gendev OS device', user_performed_task=request.user, date_time=timezone.now())
+						messages.success(request, 'Database updated')
+					except:
+						messages.error(request, 'Error adding model')
 			elif p['qtype'] == 'del_osdev':
 				if 'items' in p:
 					for i in p.getlist('items'):
@@ -1046,14 +1055,7 @@ def manage_gendev(request):
 							messages.error(request, 'Cannot delete some instances of OS_dev because there is still a reference')
 						except:
 							messages.error(request, 'Error deleting model')
-			elif p['qtype'] == 'add_osdev':
-				if 'os' in p and 'gen_dev' in p:
-					try:
-						OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['gen_dev']))
-						History.objects.create(action_type='Gendev: add', action='Added gendev OS device', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
-					except:
-						messages.error(request, 'Error adding model')
+			
 					
 						
 			
@@ -1172,14 +1174,86 @@ def acl_kick_user(request, user_id):
 		return HttpResponseRedirect(reverse('nms:index'))
 
 @login_required
-def manage_gendev_change(request, gendev_id):
+def change_gendev(request, gendev_id):
 	if request.user.has_perm('change_gen_dev') and 'qtype' in request.POST:
 		p = request.POST
 		if p['qtype'] == 'change_os':
-			pass
+			try:
+				os = OS.objects.get(pk=gendev_id)
+				os.vendor_id = Vendor.objects.get(pk=p['vendor_id'])
+				os.type_id = OS_type.objects.get(pk=p['os_type_id'])
+				os.build = p['build']
+				os.short_info = p['short_info']
+				os.name = p['name']
+				os.save()
+				messages.success(request, 'Database successfully updated')
+			except:
+				messages.error(request, 'Error occured during the request. Can not change OS')
+		elif p['qtype'] == 'change_os_type':
+			try:
+				os_type = OS_type.objects.get(pk=gendev_id)
+				os_type.type = p['type']
+				os_type.save()
+				messages.success(request, 'Database successfully updated')
+			except:
+				messages.error(request, 'Error occured during the request. Can not change OS type')
+		elif p['qtype'] == 'change_os_dev':
+			try:
+				os_dev = OS_dev.objects.get(pk=gendev_id)
+				os_dev.os_id = OS_dev.objects.get(pk=p['os_id'])
+				os_dev.gen_dev_id = Gen_dev.objects.get(pk=p['gen_dev_id'])
+				os_dev.save()
+				messages.success(request, 'Database successfully updated')
+			except:
+				messages.error(request, 'Error occured during the request. Can not change OS device relationship')
+		elif p['qtype'] == 'change_gendev':
+			try:
+				gen_dev = Gen_dev.objects.get(pk=gendev_id)
+				gen_dev.vendor_id = Vendor.objects.get(pk=p['vendor_id'])
+				gen_dev.model_id = Dev_model.objects.get(pk=p['model_id'])
+				gen_dev.dev_type_id = Dev_type.objects.get(pk=p['dev_type_id'])
+				gen_dev.file_location_id = File_location.objects.get(pk=p['file_location_id'])
+				gen_dev.save()
+				messages.success(request, 'Database successfully updated')
+			except:
+				messages.error(request, 'Error occured during the request. Can not change generic device')
+		elif p['qtype'] == 'change_dev_type':
+			try:
+				dev_type = Dev_type.objects.get(pk=p['dev_type_id'])
+				dev_type.dev_type_name = p['dev_type_name']
+				dev_type.save()
+				messages.success(request, 'Database successfully updated')
+			except:
+				messages.error(request, 'Error occured during the request. Can not change device type')
+		elif p['qtype'] == 'change_vendor':
+			
+			try:
+				vendor = Vendor.objects.get(pk=gendev_id)
+				vendor.vendor_name = p['vendor_name']
+				vendor.save()
+				messages.success(request, 'Database successfully updated')
+			except:
+				messages.error(request, 'Error occured during the request. Can not change vendor')
+		elif p['qtype'] == 'change_model':
+			try:
+				dev_model = Dev_model.objects.get(pk=gendev_id)
+				dev_model.model_name = p['model_name']
+				dev_model.version = p['version']
+				dev_model.save()
+				messages.success(request, 'Database successfully updated')
+			except:
+				messages.error(request, 'Error occured during the request. Can not change model')
+		elif p['qtype'] == 'change_xml':
+			try:
+				file_location = File_location.objects.get(pk=gendev_id)
+				file_location.location = p['location']
+				file_location.save()
+				messages.success(request, 'Database successfully updated')
+			except:
+				messages.error(request, 'Error occured during the request. Can not change XML')
 		else:
 			messages.error(request, 'No valid qtype defined in POST')
-		messages.success(request, 'Database successfully updated')
+		
 		return HttpResponseRedirect(reverse('nms:manage_gendev'))
 	else:
 		return HttpResponseRedirect(reverse('nms:index'))
