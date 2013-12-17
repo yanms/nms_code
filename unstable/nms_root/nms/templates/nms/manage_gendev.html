@@ -117,11 +117,13 @@
                                     <tr>
                                         <td width="50%">
                                             <h3>Types</h3>
+											{% if perms.nms.add_gen_dev %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="add_devtype" />
                                                 <input type="text" name="name" /><input type="submit" value="Add" />
                                             </form>
+											{% endif %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="del_devtype" /><br />
@@ -147,11 +149,13 @@
                                         </td>
                                         <td width="50%">
                                             <h3>Vendors</h3>
+											{% if perms.nms.add_gen_dev %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="add_vendor" />
                                                 <input type="text" name="name" /><input type="submit" value="Add" />
                                             </form>
+											{% endif %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="del_vendor" /><br />
@@ -179,11 +183,13 @@
                                     <tr>
                                         <td width="50%">
                                             <h3>Models</h3>
+											{% if perms.nms.add_gen_dev %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="add_model" />
                                                 <input type="text" name="name" /><input type="submit" value="Add" />
                                             </form>
+											{% endif %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="del_model" /><br />
@@ -209,11 +215,13 @@
                                         </td>
                                         <td width="50%">
                                             <h3>XML Files</h3>
+											{% if perms.nms.add_gen_dev %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="add_xml" />
                                                 <input type="text" name="name" /><input type="submit" value="Add" />
                                             </form>
+											{% endif %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="del_xml" /><br />
@@ -243,6 +251,7 @@
                                     <tr>
                                         <td width="50%">
 											<h3>OS - GenDev</h3>
+											{% if perms.nms.add_gen_dev %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="add_osdev" />
@@ -272,6 +281,7 @@
                                                     </tr>
                                                 </table>
                                             </form>
+											{% endif %}
                                         </td>
                                         <td width="50%">
                                             <h3>OS per generic device</h3>
@@ -304,6 +314,7 @@
                                     <tr>
                                         <td width="50%">
                                             <h3>Create OS</h3>
+											{% if perms.nms.add_gen_dev %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="POST">
                                                 {% csrf_token %}
 												<input type="hidden" name="qtype" value="add_os" />
@@ -351,6 +362,7 @@
                                                     </tr>
                                                 </table>
                                             </form>
+											{% endif %}
                                         </td>
                                         <td width="50%">
                                             <h3>OS</h3>
@@ -381,11 +393,13 @@
 									<tr>
 										<td width="50%">
 											<h3>OS type</h3>
+											{% if perms.nms.add_gen_dev %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="add_os_type" />
                                                 <input type="text" name="name" /><input type="submit" value="Add" />
                                             </form>
+											{% endif %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="del_os_type" /><br />
