@@ -360,6 +360,7 @@ def acl_groups_manage(request, acl_id):
 		delete_devices = None
 		add_gen_dev = None
 		delete_gen_dev = None
+		change_gen_dev = None
 		if dev_check:
 			devices = Devices.objects.all()
 			checked = []
@@ -892,7 +893,7 @@ def init(request):
 
 @login_required
 def manage_gendev(request):
-	if request.user.has_perm('nms.add_gen_dev') or request.user.has_perm('nms.delete_gen_dev'):
+	if request.user.has_perm('nms.add_gen_dev') or request.user.has_perm('nms.delete_gen_dev') or request.user.has_perm('nms.change_gen_dev'):
 		if request.method == 'POST' and 'qtype' in request.POST:
 			p = request.POST
 			if p['qtype'] == 'add_gendev':
