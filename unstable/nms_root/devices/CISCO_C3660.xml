@@ -111,7 +111,10 @@
                <argElement position="0" type="plaintext">enable</argElement>
 			   <argElement position="1" type="privpasswd" />
 			   <argElement position="2" type="plaintext">sh run full</argElement>
-			   <argElement position="3" type="plaintext">disable</argElement>
+			   <argElement position="3" type="plaintext"></argElement>
+			   <argElement position="4" type="plaintext"></argElement>
+			   <argElement position="5" type="plaintext"></argElement>
+			   <argElement position="6" type="plaintext">disable</argElement>
             </command>
             <returnParsing delimiter="\n" type="regex">.*</returnParsing>
          </item>
@@ -120,7 +123,10 @@
                <argElement position="0" type="plaintext">enable</argElement>
 			   <argElement position="1" type="privpasswd" />
 			   <argElement position="2" type="plaintext">show ip route</argElement>
-			   <argElement position="3" type="plaintext">disable</argElement>
+			   <argElement position="3" type="plaintext"></argElement>
+			   <argElement position="4" type="plaintext"></argElement>
+			   <argElement position="5" type="plaintext"></argElement>
+			   <argElement position="6" type="plaintext">disable</argElement>
             </command>
             <returnParsing delimiter="\n" type="regex">.*</returnParsing>
          </item>
@@ -129,7 +135,10 @@
                <argElement position="0" type="plaintext">enable</argElement>
 			   <argElement position="1" type="privpasswd" />
 			   <argElement position="2" type="plaintext">show ip route ospf</argElement>
-			   <argElement position="3" type="plaintext">disable</argElement>
+			   <argElement position="3" type="plaintext"></argElement>
+			   <argElement position="4" type="plaintext"></argElement>
+			   <argElement position="5" type="plaintext"></argElement>
+			   <argElement position="6" type="plaintext">disable</argElement>
             </command>
             <returnParsing delimiter="\n" type="regex">.*</returnParsing>
          </item>
@@ -138,7 +147,10 @@
                <argElement position="0" type="plaintext">enable</argElement>
 			   <argElement position="1" type="privpasswd" />
 			   <argElement position="2" type="plaintext">show version</argElement>
-			   <argElement position="3" type="plaintext">disable</argElement>
+			   <argElement position="3" type="plaintext"></argElement>
+			   <argElement position="4" type="plaintext"></argElement>
+			   <argElement position="5" type="plaintext"></argElement>
+			   <argElement position="6" type="plaintext">disable</argElement>
             </command>
             <returnParsing delimiter="\n" type="regex">.*</returnParsing>
          </item>
