@@ -1,10 +1,6 @@
 from Crypto.Cipher import AES
 from Crypto import Random
 import base64
-from multiprocessing import Lock
-
-masterPassword = bytes()
-masterPasswordLock = Lock()
 
 class AESCipher:
 	def __init__(self, key):
@@ -26,25 +22,14 @@ class AESCipher:
 		return self.unpad(cipher.decrypt(enc[16:]))
 
 def storeMasterPassword(password):
-	global masterPasswordLock
-	global masterPassword
 	if len(password) != 16:
 		return -1
-	masterPasswordLock.acquire()
-	masterPassword = password
-	masterPasswordLock.release()
 	return 0
 
 def hasMasterPassword():
-	masterPasswordLock.acquire()
-	try:
-		if not (len(masterPassword) == 16 or len(masterPassword) == 24 or len(masterPassword) == 32):
-			return False
+	if len(lib.get_password()) == 16:
 		return True
-	except:
-		return False
-	finally:
-		masterPasswordLock.release()
+	return False
 
 def storeEnablePassword(device, password):
 	salt = base64.b64encode(Random.new().read(16))[:16].decode()
