@@ -1271,6 +1271,10 @@ def change_gendev(request, gendev_id):
 		elif qtype == 'change_os_dev':
 			object = OS_dev.objects.get(pk=gendev_id)
 		elif qtype == 'change_gendev':
+			vendors = Vendor.objects.all()
+			dev_type = Dev_type.objects.all()
+			models = Dev_model.objects.all()
+			xml = File_location.objects.all()
 			object = Gen_dev.objects.get(pk=gendev_id)
 		elif qtype == 'change_dev_type':
 			object = Dev_type.objects.get(pk=gendev_id)
@@ -1285,7 +1289,7 @@ def change_gendev(request, gendev_id):
 		else:
 			messages.error(request, 'No valid qtype found')
 			return HttpResponseRedirect(reverse('nms:devices'))
-		return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype, 'object': object})
+		return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype, 'object': object, 'vendors': vendors, 'dev_type': dev_type, 'models': models, 'xml': xml})
 	else:
 		messages.error(request, "You don't have the right permissions or qtype is not found in request.")
 		return HttpResponseRedirect(reverse('nms:manage_gendev'))
