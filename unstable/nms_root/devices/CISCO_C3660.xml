@@ -106,6 +106,42 @@
             </command>
             <returnParsing delimiter="\n" type="regex">.*</returnParsing>
          </item>
+		 <item name="Show running config" type="single">
+            <command>
+               <argElement position="0" type="plaintext">enable</argElement>
+			   <argElement position="1" type="privpasswd" />
+			   <argElement position="2" type="plaintext">sh run</argElement>
+			   <argElement position="3" type="plaintext">disable</argElement>
+            </command>
+            <returnParsing delimiter="\n" type="regex">.*</returnParsing>
+         </item>
+		 <item name="Show routing table" type="single">
+            <command>
+               <argElement position="0" type="plaintext">enable</argElement>
+			   <argElement position="1" type="privpasswd" />
+			   <argElement position="2" type="plaintext">shipro</argElement>
+			   <argElement position="3" type="plaintext">disable</argElement>
+            </command>
+            <returnParsing delimiter="\n" type="regex">.*</returnParsing>
+         </item>
+		 <item name="Show ospf routing table" type="single">
+            <command>
+               <argElement position="0" type="plaintext">enable</argElement>
+			   <argElement position="1" type="privpasswd" />
+			   <argElement position="2" type="plaintext">shiproospf</argElement>
+			   <argElement position="3" type="plaintext">disable</argElement>
+            </command>
+            <returnParsing delimiter="\n" type="regex">.*</returnParsing>
+         </item>
+		 <item name="Show version" type="single">
+            <command>
+               <argElement position="0" type="plaintext">enable</argElement>
+			   <argElement position="1" type="privpasswd" />
+			   <argElement position="2" type="plaintext">shver</argElement>
+			   <argElement position="3" type="plaintext">disable</argElement>
+            </command>
+            <returnParsing delimiter="\n" type="regex">.*</returnParsing>
+         </item>
       </category>
    </configurationItems>
 </device>
