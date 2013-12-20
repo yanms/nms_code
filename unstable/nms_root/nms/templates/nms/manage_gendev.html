@@ -100,7 +100,7 @@
                                                     {% for record in gen_devs %}
                                                     <tr>
                                                         <td>{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</td>
-														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' %}?qtype=change_templates"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
+														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' record.dev_type_id %}?qtype=change_templates"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.gen_dev_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -138,7 +138,7 @@
                                                     {% for record in dev_types %}
                                                     <tr>
                                                         <td>{{ record }}</td>
-														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' %}?qtype=change_device_type"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
+														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' record.dev_type_id %}?qtype=change_device_type"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.dev_type_id }}" />{% else %} N/A {% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -172,7 +172,7 @@
                                                     {% for record in vendors %}
                                                     <tr>
                                                         <td>{{ record }}</td>
-														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' %}?qtype=change_vendor"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
+														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' record.vendor_id %}?qtype=change_vendor"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.vendor_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -208,7 +208,7 @@
                                                     {% for record in models %}
                                                     <tr>
                                                         <td>{{ record }}</td>
-														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' %}?qtype=change_model"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px">{% else %} N/A {% endif %}</td>
+														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' record.model_id %}?qtype=change_model"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px">{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.model_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -242,7 +242,7 @@
                                                     {% for record in xml_files %}
                                                     <tr>
                                                         <td>{{ record.location }}</td>
-														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' %}?qtype=change_xml"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
+														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' record.file_location_id %}?qtype=change_xml"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.file_location_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -310,7 +310,7 @@
                                                     <tr>
                                                         <td>{{ record.os_id }}</td>
                                                         <td>{{ record.gen_dev_id.dev_type_id }}: {{ record.gen_dev_id.vendor_id }} {{ record.gen_dev_id.model_id }}</td>
-														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' %}?qtype=change_osdev"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
+														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' record.os_dev_id %}?qtype=change_osdev"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.os_dev_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -391,7 +391,7 @@
                                                     {% for record in os %}
                                                     <tr>
                                                         <td>{{ record.vendor_id }} ({{ record.os_type_id}}) {{ record.name }} {{ record.build }} {{ record.short_info }}</td>
-														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' %}?qtype=change_os"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
+														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' record.os_id %}?qtype=change_os"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.os_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -427,7 +427,7 @@
                                                     {% for record in os_type %}
                                                     <tr>
                                                         <td>{{ record }}</td>
-														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' %}?qtype=change_os_type"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
+														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' record_os_type_id %}?qtype=change_os_type"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.os_type_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
