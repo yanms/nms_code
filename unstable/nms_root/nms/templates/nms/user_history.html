@@ -40,7 +40,7 @@
 							</ul>
 								<h2>User History</h2>
 								{% if history.has_previous %}
-									<a href="?page={{ history_items.previous_page_number }}">previous</a>
+									<a href="?page={{ history.previous_page_number }}">previous</a>
 									{% endif %}
 								Page {{ history.number }} of {{ history.paginator.num_pages }}.
 								{% if history.has_next %}
