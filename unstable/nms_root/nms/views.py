@@ -982,7 +982,7 @@ def manage_gendev(request):
 						for item in file_data:
 							file.write(item)
 						file.close()
-						File_location(location=destionation).save()
+						File_location(location=destination).save()
 						History.objects.create(action_type='Gendev: add', action='Added gendev XML', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
