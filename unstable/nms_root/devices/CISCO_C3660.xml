@@ -103,7 +103,8 @@
 			   <argElement position="2" type="plaintext">copy running-configuration startup-configuration</argElement>
 			   <argElement position="3" type="plaintext">startup-configuration</argElement>
 			   <argElement position="4" type="plaintext"></argElement>
-			   <argElement position="5" type="plaintext">disable</argElement>
+			   <argElement position="5" type="plaintext"></argElement>
+			   <argElement position="6" type="plaintext">disable</argElement>
             </command>
             <returnParsing delimiter="\n" type="regex">.*</returnParsing>
          </item>
