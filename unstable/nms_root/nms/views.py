@@ -978,7 +978,7 @@ def manage_gendev(request):
 					try:
 						destination = 'nms/static/devices/' + p['name']
 						file = open(destination, 'wb+')
-						file_data = p['file']
+						file_data = request.FILES['file']
 						for item in file_data:
 							file.write(item)
 						file.close()
