@@ -163,12 +163,14 @@
                                                 <input type="hidden" name="qtype" value="del_vendor" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
-                                                        <td width="95%"><b>Name</b></td>
+                                                        <td width="90%"><b>Name</b></td>
+														<td width="5%"><b>Update</b></td>
                                                         <td width="5%"><b>Delete</b></td>
                                                     </tr>
                                                     {% for record in vendors %}
                                                     <tr>
                                                         <td>{{ record }}</td>
+														<td>{% if perm.nms.change_gen_dev %}<img src="{{ STATIC_URL }}images/editButton.png" widht="20px">{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.vendor_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -197,12 +199,14 @@
                                                 <input type="hidden" name="qtype" value="del_model" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
-                                                        <td width="95%"><b>Name</b></td>
+                                                        <td width="90%"><b>Name</b></td>
+														<td width="5%"><b>Update</b></td>
                                                         <td width="5%"><b>Delete</b></td>
                                                     </tr>
                                                     {% for record in models %}
                                                     <tr>
                                                         <td>{{ record }}</td>
+														<td>{% if perm.nms.change_gen_dev %}<img src="{{ STATIC_URL }}images/editButton.png" widht="20px">{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.model_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -229,12 +233,14 @@
                                                 <input type="hidden" name="qtype" value="del_xml" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
-                                                        <td width="95%"><b>Name</b></td>
+                                                        <td width="90%"><b>Name</b></td>
+														<td width="5%"><b>Update</b></td>
                                                         <td width="5%"><b>Delete</b></td>
                                                     </tr>
                                                     {% for record in xml_files %}
                                                     <tr>
                                                         <td>{{ record.location }}</td>
+														<td>{% if perm.nms.change_gen_dev %}<img src="{{ STATIC_URL }}images/editButton.png" widht="20px">{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.file_location_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -294,13 +300,15 @@
                                                 <table class="TFtable" width="70%">
                                                     <tr>
                                                         <td width="45%"><b>OS</b></td>
-                                                        <td width="45%"><b>Device</b></td>
+                                                        <td width="40%"><b>Device</b></td>
+														<td width="5%"><b>Update</b></td>
                                                         <td width="5%"><b>Delete</b></td>
                                                     </tr>
                                                     {% for record in os_devs %}
                                                     <tr>
                                                         <td>{{ record.os_id }}</td>
                                                         <td>{{ record.gen_dev_id.dev_type_id }}: {{ record.gen_dev_id.vendor_id }} {{ record.gen_dev_id.model_id }}</td>
+														<td>{% if perm.nms.change_gen_dev %}<img src="{{ STATIC_URL }}images/editButton.png" widht="20px">{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.os_dev_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -374,12 +382,14 @@
                                                 <input type="hidden" name="qtype" value="del_os" />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
-                                                        <td width="45%"><b>OS</b></td>
+                                                        <td width="40%"><b>OS</b></td>
+														<td width="5%"><b>Update</b></td>
                                                         <td width="5%"><b>Delete</b></td>
                                                     </tr>
                                                     {% for record in os %}
                                                     <tr>
                                                         <td>{{ record.vendor_id }} ({{ record.os_type_id}}) {{ record.name }} {{ record.build }} {{ record.short_info }}</td>
+														<td>{% if perm.nms.change_gen_dev %}<img src="{{ STATIC_URL }}images/editButton.png" widht="20px">{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.os_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -408,12 +418,14 @@
                                                 <input type="hidden" name="qtype" value="del_os_type" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
-                                                        <td width="95%"><b>Name</b></td>
+                                                        <td width="90%"><b>Name</b></td>
+														<td width="5%"><b>Update</b></td>
                                                         <td width="5%"><b>Delete</b></td>
                                                     </tr>
                                                     {% for record in os_type %}
                                                     <tr>
                                                         <td>{{ record }}</td>
+														<td>{% if perm.nms.change_gen_dev %}<img src="{{ STATIC_URL }}images/editButton.png" widht="20px">{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.os_type_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
