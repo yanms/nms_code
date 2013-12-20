@@ -36,9 +36,9 @@
 										{% if perms.nms.add_gen_dev %}
                                         <td width="50%">
 											
-                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                            <form action="{% url 'nms:change_gendev_handler' record.dev_type_id %}" method="POST">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="add_gendev" />
+                                                <input type="hidden" name="qtype" value="change_gendev" />
                                                 <table border="0">
                                                     <tr>
                                                         <td>Type:</td>
@@ -95,16 +95,9 @@
 										{% if qtype == 'change_dev_type' %}
                                         <td width="50%">
                                             <h3>Types</h3>
-											{% if perms.nms.add_gen_dev %}
-                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                            <form action="{% url 'nms:change_gendev_handler' record.dev_type_id %}" method="post">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="add_devtype" />
-                                                <input type="text" name="name" /><input type="submit" value="Add" />
-                                            </form>
-											{% endif %}
-                                            <form action="{% url 'nms:manage_gendev' %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="del_devtype" /><br />
+                                                <input type="hidden" name="qtype" value="change_dev_type" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
                                                         <td width="90%"><b>Name</b></td>
@@ -131,16 +124,9 @@
 										{% if qtype == 'change_vendor' %}
                                         <td width="50%">
                                             <h3>Vendors</h3>
-											{% if perms.nms.add_gen_dev %}
-                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                            <form action="{% url 'nms:change_gendev_handler' record.vendor_id %}" method="post">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="add_vendor" />
-                                                <input type="text" name="name" /><input type="submit" value="Add" />
-                                            </form>
-											{% endif %}
-                                            <form action="{% url 'nms:manage_gendev' %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="del_vendor" /><br />
+                                                <input type="hidden" name="qtype" value="change_vendor" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
                                                         <td width="95%"><b>Name</b></td>
@@ -167,16 +153,9 @@
 										{% if qtype == 'change_model' %}
                                         <td width="50%">
                                             <h3>Models</h3>
-											{% if perms.nms.add_gen_dev %}
-                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                            <form action="{% url 'nms:change_gendev_handler' record.model_id %}" method="post">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="add_model" />
-                                                <input type="text" name="name" /><input type="submit" value="Add" />
-                                            </form>
-											{% endif %}
-                                            <form action="{% url 'nms:manage_gendev' %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="del_model" /><br />
+                                                <input type="hidden" name="qtype" value="change_model" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
                                                         <td width="95%"><b>Name</b></td>
@@ -201,16 +180,9 @@
 										{% if qtype == 'change_xml' %}
                                         <td width="50%">
                                             <h3>XML Files</h3>
-											{% if perms.nms.add_gen_dev %}
-                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                            <form action="{% url 'nms:change_gendev_handler' record.file_location_id %}" method="post">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="add_xml" />
-                                                <input type="text" name="name" /><input type="submit" value="Add" />
-                                            </form>
-											{% endif %}
-                                            <form action="{% url 'nms:manage_gendev' %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="del_xml" /><br />
+                                                <input type="hidden" name="qtype" value="change_xml" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
                                                         <td width="95%"><b>Name</b></td>
@@ -239,9 +211,9 @@
 										{% if qtype == 'change_os_dev' %}
                                         <td width="50%">
                                             <h3>OS per generic device</h3>
-                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                            <form action="{% url 'nms:change_gendev_handler' record.os_dev_id %}" method="POST">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="del_osdev" />
+                                                <input type="hidden" name="qtype" value="change_osdev" />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
                                                         <td width="45%"><b>OS</b></td>
@@ -270,9 +242,9 @@
 										{% if qtype == 'change_os' %}
                                         <td width="50%">
                                             <h3>OS</h3>
-                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                            <form action="{% url 'nms:change_gendev_handler' record.os_id %}" method="POST">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="del_os" />
+                                                <input type="hidden" name="qtype" value="change_os" />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
                                                         <td width="45%"><b>OS</b></td>
@@ -299,16 +271,9 @@
 										{% if qtype == 'change_os_type' %}
 										<td width="50%">
 											<h3>OS type</h3>
-											{% if perms.nms.add_gen_dev %}
-                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                            <form action="{% url 'nms:change_gendev' record.os_type_id %}" method="post">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="add_os_type" />
-                                                <input type="text" name="name" /><input type="submit" value="Add" />
-                                            </form>
-											{% endif %}
-                                            <form action="{% url 'nms:manage_gendev' %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="del_os_type" /><br />
+                                                <input type="hidden" name="qtype" value="change_os_type" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
                                                         <td width="95%"><b>Name</b></td>
