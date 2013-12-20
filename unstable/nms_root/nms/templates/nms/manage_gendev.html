@@ -100,7 +100,7 @@
                                                     {% for record in gen_devs %}
                                                     <tr>
                                                         <td>{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</td>
-														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' record.dev_type_id %}?qtype=change_del_gendev"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
+														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' record.gen_type_id %}?qtype=change_del_gendev"><img src="{{ STATIC_URL }}images/editButton.png" widht="20px"></a>{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.gen_dev_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
                                                     {% endfor %}
