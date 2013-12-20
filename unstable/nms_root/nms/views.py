@@ -1264,6 +1264,25 @@ def change_gendev_handler(request, gendev_id):
 def change_gendev(request, gendev_id):
 	if request.user.has_perm('change_gen_dev') and qtype in request.GET:
 		qtype = request.GET['qtype']
-		return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype})
+		if qtype == 'change_os':
+			object = OS.objects.get(pk=gendev_id)
+		elif qtype == 'change_os_type':
+			object == OS_type.objects.get(pk=gendev_id)
+		elif qtype == 'change_os_dev':
+			object = OS_dev.objects.get(pk=gendev_id)
+		elif qtype == 'change_gendev':
+			object = Gen_dev.objects.get(pk=gendev_id)
+		elif qtype == 'change_dev_type':
+			object = Dev_type.objects.get(pk=gendev_id)
+		elif qtype == 'change_vendor':
+			object = Vendor.objects.get(pk=gendev_id)
+		elif qtype == 'change_model':
+			object = Model.objects.get(pk=gendev_id)
+		elif qtype == 'change_xml':
+			object = File_location.objects.get(pk=gendev_id)
+		else:
+			messages.error(request, 'No valid qtype found')
+			return HttpResponseRedirect(reverse('nms:devices'))
+		return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype, 'object': object})
 	else:
 		return HttpResponseRedirect(reverse('nms:manage_gendev'))
