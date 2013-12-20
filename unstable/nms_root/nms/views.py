@@ -1285,4 +1285,5 @@ def change_gendev(request, gendev_id):
 			return HttpResponseRedirect(reverse('nms:devices'))
 		return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype, 'object': object})
 	else:
+		messages.error(request, "You don't have the right permissions or qtype is not found in request.")
 		return HttpResponseRedirect(reverse('nms:manage_gendev'))
