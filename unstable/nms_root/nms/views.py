@@ -986,7 +986,7 @@ def manage_gendev(request):
 						History.objects.create(action_type='Gendev: add', action='Added gendev XML', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
-						messages.error(request, list(POST.items()))
+						messages.error(request, list(request.POST.items()))
 						messages.error(request, traceback.format_exc()) #debug code
 						messages.error(request, 'Error adding XML')
 			elif p['qtype'] == 'del_xml':
