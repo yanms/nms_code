@@ -976,7 +976,13 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_xml':
 				if 'name' in p:
 					try:
-						File_location(location=p['name']).save()
+						destination = 'nms/static/devices/' + p['name']
+						file = open(destination, 'wb+')
+						file_data = p['file']
+						for item in file_data:
+							file.write(item)
+						file.close()
+						File_location(location=destionation).save()
 						History.objects.create(action_type='Gendev: add', action='Added gendev XML', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
@@ -1220,7 +1226,7 @@ def change_gendev_handler(request, gendev_id):
 				messages.error(request, 'Error occured during the request. Can not change generic device')
 		elif p['qtype'] == 'change_dev_type':
 			try:
-				dev_type = Dev_type.objects.get(pk=p['dev_type_id'])
+				dev_type = Dev_type.objects.get(pk=gendev_id)
 				dev_type.dev_type_name = p['dev_type_name']
 				dev_type.save()
 				messages.success(request, 'Database successfully updated')
