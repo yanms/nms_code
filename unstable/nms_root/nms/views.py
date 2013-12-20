@@ -1267,7 +1267,7 @@ def change_gendev(request, gendev_id):
 		if qtype == 'change_os':
 			object = OS.objects.get(pk=gendev_id)
 		elif qtype == 'change_os_type':
-			object == OS_type.objects.get(pk=gendev_id)
+			object = OS_type.objects.get(pk=gendev_id)
 		elif qtype == 'change_os_dev':
 			object = OS_dev.objects.get(pk=gendev_id)
 		elif qtype == 'change_gendev':
