@@ -71,7 +71,7 @@
 				<argElement position="5" type="plaintext">end</argElement>
 				<argElement position="6" type="plaintext">disable</argElement>
 			</command>
-			<returnParsing delimiter="\n" type="regex">Router></returnParsing>
+			<returnParsing delimiter="\n" type="regex">.*</returnParsing>
 		 </item>
 		 <item name="Show ospf neighbours" type="single">
 			<command>
@@ -80,7 +80,7 @@
 				<argElement position="2" type="plaintext">show ip ospf neighbor</argElement>
 				<argElement position="3" type="plaintext">disable</argElement>
 			</command>
-			<returnParsing delimiter="\n" type="regex">Router></returnParsing>
+			<returnParsing delimiter="\n" type="regex">.*</returnParsing>
 		 </item>
 	  </category>
       <category name="General settings">
@@ -95,6 +95,52 @@
                <argElement position="0" type="plaintext">reboot</argElement>
             </command>
             <returnParsing delimiter="\n" type="regex">Router>reboot</returnParsing>
+         </item>
+		 <item name="Copy running config to startup config" type="single">
+            <command>
+               <argElement position="0" type="plaintext">enable</argElement>
+			   <argElement position="1" type="privpasswd" />
+			   <argElement position="2" type="plaintext">copy running-config startup-config</argElement>
+			   <argElement position="3" type="plaintext"></argElement>
+			   <argElement position="4" type="plaintext">disable</argElement>
+            </command>
+            <returnParsing delimiter="\n" type="regex">.*</returnParsing>
+         </item>
+		 <item name="Show running config" type="single">
+            <command>
+               <argElement position="0" type="plaintext">enable</argElement>
+			   <argElement position="1" type="privpasswd" />
+			   <argElement position="2" type="plaintext">sh run</argElement>
+			   <argElement position="3" type="plaintext">disable</argElement>
+            </command>
+            <returnParsing delimiter="\n" type="regex">.*</returnParsing>
+         </item>
+		 <item name="Show routing table" type="single">
+            <command>
+               <argElement position="0" type="plaintext">enable</argElement>
+			   <argElement position="1" type="privpasswd" />
+			   <argElement position="2" type="plaintext">shipro</argElement>
+			   <argElement position="3" type="plaintext">disable</argElement>
+            </command>
+            <returnParsing delimiter="\n" type="regex">.*</returnParsing>
+         </item>
+		 <item name="Show ospf routing table" type="single">
+            <command>
+               <argElement position="0" type="plaintext">enable</argElement>
+			   <argElement position="1" type="privpasswd" />
+			   <argElement position="2" type="plaintext">shiproospf</argElement>
+			   <argElement position="3" type="plaintext">disable</argElement>
+            </command>
+            <returnParsing delimiter="\n" type="regex">.*</returnParsing>
+         </item>
+		 <item name="Show version" type="single">
+            <command>
+               <argElement position="0" type="plaintext">enable</argElement>
+			   <argElement position="1" type="privpasswd" />
+			   <argElement position="2" type="plaintext">shver</argElement>
+			   <argElement position="3" type="plaintext">disable</argElement>
+            </command>
+            <returnParsing delimiter="\n" type="regex">.*</returnParsing>
          </item>
       </category>
    </configurationItems>
