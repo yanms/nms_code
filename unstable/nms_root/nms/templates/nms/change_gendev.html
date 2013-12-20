@@ -106,7 +106,7 @@
                                                     </tr>
                                                     {% for record in dev_types %}
                                                     <tr>
-                                                        <td>{{ record }}</td>
+                                                        <td><input type="text" value="{{ record }}" name="dev_type_name" /></td>
 														<td>{% if perm.nms.change_gen_dev %}<img src="{{ STATIC_URL }}images/editButton.png" widht="20px">{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.dev_type_id }}" />{% else %} N/A {% endif %}</td>
                                                     </tr>
@@ -115,7 +115,7 @@
                                                 <table border="0" width="70%">
                                                     <tr>
                                                         <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.delete_gen_dev %}<input type="submit" value="Delete" />{% endif %}</td>
+                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
                                                     </tr>
                                                 </table>
                                             </form>
@@ -129,20 +129,18 @@
                                                 <input type="hidden" name="qtype" value="change_vendor" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
-                                                        <td width="95%"><b>Name</b></td>
-                                                        <td width="5%"><b>Delete</b></td>
+                                                        <td width="100%"><b>Name</b></td>
                                                     </tr>
                                                     {% for record in vendors %}
                                                     <tr>
-                                                        <td>{{ record }}</td>
-                                                        <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.vendor_id }}" />{% else %}N/A{% endif %}</td>
+                                                        <td><input type="type=" value="{{ record }}" name="vendor_name" /></td>
                                                     </tr>
                                                     {% endfor %}
                                                 </table>
                                                 <table border="0" width="70%">
                                                     <tr>
                                                         <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.delete_gen_dev %}<input type="submit" value="Delete" />{% endif %}</td>
+                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
                                                     </tr>
                                                 </table>
                                             </form>
@@ -158,20 +156,18 @@
                                                 <input type="hidden" name="qtype" value="change_model" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
-                                                        <td width="95%"><b>Name</b></td>
-                                                        <td width="5%"><b>Delete</b></td>
+                                                        <td width="100%"><b>Name</b></td>
                                                     </tr>
                                                     {% for record in models %}
                                                     <tr>
-                                                        <td>{{ record }}</td>
-                                                        <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.model_id }}" />{% else %}N/A{% endif %}</td>
+                                                        <td><input type="text" value="{{ record }}" name="model_name" /></td>
                                                     </tr>
                                                     {% endfor %}
                                                 </table>
                                                 <table border="0" width="70%">
                                                     <tr>
                                                         <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.delete_gen_dev %}<input type="submit" value="Delete" />{% endif %}</td>
+                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
                                                     </tr>
                                                 </table>
                                             </form>
@@ -185,20 +181,18 @@
                                                 <input type="hidden" name="qtype" value="change_xml" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
-                                                        <td width="95%"><b>Name</b></td>
-                                                        <td width="5%"><b>Delete</b></td>
+                                                        <td width="100%"><b>Name</b></td>
                                                     </tr>
                                                     {% for record in xml_files %}
                                                     <tr>
-                                                        <td>{{ record.location }}</td>
-                                                        <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.file_location_id }}" />{% else %}N/A{% endif %}</td>
+                                                        <td><input type="text" value="{{ record.location }}" name="location" /></td>
                                                     </tr>
                                                     {% endfor %}
                                                 </table>
                                                 <table border="0" width="70%">
                                                     <tr>
                                                         <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.delete_gen_dev %}<input type="submit" value="Delete" />{% endif %}</td>
+                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
                                                     </tr>
                                                 </table>
                                             </form>
@@ -210,28 +204,34 @@
                                     <tr>
 										{% if qtype == 'change_os_dev' %}
                                         <td width="50%">
-                                            <h3>OS per generic device</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' record.os_dev_id %}" method="POST">
+											<h3>OS - GenDev</h3>
+											
+                                            <form action="{% url 'nms:change_gendev_handler' record.gen_dev_id %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_osdev" />
-                                                <table class="TFtable" width="70%">
+                                                <table border="0">
                                                     <tr>
-                                                        <td width="45%"><b>OS</b></td>
-                                                        <td width="45%"><b>Device</b></td>
-                                                        <td width="5%"><b>Delete</b></td>
+                                                        <td>Device template:</td>
+                                                        <td>
+                                                            <select id="selectGen_dev" name="gen_dev">
+                                                                {% for record in gen_devs %}
+                                                                <option value="{{ record.gen_dev_id }}">{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
                                                     </tr>
-                                                    {% for record in os_devs %}
                                                     <tr>
-                                                        <td>{{ record.os_id }}</td>
-                                                        <td>{{ record.gen_dev_id.dev_type_id }}: {{ record.gen_dev_id.vendor_id }} {{ record.gen_dev_id.model_id }}</td>
-                                                        <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.os_dev_id }}" />{% else %}N/A{% endif %}</td>
+                                                        <td>OS:</td>
+                                                        <td>
+                                                            <select id="selectOS" name="os">
+                                                                {% for record in os %}
+                                                                <option value="{{ record.os_id }}">{{ record }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
                                                     </tr>
-                                                    {% endfor %}
-                                                </table>
-                                                <table border="0" width="70%">
                                                     <tr>
-                                                        <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.delete_gen_dev %}<input type="submit" value="Delete" />{% endif %}</td>
+                                                        <td><input type="submit" value="Add OS-Template" /></td>
                                                     </tr>
                                                 </table>
                                             </form>
@@ -240,27 +240,52 @@
                                     </tr>
                                     <tr>
 										{% if qtype == 'change_os' %}
-                                        <td width="50%">
-                                            <h3>OS</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' record.os_id %}" method="POST">
+                                        <td width="100%">
+                                            <h3>Create OS</h3>
+                                            <form action="{% url 'nms:change_gendev_handler' record.os_type_id %}" method="POST">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="change_os" />
-                                                <table class="TFtable" width="70%">
+												<input type="hidden" name="qtype" value="change_os" />
+												<table border="0">
                                                     <tr>
-                                                        <td width="45%"><b>OS</b></td>
-                                                        <td width="5%"><b>Delete</b></td>
+                                                        <td>Vendor</td>
+                                                        <td>
+                                                            <select id="vendor_id" name="vendor_id">
+                                                                {% for record in vendors %}
+                                                                <option value="{{ record.vendor_id }}">{{ record }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
                                                     </tr>
-                                                    {% for record in os %}
                                                     <tr>
-                                                        <td>{{ record.vendor_id }} ({{ record.os_type_id}}) {{ record.name }} {{ record.build }} {{ record.short_info }}</td>
-                                                        <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.os_id }}" />{% else %}N/A{% endif %}</td>
+                                                        <td>OS type</td>
+                                                        <td>
+                                                            <select id="os_type_id" name="os_type_id">
+                                                                {% for record in os_type %}
+                                                                <option value="{{ record.os_type_id }}">{{ record }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
                                                     </tr>
-                                                    {% endfor %}
-                                                </table>
-                                                <table border="0" width="70%">
+													<tr>
+														<td>Name</td>
+														<td>
+															<input type="text" name="name" value="{{ record.name }}" />
+														</td>
+													</tr>													
+													<tr>
+														<td>Build</td>
+														<td>
+															<input type="text" name="build" value="{{ record.build }}" />
+														</td>
+													</tr>
+													<tr>
+														<td>Short info</td>
+														<td>
+															<input type="text" name="short_info" value="{{ record.short_info }}" />
+														</td>
+													</tr>
                                                     <tr>
-                                                        <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.delete_gen_dev %}<input type="submit" value="Delete" />{% endif %}</td>
+                                                        <td><input type="submit" value="Change OS-Template" /></td>
                                                     </tr>
                                                 </table>
                                             </form>
@@ -276,20 +301,18 @@
                                                 <input type="hidden" name="qtype" value="change_os_type" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
-                                                        <td width="95%"><b>Name</b></td>
-                                                        <td width="5%"><b>Delete</b></td>
+                                                        <td width="100%"><b>Name</b></td>
                                                     </tr>
                                                     {% for record in os_type %}
                                                     <tr>
-                                                        <td>{{ record }}</td>
-                                                        <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.os_type_id }}" />{% else %}N/A{% endif %}</td>
+                                                        <td><input type="text" value="{{ record }}" name="type" /></td>
                                                     </tr>
                                                     {% endfor %}
                                                 </table>
                                                 <table border="0" width="70%">
                                                     <tr>
                                                         <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.delete_gen_dev %}<input type="submit" value="Delete" />{% endif %}</td>
+                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
 
                                                     </tr>
                                                 </table>
