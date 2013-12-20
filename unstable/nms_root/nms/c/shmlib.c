@@ -25,6 +25,7 @@ static int init_sem(void)
    {
       return ESEMOPEN;
    }
+   return 0;
 }
 
 static int init_shm(void)
