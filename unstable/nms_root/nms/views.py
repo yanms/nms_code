@@ -1277,7 +1277,7 @@ def change_gendev(request, gendev_id):
 		elif qtype == 'change_vendor':
 			object = Vendor.objects.get(pk=gendev_id)
 		elif qtype == 'change_model':
-			object = Model.objects.get(pk=gendev_id)
+			object = Dev_model.objects.get(pk=gendev_id)
 		elif qtype == 'change_xml':
 			object = File_location.objects.get(pk=gendev_id)
 		elif qtype == 'change_dev_type':
