@@ -224,7 +224,7 @@
                                         <td width="50%">
                                             <h3>XML Files</h3>
 											{% if perms.nms.add_gen_dev %}
-                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
+                                            <form action="{% url 'nms:manage_gendev' %}" method="POST" enctype="multipart/form-data">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="add_xml" />
                                                 <input type="text" name="name" />
