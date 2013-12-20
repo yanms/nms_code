@@ -976,10 +976,18 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_xml':
 				if 'name' in p:
 					try:
-						File_location(location=p['name']).save()
+						destination = 'nms/static/devices/' + p['name']
+						file = open(destination, 'wb+')
+						file_data = p['file']
+						for item in file_data:
+							file.write(item)
+						file.close()
+						File_location(location=destionation).save()
 						History.objects.create(action_type='Gendev: add', action='Added gendev XML', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
+						messages.error(request, list(POST.items()))
+						messages.error(request, traceback.format_exc()) #debug code
 						messages.error(request, 'Error adding XML')
 			elif p['qtype'] == 'del_xml':
 				if 'items' in p:
@@ -1220,7 +1228,7 @@ def change_gendev_handler(request, gendev_id):
 				messages.error(request, 'Error occured during the request. Can not change generic device')
 		elif p['qtype'] == 'change_dev_type':
 			try:
-				dev_type = Dev_type.objects.get(pk=p['dev_type_id'])
+				dev_type = Dev_type.objects.get(pk=gendev_id)
 				dev_type.dev_type_name = p['dev_type_name']
 				dev_type.save()
 				messages.success(request, 'Database successfully updated')
@@ -1276,6 +1284,7 @@ def change_gendev(request, gendev_id):
 			models = Dev_model.objects.all()
 			xml = File_location.objects.all()
 			object = Gen_dev.objects.get(pk=gendev_id)
+			return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype, 'object': object, 'vendors': vendors, 'dev_type': dev_type, 'models': models, 'xml': xml})
 		elif qtype == 'change_dev_type':
 			object = Dev_type.objects.get(pk=gendev_id)
 		elif qtype == 'change_vendor':
@@ -1289,7 +1298,7 @@ def change_gendev(request, gendev_id):
 		else:
 			messages.error(request, 'No valid qtype found')
 			return HttpResponseRedirect(reverse('nms:devices'))
-		return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype, 'object': object, 'vendors': vendors, 'dev_type': dev_type, 'models': models, 'xml': xml})
+		return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype, 'object': object})
 	else:
 		messages.error(request, "You don't have the right permissions or qtype is not found in request.")
 		return HttpResponseRedirect(reverse('nms:manage_gendev'))
