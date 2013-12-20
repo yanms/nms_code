@@ -110,7 +110,7 @@
             <command>
                <argElement position="0" type="plaintext">enable</argElement>
 			   <argElement position="1" type="privpasswd" />
-			   <argElement position="2" type="plaintext">sh run</argElement>
+			   <argElement position="2" type="plaintext">sh run full</argElement>
 			   <argElement position="3" type="plaintext">disable</argElement>
             </command>
             <returnParsing delimiter="\n" type="regex">.*</returnParsing>
@@ -119,7 +119,7 @@
             <command>
                <argElement position="0" type="plaintext">enable</argElement>
 			   <argElement position="1" type="privpasswd" />
-			   <argElement position="2" type="plaintext">shipro</argElement>
+			   <argElement position="2" type="plaintext">show ip route</argElement>
 			   <argElement position="3" type="plaintext">disable</argElement>
             </command>
             <returnParsing delimiter="\n" type="regex">.*</returnParsing>
@@ -128,7 +128,7 @@
             <command>
                <argElement position="0" type="plaintext">enable</argElement>
 			   <argElement position="1" type="privpasswd" />
-			   <argElement position="2" type="plaintext">shiproospf</argElement>
+			   <argElement position="2" type="plaintext">show ip route ospf</argElement>
 			   <argElement position="3" type="plaintext">disable</argElement>
             </command>
             <returnParsing delimiter="\n" type="regex">.*</returnParsing>
@@ -137,7 +137,7 @@
             <command>
                <argElement position="0" type="plaintext">enable</argElement>
 			   <argElement position="1" type="privpasswd" />
-			   <argElement position="2" type="plaintext">shver</argElement>
+			   <argElement position="2" type="plaintext">show version</argElement>
 			   <argElement position="3" type="plaintext">disable</argElement>
             </command>
             <returnParsing delimiter="\n" type="regex">.*</returnParsing>
