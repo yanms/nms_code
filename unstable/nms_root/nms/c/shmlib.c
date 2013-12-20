@@ -34,7 +34,7 @@ static int init_shm(void)
 
    key = SHMKEY;
 
-   if ((shmid = shmget(key, SHMLEN, IPC_CREAT | 0666)) < 0)
+   if ((shmid = shmget(key, SHMLEN, IPC_CREAT | 0600)) < 0)
    {
       return ESHMGET;
    }
