@@ -96,6 +96,15 @@
             </command>
             <returnParsing delimiter="\n" type="regex">Router>reboot</returnParsing>
          </item>
+		 <item name="Copy running config to startup config" type="single">
+            <command>
+               <argElement position="0" type="plaintext">enable</argElement>
+			   <argElement position="1" type="privpasswd" />
+			   <argElement position="2" type="plaintext">copy running-configuration startup-configuration</argElement>
+			   <argElement position="3" type="plaintext">disable</argElement>
+            </command>
+            <returnParsing delimiter="\n" type="regex">Router></returnParsing>
+         </item>
       </category>
    </configurationItems>
 </device>
