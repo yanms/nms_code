@@ -1259,3 +1259,11 @@ def change_gendev_handler(request, gendev_id):
 	else:
 		messages.error(request, "You don't have the right permissions to access this page")
 		return HttpResponseRedirect(reverse('nms:index'))
+
+@login_required
+def change_gendev(request, gendev_id):
+	if request.user.has_perm('change_gen_dev') and qtype in request.GET:
+		qtype = request.GET['qtype']
+		return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype})
+	else:
+		return HttpResponseRedirect(reverse('nms:manage_gendev'))
