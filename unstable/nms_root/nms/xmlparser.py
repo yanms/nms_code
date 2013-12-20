@@ -34,7 +34,10 @@ def __getCommand__(element, interface = '', privPassword = ''):
 		for c in element.getchildren():
 			if int(c.get('position')) == i:
 				if c.get('type') == 'plaintext':
-					ret.append(c.text.replace('%if%', interface))
+					if c.text == None:
+						ret.append('')
+					else:
+						ret.append(c.text.replace('%if%', interface))
 				elif c.get('type') == 'privpasswd':
 					ret.append(privPassword)
 				else:
