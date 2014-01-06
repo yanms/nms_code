@@ -190,6 +190,7 @@ footer{
 	background:#f9f9f9;
 	padding:19px 0 8px 36px;
 	margin:0 0 1px;
+	z-index:999;
 }
 .tabs h1 {
 	font-size:18px;
