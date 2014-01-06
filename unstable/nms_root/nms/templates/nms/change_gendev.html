@@ -26,7 +26,7 @@
                                 <h1>Dashboard</h1>
                                 <ul class="states">
                                     {% for message in messages %}
-                                    <li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+                                    <li class="{{ message.tags }}">{{ message.tags.title }} : {{ message }}</li>
                                     {% endfor %}
                                 </ul>
                                 <h2>Change Device Templates</h2>
@@ -36,7 +36,7 @@
 										{% if perms.nms.add_gen_dev %}
                                         <td width="50%">
 											
-                                            <form action="{% url 'nms:change_gendev_handler' record.dev_type_id %}" method="POST">
+                                            <form action="{% url 'nms:change_gendev_handler' dev_type_id %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_gendev" />
                                                 <table border="0">
