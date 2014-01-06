@@ -95,7 +95,7 @@
 										{% if qtype == 'change_dev_type' %}
                                         <td width="50%">
                                             <h3>Types</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' gendev_id %}" method="post">
+                                            <form action="{% url 'nms:change_gendev_handler' nms_dev_type.dev_type_id %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_dev_type" /><br />
                                                 <table class="TFtable" width="70%">
