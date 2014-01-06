@@ -95,8 +95,7 @@
 										{% if qtype == 'change_dev_type' %}
                                         <td width="50%">
                                             <h3>Types</h3>
-											{% for record in dev_type %}
-                                            <form action="{% url 'nms:change_gendev_handler' record.dev_type_id %}" method="post">
+                                            <form action="{% url 'nms:change_gendev_handler' dev_types.dev_type_id %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_dev_type" /><br />
                                                 <table class="TFtable" width="70%">
@@ -104,11 +103,12 @@
                                                         <td width="90%"><b>Name</b></td>
 														<td width="10%"><b>Update</b></td>
                                                     </tr>
+                                                    {% for record in dev_types %}
                                                     <tr>
                                                         <td><input type="text" value="{{ record }}" name="dev_type_name" /></td>
 														<td>{% if perm.nms.change_gen_dev %}<img src="{{ STATIC_URL }}images/editButton.png" widht="20px">{% else %} N/A {% endif %}</td>
                                                     </tr>
-                                            {% endfor %}
+                                                    {% endfor %}
                                                 </table>
                                                 <table border="0" width="70%">
                                                     <tr>
