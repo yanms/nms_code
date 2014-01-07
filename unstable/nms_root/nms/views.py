@@ -20,6 +20,7 @@ from django.contrib.sessions.models import Session
 from django.views.decorators.csrf import csrf_protect
 from xml.etree import ElementTree
 import os as os_library
+from subprocess import call
 
 @login_required
 def index(request):
@@ -57,8 +58,9 @@ def install(request):
 			change_user = Permission.objects.get(codename='change_user')
 			delete_user = Permission.objects.get(codename='delete_user')
 			group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
-			Settings.objects.create(known_name='hostname', string=request.POST['hostname'])			
 			Settings.objects.create(known_id=1, known_name='install complete', known_boolean=True)
+			Settings.objects.create(known_id=2, known_name='hostname', string=request.POST['hostname'])
+			call(['make', './nms/c/'])
 
 			return HttpResponse('Finished installing NMS.')
 		else:
