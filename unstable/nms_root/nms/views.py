@@ -797,15 +797,18 @@ def session_handler(request):
 @login_required
 def query(request):
 	if request.method == 'GET':
-		if 'type' in request.GET and 'q' in request.GET:
+		if 'type' in request.GET and 'q' in request.GET and 'HTTP_REFERER' in request.META:
 			qtype = request.GET['type']
 			query = request.GET['q']
+			referer = request.META['HTTP_REFERER']
 		else:
 			return HttpResponse('<Error>', content_type='text/plain')
 	else:
 		return HttpResponse('<Error>', content_type='text/plain')
 
-	messages.info(request, request.META['HTTP_REFERER'])
+	if not (referer.startswith('http://remybien.dyndns.org') or referer.startswith('https://remybien.dyndns.org')):
+		return HttpResponse('<Error>', content_type='text/plain')
+
 	if qtype == 'models' and request.user.has_perm('nms.add_devices'):
 		ret_list = []
 		ret_string = ''
