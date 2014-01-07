@@ -176,13 +176,7 @@
                                                     <tr>
                                                         <td>Name XML file: <input type="text" name="name" /><br />
 															<input type="file" name="file" id="file">
-															<input type="submit" value="Update" /></td>
-                                                    </tr>
-                                                </table>
-                                                <table border="0" width="70%">
-                                                    <tr>
-                                                        <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
+															{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
                                                     </tr>
                                                 </table>
                                             </form>
