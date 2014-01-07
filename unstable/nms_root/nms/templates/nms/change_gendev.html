@@ -36,7 +36,7 @@
 										{% if perms.nms.add_gen_dev %}
                                         <td width="50%">
 											
-                                            <form action="{% url 'nms:change_gendev_handler' dev_types.dev_type_id %}" method="POST">
+                                            <form action="{% url 'nms:change_gendev_handler' object.gen_dev_id %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_gendev" />
                                                 <table border="0">
@@ -44,7 +44,7 @@
                                                         <td>Type:</td>
                                                         <td>
                                                             <select id="selectType" name="dev_type">
-                                                                {% for record in dev_types %}
+                                                                {% for record in dev_type %}
                                                                 <option value="{{ record.dev_type_id }}">{{ record }}</option>
                                                                 {% endfor %}
                                                             </select>
@@ -74,14 +74,14 @@
                                                         <td>XML:</td>
                                                         <td>
                                                             <select id="selectXMLFile" name="xml_files">
-                                                                {% for record in xml_files %}
+                                                                {% for record in xml %}
                                                                 <option value="{{ record.file_location_id }}">{{ record.location }}</option>
                                                                 {% endfor %}
                                                             </select>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td><input type="submit" value="Add Template" /></td>
+                                                        <td><input type="submit" value="Change Template" /></td>
                                                     </tr>
                                                 </table>
                                             </form>
@@ -95,20 +95,16 @@
 										{% if qtype == 'change_dev_type' %}
                                         <td width="50%">
                                             <h3>Types</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' dev_type_id_id %}" method="post">
+                                            <form action="{% url 'nms:change_gendev_handler' object.dev_type_id %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_dev_type" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
                                                         <td width="90%"><b>Name</b></td>
-														<td width="10%"><b>Update</b></td>
                                                     </tr>
-                                                    {% for record in dev_types %}
                                                     <tr>
-                                                        <td><input type="text" value="{{ record }}" name="dev_type_name" /></td>
-														<td>{% if perm.nms.change_gen_dev %}<img src="{{ STATIC_URL }}images/editButton.png" widht="20px">{% else %} N/A {% endif %}</td>
+                                                        <td><input type="text" value="{{ object.dev_type_name }}" name="dev_type_name" /></td>
                                                     </tr>
-                                                    {% endfor %}
                                                 </table>
                                                 <table border="0" width="70%">
                                                     <tr>
@@ -122,7 +118,7 @@
 										{% if qtype == 'change_vendor' %}
                                         <td width="50%">
                                             <h3>Vendors</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' vendor_id_id %}" method="post">
+                                            <form action="{% url 'nms:change_gendev_handler' object.vendor_id %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_vendor" /><br />
                                                 <table class="TFtable" width="70%">
@@ -149,18 +145,16 @@
 										{% if qtype == 'change_model' %}
                                         <td width="50%">
                                             <h3>Models</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' model_id_id %}" method="post">
+                                            <form action="{% url 'nms:change_gendev_handler' object.model_id %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_model" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
                                                         <td width="100%"><b>Name</b></td>
                                                     </tr>
-                                                    {% for record in models %}
                                                     <tr>
-                                                        <td><input type="text" value="{{ record }}" name="model_name" /></td>
+                                                        <td><input type="text" value="{{ object.model_name }}" name="model_name" /></td>
                                                     </tr>
-                                                    {% endfor %}
                                                 </table>
                                                 <table border="0" width="70%">
                                                     <tr>
@@ -174,7 +168,7 @@
 										{% if qtype == 'change_xml' %}
                                         <td width="50%">
                                             <h3>XML Files</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' file_location_id_id %}" method="post">
+                                            <form action="{% url 'nms:change_gendev_handler' object.file_location_id %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_xml" /><br />
                                                 <table class="TFtable" width="70%">
@@ -204,7 +198,7 @@
                                         <td width="50%">
 											<h3>OS - GenDev</h3>
 											
-                                            <form action="{% url 'nms:change_gendev_handler' gen_dev_id %}" method="POST">
+                                            <form action="{% url 'nms:change_gendev_handler' object.gen_dev_id %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_osdev" />
                                                 <table border="0">
@@ -239,8 +233,8 @@
                                     <tr>
 										{% if qtype == 'change_os' %}
                                         <td width="100%">
-                                            <h3>Create OS</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' os_type_id %}" method="POST">
+                                            <h3>Change OS</h3>
+                                            <form action="{% url 'nms:change_gendev_handler' object.os_id %}" method="POST">
                                                 {% csrf_token %}
 												<input type="hidden" name="qtype" value="change_os" />
 												<table border="0">
@@ -294,7 +288,7 @@
 										{% if qtype == 'change_os_type' %}
 										<td width="50%">
 											<h3>OS type</h3>
-                                            <form action="{% url 'nms:change_gendev' os_type_id %}" method="post">
+                                            <form action="{% url 'nms:change_gendev_handler' object.os_type_id %}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_os_type" /><br />
                                                 <table class="TFtable" width="70%">
