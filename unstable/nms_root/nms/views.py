@@ -1282,7 +1282,7 @@ def change_gendev_handler(request, gendev_id):
 			except:
 				messages.error(request, 'Error occured during the request. Can not change model')
 		elif p['qtype'] == 'change_xml':
-			if file in request.FILES:
+			if 'file' in request.FILES:
 				try:
 					file_data = request.FILES['file']
 					if file_data.content_type != 'text/xml':
