@@ -60,19 +60,7 @@
 		var dvendor = selectVendor.options[selectVendor.selectedIndex].text;
 
 		var args = "?type=models&q=".concat(dtype, "|", dvendor, "&t=", Math.random().toString(36).substring(7));
-		function csrfSafeMethod(method) {
-			 // these HTTP methods do not require CSRF protection
-			 return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-		}
-		$.ajaxSetup({
-			 crossDomain: false, // obviates need for sameOrigin test
-			 beforeSend: function(xhr, settings) {
-				  if (!csrfSafeMethod(settings.type)) {
-						xhr.setRequestHeader("X-CSRFToken", csrftoken);
-				  }
-			 }
-		});
-		xmlhttp.open("POST", "{% url 'nms:query' %}".concat(args), true);
+		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
 		xmlhttp.send();
 	}
 	window.onload = function() {
