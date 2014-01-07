@@ -125,11 +125,9 @@
                                                     <tr>
                                                         <td width="100%"><b>Name</b></td>
                                                     </tr>
-                                                    {% for record in vendors %}
                                                     <tr>
-                                                        <td><input type="type=" value="{{ record }}" name="vendor_name" /></td>
+                                                        <td><input type="type=" value="{{ object }}" name="vendor_name" /></td>
                                                     </tr>
-                                                    {% endfor %}
                                                 </table>
                                                 <table border="0" width="70%">
                                                     <tr>
@@ -176,7 +174,7 @@
                                                         <td width="100%"><b>Name</b></td>
                                                     </tr>
                                                     <tr>
-                                                        <td><input type="text" value="{{ object.location }}" name="location" /></td>
+                                                        <td><input width="300px" type="text" value="{{ object.location }}" name="location" /></td>
                                                     </tr>
                                                 </table>
                                                 <table border="0" width="70%">
@@ -259,23 +257,23 @@
 													<tr>
 														<td>Name</td>
 														<td>
-															<input type="text" name="name" value="{{ record.name }}" />
+															<input type="text" name="name" value="{{ object.name }}" />
 														</td>
 													</tr>													
 													<tr>
 														<td>Build</td>
 														<td>
-															<input type="text" name="build" value="{{ record.build }}" />
+															<input type="text" name="build" value="{{ object.build }}" />
 														</td>
 													</tr>
 													<tr>
 														<td>Short info</td>
 														<td>
-															<input type="text" name="short_info" value="{{ record.short_info }}" />
+															<input type="text" name="short_info" value="{{ object.short_info }}" />
 														</td>
 													</tr>
                                                     <tr>
-                                                        <td><input type="submit" value="Change OS-Template" /></td>
+                                                        <td><input type="submit" value="Change OS Template" /></td>
                                                     </tr>
                                                 </table>
                                             </form>

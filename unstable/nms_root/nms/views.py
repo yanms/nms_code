@@ -19,7 +19,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.views.decorators.csrf import csrf_protect
 from xml.etree import ElementTree
-import os
+import os as os_library
 
 @login_required
 def index(request):
@@ -1006,11 +1006,12 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							file = File_location.objects.get(pk=int(i))
-							if not os.path.exists(file.location):
-								messages.error(request, "File doesn't exist")
-								return HttpResponseRedirect(reverse('nms:manage_gendev'))
-							os.remove(file.location)
 							file.delete()
+							if not os_library.path.isfile(file.location):
+								messages.info(request, "File doesn't exist")
+							else:
+								os_library.remove(file.location)
+								messages.info(request, "File found and trying to removing it")
 							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev XML', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
@@ -1107,7 +1108,7 @@ def history(request, device_id_request):
 	if request.user.has_perm('nms.manage_devices'):
 		device = get_object_or_404(Devices, pk=device_id_request)
 		history_items_list = History.objects.filter(dev_id=device)
-		history_items_list = history_items_list.extra(order_by = ['history_id'])
+		history_items_list = history_items_list.extra(order_by = ['-history_id'])
 		paginator = Paginator(history_items_list, 25)
 	
 		page = request.GET.get('page')
@@ -1129,7 +1130,7 @@ def history(request, device_id_request):
 @login_required
 def user_history(request):
 	history_items_list = History.objects.filter(Q(user_id = request.user) | Q(user_performed_task = request.user ))
-	history_items_list = history_items_list.extra(order_by = ['history_id'])
+	history_items_list = history_items_list.extra(order_by = ['-history_id'])
 	paginator = Paginator(history_items_list, 25)
 	
 	page = request.GET.get('page')
@@ -1150,7 +1151,7 @@ def acl_user_history(request, acl_user):
 		devices_count = Devices.objects.count()
 		user_obj = get_object_or_404(User, pk=acl_user)
 		history_items_list = History.objects.filter(Q(user_id = user_obj ) | Q(user_performed_task = user_obj ))
-		history_items_list = history_items_list.extra(order_by = ['history_id'])
+		history_items_list = history_items_list.extra(order_by = ['-history_id'])
 		paginator = Paginator(history_items_list, 25)
 	
 		page = request.GET.get('page')
@@ -1170,7 +1171,7 @@ def acl_device_history(request, acl_id):
 	if request.user.has_perm('auth.list_group'):
 		device = get_object_or_404(Devices, pk=acl_id)
 		history_items_list = History.objects.filter(dev_id=device)
-		history_items_list = history_items_list.extra(order_by = ['history_id'])
+		history_items_list = history_items_list.extra(order_by = ['-history_id'])
 		paginator = Paginator(history_items_list, 25)
 	
 		page = request.GET.get('page')
@@ -1290,14 +1291,17 @@ def change_gendev(request, gendev_id):
 	if request.user.has_perm('nms.change_gen_dev') and 'qtype' in request.GET:
 		qtype = request.GET['qtype']
 		if qtype == 'change_os':
+			vendors = Vendor.objects.all()
+			os_type = OS_type.objects.all()
 			object = OS.objects.get(pk=gendev_id)
+			return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype, 'object': object, 'vendors': vendors, 'os_type': os_type})
 		elif qtype == 'change_os_type':
 			object = OS_type.objects.get(pk=gendev_id)
 		elif qtype == 'change_os_dev':
 			os = OS.objects.all()
 			gen_devs = Gen_dev.objects.all()
 			object = OS_dev.objects.get(pk=gendev_id)
-			return render(request, 'nms/change_gendev.html', {'request': request, 'os': os, 'gen_devs': gen_devs})
+			return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype, 'object': object, 'os': os, 'gen_devs': gen_devs})
 		elif qtype == 'change_gendev':
 			vendors = Vendor.objects.all()
 			dev_type = Dev_type.objects.all()
