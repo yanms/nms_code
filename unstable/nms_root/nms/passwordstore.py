@@ -2,6 +2,8 @@ from Crypto.Cipher import AES
 from Crypto import Random
 import base64
 import ctypes
+import nms
+import os
 
 lib = None
 
@@ -26,7 +28,8 @@ class AESCipher:
 
 def __initSHMLib__():
 	global lib
-	lib = ctypes.cdll.LoadLibrary('./nms/c/shmlib.so')
+	path = os.path.abspath(os.path.dirname(nms.__file__))
+	lib = ctypes.cdll.LoadLibrary(path + '/c/shmlib.so')
 	lib.store_password.restype = None
 	lib.get_password.restype = ctypes.c_char_p
 
