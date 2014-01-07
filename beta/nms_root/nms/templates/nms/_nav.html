@@ -1,0 +1,24 @@
+<!-- navigation -->
+{% load menu_tags %}
+{% url 'nms:devices' as devicespage %}
+{% url 'nms:index' as index %}
+{% url 'nms:device_add' as device_add %}
+{% url 'nms:acl' as acl %}
+{% url 'nms:user_settings' as user_settings %}
+
+{% if user.is_authenticated %}
+<ul class="tabset buttons">
+	<li class="{% active request index %}">
+		<a href="{% url 'nms:index' %}" class="ico4"><span>Dashboard</span><em></em></a>
+		<span class="tooltip"><span>Dashboard</span></span>
+	</li>
+	<li class="{% active request devicespage %}">
+		<a href="{% url 'nms:devices' %}" class="ico1"><span>Devices</span><em></em></a>
+		<span class="tooltip"><span>Devices</span></span>
+	</li>
+	<li class="{% active request acl %}">
+			<a href="{% url 'nms:acl' %}" class="ico8"><span>ACL</span><em></em></a>
+			<span class="tooltip"><span>ACL</span></span>
+	</li>
+</ul>
+{% endif %}

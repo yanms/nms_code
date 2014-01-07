@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - AdminPanel: Devices</title>
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript">
+		function showLoadingImage(num)
+		{
+			document.getElementById('loadingImage'.concat(num)).style.visibility='visible';
+		}
+	</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+					</nav>
+					{% include "_navuser.html" %}
+				</div>
+				<div class="tabs">
+					<div id="tab-4" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<ul class="states">
+								{% for message in messages %}
+								<li class="{{ message.tags }}">{{ message.tags.title }} : {{message}}</li>
+								{% endfor %}
+							</ul>
+								<h2>User History</h2>
+								{% if history.has_previous %}
+									<a href="?page={{ history.previous_page_number }}">previous</a>
+									{% endif %}
+								Page {{ history.number }} of {{ history.paginator.num_pages }}.
+								{% if history.has_next %}
+									<a href="?page={{ history.next_page_number }}">next</a>
+									{% endif %}
+								<table class="TFtable">
+									<tr>
+										<td><b>History id</b></td>
+										<td width="200px"><b>Action</b></td>
+										<td><b>Action type</b></td>
+										<td><b>Device</b></td>
+										<td><b>Modified User</b></td>
+										<td><b>User affected</b></td>
+										<td><b>User performed task</b></td>
+										<td><b>Time</b></td>
+									</tr>
+								{% for record in history %}
+									<tr>
+										<td>{{ record.history_id }}</td>
+										<td>{{ record.action }}</td>
+										<td>{{ record.action_type }}</td>
+										<td>{{ record.dev_id }}</td>
+										<td>{{ record.user_id }}</td>
+										<td>{{ record.user_id }}</td>
+										<td>{{ record.user_performed_task }}</td>
+										<td>{{ record.date_time }}</td>
+									</tr>
+								{% endfor %}
+								</table>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside id="sidebar">
+			<img src="{{ STATIC_URL }}images/NMS.png"/>
+			{% include "_nav.html" %}
+			<span class="shadow"></span>
+		</aside>
+		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
+	</div> <!-- Wrapper -->
+	<footer>
+		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+	</footer>
+</body>
+</html>

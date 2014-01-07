@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - AdminPanel: Devices</title>
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<script type="text/javascript">
+		function showLoadingImage(num)
+		{
+			document.getElementById('loadingImage'.concat(num)).style.visibility='visible';
+		}
+		function muteurl(id)
+		{
+			var e = document.getElementById(id);
+			var start_i = e.href.indexOf('&arg:');
+			var arg_array = new Array();
+			while (start_i != -1)
+			{
+				var end_i = e.href.indexOf('&', start_i+1); 
+				var name;
+				if (end_i != -1)
+				{
+					name = e.href.substring(start_i, end_i);
+				}
+				else
+				{
+					name = e.href.substring(start_i);
+				}
+				var uinput = prompt(name.substring(5));
+				arg_array.push(name + "=" + uinput);
+				start_i = e.href.indexOf('&arg:', start_i+1);
+			}
+			for (i = 0; i < arg_array.length; i++)
+			{
+				e.href = e.href.replace(arg_array[i].substring(0, arg_array[i].indexOf('=')), arg_array[i]);
+			}	
+			return true;
+		}
+	</script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+						{% include "_navupdev.html" %}
+					</nav>
+					<!-- Upper Menu -->
+					{% include "_navuser.html" %}
+				</div>
+				<div class="tabs">
+					<div id="tab-4" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<ul class="states">
+									{% for message in messages %}
+									<li class="{{message.tags}}">{{message.tags.title}} : {{message|safe}}</li>
+									{% endfor %}
+								</ul>
+								<h2>Device: {{ devices.gen_dev_id }} ({{ devices.ip }})</h2>
+								<p>
+									<b><a href="{% url 'nms:device_manager' devices.dev_id %}?refresh" onclick="showLoadingImage(1)">Refresh this page</a></b> <img id="loadingImage1" src="{{ STATIC_URL }}images/loading.gif" style="visibility:hidden" />
+									<br /><b><a href="{% url 'nms:device_ssh' devices.dev_id %}">Open terminal</a></b>
+									{{ taskhtml|safe }}
+								</p>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside id="sidebar">
+			<img src="{{ STATIC_URL }}images/NMS.png"/>
+			{% include "_nav.html" %}
+			<span class="shadow"></span>
+		</aside>
+		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
+	</div> <!-- Wrapper -->
+	<footer>
+		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+	</footer>
+</body>
+</html>

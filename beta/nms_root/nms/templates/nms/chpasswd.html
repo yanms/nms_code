@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - AdminPanel: Devices</title>
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript">
+	function clearpasswd()
+	{
+		document.getElementById('oldpassword').value='';
+		document.getElementById('newpassword1').value='';
+		document.getElementById('oldpassword2').value='';
+	}
+	function clearsettings()
+	{
+		document.getElementById('newname').value='';
+		document.getElementById('newsurname').value='';
+		document.getElementById('newemail').value='';
+	}
+	</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+						<ul>
+							<li><a href="{% url 'nms:user_history' %}" class="ico2">User History</a></li>
+                                	        </ul>
+					</nav>
+					<!-- Upper Menu -->
+					{% include "_navuser.html" %}
+				</div>
+				<div class="tabs">
+					<div id="tab-8" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<ul class="states">
+									{% for message in messages %}
+									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+									{% endfor %}
+								</ul>
+								<h2>User Settings</h2>
+								<p>
+									<form action="{% url 'nms:user_settings' %}" method="POST">
+										{% csrf_token %}
+										<input type="hidden" name="mode" id="mode" value="chpasswd" />
+										<table border="0">
+											<tr>
+												<td>Old password:</td>
+												<td><input type="password" name="oldpassword" id="oldpassword" /></td>
+											</tr>
+											<tr>
+												<td>New password:</td>
+												<td><input type="password" name="newpassword1" id="newpassword1" /></td>
+											</tr>
+											<tr>
+												<td>New password again:</td>
+												<td><input type="password" name="newpassword2" id="newpassword2" /></td>
+											</tr>
+											<tr>
+												<td><input type="submit" value="Submit" id="submit" /><input type="reset" value="Reset" id="reset" onclick="clearpasswd()" /></td>
+											</tr>
+										</table>
+									</form>
+									<form action="{% url 'nms:user_settings' %}" method="POST">
+										{% csrf_token %}
+										<input type="hidden" name="mode" id="mode" value="chsettings" />
+										<table border="0">
+										<br>
+											<tr>
+												<td>Name:</td>
+												<td><input type="name" name="newname" id="newname" value="{{ user.first_name }}" /></td>
+											</tr>
+											<tr>
+												<td>Surname:</td>
+												<td><input type="surname" name="newsurname" id="newsurname" value="{{ user.last_name }}"/></td>
+											</tr>
+											<tr>
+												<td>E-Mail:</td>
+												<td><input type="e-mail" name="newemail" id="newemail" value="{{ user.email }}"/></td>
+											</tr>
+											<tr>
+												<td><input type="submit" value="Submit" id="submit" /><input type="reset" value="Reset" id="reset" onclick="clearsettings()" /></td>
+											</tr>
+										</table>
+									</form>
+								</p>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside id="sidebar">
+			<img src="{{ STATIC_URL }}images/NMS.png"/>
+			{% include "_nav.html" %}
+			<span class="shadow"></span>
+		</aside>
+		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
+	</div> <!-- Wrapper -->
+	<footer>
+		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+	</footer>
+</body>
+</html>
