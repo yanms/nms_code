@@ -9,22 +9,11 @@
 	<script type="text/javascript">
 	function sshSend()
 	{
-		var xmlhttp;
-		if (window.XMLHttpRequest)
-		{
-			// IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp = new XMLHttpRequest();
-		}
-		else
-		{
-			// IE6, IE5
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
 		var textElement = document.getElementById("sshinput");
 		var text = textElement.value;
 		textElement.value = "";
 
-		var args = "?type=ssh&q=send&text=".concat(text, "\n", "&dev={{ device.dev_id }}&t=", Math.random().toString(36).substring(7));
+		var args = "type=ssh&q=send&text=".concat(text, "\n", "&dev={{ device.dev_id }}&t=", Math.random().toString(36).substring(7));
 		function csrfSafeMethod(method) {
 			 // these HTTP methods do not require CSRF protection
 			 return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -37,28 +26,18 @@
 				  }
 			 }
 		});
-		xmlhttp.open("POST", "{% url 'nms:query' %}".concat(args), true);
-		xmlhttp.send();
+		$.ajax({
+			url : "AJAX_POST_URL",
+			type : "POST",
+			data : args,
+			success: function(data, textStatus, jqXHR){},
+			error: function (jqXHR, textStatus, errorThrown){}
+		});
 	}
 
 	function sshPriv()
 	{
-		var xmlhttp;
-		if (window.XMLHttpRequest)
-		{
-			// IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp = new XMLHttpRequest();
-		}
-		else
-		{
-			// IE6, IE5
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		var textElement = document.getElementById("sshinput");
-		var text = textElement.value;
-		textElement.value = "";
-
-		var args = "?type=ssh&q=priv&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
+		var args = "type=ssh&q=priv&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
 		function csrfSafeMethod(method) {
 			 // these HTTP methods do not require CSRF protection
 			 return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -71,36 +50,18 @@
 				  }
 			 }
 		});
-		xmlhttp.open("POST", "{% url 'nms:query' %}".concat(args), true);
-		xmlhttp.send();
+		$.ajax({
+			url : "AJAX_POST_URL",
+			type : "POST",
+			data : args,
+			success: function(data, textStatus, jqXHR){},
+			error: function (jqXHR, textStatus, errorThrown){}
+		});
 	}
 
 	function sshReceive()
 	{
-		var xmlhttp;
-		if (window.XMLHttpRequest)
-		{
-			// IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp = new XMLHttpRequest();
-		}
-		else
-		{
-			// IE6, IE5
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		xmlhttp.onreadystatechange = function(){
-			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-			{
-				var div = document.getElementById("sshtext");
-				if (xmlhttp.responseText != "")
-				{
-					div.innerHTML = div.innerHTML + xmlhttp.responseText.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
-					div.scrollTop = div.scrollHeight;
-				}
-			}
-		}
-		
-		var args = "?type=ssh&q=receive&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
+		var args = "type=ssh&q=receive&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
 		function csrfSafeMethod(method) {
 			 // these HTTP methods do not require CSRF protection
 			 return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -113,35 +74,29 @@
 				  }
 			 }
 		});
-		xmlhttp.open("POST", "{% url 'nms:query' %}".concat(args), true);
-		xmlhttp.send();
+		$.ajax({
+			url : "AJAX_POST_URL",
+			type : "POST",
+			data : args,
+			success: function(data, textStatus, jqXHR)
+			{
+				var div = document.getElementById("sshtext");
+				if (data != "")
+				{
+					div.innerHTML = div.innerHTML + data.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
+					div.scrollTop = div.scrollHeight;
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown)
+			{
+			
+			}
+		});
 	}
 	function sshClose()
 	{
-		var xmlhttp;
-		if (window.XMLHttpRequest)
-		{
-			// IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp = new XMLHttpRequest();
-		}
-		else
-		{
-			// IE6, IE5
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		xmlhttp.onreadystatechange = function(){
-			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-			{
-				var div = document.getElementById("sshtext");
-				if (xmlhttp.responseText != "")
-				{
-					div.innerHTML = div.innerHTML + xmlhttp.responseText.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
-					div.scrollTop = div.scrollHeight;
-				}
-			}
-		}
-
 		window.clearInterval(intervalId);
+
 		var args = "?type=ssh&q=del&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
 		function csrfSafeMethod(method) {
 			 // these HTTP methods do not require CSRF protection
@@ -155,8 +110,24 @@
 				  }
 			 }
 		});
-		xmlhttp.open("POST", "{% url 'nms:query' %}".concat(args), true);
-		xmlhttp.send();
+		$.ajax({
+			url : "AJAX_POST_URL",
+			type : "POST",
+			data : args,
+			success: function(data, textStatus, jqXHR)
+			{
+				var div = document.getElementById("sshtext");
+				if (xmlhttp.responseText != "")
+				{
+					div.innerHTML = div.innerHTML + xmlhttp.responseText.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
+					div.scrollTop = div.scrollHeight;
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown)
+			{
+			
+			}
+		});
 	}
 	
 	var intervalId = window.setInterval(function(){sshReceive()}, 1000);
