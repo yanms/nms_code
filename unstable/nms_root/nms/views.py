@@ -793,6 +793,7 @@ def session_handler(request):
 		return HttpResponseRedirect(reverse('nms:login_handler'))
 
 @login_required
+@csrf_protect
 def query(request):
 	if request.method == 'GET':
 		if 'type' in request.GET and 'q' in request.GET:
