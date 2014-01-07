@@ -19,9 +19,13 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.views.decorators.csrf import csrf_protect
 from xml.etree import ElementTree
+<<<<<<< HEAD
 import os
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
+=======
+import os as os_library
+>>>>>>> 84ae83e7ff365f5b7f7d41a5189003a3268391d5
 
 @login_required
 def index(request):
@@ -1010,13 +1014,18 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							file = File_location.objects.get(pk=int(i))
-							#os.path.exists
+							if not os_library.path.isfile(file.location):
+								messages.info(request, "File doesn't exist")
+							else:
+								os_library.remove(file.location)
+								messages.info(request, "File found and removing it")
 							file.delete()
 							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev XML', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
 							messages.error(request, 'Cannot delete some instances of xml because there is still a reference')
 						except:
+							messages.error(request, traceback.format_exc())
 							messages.error(request, 'Error deleting XML')
 			elif p['qtype'] == 'add_os_type':
 				if 'name' in p:
