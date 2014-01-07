@@ -97,6 +97,7 @@ class Settings(models.Model):
     known_id = models.PositiveIntegerField()
     known_name = models.CharField(max_length=255)
     known_boolean = models.BooleanField()
+    string = models.CharField(max_length=255)
 
 class Dev_group(models.Model):
     dev_group_id = models.AutoField(primary_key=True)
