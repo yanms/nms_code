@@ -152,11 +152,9 @@
                                                     <tr>
                                                         <td width="100%"><b>Name</b></td>
                                                     </tr>
-                                                    {% for record in models %}
                                                     <tr>
-                                                        <td><input type="text" value="{{ record }}" name="model_name" /></td>
+                                                        <td><input type="text" value="{{ object.model_name }}" name="model_name" /></td>
                                                     </tr>
-                                                    {% endfor %}
                                                 </table>
                                                 <table border="0" width="70%">
                                                     <tr>
