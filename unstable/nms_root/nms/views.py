@@ -30,35 +30,39 @@ def install(request):
 		if Settings.objects.filter(known_name='install complete', known_boolean=True).exists():
 			return HttpResponse('Installation already finished.') 
 	else:
-		content_type = ContentType.objects.get_for_model(User)
-		list_user, created = Permission.objects.get_or_create(codename='list_user', name='Can list users', content_type=content_type)
-		content_type = ContentType.objects.get_for_model(Group)
-		list_group, created = Permission.objects.get_or_create(codename='list_group', name='Can list (dev/usr) groups', content_type=content_type)
-		content_type = ContentType.objects.get_for_model(Devices)
-		manage_devices, created = Permission.objects.get_or_create(codename='manage_devices', name='Can manage devices (perform action)', content_type=content_type)
-		content_type = ContentType.objects.get_for_model(Devices)
-		list_devices, created = Permission.objects.get_or_create(codename='list_devices', name='Can list devices', content_type=content_type)
-		
-		group, created = Group.objects.get_or_create(name='usr:staff')
-		add_group = Permission.objects.get(codename='add_group')
-		change_group = Permission.objects.get(codename='change_group')
-		delete_group = Permission.objects.get(codename='delete_group')
-		add_devices = Permission.objects.get(codename='add_devices')
-		delete_devices = Permission.objects.get(codename='delete_devices')
-		add_gen_dev = Permission.objects.get(codename='add_gen_dev')
-		delete_gen_dev = Permission.objects.get(codename='delete_gen_dev')
-		group.permissions = [add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
-		
-		group, created = Group.objects.get_or_create(name='usr:admin')
-		add_user = Permission.objects.get(codename='add_user')
-		change_user = Permission.objects.get(codename='change_user')
-		delete_user = Permission.objects.get(codename='delete_user')
-		group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
-		
-		
-		
-		Settings.objects.create(known_id=1, known_name='install complete', known_boolean=True)
-		return HttpResponse('Finished installing NMS.')
+		if request.method == 'POST':
+			if not 'hostname' in request.POST:
+				return HttpResponse('Missing hostname');
+			content_type = ContentType.objects.get_for_model(User)
+			list_user, created = Permission.objects.get_or_create(codename='list_user', name='Can list users', content_type=content_type)
+			content_type = ContentType.objects.get_for_model(Group)
+			list_group, created = Permission.objects.get_or_create(codename='list_group', name='Can list (dev/usr) groups', content_type=content_type)
+			content_type = ContentType.objects.get_for_model(Devices)
+			manage_devices, created = Permission.objects.get_or_create(codename='manage_devices', name='Can manage devices (perform action)', content_type=content_type)
+			content_type = ContentType.objects.get_for_model(Devices)
+			list_devices, created = Permission.objects.get_or_create(codename='list_devices', name='Can list devices', content_type=content_type)
+			
+			group, created = Group.objects.get_or_create(name='usr:staff')
+			add_group = Permission.objects.get(codename='add_group')
+			change_group = Permission.objects.get(codename='change_group')
+			delete_group = Permission.objects.get(codename='delete_group')
+			add_devices = Permission.objects.get(codename='add_devices')
+			delete_devices = Permission.objects.get(codename='delete_devices')
+			add_gen_dev = Permission.objects.get(codename='add_gen_dev')
+			delete_gen_dev = Permission.objects.get(codename='delete_gen_dev')
+			group.permissions = [add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
+			
+			group, created = Group.objects.get_or_create(name='usr:admin')
+			add_user = Permission.objects.get(codename='add_user')
+			change_user = Permission.objects.get(codename='change_user')
+			delete_user = Permission.objects.get(codename='delete_user')
+			group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
+			Settings.objects.create(known_name='hostname', string=request.POST['hostname'])			
+			Settings.objects.create(known_id=1, known_name='install complete', known_boolean=True)
+
+			return HttpResponse('Finished installing NMS.')
+		else:
+			return render(request, 'nms/install.html', {'request':request})
 
 @login_required
 def acl(request):
