@@ -234,7 +234,7 @@
 											{% endif %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="post">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="del_xml" /><br />
+                                                Name XML file: <input type="hidden" name="qtype" value="del_xml" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
                                                         <td width="90%"><b>Name</b></td>
