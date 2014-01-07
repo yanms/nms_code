@@ -45,8 +45,11 @@ class Dev_type(models.Model):
 		return self.dev_type_name
 
 class File_location(models.Model):
-    file_location_id = models.AutoField(primary_key=True)
-    location = models.CharField(max_length=255)
+	file_location_id = models.AutoField(primary_key=True)
+	location = models.CharField(max_length=255)
+
+	def __str__(self):
+		return self.location.split('.')[-1]
 
 class Gen_dev(models.Model):
 	gen_dev_id = models.AutoField(primary_key=True)
