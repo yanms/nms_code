@@ -1188,7 +1188,7 @@ def acl_kick_user(request, user_id):
 
 @login_required
 def change_gendev_handler(request, gendev_id):
-	if request.user.has_perm('change_gen_dev') and 'qtype' in request.POST:
+	if request.user.has_perm('nms.change_gen_dev') and 'qtype' in request.POST:
 		p = request.POST
 		if p['qtype'] == 'change_os':
 			try:
@@ -1274,7 +1274,7 @@ def change_gendev_handler(request, gendev_id):
 
 @login_required
 def change_gendev(request, gendev_id):
-	if request.user.has_perm('nms.change_gen_dev') and 'qtype' in request.POST:
+	if request.user.has_perm('nms.change_gen_dev') and 'qtype' in request.GET:
 		qtype = request.GET['qtype']
 		if qtype == 'change_os':
 			object = OS.objects.get(pk=gendev_id)
