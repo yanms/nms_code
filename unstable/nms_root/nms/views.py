@@ -1007,10 +1007,10 @@ def manage_gendev(request):
 						try:
 							file = File_location.objects.get(pk=int(i))
 							if not os_library.path.isfile(file.location):
-								messages.error(request, "File doesn't exist")
+								messages.info(request, "File doesn't exist")
 							else:
 								os_library.remove(file.location)
-								messages.success(request, "File found and removing it")
+								messages.info(request, "File found and removing it")
 							file.delete()
 							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev XML', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
