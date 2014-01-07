@@ -807,7 +807,7 @@ def query(request):
 		return HttpResponse('<Error>', content_type='text/plain')
 
 	if not (referer.startswith('http://remybien.dyndns.org') or referer.startswith('https://remybien.dyndns.org')):
-		return HttpResponse('<Error>' content_type='text/plain')
+		return HttpResponse('<Error>', content_type='text/plain')
 
 	if qtype == 'models' and request.user.has_perm('nms.add_devices'):
 		ret_list = []
