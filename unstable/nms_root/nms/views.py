@@ -1283,8 +1283,28 @@ def change_gendev_handler(request, gendev_id):
 				messages.error(request, 'Error occured during the request. Can not change model')
 		elif p['qtype'] == 'change_xml':
 			try:
+				file_data = request.FILES['file']
+				if file_data.content_type != 'text/xml':
+					messages.error(request,"The uploaded file isn't a XML-file")
+					return HttpResponseRedirect(reverse('nms:manage_gendev'))
+				try:
+					ElementTree.parse(file_data)
+					messages.success(request, 'Well formatted XML-file received')
+				except:
+					messages.error(request, 'Not well formatted XML-file')
+					return HttpResponseRedirect(reverse('nms:change_gendev', args=(gendev_id,)))
 				file_location = File_location.objects.get(pk=gendev_id)
-				file_location.location = p['location']
+				if not os_library.path.isfile(file_location.location):
+					messages.info(request, "File doesn't exist")
+				else:
+					os_library.remove(file_location.location)
+					messages.info(request, "File found and trying to removing it")
+				destination = os_library.path.abspath(os_library.path.dirname(nms.__file__)) + '/static/devices/' + p['name']
+				file = open(destination, 'wb+')
+				for item in file_data:
+					file.write(item)
+				file.close()
+				file_location.location = destination
 				file_location.save()
 				messages.success(request, 'Database successfully updated')
 			except:
