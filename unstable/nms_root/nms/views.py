@@ -1308,6 +1308,7 @@ def change_gendev_handler(request, gendev_id):
 				file_location.save()
 				messages.success(request, 'Database successfully updated')
 			except:
+				messages.error(request, traceback.format_exc())
 				messages.error(request, 'Error occured during the request. Can not change XML')
 		else:
 			messages.error(request, 'No valid qtype defined in POST')
