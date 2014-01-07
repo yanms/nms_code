@@ -18,6 +18,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.views.decorators.csrf import csrf_protect
+from xml.etree import ElementTree
 
 @login_required
 def index(request):
@@ -981,12 +982,18 @@ def manage_gendev(request):
 						if file_data.content_type != 'text/xml':
 							messages.error(request,"The uploaded file isn't a XML-file")
 							return HttpResponseRedirect(reverse('nms:manage_gendev'))
+						try:
+							ElementTree.parse(file_data)
+							messages.success(request, 'Well formatted XML-file received')
+						except:
+							messages.error(request, 'Not well formatted XML-file')
+							return HttpResponseRedirect(reverse('nms:manage_gendev'))
 						destination = 'nms/static/devices/' + p['name']
 						file = open(destination, 'wb+')
 						for item in file_data:
 							file.write(item)
 						file.close()
-						File_location(location=destination).save()
+						File_location(location=destination).save()	
 						History.objects.create(action_type='Gendev: add', action='Added gendev XML', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
@@ -1281,6 +1288,8 @@ def change_gendev(request, gendev_id):
 		elif qtype == 'change_os_type':
 			object = OS_type.objects.get(pk=gendev_id)
 		elif qtype == 'change_os_dev':
+            os = OS.objects.all()
+            gen_devs = Gen_dev.objects.all()
 			object = OS_dev.objects.get(pk=gendev_id)
 		elif qtype == 'change_gendev':
 			vendors = Vendor.objects.all()
