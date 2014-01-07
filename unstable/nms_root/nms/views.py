@@ -1298,7 +1298,7 @@ def change_gendev(request, gendev_id):
 			os = OS.objects.all()
 			gen_devs = Gen_dev.objects.all()
 			object = OS_dev.objects.get(pk=gendev_id)
-			return render(request, 'nms/change_gendev.html', {'request': request, 'os': os, 'gen_devs': gen_devs})
+			return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype, 'object': object, 'os': os, 'gen_devs': gen_devs})
 		elif qtype == 'change_gendev':
 			vendors = Vendor.objects.all()
 			dev_type = Dev_type.objects.all()
