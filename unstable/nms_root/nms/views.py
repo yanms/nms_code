@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Permission, Group
 from django.contrib.auth.decorators import login_required, permission_required
-from django.template import RequestContext
+from django.template import RequestContext, Template
 from django.contrib.contenttypes.models import ContentType
 import nms.commands as commands
 import nms.xmlparser as xmlparser
@@ -20,6 +20,8 @@ from django.contrib.sessions.models import Session
 from django.views.decorators.csrf import csrf_protect
 from xml.etree import ElementTree
 import os
+from django.core.context_processors import csrf
+from django.shortcuts import render_to_response
 
 @login_required
 def index(request):
@@ -873,7 +875,9 @@ def logout_handler(request):
 @login_required
 def device_ssh(request, device_id_request):
 	device = get_object_or_404(Devices, pk=device_id_request)
-	return render(request, 'nms/ssh.html', {'device': device, 'request':request})
+	c = {}
+	c.update(csrf(request))
+	return render_to_response('nms/ssh.html', {'device': device, 'request':request}, c)
 
 def license(request):
 	return render(request, 'nms/license.html', {'request':request})
