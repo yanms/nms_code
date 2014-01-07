@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - AdminPanel: ACL</title>
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" /><!--{{ STATIC_URL }}-->
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+						{% include "_navup.html" %}
+					</nav>
+					{% include "_navuser.html" %}
+				</div>
+				<div class="tabs">
+					<div id="tab-8" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<ul class="states">
+									{% for message in messages %}
+									<li class="{{message.tags}}">{{ message.tags.title }} : {{ message }}</li>
+									{% endfor %}
+								</ul>
+								<h2>ACL MANAGE USER </h2>
+								<table class="TFtable">
+									<tr>
+										<td>Username</td>
+										<td>Last Login</td>
+										<td>First Name</td>
+										<td>Last Name</td>
+										<td>E-mail address</td>
+										<td>Active?</td>
+										<td>Date joined</td>
+									</tr>
+									<tr>
+										<td>{{ user_obj.username }}</td>
+										<td>{{ user_obj.last_login }}</td>
+										<td>{{ user_obj.first_name }}</td>
+										<td>{{ user_obj.last_name }}</td>
+										<td>{{ user_obj.email }}</td>
+										<td>{{ user_obj.is_active }}</td>
+										<td>{{ user_obj.date_joined }}</td>
+									</tr>
+								</table>
+								<br />
+								<form method="POST" action="{% url 'nms:acl_user_manage_handler' user_obj.id %}">
+									{% csrf_token %}
+									<table border="0">
+										<tr>
+											<td>Username</td>
+											<td><input type="text" name="username" value="{{ user_obj.username }}" disabled="true" /></td>
+										</tr>
+										<tr>
+											<td>First Name</td>
+											<td><input type="text" name="first_name" value="{{ user_obj.first_name }}" /></td>
+										</tr>
+										<tr>
+											<td>Last Name</td>
+											<td><input type="text" name="last_name" value="{{ user_obj.last_name }}" /></td>
+										</tr>
+										<tr>
+											<td>E-mail address</td>
+											<td><input type="e-mail" name="email" value="{{ user_obj.email }}" /></td>
+										</tr>
+										<tr>
+											<td>Active User?</td>
+											<td><input type="checkbox" name="is_active" {{ is_active_check }}/></td>
+										</tr>
+										<tr>
+											<td>Password</td>
+											<td><input type="password" name="password" /></td>
+										</tr>
+										<tr>
+											<td>Password Check</td>
+											<td><input type="password" name="password2" /></td>
+										</tr>
+										<tr>
+											<td><input type="submit" value="Update" name="usr_update" /></td>
+											<td><input type="reset" value="Reset" /></td>
+										</tr>
+									</table>
+									<a href="{% url 'nms:acl_kick_user' user_obj.id %}">Kick user from system</a>
+								</form>
+								<br />
+								{% if perms.auth.list_group %}
+								<h2>Manage User: {{ user_obj.username }}</h2>
+								<form name="usr_group" action="{% url 'nms:acl_handler' user_obj.id %}" method="POST">
+									{% csrf_token %}
+									<table class="TFtable">
+										<tr>
+											<td>Group</td>
+											<td>Users</td>
+											<td>Permissions</td>
+										</tr>
+									{% for item in groups %}
+										<tr>
+										{% if item in user_obj.groups.all %}
+											<td><input type="checkbox" name="groups" value="{{ item }}" checked />{{ item }}</td>
+											{% else %}
+											<td><input type="checkbox" name="groups" value="{{ item }}" />{{ item }}</td>
+											{% endif %}
+											<td>{% for usr_item in item.user_set.all %}
+												{{ usr_item }}<br />
+											{% endfor %}</td>
+											<td>{% for iter in item.permissions.all %}
+												{{ iter.name }}<br />
+											{% endfor %}</td>
+										</tr>
+									{% endfor %}
+									</table>
+									<br />
+									<input type="hidden" name="task" value="usr_group_update" />
+									<input type="submit" value="Update" />
+								</form>	
+								{% endif %}						
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<aside id="sidebar">
+			<img src="{{ STATIC_URL }}images/NMS.png"/>
+			{% include "_nav.html" %}
+			<span class="shadow"></span>
+		</aside>
+		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
+	</div> <!-- Wrapper -->
+	<footer>
+		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+	</footer>
+</body>
+</html>

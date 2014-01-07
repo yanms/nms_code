@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Network Management System - AdminPanel: ACL</title>
+	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content">
+			<div class="c1">
+				<div class="controls">
+					<nav class="links">
+						{% include "_navup.html" %}
+					</nav>
+					{% include "_navuser.html" %}
+				</div>
+				<div class="tabs">
+					<div id="tab-8" class="tab">
+						<article>
+							<div class="text-section">
+								<h1>Dashboard</h1>
+								<h2>ACL Devices: <strong>{{ dev_obj }}</strong></h2>
+								<ul class="states">
+									{% for message in messages %}
+									<li class="{{message.tags}}">{{ message.tags.title }} : {{ message }}</li>
+									{% endfor %}
+								</ul>
+								<form name="groups" action="{% url 'nms:acl_handler' dev_obj.dev_id %}" method="POST">
+								{% csrf_token %}
+									<h2>Groups</h2>
+										<table class="TFtable">
+											<tr>
+												<td><b>Group</b></td>
+												<td><b>Users</b></td>
+												<td><b>Permissions</b></td>
+											</tr>
+										{% for group in dev_groups %}
+											<tr>
+											{% if group in checked %}
+												<td><input type="checkbox" name="groups" value="{{ group.id }}" checked /> {{ group }}</td>
+											{% else %}
+												<td><input type="checkbox" name="groups" value="{{ group.id }}" /> {{ group }}</td>
+											{% endif %}
+												<td>{% for iter in group.user_set.all %} 
+														{{ iter }}<br />
+													{% endfor %}</td>
+												<td>{% for iter in group.permissions.all %}
+														{{ iter.name }}<br />
+													{% endfor %}</td>
+											</tr>
+										{% endfor %}
+										</table>
+									<input type="hidden" value="dev_group_update" name="task" />
+									<input type="submit" value="Update" id="update" />
+								</form>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside id="sidebar">
+			<img src="{{ STATIC_URL }}images/NMS.png"/>
+			{% include "_nav.html" %}
+			<span class="shadow"></span>
+		</aside>
+		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
+	</div> <!-- Wrapper -->
+	<footer>
+		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+	</footer>
+</body>
+</html>
