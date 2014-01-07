@@ -19,13 +19,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.views.decorators.csrf import csrf_protect
 from xml.etree import ElementTree
-<<<<<<< HEAD
-import os
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
-=======
 import os as os_library
->>>>>>> 84ae83e7ff365f5b7f7d41a5189003a3268391d5
 
 @login_required
 def index(request):
