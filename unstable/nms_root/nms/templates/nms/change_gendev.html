@@ -44,7 +44,7 @@
                                                         <td>Type:</td>
                                                         <td>
                                                             <select id="selectType" name="dev_type">
-                                                                {% for record in dev_types %}
+                                                                {% for record in dev_type %}
                                                                 <option value="{{ record.dev_type_id }}">{{ record }}</option>
                                                                 {% endfor %}
                                                             </select>
@@ -74,7 +74,7 @@
                                                         <td>XML:</td>
                                                         <td>
                                                             <select id="selectXMLFile" name="xml_files">
-                                                                {% for record in xml_files %}
+                                                                {% for record in xml %}
                                                                 <option value="{{ record.file_location_id }}">{{ record.location }}</option>
                                                                 {% endfor %}
                                                             </select>
