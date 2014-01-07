@@ -1005,12 +1005,12 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							file = File_location.objects.get(pk=int(i))
+							file.delete()
 							if not os_library.path.isfile(file.location):
 								messages.info(request, "File doesn't exist")
 							else:
 								os_library.remove(file.location)
 								messages.info(request, "File found and trying to removing it")
-							file.delete()
 							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev XML', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
