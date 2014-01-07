@@ -1349,6 +1349,8 @@ def change_gendev(request, gendev_id):
 			object = Dev_model.objects.get(pk=gendev_id)
 		elif qtype == 'change_xml':
 			object = File_location.objects.get(pk=gendev_id)
+			file_name = object.location.split('/')[-1]
+			return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype, 'object': object, 'file_name': file_name})
 		elif qtype == 'change_dev_type':
 			object = Dev_type.objects.get(pk=gendev_id)
 		else:
