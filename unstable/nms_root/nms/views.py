@@ -19,7 +19,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.views.decorators.csrf import csrf_protect
 from xml.etree import ElementTree
-import os
+import os as os_library
 
 @login_required
 def index(request):
@@ -795,12 +795,11 @@ def session_handler(request):
 		return HttpResponseRedirect(reverse('nms:login_handler'))
 
 @login_required
-@csrf_protect
 def query(request):
-	if request.method == 'POST':
-		if 'type' in request.POST and 'q' in request.POST:
-			qtype = request.POST['type']
-			query = request.POST['q']
+	if request.method == 'GET':
+		if 'type' in request.GET and 'q' in request.GET:
+			qtype = request.GET['type']
+			query = request.GET['q']
 		else:
 			return HttpResponse('<Error>', content_type='text/plain')
 	else:
@@ -822,9 +821,9 @@ def query(request):
 				ret_string += '|'
 		return HttpResponse(ret_string, content_type='text/plain')
 	elif qtype == 'ssh':
-		if not 'dev' in request.POST:
-			return HttpResponse('<Missing dev in POST>', content_type='text/plain')
-		dev = request.POST['dev']
+		if not 'dev' in request.GET:
+			return HttpResponse('<Missing dev in GET>', content_type='text/plain')
+		dev = request.GET['dev']
 		try:
 			device = Devices.objects.get(pk=dev)
 			groups = request.user.groups.all()
@@ -842,9 +841,9 @@ def query(request):
 				return HttpResponse('', content_type='text/plain')
 			return HttpResponse(ret.decode(), content_type='text/plain')
 		elif query == 'send':
-			if not 'text' in request.POST:
+			if not 'text' in request.GET:
 				return HttpResponse('', content_type='text/plain')
-			text = request.POST['text']
+			text = request.GET['text']
 			connection = commands.getConnection(request.user, device)
 			text = text + '\n'
 			if type(text) != type(bytes()):
@@ -871,7 +870,6 @@ def logout_handler(request):
 	return HttpResponseRedirect(reverse('nms:login_handler'))
 
 @login_required
-@csrf_protect
 def device_ssh(request, device_id_request):
 	device = get_object_or_404(Devices, pk=device_id_request)
 	return render(request, 'nms/ssh.html', {'device': device, 'request':request})
@@ -1007,11 +1005,12 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							file = File_location.objects.get(pk=int(i))
-							if not os.path.exists(file.location):
-								messages.error(request, "File doesn't exist")
-								return HttpResponseRedirect(reverse('nms:manage_gendev'))
-							os.remove(file.location)
 							file.delete()
+							if not os_library.path.isfile(file.location):
+								messages.info(request, "File doesn't exist")
+							else:
+								os_library.remove(file.location)
+								messages.info(request, "File found and trying to removing it")
 							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev XML', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
