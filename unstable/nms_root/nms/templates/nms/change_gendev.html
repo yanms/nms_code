@@ -175,11 +175,9 @@
                                                     <tr>
                                                         <td width="100%"><b>Name</b></td>
                                                     </tr>
-                                                    {% for record in xml_files %}
                                                     <tr>
-                                                        <td><input type="text" value="{{ record.location }}" name="location" /></td>
+                                                        <td><input type="text" value="{{ object.location }}" name="location" /></td>
                                                     </tr>
-                                                    {% endfor %}
                                                 </table>
                                                 <table border="0" width="70%">
                                                     <tr>
@@ -295,11 +293,9 @@
                                                     <tr>
                                                         <td width="100%"><b>Name</b></td>
                                                     </tr>
-                                                    {% for record in os_type %}
                                                     <tr>
-                                                        <td><input type="text" value="{{ record }}" name="type" /></td>
+                                                        <td><input type="text" value="{{ object.type }}" name="type" /></td>
                                                     </tr>
-                                                    {% endfor %}
                                                 </table>
                                                 <table border="0" width="70%">
                                                     <tr>
