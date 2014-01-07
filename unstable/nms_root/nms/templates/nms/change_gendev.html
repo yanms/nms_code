@@ -239,8 +239,8 @@
                                     <tr>
 										{% if qtype == 'change_os' %}
                                         <td width="100%">
-                                            <h3>Create OS</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' object.os_type_id %}" method="POST">
+                                            <h3>Change OS</h3>
+                                            <form action="{% url 'nms:change_gendev_handler' object.os_id %}" method="POST">
                                                 {% csrf_token %}
 												<input type="hidden" name="qtype" value="change_os" />
 												<table border="0">
