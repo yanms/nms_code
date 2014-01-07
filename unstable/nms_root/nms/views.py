@@ -19,7 +19,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.views.decorators.csrf import csrf_protect
 from xml.etree import ElementTree
-import os
+import os as os_library
 
 @login_required
 def index(request):
@@ -1007,10 +1007,11 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							file = File_location.objects.get(pk=int(i))
-							if not os.path.exists(file.location):
-								messages.error(request, "File doesn't exist")
-								return HttpResponseRedirect(reverse('nms:manage_gendev'))
-							os.remove(file.location)
+							if not os_library.path.isfile(file.location):
+								messages.info(request, "File doesn't exist")
+							else:
+								os_library.remove(file.location)
+								messages.info(request, "File found and trying to removing it")
 							file.delete()
 							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev XML', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
