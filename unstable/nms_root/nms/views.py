@@ -19,7 +19,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.views.decorators.csrf import csrf_protect
 
-
 @login_required
 def index(request):
 	return render(request, 'nms/index.html', {'request':request})
