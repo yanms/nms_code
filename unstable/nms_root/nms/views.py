@@ -1291,6 +1291,8 @@ def change_gendev(request, gendev_id):
 		elif qtype == 'change_os_type':
 			object = OS_type.objects.get(pk=gendev_id)
 		elif qtype == 'change_os_dev':
+            os = OS.objects.all()
+            gen_devs = Gen_dev.objects.all()
 			object = OS_dev.objects.get(pk=gendev_id)
 		elif qtype == 'change_gendev':
 			vendors = Vendor.objects.all()
