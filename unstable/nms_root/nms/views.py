@@ -1150,7 +1150,7 @@ def acl_user_history(request, acl_user):
 		devices_count = Devices.objects.count()
 		user_obj = get_object_or_404(User, pk=acl_user)
 		history_items_list = History.objects.filter(Q(user_id = user_obj ) | Q(user_performed_task = user_obj ))
-		history_items_list = history_items_list.extra(order_by = ['history_id'])
+		history_items_list = history_items_list.extra(order_by = ['-history_id'])
 		paginator = Paginator(history_items_list, 25)
 	
 		page = request.GET.get('page')
