@@ -25,10 +25,9 @@ class AESCipher:
 
 def __initSHMLib__():
 	global lib
-	if lib != None:
-		lib = ctypes.cdll.LoadLibrary('./nms/c/shmlib.so')
-		lib.store_password.restype = None
-		lib.get_password.restype = ctypes.c_char_p
+	lib = ctypes.cdll.LoadLibrary('./nms/c/shmlib.so')
+	lib.store_password.restype = None
+	lib.get_password.restype = ctypes.c_char_p
 
 def storeMasterPassword(password):
 	global lib
