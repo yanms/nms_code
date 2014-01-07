@@ -19,6 +19,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.views.decorators.csrf import csrf_protect
 from xml.etree import ElementTree
+import os
 
 @login_required
 def index(request):
@@ -1004,7 +1005,9 @@ def manage_gendev(request):
 				if 'items' in p:
 					for i in p.getlist('items'):
 						try:
-							File_location.objects.get(pk=int(i)).delete()
+							file = File_location.objects.get(pk=int(i))
+							#os.path.exists
+							file.delete()
 							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev XML', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
