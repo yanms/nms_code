@@ -805,6 +805,7 @@ def query(request):
 	else:
 		return HttpResponse('<Error>', content_type='text/plain')
 
+	messages.info(request, request.META['HTTP_REFERER'])
 	if qtype == 'models' and request.user.has_perm('nms.add_devices'):
 		ret_list = []
 		ret_string = ''
