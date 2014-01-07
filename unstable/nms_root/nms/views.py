@@ -877,7 +877,7 @@ def device_ssh(request, device_id_request):
 	device = get_object_or_404(Devices, pk=device_id_request)
 	c = {}
 	c.update(csrf(request))
-	return render_to_response('nms/ssh.html', {'device': device, 'request':request}, c)
+	return render(c, 'nms/ssh.html', {'device': device, 'request':request})
 
 def license(request):
 	return render(request, 'nms/license.html', {'request':request})
