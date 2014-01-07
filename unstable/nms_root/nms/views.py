@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Permission, Group
 from django.contrib.auth.decorators import login_required, permission_required
-from django.template import RequestContext, Template
+from django.template import RequestContext
 from django.contrib.contenttypes.models import ContentType
 import nms.commands as commands
 import nms.xmlparser as xmlparser
@@ -19,9 +19,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.views.decorators.csrf import csrf_protect
 from xml.etree import ElementTree
-from django.core.context_processors import csrf
-from django.shortcuts import render_to_response
-import os as os_library
+import os
 
 @login_required
 def index(request):
@@ -1009,18 +1007,16 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							file = File_location.objects.get(pk=int(i))
-							if not os_library.path.isfile(file.location):
-								messages.info(request, "File doesn't exist")
-							else:
-								os_library.remove(file.location)
-								messages.info(request, "File found and trying to removing it")
+							if not os.path.exists(file.location):
+								messages.error(request, "File doesn't exist")
+								return HttpResponseRedirect(reverse('nms:manage_gendev'))
+							os.remove(file.location)
 							file.delete()
 							History.objects.create(action_type='Gendev: deleted', action='Deleted gendev XML', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
 						except django_exception.ProtectedError:
 							messages.error(request, 'Cannot delete some instances of xml because there is still a reference')
 						except:
-							messages.error(request, traceback.format_exc())
 							messages.error(request, 'Error deleting XML')
 			elif p['qtype'] == 'add_os_type':
 				if 'name' in p:
@@ -1302,6 +1298,7 @@ def change_gendev(request, gendev_id):
 			os = OS.objects.all()
 			gen_devs = Gen_dev.objects.all()
 			object = OS_dev.objects.get(pk=gendev_id)
+			return render(request, 'nms/change_gendev.html', {'request':request, 'os': os, 'gen_devs': gen_devs})
 		elif qtype == 'change_gendev':
 			vendors = Vendor.objects.all()
 			dev_type = Dev_type.objects.all()
