@@ -1016,6 +1016,7 @@ def manage_gendev(request):
 						except django_exception.ProtectedError:
 							messages.error(request, 'Cannot delete some instances of xml because there is still a reference')
 						except:
+							messages.error(request, traceback.format_exc())
 							messages.error(request, 'Error deleting XML')
 			elif p['qtype'] == 'add_os_type':
 				if 'name' in p:
