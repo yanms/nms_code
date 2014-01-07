@@ -701,7 +701,7 @@ def user_settings(request):
 						if new_password == check_new_password:
 							request.user.set_password(new_password)
 							request.user.save()
-							History.objects.create(action_type='User: Modify passwords', action='Password has been changed', user_performed_action=request.user, user_id=request.user, date_time=timezone.now())
+							History.objects.create(action_type='User: Modify passwords', action='Password has been changed', user_performed_task=request.user, user_id=request.user, date_time=timezone.now())
 							messages.success(request, 'Your password has been updated')
 							#debug = list(request.POST.items())
 							#messages.error(request, debug)
