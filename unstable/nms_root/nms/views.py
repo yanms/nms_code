@@ -1000,7 +1000,7 @@ def manage_gendev(request):
 						except:
 							messages.error(request, 'Not well formatted XML-file')
 							return HttpResponseRedirect(reverse('nms:manage_gendev'))
-						destination = os_library.path.abspath(os_library.path.dirname(nms.__file__)) + '/static/devices' + p['name']
+						destination = os_library.path.abspath(os_library.path.dirname(nms.__file__)) + '/static/devices/' + p['name']
 						file = open(destination, 'wb+')
 						for item in file_data:
 							file.write(item)
