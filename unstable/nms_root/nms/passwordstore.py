@@ -45,8 +45,8 @@ def storeMasterPassword(password):
 
 def hasMasterPassword():
 	global lib
-	if lib == None:
-		__initSHMLib__()
+	#if lib == None:
+	__initSHMLib__()
 
 	if len(lib.get_password()) == 16:
 		return True
