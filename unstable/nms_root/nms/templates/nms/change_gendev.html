@@ -81,7 +81,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td><input type="submit" value="Add Template" /></td>
+                                                        <td><input type="submit" value="Change Template" /></td>
                                                     </tr>
                                                 </table>
                                             </form>
@@ -103,7 +103,7 @@
                                                         <td width="90%"><b>Name</b></td>
 														<td width="10%"><b>Update</b></td>
                                                     </tr>
-                                                    {% for record in dev_types %}
+                                                    {% for record in object %}
                                                     <tr>
                                                         <td><input type="text" value="{{ record }}" name="dev_type_name" /></td>
 														<td>{% if perm.nms.change_gen_dev %}<img src="{{ STATIC_URL }}images/editButton.png" widht="20px">{% else %} N/A {% endif %}</td>
