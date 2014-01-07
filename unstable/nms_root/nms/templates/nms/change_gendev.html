@@ -196,7 +196,7 @@
                                         <td width="50%">
 											<h3>OS - GenDev</h3>
 											
-                                            <form action="{% url 'nms:change_gendev_handler' object.gen_dev_id %}" method="POST">
+                                            <form action="{% url 'nms:change_gendev_handler' object.os_dev_id %}" method="POST">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_osdev" />
                                                 <table border="0">
