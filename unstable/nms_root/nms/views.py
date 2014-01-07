@@ -1006,7 +1006,7 @@ def manage_gendev(request):
 					for i in p.getlist('items'):
 						try:
 							file = File_location.objects.get(pk=int(i))
-							if not os.path.exists(file.location):
+							if not os.path.isfile(file.location):
 								messages.error(request, "File doesn't exist")
 								return HttpResponseRedirect(reverse('nms:manage_gendev'))
 							os.remove(file.location)
