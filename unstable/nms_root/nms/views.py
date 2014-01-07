@@ -977,9 +977,12 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_xml':
 				if 'name' in p:
 					try:
+						file_data = request.FILES['file']
+						if file_data.content_type != 'text/xml':
+							messages.error(request,"The uploaded file isn't a XML-file")
+							return HttpResponseRedirect(reverse('nms:manage_gendev'))
 						destination = 'nms/static/devices/' + p['name']
 						file = open(destination, 'wb+')
-						file_data = request.FILES['file']
 						for item in file_data:
 							file.write(item)
 						file.close()
@@ -1185,7 +1188,7 @@ def acl_kick_user(request, user_id):
 
 @login_required
 def change_gendev_handler(request, gendev_id):
-	if request.user.has_perm('change_gen_dev') and 'qtype' in request.POST:
+	if request.user.has_perm('nms.change_gen_dev') and 'qtype' in request.POST:
 		p = request.POST
 		if p['qtype'] == 'change_os':
 			try:
