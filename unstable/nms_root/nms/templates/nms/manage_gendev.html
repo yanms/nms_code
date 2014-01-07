@@ -227,7 +227,7 @@
                                             <form action="{% url 'nms:manage_gendev' %}" method="POST" enctype="multipart/form-data">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="add_xml" />
-                                                <input type="text" name="name" />
+                                                Name XML file: <input type="text" name="name" /><br />
 												<input type="file" name="file" id="file">
 												<input type="submit" value="Add" />
                                             </form>

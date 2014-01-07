@@ -174,13 +174,9 @@
                                                         <td width="100%"><b>Name</b></td>
                                                     </tr>
                                                     <tr>
-                                                        <td><input type="text" value="{{ object.location }}" name="location" /></td>
-                                                    </tr>
-                                                </table>
-                                                <table border="0" width="70%">
-                                                    <tr>
-                                                        <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
+                                                        <td>Name XML file: <input type="text" name="name" /><br />
+															<input type="file" name="file" id="file">
+															{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
                                                     </tr>
                                                 </table>
                                             </form>
