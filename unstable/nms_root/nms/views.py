@@ -795,10 +795,10 @@ def session_handler(request):
 @login_required
 @csrf_protect
 def query(request):
-	if request.method == 'GET':
-		if 'type' in request.GET and 'q' in request.GET:
-			qtype = request.GET['type']
-			query = request.GET['q']
+	if request.method == 'POST':
+		if 'type' in request.POST and 'q' in request.POST:
+			qtype = request.POST['type']
+			query = request.POST['q']
 		else:
 			return HttpResponse('<Error>', content_type='text/plain')
 	else:
@@ -820,9 +820,9 @@ def query(request):
 				ret_string += '|'
 		return HttpResponse(ret_string, content_type='text/plain')
 	elif qtype == 'ssh':
-		if not 'dev' in request.GET:
-			return HttpResponse('<Missing dev in GET>', content_type='text/plain')
-		dev = request.GET['dev']
+		if not 'dev' in request.POST:
+			return HttpResponse('<Missing dev in POST>', content_type='text/plain')
+		dev = request.POST['dev']
 		try:
 			device = Devices.objects.get(pk=dev)
 			groups = request.user.groups.all()
@@ -840,9 +840,9 @@ def query(request):
 				return HttpResponse('', content_type='text/plain')
 			return HttpResponse(ret.decode(), content_type='text/plain')
 		elif query == 'send':
-			if not 'text' in request.GET:
+			if not 'text' in request.POST:
 				return HttpResponse('', content_type='text/plain')
-			text = request.GET['text']
+			text = request.POST['text']
 			connection = commands.getConnection(request.user, device)
 			text = text + '\n'
 			if type(text) != type(bytes()):
