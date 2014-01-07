@@ -27,7 +27,7 @@
 			 }
 		});
 		$.ajax({
-			url : "AJAX_POST_URL",
+			url : "{% url 'nms:query' %}",
 			type : "POST",
 			data : args,
 			success: function(data, textStatus, jqXHR){},
@@ -51,7 +51,7 @@
 			 }
 		});
 		$.ajax({
-			url : "AJAX_POST_URL",
+			url : "{% url 'nms:query' %}",
 			type : "POST",
 			data : args,
 			success: function(data, textStatus, jqXHR){},
@@ -75,7 +75,7 @@
 			 }
 		});
 		$.ajax({
-			url : "AJAX_POST_URL",
+			url : "{% url 'nms:query' %}",
 			type : "POST",
 			data : args,
 			success: function(data, textStatus, jqXHR)
@@ -111,7 +111,7 @@
 			 }
 		});
 		$.ajax({
-			url : "AJAX_POST_URL",
+			url : "{% url 'nms:query' %}",
 			type : "POST",
 			data : args,
 			success: function(data, textStatus, jqXHR)
