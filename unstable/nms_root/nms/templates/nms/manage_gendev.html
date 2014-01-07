@@ -74,7 +74,7 @@
                                                         <td>
                                                             <select id="selectXMLFile" name="xml_files">
                                                                 {% for record in xml_files %}
-                                                                <option value="{{ record.file_location_id }}">{{ record.location }}</option>
+                                                                <option value="{{ record.file_location_id }}">{{ record }}</option>
                                                                 {% endfor %}
                                                             </select>
                                                         </td>
@@ -99,7 +99,7 @@
                                                     </tr>
                                                     {% for record in gen_devs %}
                                                     <tr>
-                                                        <td>{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</td>
+                                                        <td>{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id }}</td>
 														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' record.gen_dev_id %}?qtype=change_gendev"><img src="{{ STATIC_URL }}images/editButton.png" width="20px"></a>{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.gen_dev_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
@@ -243,7 +243,7 @@
                                                     </tr>
                                                     {% for record in xml_files %}
                                                     <tr>
-                                                        <td>{{ record.location }}</td>
+                                                        <td>{{ record }}</td>
 														<td>{% if perms.nms.change_gen_dev %}<a href="{% url 'nms:change_gendev' record.file_location_id %}?qtype=change_xml"><img src="{{ STATIC_URL }}images/editButton.png" width="20px"></a>{% else %} N/A {% endif %}</td>
                                                         <td>{% if perms.nms.delete_gen_dev %}<input type="checkbox" name="items" value="{{ record.file_location_id }}" />{% else %}N/A{% endif %}</td>
                                                     </tr>
@@ -274,7 +274,7 @@
                                                         <td>
                                                             <select id="selectGen_dev" name="gen_dev">
                                                                 {% for record in gen_devs %}
-                                                                <option value="{{ record.gen_dev_id }}">{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</option>
+                                                                <option value="{{ record.gen_dev_id }}">{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id }}</option>
                                                                 {% endfor %}
                                                             </select>
                                                         </td>
