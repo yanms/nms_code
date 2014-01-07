@@ -20,7 +20,7 @@ static sem_t *sem_id = SEM_FAILED;
 
 static int init_sem(void)
 {
-   sem_id = sem_open(SEMNAME, O_CREAT, 0600, 1);
+   sem_id = sem_open(SEMNAME, O_CREAT, 0777, 1);
    if (sem_id == SEM_FAILED)
    {
       return ESEMOPEN;
