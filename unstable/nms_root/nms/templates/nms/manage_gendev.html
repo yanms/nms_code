@@ -227,14 +227,14 @@
                                             <form action="{% url 'nms:manage_gendev' %}" method="POST" enctype="multipart/form-data">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="add_xml" />
-                                                <input type="text" name="name" />
+                                                Name XML file: <input type="text" name="name" />
 												<input type="file" name="file" id="file">
 												<input type="submit" value="Add" />
                                             </form>
 											{% endif %}
                                             <form action="{% url 'nms:manage_gendev' %}" method="post">
                                                 {% csrf_token %}
-                                                Name XML file: <input type="hidden" name="qtype" value="del_xml" /><br />
+                                                <input type="hidden" name="qtype" value="del_xml" /><br />
                                                 <table class="TFtable" width="70%">
                                                     <tr>
                                                         <td width="90%"><b>Name</b></td>
