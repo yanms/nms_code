@@ -812,7 +812,8 @@ def query(request):
 	else:
 		return HttpResponse('<Error>', content_type='text/plain')
 
-	if not (referer.startswith('http://remybien.dyndns.org') or referer.startswith('https://remybien.dyndns.org')):
+	hostname = get_object_or_404(Settings, known_id=2)
+	if not (referer.startswith('http://' + hostname.string) or referer.startswith('https://' + hostname.string)):
 		return HttpResponse('<Error>', content_type='text/plain')
 
 	if qtype == 'models' and request.user.has_perm('nms.add_devices'):
