@@ -1290,7 +1290,10 @@ def change_gendev(request, gendev_id):
 	if request.user.has_perm('nms.change_gen_dev') and 'qtype' in request.GET:
 		qtype = request.GET['qtype']
 		if qtype == 'change_os':
+			vendors = Vendor.objects.all()
+			os_type = OS_type.objects.all()
 			object = OS.objects.get(pk=gendev_id)
+			return render(request, 'nms/change_gendev.html', {'request': request, 'qtype': qtype, 'object': object, 'vendors': vendors, 'os_type': os_type})
 		elif qtype == 'change_os_type':
 			object = OS_type.objects.get(pk=gendev_id)
 		elif qtype == 'change_os_dev':
