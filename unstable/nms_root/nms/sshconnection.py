@@ -7,7 +7,6 @@ from django.contrib import messages
 
 class SSHConnection:
 	def __init__(self, hostname, username, password, port = 22):
-		paramiko.util.log_to_file('paramiko_ssh.log')
 		self.hostname = hostname
 		self.port = port
 		self.username = username
