@@ -166,7 +166,7 @@
 										{% if qtype == 'change_xml' %}
                                         <td width="50%">
                                             <h3>XML Files</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' object.file_location_id %}" method="post">
+                                            <form action="{% url 'nms:change_gendev_handler' object.file_location_id %}" method="post"  enctype="multipart/form-data">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="qtype" value="change_xml" /><br />
                                                 <table class="TFtable" width="70%">
