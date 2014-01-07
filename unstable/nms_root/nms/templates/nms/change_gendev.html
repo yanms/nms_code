@@ -174,7 +174,7 @@
                                                         <td width="100%"><b>Name</b></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Name XML file: <input type="text" name="name" /><br />
+                                                        <td>Name XML file: <input type="text" name="name" value="{{ file_name }}"/><br />
 															<input type="file" name="file" id="file">
 															{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
                                                     </tr>
