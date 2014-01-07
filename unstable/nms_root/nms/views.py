@@ -17,6 +17,7 @@ from django.utils import timezone
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
+from django.views.decorators.csrf import csrf_protect
 
 
 @login_required
