@@ -41,6 +41,11 @@ def index(request):
 	return render(request, 'nms/index.html', {'request':request})
 
 def install(request):
+	"""Creates several permissions, sets the hostname for the server
+	and calls make on the nms/c/ directory for the shmlib.so
+	
+	Location: /install
+	"""
 	if Settings.objects.filter(known_name='install complete').exists():
 		if Settings.objects.filter(known_name='install complete', known_boolean=True).exists():
 			return HttpResponse('Installation already finished.') 
@@ -74,7 +79,8 @@ def install(request):
 			group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
 			Settings.objects.create(known_id=1, known_name='install complete', known_boolean=True)
 			Settings.objects.create(known_id=2, known_name='hostname', string=request.POST['hostname'])
-			call(['make', './nms/c/'])
+			path = os_library.path.abspath(os_library.path.dirname(nms.__file__))
+			call(['make', path + '/c/'])
 
 			return HttpResponse('Finished installing NMS.')
 		else:
@@ -82,6 +88,10 @@ def install(request):
 
 @login_required
 def acl(request):
+	"""Main ACL page
+	
+	Location: /acl
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -89,6 +99,10 @@ def acl(request):
 
 @login_required
 def acl_groups(request):
+	"""Main ACL groups page
+	
+	Location: /acl/groups
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -104,6 +118,10 @@ def acl_groups(request):
 
 @login_required
 def acl_user(request):
+	"""Main ACL users page
+	
+	Location: /acl/users
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -116,6 +134,10 @@ def acl_user(request):
 
 @login_required
 def acl_user_add(request):
+	"""User add page
+	
+	Location: /acl/users/add
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -126,6 +148,10 @@ def acl_user_add(request):
 
 @login_required
 def acl_user_add_handler(request):
+	"""User add handler. Redirects when done.
+	
+	Location: /acl/users/add/handler
+	"""
 	if request.user.has_perm('auth.add_user'):
 		if request.method == 'POST':
 			try:
@@ -166,6 +192,10 @@ def acl_user_add_handler(request):
 
 @login_required
 def acl_user_manage(request, acl_user):
+	"""User-specific manage page
+	
+	Location: /acl/users/\d+/manage
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -180,6 +210,10 @@ def acl_user_manage(request, acl_user):
 
 @login_required
 def acl_user_manage_handler(request, acl_user):
+	"""User-specific manage handler. This view redirects when done.
+	
+	Location: /acl/users/\d+/manage/handler
+	"""
 	if request.user.has_perm('auth.change_user'):
 		user_obj = get_object_or_404(User, pk=acl_user)
 		if request.method == 'POST':
@@ -218,6 +252,10 @@ def acl_user_manage_handler(request, acl_user):
 
 @login_required
 def acl_device(request):
+	"""Main ACL devices page
+	
+	Location: /acl/devices
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -231,6 +269,10 @@ def acl_device(request):
 
 @login_required
 def acl_device_manage(request, acl_id):
+	"""ACL device-specific manage page
+	
+	Location: /acl/devices/\d+/manage
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -248,6 +290,10 @@ def acl_device_manage(request, acl_id):
 
 @login_required
 def acl_handler(request, acl_id):
+	"""TBD
+	
+	Location: /acl/\d+/manage
+	"""
 	if request.method == 'POST':
 		try:
 			task = request.POST['task']
@@ -356,6 +402,10 @@ def acl_handler(request, acl_id):
 
 @login_required
 def acl_groups_manage(request, acl_id):
+	"""ACL group-specific manage page
+	
+	Location: /acl/groups/\d+/manage
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -416,6 +466,10 @@ def acl_groups_manage(request, acl_id):
 
 @login_required
 def acl_groups_handler(request):
+	"""Handler for ACL Groups. This view redirects when done.
+	
+	Location: /acl/groups/handler
+	"""
 	if request.method == 'POST':
 		if request.POST['task'] == 'usr':
 			if request.user.has_perm('auth.add_user'):
@@ -489,6 +543,10 @@ def acl_groups_handler(request):
 			return HttpResponseRedirect(reverse('nms:acl_groups'))
 
 def register(request):
+	"""Register view for registering new user accounts
+	
+	Location: /register
+	"""
 	if request.method == 'POST':
 		username = request.POST['username']
 		password = request.POST['password']
@@ -519,6 +577,10 @@ def register(request):
 			
 
 def login_handler(request):
+	"""The login view
+	
+	Location: /login
+	"""
 	if (request.method == 'GET' and 'next' in request.GET):
 		url = request.GET['next']
 		return(render(request, 'nms/login.html', {'url': url}))
@@ -527,10 +589,18 @@ def login_handler(request):
 
 @login_required
 def devices(request):
+	"""The main devices view
+	
+	Location: /devices
+	"""
 	return render(request, 'nms/devices.html', {'request':request})
 
 @login_required
 def devices_manage(request):
+	"""The main manage devices page, listing all added devices
+	
+	Location: /devices/manage
+	"""
 	if request.user.has_perm('nms.list_devices'):
 		user_obj = request.user
 		groups = user_obj.groups.all()
@@ -556,6 +626,10 @@ def devices_manage(request):
 
 @login_required
 def device_add(request):
+	"""The view used to add new devices
+	
+	Location: /devices/add
+	"""
 	if not passwordstore.hasMasterPassword():
 			return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_add'))
 	if request.user.has_perm('nms.add_devices'):
@@ -623,7 +697,10 @@ def device_add(request):
 		
 @login_required
 def device_manager(request, device_id_request):
-
+	"""Device-specific manage page, allowing executing tasks on the device
+	
+	Location: /devices/\d+/manage
+	"""
 	devices = get_object_or_404(Devices, pk=device_id_request)
 	groups = request.user.groups.all()
 	group_device = [group for group in groups if group.dev_group_set.filter(devid=devices).exists()]
@@ -652,6 +729,10 @@ def device_manager(request, device_id_request):
 
 @login_required
 def device_modify(request, device_id_request):
+	"""View for modifying device settings, such as the IP address
+	
+	Location: /devices/\d+/modify
+	"""
 	device = get_object_or_404(Devices, pk=device_id_request)
 	groups = request.user.groups.all()
 	group_device = [group for group in groups if group.dev_group_set.filter(devid=device).exists()]
@@ -710,6 +791,10 @@ def device_modify(request, device_id_request):
 
 @login_required
 def user_settings(request):
+	"""User settings page
+	
+	Location: /settings
+	"""
 	if request.method == 'POST':
 		try:
 			if request.POST['mode'] == 'chpasswd':
@@ -756,6 +841,10 @@ def user_settings(request):
 
 @login_required
 def send_command(request, device_id_request):
+	"""View for sending commands to a device. This view redirects when done.
+	
+	Location: /devices/\d+/send_command
+	"""
 	device = Devices.objects.get(pk=device_id_request)
 	groups = request.user.groups.all()
 	group_device = [group for group in groups if group.dev_group_set.filter(devid=device).exists()]
@@ -785,6 +874,10 @@ def send_command(request, device_id_request):
 		return HttpResponseRedirect(reverse('nms:devices'))
 
 def session_handler(request):
+	"""Session handler to check if the current user is a valid user
+	
+	Location: /session
+	"""
 	if request.method == 'POST':
 		try:
 			username = request.POST['username']
@@ -816,6 +909,10 @@ def session_handler(request):
 
 @login_required
 def query(request):
+	"""AJAX-view to query device models or SSH connection traffic.
+	
+	Location: /query
+	"""
 	if request.method == 'GET':
 		if 'type' in request.GET and 'q' in request.GET and 'HTTP_REFERER' in request.META:
 			qtype = request.GET['type']
@@ -889,6 +986,10 @@ def query(request):
 
 @login_required
 def logout_handler(request):
+	"""Handler to terminate the current users session. Redirects when done.
+	
+	Location: /logout
+	"""
 	History.objects.create(user_performed_task=request.user, user_id=request.user, action_type='User: logged out', action='The user has been logged out', date_time=timezone.now())
 	logout(request)
 	messages.success(request, "You are logged out")
@@ -896,14 +997,26 @@ def logout_handler(request):
 
 @login_required
 def device_ssh(request, device_id_request):
+	"""Device-specific SSH / Telnet terminal
+	
+	Location: /devices/\d+/manage/ssh
+	"""
 	device = get_object_or_404(Devices, pk=device_id_request)
 	return render(request, 'nms/ssh.html', {'device': device, 'request':request})
 
 def license(request):
+	"""Displays the licenses applicable to the application
+	
+	Location: /license
+	"""
 	return render(request, 'nms/license.html', {'request':request})
 
 @login_required
 def init(request):
+	"""Application-management page for entering the master password
+	
+	Location: /init
+	"""
 	if request.method == 'POST' and 'master' in request.POST:
 		master = request.POST['master']
 		if passwordstore.storeMasterPassword(master) != -1:
@@ -920,6 +1033,10 @@ def init(request):
 
 @login_required
 def manage_gendev(request):
+	"""This view allows the manipulation of several database tables used for generic devices.
+	
+	Location: /devices/gen_dev/manage
+	"""
 	if request.user.has_perm('nms.add_gen_dev') or request.user.has_perm('nms.delete_gen_dev') or request.user.has_perm('nms.change_gen_dev'):
 		if request.method == 'POST' and 'qtype' in request.POST:
 			p = request.POST
@@ -1129,6 +1246,10 @@ def manage_gendev(request):
 	
 @login_required
 def history(request, device_id_request):
+	"""Shows the logged history of a device
+	
+	Location: /devices/\d+/history
+	"""
 	if request.user.has_perm('nms.manage_devices'):
 		device = get_object_or_404(Devices, pk=device_id_request)
 		history_items_list = History.objects.filter(dev_id=device)
@@ -1153,6 +1274,10 @@ def history(request, device_id_request):
 		
 @login_required
 def user_history(request):
+	"""Shows the user-specific history
+	
+	Location: /history
+	"""
 	history_items_list = History.objects.filter(Q(user_id = request.user) | Q(user_performed_task = request.user ))
 	history_items_list = history_items_list.extra(order_by = ['-history_id'])
 	paginator = Paginator(history_items_list, 25)
@@ -1169,6 +1294,10 @@ def user_history(request):
 
 @login_required
 def acl_user_history(request, acl_user):
+	"""Application administrator page for listing user-specific history
+	
+	Location: /acl/users/\d+/history
+	"""
 	if request.user.has_perm('auth.list_user'):
 		group_count = Group.objects.count()
 		user_count = User.objects.count()
@@ -1192,6 +1321,10 @@ def acl_user_history(request, acl_user):
 
 @login_required
 def acl_device_history(request, acl_id):
+	"""Application administrator page for listing device-specific history
+	
+	Location: /acl/devices/\d+/history
+	"""
 	if request.user.has_perm('auth.list_group'):
 		device = get_object_or_404(Devices, pk=acl_id)
 		history_items_list = History.objects.filter(dev_id=device)
@@ -1215,6 +1348,10 @@ def acl_device_history(request, acl_id):
 
 @login_required
 def acl_kick_user(request, user_id):
+	"""User-kick handler. Redirects when done.
+	
+	Location: /acl/users/\d+/kick
+	"""
 	user_obj = get_object_or_404(User, pk=user_id)
 	if request.user.has_perm('auth.change_user') and user_obj.username != 'root':
 		[x.delete() for x in Session.objects.all() if x.get_decoded().get('_auth_user_id') == user_obj.id]
@@ -1226,6 +1363,10 @@ def acl_kick_user(request, user_id):
 
 @login_required
 def change_gendev_handler(request, gendev_id):
+	"""Handler for changing gen_dev related tables. Redirects when done
+	
+	Location: /devices/gen_dev/change/\d+/handler
+	"""
 	if request.user.has_perm('nms.change_gen_dev') and 'qtype' in request.POST:
 		p = request.POST
 		if p['qtype'] == 'change_os':
@@ -1336,6 +1477,10 @@ def change_gendev_handler(request, gendev_id):
 
 @login_required
 def change_gendev(request, gendev_id):
+	"""Page for allowing users to change gendev records
+	
+	Location: /devices/gen_dev/\d+/change
+	"""
 	if request.user.has_perm('nms.change_gen_dev') and 'qtype' in request.GET:
 		qtype = request.GET['qtype']
 		if qtype == 'change_os':
