@@ -1,3 +1,14 @@
+"""
+The SSHConnection class contains generic connection routines with an SSH implementation
+
+Copyright (c) 2014 Remy Bien, Sebastiaan Groot, Wouter Miltenburg and Koen Veelenturf
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option) 
+any later version.
+"""
+
 import socket
 import paramiko
 import traceback
@@ -20,25 +31,15 @@ class SSHConnection:
 			return
 	
 	def connect(self):
+	"""Opens the SSH connection
+	
+	Return value:
+	Integer
+	"""
 		try:
 			self.sock.connect((self.hostname, self.port))
 			self.t = paramiko.Transport(self.sock)
 			self.t.start_client()
-			try:
-				self.keys = paramiko.util.load_host_keys(os.path.expanduser('~/.ssh/known_hosts'))
-			except IOError:
-				self.keys = {}
-			
-			key = self.t.get_remote_server_key()
-			
-			#if not self.hostname in self.keys:
-			#	print('*** WARNING: Unknown host key!')
-			#elif not self.keys[hostname].has_key(key.get_name()):
-			#	print('*** WARNING: Unknown host key!')
-			#elif self.keys[hostname][key.get_name()] != key:
-			#	print('*** WARNING: Host key has changed!!!')
-			#else:
-			#	print('*** Host key OK.')
 			self.t.auth_password(self.username, self.password)
 			if not self.t.is_authenticated():
 				self.t.close()
@@ -47,21 +48,25 @@ class SSHConnection:
 			self.chan.get_pty()
 			self.chan.invoke_shell()
 		except paramiko.SSHException:
-			#print('*** SSHException raised')
-			#traceback.print_exc()
 			return -1
 		except Exception as e:
-			#print('*** Caught exception')
-			#traceback.print_exc()
 			return -1
 
 	def send_and_receive(self, command, delay=0):
+	"""Sends a command, waits for the specified delay and
+	receives data
+	
+	Keyword arguments:
+	command -- The string to send over the connection
+	delay   -- The amount of seconds to sleep before calling recv (default = 0)
+	
+	Return value:
+	Bytestring
+	"""
 		if type(command) != type(bytes()):
 			try:
 				command = command.encode()
 			except AttributeError:
-				#print('*** Expected a string or bytestring as input')
-				#traceback.print_exc()
 				return
 
 		command = command.strip() + b'\n'
