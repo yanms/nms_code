@@ -31,11 +31,11 @@ class SSHConnection:
 			return
 	
 	def connect(self):
-	"""Opens the SSH connection
-	
-	Return value:
-	Integer
-	"""
+		"""Opens the SSH connection
+		
+		Return value:
+		Integer
+		"""
 		try:
 			self.sock.connect((self.hostname, self.port))
 			self.t = paramiko.Transport(self.sock)
@@ -53,16 +53,16 @@ class SSHConnection:
 			return -1
 
 	def send_and_receive(self, command, delay=0):
-	"""Sends a command, waits for the specified delay and
-	receives data
-	
-	Keyword arguments:
-	command -- The string to send over the connection
-	delay   -- The amount of seconds to sleep before calling recv (default = 0)
-	
-	Return value:
-	Bytestring
-	"""
+		"""Sends a command, waits for the specified delay and
+		receives data
+		
+		Keyword arguments:
+		command -- The string to send over the connection
+		delay   -- The amount of seconds to sleep before calling recv (default = 0)
+		
+		Return value:
+		Bytestring
+		"""
 		if type(command) != type(bytes()):
 			try:
 				command = command.encode()
