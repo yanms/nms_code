@@ -1,27 +1,40 @@
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
-from django.core.urlresolvers import reverse
+"""
+This module contains all django views for this app
+
+Copyright (c) 2014 Remy Bien, Sebastiaan Groot, Wouter Miltenburg and Koen Veelenturf
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option) 
+any later version.
+"""
+
+import nms
+from nms import commands
+from nms import xmlparser
+from nms import passwordstore
 from nms.models import *
+
+import traceback
+import os as os_library
+from xml.etree import ElementTree
+from subprocess import call
+
+import django.db.models as django_exception
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User, Permission, Group
 from django.contrib.auth.decorators import login_required, permission_required
-from django.template import RequestContext
+from django.contrib.auth.models import User, Permission, Group
 from django.contrib.contenttypes.models import ContentType
-import nms.commands as commands
-import nms.xmlparser as xmlparser
-import nms.passwordstore as passwordstore
-import traceback
-import  django.db.models as django_exception
-from django.utils import timezone
-from django.db.models import Q
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
+from django.db.models import Q
+from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
+from django.shortcuts import get_object_or_404, render
+from django.template import RequestContext
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_protect
-from xml.etree import ElementTree
-import os as os_library
-from subprocess import call
-import nms
 
 @login_required
 def index(request):
