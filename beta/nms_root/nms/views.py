@@ -290,7 +290,7 @@ def acl_device_manage(request, acl_id):
 
 @login_required
 def acl_handler(request, acl_id):
-	"""TBD
+	"""ACL handler, all requests for changing user/device groups are handled here. This view redirects when done.
 	
 	Location: /acl/\d+/manage
 	"""
