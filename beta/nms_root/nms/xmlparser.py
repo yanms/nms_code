@@ -175,8 +175,9 @@ def removeXmlStruct(device):
 	global cacheLock
 	global cache
 	cacheLock.acquire()
-	if device in cache.keys():
-		del cache[device]
+	location = device.gen_dev_id.file_location_id.location
+	if location in cache.keys():
+		del cache[location]
 	cacheLock.release()
 				
 def get_xml_struct(filepath):
