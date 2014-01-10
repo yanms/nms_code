@@ -7,7 +7,7 @@ class SessionLogout:
 		if not request.user.is_authenticated():
 			return
 		try:
-			if datetime.now().timestamp() - request.session['last_touch'] > timedelta(0, settings.SESSION_EXPIRATION_TIME, 0):
+			if datetime.now().timestamp() - request.session['last_touch'] > timedelta(0, settings.SESSION_EXPIRATION_TIME, 0).total_seconds():
 				auth.logout(request)
 				del request.session['last_touch']
 				return
