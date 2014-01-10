@@ -887,7 +887,6 @@ def session_handler(request):
 			if user is not None:
 				if user.is_active:
 					login(request, user)
-					request.session.set_expiry(30) #1 hour
 					History.objects.create(user_performed_task=request.user, action_type='User: logged in', action='User succesfully logged in', date_time=timezone.now(), user_id=request.user)
 					messages.success(request, "Successfully logged in")
 					if url == "":
