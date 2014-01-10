@@ -569,7 +569,7 @@ def register(request):
 				return HttpResponseRedirect(reverse('nms:register'))
 			else:
 				messages.error(request, 'Password mismatch')
-				return HttpResponseRedirect(request('nms:register'))
+				return HttpResponseRedirect(reverse('nms:register'))
 		else:
 			messages.error(request, 'User already exists')
 			return HttpResponseRedirect(reverse('nms:register'))
