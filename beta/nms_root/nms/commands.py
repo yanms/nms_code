@@ -188,7 +188,7 @@ def getConnection(user, device):
 	finally:
 		connectionsLock.release()
 		
-def removeSSHConnection(user, device):
+def removeConnection(user, device):
 	"""Removes an connection object from the global dict
 	
 	Keyword arguments:

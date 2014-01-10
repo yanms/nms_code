@@ -973,7 +973,7 @@ def query(request):
 			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
 		elif query == 'del':
-			commands.removeSSHConnection(request.user, device)
+			commands.removeConnection(request.user, device)
 			return HttpResponse('Connection closed', content_type='text/plain')
 		elif query == 'priv':
 			connection = commands.getConnection(request.user, device)
