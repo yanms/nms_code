@@ -517,6 +517,7 @@ def acl_groups_handler(request):
 						messages.error(request, "Can't remove user: root")
 						return HttpResponseRedirect(reverse('nms:acl_user'))
 					History.objects.create(user_performed_task=request.user, date_time=timezone.now(), action_type='ACL: Removed user', action='Removed user {0}'.format(user))
+					[x.delete() for x in Session.objects.all() if x.get_decoded().get('_auth_user_id') == user.id]
 					user.delete()
 				messages.success(request, "Database updated succesfully")
 				return HttpResponseRedirect(reverse('nms:acl_user'))
