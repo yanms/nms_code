@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 	<meta charset="utf-8">
-	<title>Network Management System - AdminPanel: ACL Devices History</title>
+	<title>yaNMS - ACL Devices History</title>
 	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_js/jquery-1.7.2.min.js"><\/script>');</script>
@@ -41,7 +41,7 @@
 								Page {{ history.number }} of {{ history.paginator.num_pages }}.
 								{% if history.has_next %}
 									<a href="?page={{ history.next_page_number }}">next</a>
-									{% endif %}
+								{% endif %}
 								<table class="TFtable">
 									<tr>
 										<td><b>History id</b></td>
@@ -75,8 +75,8 @@
 			{% include "_nav.html" %}
 			<span class="shadow"></span>
 		</aside>
-		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
-	</div> <!-- Wrapper -->
+		<div class="push"></div>
+	</div>
 	<footer>
 		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
 	</footer>

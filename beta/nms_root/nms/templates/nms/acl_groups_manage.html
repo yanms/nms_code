@@ -1,29 +1,29 @@
 <!DOCTYPE html>
-<head>
-	<meta charset="utf-8">
-	<title>Network Management System - AdminPanel: ACL</title>
-	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
-	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
-	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
-</head>
-<body>
-	<div id="wrapper">
-		<div id="content">
-			<div class="c1">
-				<div class="controls">
-					<nav class="links">
+	<head>
+		<meta charset="utf-8">
+		<title>yaNMS - ACL Groups</title>
+		<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+		<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="content">
+				<div class="c1">
+					<div class="controls">
+						<nav class="links">
 						{% include "_navup.html" %}
-					</nav>
-					{% include "_navuser.html" %}
-				</div>
+						</nav>
+						{% include "_navuser.html" %}
+				 </div>
 				<div class="tabs">
 					<div id="tab-8" class="tab">
 						<article>
 							<div class="text-section">
 								<h1>Dashboard</h1>
-								<h2>Manage group: <strong>{{ group }}</strong></h2>
+								<h2>ACL Manage Group: <strong>{{ group }}</strong></h2>
 								<ul class="states">
 									{% for message in messages %}
 									<li class="{{message.tags}}">{{ message.tags.title }} : {{ message }}</li>
@@ -34,11 +34,11 @@
 								{% if dev_check %}
 									<h2>Devices</h2>
 									{% for iter in devices %}
-										{% if iter in checked %}
-										<input type="checkbox" name="devices" value="{{ iter.dev_id }}" checked/> {{ iter }}<br />
-										{% else %}
-										<input type="checkbox" name="devices" value="{{ iter.dev_id }}" /> {{ iter }}<br />
-										{%endif %}
+									{% if iter in checked %}
+									<input type="checkbox" name="devices" value="{{ iter.dev_id }}" checked/> {{ iter }}<br />
+									{% else %}
+									<input type="checkbox" name="devices" value="{{ iter.dev_id }}" /> {{ iter }}<br />
+									{%endif %}
 									{% endfor %}
 									<h2>Device Group Rights</h2>
 									<input type="checkbox" name="rights" value="list" {{ list_check }}/>List Devices<br />
@@ -97,12 +97,10 @@
 									<h2>Device Rights</h2>
 									<input type="checkbox" name="rights" value="add_devices" {{ add_devices }}/>Add device<br />
 									<input type="checkbox" name="rights" value="delete_devices" {{ delete_devices }}/>Delete device<br />
-									
 									<h2>Generic Device Rights</h2>
 									<input type="checkbox" name="rights" value="add_gen_dev" {{ add_gen_dev }}/>Add generic device<br />
 									<input type="checkbox" name="rights" value="change_gen_dev" {{ change_gen_dev }}/>Change generic device<br />
 									<input type="checkbox" name="rights" value="delete_gen_dev" {{ delete_gen_dev }}/>Delete generic device<br />
-									
 									<h2>INHERIT OPTIONS</h2>
 									<table class="TFtable">
 										<tr>
@@ -145,24 +143,20 @@
 									<input type="submit" value="Update" id="update" />
 								</form>
 								<br />
-								
-								
-								
 							</div>
 						</article>
 					</div>
 				</div>
 			</div>
+			<aside id="sidebar">
+				<img src="{{ STATIC_URL }}images/NMS.png"/>
+				{% include "_nav.html" %}
+				<span class="shadow"></span>
+			</aside>
+			<div class="push"></div>
 		</div>
-		<aside id="sidebar">
-			<img src="{{ STATIC_URL }}images/NMS.png"/>
-			{% include "_nav.html" %}
-			<span class="shadow"></span>
-		</aside>
-		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
-	</div> <!-- Wrapper -->
-	<footer>
-		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
-	</footer>
-</body>
+		<footer>
+			Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+		</footer>
+	</body>
 </html>
