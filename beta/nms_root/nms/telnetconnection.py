@@ -30,7 +30,8 @@ class TelnetConnection:
 			self.tn.open(host = self.hostname, port = self.port)
 			self.tn.read_until(b'login: ')
 			self.tn.write(self.password.encode() + b'\n')
-			self.tn.read_lazy()			
+			self.tn.read_lazy()
+			return 0
 		except:
 			return -1
 
@@ -49,7 +50,7 @@ class TelnetConnection:
 			try:
 				command = command.encode()
 			except AttributeError:
-				return
+				return None
 		command = command.strip() + b'\n'
 		self.tn.send(command)
 		time.sleep(delay)
