@@ -52,7 +52,7 @@ def getInterfaces(command, parser, device, user):
 	user    -- The NMS user making this request
 	
 	Return value:
-	List of strings	
+	List of strings	or None
 	"""
 	global interfacesLock
 	global interfaces
@@ -64,9 +64,9 @@ def getInterfaces(command, parser, device, user):
 			elif device.pref_remote_prot == 'Telnet':
 				s = telnetconnection.TelnetConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
 			else:
-				return -1
+				return None
 			if s.connect() == -1:
-				return -1
+				return None
 			ret = b''
 			for i, arg in enumerate(command):
 				if type(arg) != type(bytes()):
