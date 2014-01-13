@@ -168,11 +168,13 @@ def acl_user_add_handler(request):
 				email = request.POST['emailaddress']
 				password = request.POST['password']
 				password_check = request.POST['password2']
-				check = User.objects.filter(username=username).exists()
-				if check:
+				#Check if the user already exists
+				if User.objects.filter(username=username).exists():
 					messages.error(request, 'User already exists.')
 					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+				#Check if the two passwords match and are not empty
 				if password == password_check and password != '':
+					#Create the player
 					user = User.objects.create()
 					user.username = username
 					user.first_name = firstname
@@ -183,16 +185,20 @@ def acl_user_add_handler(request):
 					History.objects.create(action_type='ACL: User', action='Added user', user_id=user, user_performed_task=request.user, date_time = timezone.now())
 					messages.success(request, "Database updated successfully.")
 					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+				#Password mismatch or empty
 				else:
 					messages.error(request, 'Password fields may not be empty.')
 					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+			#KeyError can be raised on POST arguments not existing
 			except KeyError as err:
 				messages.error(request, "Not all fields are set")
 				messages.error(request, err)
 				return HttpResponseRedirect(reverse('nms:acl_user_add'))
+		#request.method != 'POST'
 		else:
 			messages.error(request, "Invalid method")
 			return HttpResponseRedirect(reverse('nms:acl_user_add'))
+	#not request.user.has_perm('auth.add_user')
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
 		return HttpResponseRedirect(reverse('nms:acl'))
