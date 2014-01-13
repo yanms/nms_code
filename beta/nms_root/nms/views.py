@@ -46,13 +46,18 @@ def install(request):
 	
 	Location: /install
 	"""
+	#Check if the installation is already completed
 	if Settings.objects.filter(known_name='install complete').exists():
 		if Settings.objects.filter(known_name='install complete', known_boolean=True).exists():
-			return HttpResponse('Installation already finished.') 
+			return HttpResponse('Installation already finished.')
+	#Do the installation
 	else:
+		#request.method == 'POST' -> The hostname form was submitted, we can install
 		if request.method == 'POST':
 			if not 'hostname' in request.POST:
-				return HttpResponse('Missing hostname');
+				return HttpResponse('Missing hostname')
+			
+			#Set up all permissions
 			content_type = ContentType.objects.get_for_model(User)
 			list_user, created = Permission.objects.get_or_create(codename='list_user', name='Can list users', content_type=content_type)
 			content_type = ContentType.objects.get_for_model(Group)
@@ -79,10 +84,12 @@ def install(request):
 			group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
 			Settings.objects.create(known_id=1, known_name='install complete', known_boolean=True)
 			Settings.objects.create(known_id=2, known_name='hostname', string=request.POST['hostname'])
+			
+			#Make the shmlib C library for shared memory segments
 			path = os_library.path.abspath(os_library.path.dirname(nms.__file__))
 			call(['make', path + '/c/'])
-
 			return HttpResponse('Finished installing NMS.')
+		#request.method != 'POST' -> Display the form to fill in the hostname
 		else:
 			return render(request, 'nms/install.html', {'request':request})
 
@@ -92,6 +99,7 @@ def acl(request):
 	
 	Location: /acl
 	"""
+	#Counts are used in all ACL pages for the menu-numbers indicating the number of group, user and device objects
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -107,8 +115,7 @@ def acl_groups(request):
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
 	if request.user.has_perm('auth.list_user') or request.user.has_perm('auth.add_group') or request.user.has_perm('auth.change_group') or request.user.has_perm('auth.delete_group'):
-		user = request.user
-		user_perm = user.has_perm('auth.list_group')
+		user_perm = request.user.has_perm('auth.list_group')
 		dev_groups = Group.objects.filter(name__startswith='dev:')
 		usr_groups = Group.objects.filter(name__startswith='usr:')
 		return render(request, 'nms/acl_groups.html', {'user_perm': user_perm, 'dev_groups': dev_groups, 'usr_groups': usr_groups, 'request':request, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
