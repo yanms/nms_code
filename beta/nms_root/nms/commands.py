@@ -93,7 +93,7 @@ def executeTask(taskpath, device, uargs, user):
 	user     -- The NMS user making this request
 	
 	Return value:
-	String	
+	List of strings
 	"""
 	xmlroot = xmlparser.get_xml_struct(device.gen_dev_id.file_location_id.location)
 	taskpath = taskpath.split('|')
@@ -108,7 +108,7 @@ def executeTask(taskpath, device, uargs, user):
 		args.append(raw_arg)
 	for uarg_name in uarg_names:
 		if not uarg_name in uargs.keys():
-			return 'User arguments not supplied'
+			return ['User arguments not supplied']
 	for i in range(len(args)):
 		for uarg_key in uargs.keys():
 			if type(args[i]) == type(str()):
@@ -119,9 +119,9 @@ def executeTask(taskpath, device, uargs, user):
 	elif device.pref_remote_prot == 'Telnet':
 		s = telnetconnection.TelnetConnection(device.ip, device.login_name, passwordstore.getRemotePassword(device), device.port)
 	else:
-		return -1
+		return ['Unknown protocol defined for device']
 	if s.connect() == -1:
-		return -1
+		return ['Unable to connect']
 	ret = b''
 	for i, arg in enumerate(args):
 		if type(arg) != type(bytes()):
