@@ -26,8 +26,6 @@ class SSHConnection:
 			self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #IPv4
 			self.sock.settimeout(15)
 		except Exception as e:
-			print('*** Socket creation failed: ' + str(e))
-			traceback.print_exc()
 			return
 	
 	def connect(self):
@@ -47,6 +45,7 @@ class SSHConnection:
 			self.chan = self.t.open_session()
 			self.chan.get_pty()
 			self.chan.invoke_shell()
+			return 0
 		except paramiko.SSHException:
 			return -1
 		except Exception as e:
@@ -67,7 +66,7 @@ class SSHConnection:
 			try:
 				command = command.encode()
 			except AttributeError:
-				return
+				return None
 
 		command = command.strip() + b'\n'
 		self.chan.send(command)
