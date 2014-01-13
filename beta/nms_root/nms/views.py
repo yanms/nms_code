@@ -278,7 +278,7 @@ def acl_device(request):
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
 		return HttpResponseRedirect(reverse('nms:acl'))
-	
+
 
 @login_required
 def acl_device_manage(request, acl_id):
@@ -290,12 +290,12 @@ def acl_device_manage(request, acl_id):
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
 	if request.user.has_perm('auth.list_group'):
+		#The object of the device we're managing here
 		dev_obj = get_object_or_404(Devices, pk=acl_id)
+		#All available device groups
 		dev_groups = Group.objects.filter(name__startswith='dev:')
-		check = Dev_group.objects.filter(devid=dev_obj)
-		checked = []
-		for iter in check:
-			checked.append(iter.gid)
+		#The device groups that will appear with checkboxes already ticked
+		checked = [dev_group.gid for dev_group in Dev_group.objects.filter(devid=dev_obj)]
 		return render(request, 'nms/acl_devices_manage.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups, 'checked': checked, 'request':request, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
@@ -313,10 +313,10 @@ def acl_handler(request, acl_id):
 			if task == 'usr_group_update':
 				if request.user.has_perm('auth.list_group'):
 					user_obj = get_object_or_404(User, pk=acl_id)
-					groups = request.POST.getlist('groups')
+					groupnames = request.POST.getlist('groups')
 					user_obj.groups = []
-					for iter in groups:
-						group = get_object_or_404(Group, name=iter)
+					for groupname in groupnames:
+						group = get_object_or_404(Group, name=groupname)
 						user_obj.groups.add(group)
 						History.objects.create(action_type = 'ACL: Modified user groups', user_id = user_obj, user_performed_task = request.user, action='Currently assigned groups: {0}'.format(group), group_id=group, date_time = timezone.now())
 					messages.success(request, 'Database updated successfully')
@@ -332,17 +332,16 @@ def acl_handler(request, acl_id):
 					users_received = request.POST.getlist('users')
 					group.permissions = []
 					group.user_set.clear()
-					for iter in rights:
-						right = iter
+					for right in rights:
 						permission = Permission.objects.get(codename=right)
 						group.permissions.add(permission)
 			
-					for iter in groups_received:
-						group_recv = get_object_or_404(Group, pk=iter)
+					for group_received in groups_received:
+						group_recv = get_object_or_404(Group, pk=group_received)
 						for item in group_recv.user_set.all():
 							group.user_set.add(item)
-					for iter in users_received:
-						user_recv = get_object_or_404(User, pk=iter)
+					for user_received in users_received:
+						user_recv = get_object_or_404(User, pk=user_received)
 						group.user_set.add(user_recv)
 					
 					History.objects.create(action_type='ACL: Changed permission user group', action='Current permissions {0}'.format(group.permissions.all()), group_id=group, user_performed_task = request.user, date_time = timezone.now())
@@ -380,20 +379,19 @@ def acl_handler(request, acl_id):
 					group.user_set.clear()
 					if Dev_group.objects.filter(gid=group).exists():
 						Dev_group.objects.filter(gid=group).delete()
-					for iter in devices:
-						dev = Devices.objects.get(pk=iter)
+					for device in devices:
+						dev = Devices.objects.get(pk=device)
 						Dev_group.objects.get_or_create(gid=group, devid=dev)
-					for iter in rights:
-						right = iter
+					for right in rights:
 						right += '_devices'
 						permission = Permission.objects.get(codename=right)
 						group.permissions.add(permission)
-					for iter in groups_received:
-						group_recv = get_object_or_404(Group, pk=iter)
+					for group_received in groups_received:
+						group_recv = get_object_or_404(Group, pk=group_received)
 						for item in group_recv.user_set.all():
 							group.user_set.add(item)
-					for iter in users_received:
-						user_recv = get_object_or_404(User, pk=iter)
+					for user_received in users_received:
+						user_recv = get_object_or_404(User, pk=user_received)
 						group.user_set.add(user_recv)
 					History.objects.create(action_type='ACL: Changed permission device group', action='Current permissions {0}'.format(group.permissions.all()), group_id=group, user_performed_task = request.user, date_time = timezone.now())
 					History.objects.create(action_type='ACL: Changed users listed in device group', action='Current users listed in device group: {0}'.format(group.user_set.all()), group_id = group, user_performed_task = request.user, date_time = timezone.now())
