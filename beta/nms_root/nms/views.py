@@ -421,6 +421,7 @@ def acl_groups_manage(request, acl_id):
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
 	if request.user.has_perm('auth.change_group'):
+		#Set the default values for all variables the template needs
 		group = get_object_or_404(Group, pk=acl_id)
 		dev_check = True if group.name[:4] == 'dev:' else False
 		groups_usr = Group.objects.filter(name__startswith='usr:')
@@ -444,6 +445,7 @@ def acl_groups_manage(request, acl_id):
 		add_gen_dev = None
 		delete_gen_dev = None
 		change_gen_dev = None
+		#Try to set the variables
 		if dev_check:
 			devices = Devices.objects.all()
 			checked = []
