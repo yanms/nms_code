@@ -1286,7 +1286,7 @@ def manage_gendev(request):
 					try:
 						if p['os'] == '' and p['gen_dev'] == '':
 							raise
-							else: 
+						else: 
 							OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['gen_dev']))
 							History.objects.create(action_type='Gendev: add', action='Added gendev OS device', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
