@@ -1257,7 +1257,7 @@ def manage_gendev(request):
 					try:
 						if p['vendor_id'] == '' and p['os_type_id'] == '':
 							raise
-							else:
+						else:
 							os = OS()
 							os.vendor_id = Vendor.objects.get(pk=request.POST['vendor_id'])
 							os.os_type_id =	OS_type.objects.get(pk=request.POST['os_type_id'])
