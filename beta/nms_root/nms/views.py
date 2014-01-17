@@ -699,7 +699,7 @@ def device_add(request):
 					try:
 						socket.inet_pton(socket.AF_INET6, ip_recv)
 					except:
-						messages.error(requets, 'Not a valid IPv4 or IPv6 address')
+						messages.error(request, 'Not a valid IPv4 or IPv6 address')
 						return HttpResponseRedirect(reverse('nms:device_add'))
 				device = Devices(gen_dev_id=gen_dev, os_dev_id=os, ip=ip_recv, pref_remote_prot=pref_remote_prot, 
 				ip_version = ipprot, login_name = login_name, password_enable='', password_remote='', port=port)
@@ -710,9 +710,8 @@ def device_add(request):
 					dev_groups = request.POST['dev_groups']
 					group_dev_add = get_object_or_404(Group, pk=dev_groups)
 					Dev_group.objects.create(gid=group_dev_add, devid=device)
-			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
+			except (KeyError, ValueError, NameError, UnboundLocalError):
 				messages.error(request, 'Not all fields are set or an other error occured')
-				messages.error(request, str(err))
 				return HttpResponseRedirect(reverse('nms:device_add'))
 			History.objects.create(user_performed_task=request.user, dev_id=device, date_time=timezone.now(), action_type='Created device', action='Created device {0}'.format(device))
 			messages.success(request, 'Database updated')
