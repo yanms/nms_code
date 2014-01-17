@@ -16,6 +16,7 @@ from nms import passwordstore
 from nms.models import *
 
 import traceback
+import socket
 import os as os_library
 from xml.etree import ElementTree
 from subprocess import call
@@ -673,14 +674,10 @@ def device_add(request):
 					if len(model_id) == 1:
 						gen_dev = Gen_dev.objects.get(model_id=model_id[0], vendor_id=Vendor.objects.get(vendor_name=request.POST['selectVendor']), dev_type_id=Dev_type.objects.get(dev_type_name=request.POST['selectType']))
 					else:
-						messages.error(request, 'test')
-						messages.error(request, list(request.POST.items()))
 						messages.error(request, "Received multiple models, not unique")
 						return HttpResponseRedirect(reverse('nms:device_add'))
 				except:
-					messages.error(request, list(request.POST.items()))
-					messages.error(request, "No gendev found")
-					messages.error(request, traceback.format_exc())
+					messages.error(request, "No device template found")
 					return HttpResponseRedirect(reverse('nms:device_add'))
 				os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
 				pref_remote_prot = request.POST['pref_remote_prot']
@@ -689,7 +686,21 @@ def device_add(request):
 				port = request.POST['port']
 				login_name = request.POST['login_name']
 				password_remote = request.POST['password_remote']
-				password_enable = request.POST['password_enable']				
+				password_enable = request.POST['password_enable']
+				try:
+					socket.inet_pton(socket.AF_INET, ip_recv)
+				except AttributeError: #inet_pton not available, no IPv6 support
+					try:
+						socket.inet_aton(ip_recv)
+					except:
+						messages.error(request, 'Not a valid IPv4 address')
+						return HttpResponseRedirect(reverse('nms:device_add'))
+				except:
+					try:
+						socket.inet_pton(socket.AF_INET6, ip_recv)
+					except:
+						messages.error(requets, 'Not a valid IPv4 or IPv6 address')
+						return HttpResponseRedirect(reverse('nms:device_add'))
 				device = Devices(gen_dev_id=gen_dev, os_dev_id=os, ip=ip_recv, pref_remote_prot=pref_remote_prot, 
 				ip_version = ipprot, login_name = login_name, password_enable='', password_remote='', port=port)
 				device.save()
@@ -702,7 +713,6 @@ def device_add(request):
 			except (KeyError, ValueError, NameError, UnboundLocalError):
 				messages.error(request, 'Not all fields are set or an other error occured')
 				return HttpResponseRedirect(reverse('nms:device_add'))
-			
 			History.objects.create(user_performed_task=request.user, dev_id=device, date_time=timezone.now(), action_type='Created device', action='Created device {0}'.format(device))
 			messages.success(request, 'Database updated')
 			return HttpResponseRedirect(reverse('nms:device_add'))
