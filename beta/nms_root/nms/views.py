@@ -16,6 +16,7 @@ from nms import passwordstore
 from nms.models import *
 
 import traceback
+import socket
 import os as os_library
 from xml.etree import ElementTree
 from subprocess import call
