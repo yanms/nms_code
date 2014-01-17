@@ -256,12 +256,12 @@ def acl_user_manage_handler(request, acl_user):
 					return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,)))
 				else:
 				   messages.error(request, "Passwords are not the same")
-				   return HttpResponseRedirect(reverse('nms:acl_user_add')) 
+				   return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,))) 
 			except KeyError:
 				messages.error(request, "Not all fields are set")
-				return HttpResponseRedirect(reverse('nms:acl_user_add'))
+				return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,))) 
 		messages.error(request, "Invalid method")
-		return HttpResponseRedirect(reverse('nms:acl_user_add'))
+		return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,))) 
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
 		return HttpResponseRedirect(reverse('nms:acl'))
