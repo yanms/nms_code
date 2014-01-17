@@ -701,6 +701,14 @@ def device_add(request):
 					except:
 						messages.error(request, 'Not a valid IPv4 or IPv6 address')
 						return HttpResponseRedirect(reverse('nms:device_add'))
+
+				try:
+					if int(port) <= 0 or int(port) > 65535:
+						raise ValueError
+				except:
+					messages.error(request, 'Not a valid port number')
+					return HttpResponseRedirect(reverse('nms:device_add', args=(device.dev_id,)))
+
 				device = Devices(gen_dev_id=gen_dev, os_dev_id=os, ip=ip_recv, pref_remote_prot=pref_remote_prot, 
 				ip_version = ipprot, login_name = login_name, password_enable='', password_remote='', port=port)
 				device.save()
@@ -803,6 +811,14 @@ def device_modify(request, device_id_request):
 					except:
 						messages.error(request, 'Not a valid IPv4 or IPv6 address')
 						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+
+				try:
+					if int(request.POST['port']) <= 0 or int(request.POST['port']) > 65535:
+						raise ValueError
+				except:
+					messages.error(request, 'Not a valid port number')
+					return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+						
 
 				device.os_dev_id = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
 				device.pref_remote_prot = request.POST['pref_remote_prot']
