@@ -1144,9 +1144,13 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_vendor':
 				if 'name' in p:
 					try:
-						Vendor(vendor_name=p['name']).save()
-						History.objects.create(action_type='Gendev: add', action='Added gendev vendor', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if ['name'] == '':
+							raise
+						else:
+								
+							Vendor(vendor_name=p['name']).save()
+							History.objects.create(action_type='Gendev: add', action='Added gendev vendor', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding vendor')
 			elif p['qtype'] == 'del_vendor':
@@ -1163,9 +1167,12 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_model':
 				if 'name' in p:
 					try:
-						Dev_model(model_name=p['name'], version=p['version']).save()
-						History.objects.create(action_type='Gendev: add', action='Added gendev model', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if ['name'] == '':
+							raise
+						else:
+							Dev_model(model_name=p['name'], version=p['version']).save()
+							History.objects.create(action_type='Gendev: add', action='Added gendev model', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding model')
 			elif p['qtype'] == 'del_model':
@@ -1182,24 +1189,27 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_xml':
 				if 'name' in p:
 					try:
-						file_data = request.FILES['file']
-						if file_data.content_type != 'text/xml':
-							messages.error(request,"The uploaded file isn't a XML-file")
-							return HttpResponseRedirect(reverse('nms:manage_gendev'))
-						try:
-							ElementTree.parse(file_data)
-							messages.success(request, 'Well formatted XML-file received')
-						except:
-							messages.error(request, 'Not well formatted XML-file')
-							return HttpResponseRedirect(reverse('nms:manage_gendev'))
-						destination = os_library.path.abspath(os_library.path.dirname(nms.__file__)) + '/static/devices/' + p['name']
-						file = open(destination, 'wb+')
-						for item in file_data:
-							file.write(item)
-						file.close()
-						File_location(location=destination).save()	
-						History.objects.create(action_type='Gendev: add', action='Added gendev XML', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if ['name'] == '':
+							raise
+						else:
+							file_data = request.FILES['file']
+							if file_data.content_type != 'text/xml':
+								messages.error(request,"The uploaded file isn't a XML-file")
+								return HttpResponseRedirect(reverse('nms:manage_gendev'))
+							try:
+								ElementTree.parse(file_data)
+								messages.success(request, 'Well formatted XML-file received')
+							except:
+								messages.error(request, 'Not well formatted XML-file')
+								return HttpResponseRedirect(reverse('nms:manage_gendev'))
+							destination = os_library.path.abspath(os_library.path.dirname(nms.__file__)) + '/static/devices/' + p['name']
+							file = open(destination, 'wb+')
+							for item in file_data:
+								file.write(item)
+							file.close()
+							File_location(location=destination).save()	
+							History.objects.create(action_type='Gendev: add', action='Added gendev XML', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, list(request.POST.items()))
 						messages.error(request, traceback.format_exc()) #debug code
@@ -1224,9 +1234,12 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_os_type':
 				if 'name' in p:
 					try:
-						OS_type(type=p['name']).save()
-						History.objects.create(action_type='Gendev: add', action='Added gendev OS type', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if ['name'] == '':
+							raise
+						else:
+							OS_type(type=p['name']).save()
+							History.objects.create(action_type='Gendev: add', action='Added gendev OS type', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding model')
 			elif p['qtype'] == 'del_os_type':
@@ -1243,15 +1256,18 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_os':
 				if 'vendor_id' in p and 'os_type_id' in p:
 					try:
-						os = OS()
-						os.vendor_id = Vendor.objects.get(pk=request.POST['vendor_id'])
-						os.os_type_id =	OS_type.objects.get(pk=request.POST['os_type_id'])
-						os.build = request.POST['build']
-						os.short_info = request.POST['short_info']
-						os.name = request.POST['name']		
-						os.save()
-						History.objects.create(action_type='Gendev: add', action='Added gendev OS', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if ['vendor_id'] == '' and p['os_type_id'] == '':
+							raise
+							else:
+							os = OS()
+							os.vendor_id = Vendor.objects.get(pk=request.POST['vendor_id'])
+							os.os_type_id =	OS_type.objects.get(pk=request.POST['os_type_id'])
+							os.build = request.POST['build']
+							os.short_info = request.POST['short_info']
+							os.name = request.POST['name']		
+							os.save()
+							History.objects.create(action_type='Gendev: add', action='Added gendev OS', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding model')
 			elif p['qtype'] == 'del_os':
@@ -1269,9 +1285,12 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_osdev':
 				if 'os' in p and 'gen_dev' in p:
 					try:
-						OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['gen_dev']))
-						History.objects.create(action_type='Gendev: add', action='Added gendev OS device', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if p['os'] == '' and p['gen_dev'] == '':
+							raise
+							else: 
+							OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['gen_dev']))
+							History.objects.create(action_type='Gendev: add', action='Added gendev OS device', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding model')
 			elif p['qtype'] == 'del_osdev':
