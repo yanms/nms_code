@@ -796,7 +796,7 @@ def device_modify(request, device_id_request):
 				device.login_name = request.POST['login_name']
 				password_remote = request.POST['password_remote']
 				password_enable = request.POST['password_enable']
-				
+				"""
 				try:
 					socket.inet_pton(socket.AF_INET, ip_recv)
 				except AttributeError: #inet_pton not available, no IPv6 support
@@ -811,7 +811,7 @@ def device_modify(request, device_id_request):
 					except:
 						messages.error(request, 'Not a valid IPv4 or IPv6 address')
 						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
-				
+				"""
 				device.save()
 				if password_enable != '':
 					passwordstore.storeEnablePassword(device, password_enable)
