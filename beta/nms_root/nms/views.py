@@ -1382,6 +1382,9 @@ def acl_device_history(request, acl_id):
 	Location: /acl/devices/\d+/history
 	"""
 	if request.user.has_perm('auth.list_group'):
+		group_count = Group.objects.count()
+		user_count = User.objects.count()
+		devices_count = Devices.objects.count()
 		device = get_object_or_404(Devices, pk=acl_id)
 		history_items_list = History.objects.filter(dev_id=device)
 		history_items_list = history_items_list.extra(order_by = ['-history_id'])
