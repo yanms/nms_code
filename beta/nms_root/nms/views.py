@@ -760,76 +760,73 @@ def device_modify(request, device_id_request):
 	
 	Location: /devices/\d+/modify
 	"""
-	try:
-		device = get_object_or_404(Devices, pk=device_id_request)
-		groups = request.user.groups.all()
-		group_device = [group for group in groups if group.dev_group_set.filter(devid=device).exists()]
-		group_rights = [groups for groups in group_device if groups.permissions.filter(codename='change_devices').exists()]
-		if len(group_rights) > 0:
-			if not passwordstore.hasMasterPassword():
-				return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_modify', args=(device_id_request,)))
-			dev_type_view = Dev_type.objects.all()
-			vendor_view = Vendor.objects.all()
-			dev_model_view = Dev_model.objects.all()
-			os_view = OS_dev.objects.all()
-			gen_dev = Gen_dev.objects.all()
-			if request.method == 'POST':
-				#return HttpResponse('Received post method.')
+	device = get_object_or_404(Devices, pk=device_id_request)
+	groups = request.user.groups.all()
+	group_device = [group for group in groups if group.dev_group_set.filter(devid=device).exists()]
+	group_rights = [groups for groups in group_device if groups.permissions.filter(codename='change_devices').exists()]
+	if len(group_rights) > 0:
+		if not passwordstore.hasMasterPassword():
+			return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_modify', args=(device_id_request,)))
+		dev_type_view = Dev_type.objects.all()
+		vendor_view = Vendor.objects.all()
+		dev_model_view = Dev_model.objects.all()
+		os_view = OS_dev.objects.all()
+		gen_dev = Gen_dev.objects.all()
+		if request.method == 'POST':
+			#return HttpResponse('Received post method.')
+			try:
 				try:
-					try:
-						models = Dev_model.objects.all()
-						model_version_name = [[(x.model_name + ' ' + x.version if len(x.version) >= 1 else x.model_name + ' '), x.model_id] for x in models]
-						model_id = [x[1] for x in model_version_name if x[0] == request.POST['selectModel']]
-						if len(model_id) == 1:
-							device.gen_dev_id = Gen_dev.objects.get(model_id=model_id[0], vendor_id=Vendor.objects.get(vendor_name=request.POST['selectVendor']), dev_type_id=Dev_type.objects.get(dev_type_name=request.POST['selectType']))
-						else:
-							messages.error(request, list(request.POST.items()))
-							messages.error(request, "Received multiple models, not unique")
-							return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
-					except:
-						messages.error(request, "No gendev found")
+					models = Dev_model.objects.all()
+					model_version_name = [[(x.model_name + ' ' + x.version if len(x.version) >= 1 else x.model_name + ' '), x.model_id] for x in models]
+					model_id = [x[1] for x in model_version_name if x[0] == request.POST['selectModel']]
+					if len(model_id) == 1:
+						device.gen_dev_id = Gen_dev.objects.get(model_id=model_id[0], vendor_id=Vendor.objects.get(vendor_name=request.POST['selectVendor']), dev_type_id=Dev_type.objects.get(dev_type_name=request.POST['selectType']))
+					else:
+						messages.error(request, list(request.POST.items()))
+						messages.error(request, "Received multiple models, not unique")
 						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
-					device.os_dev_id = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
-					device.pref_remote_prot = request.POST['pref_remote_prot']
-					device.ip_version = request.POST['ipprot']
-					device.ip = request.POST['ipaddr']
-					device.port = request.POST['port']
-					device.login_name = request.POST['login_name']
-					password_remote = request.POST['password_remote']
-					password_enable = request.POST['password_enable']
-					"""
-					try:
-						socket.inet_pton(socket.AF_INET, ip_recv)
-					except AttributeError: #inet_pton not available, no IPv6 support
-						try:
-							socket.inet_aton(ip_recv)
-						except:
-							messages.error(request, 'Not a valid IPv4 address')
-							return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
-					except:
-						try:
-							socket.inet_pton(socket.AF_INET6, ip_recv)
-						except:
-							messages.error(request, 'Not a valid IPv4 or IPv6 address')
-							return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
-					"""
-					device.save()
-					if password_enable != '':
-						passwordstore.storeEnablePassword(device, password_enable)
-					if password_remote != '':
-						passwordstore.storeRemotePassword(device, password_remote)
-				except (KeyError, ValueError, NameError, UnboundLocalError):
-					messages.error(request, 'Not all fields are set or an other error occured')
+				except:
+					messages.error(request, "No gendev found")
 					return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
-				History.objects.create(user_performed_task=request.user, dev_id=device, date_time=timezone.now(), action_type='Modified device', action='Modified device {0}'.format(device))
-				messages.success(request, 'Database updated')
+				device.os_dev_id = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
+				device.pref_remote_prot = request.POST['pref_remote_prot']
+				device.ip_version = request.POST['ipprot']
+				device.ip = request.POST['ipaddr']
+				device.port = request.POST['port']
+				device.login_name = request.POST['login_name']
+				password_remote = request.POST['password_remote']
+				password_enable = request.POST['password_enable']
+				"""
+				try:
+					socket.inet_pton(socket.AF_INET, ip_recv)
+				except AttributeError: #inet_pton not available, no IPv6 support
+					try:
+						socket.inet_aton(ip_recv)
+					except:
+						messages.error(request, 'Not a valid IPv4 address')
+						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+				except:
+					try:
+						socket.inet_pton(socket.AF_INET6, ip_recv)
+					except:
+						messages.error(request, 'Not a valid IPv4 or IPv6 address')
+						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+				"""
+				device.save()
+				if password_enable != '':
+					passwordstore.storeEnablePassword(device, password_enable)
+				if password_remote != '':
+					passwordstore.storeRemotePassword(device, password_remote)
+			except (KeyError, ValueError, NameError, UnboundLocalError):
+				messages.error(request, 'Not all fields are set or an other error occured')
 				return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
-			else:
-				return render(request, 'nms/devices_modify.html', {'device': device, 'dev_type_view': dev_type_view, 'vendor_view': vendor_view, 'dev_model_view': dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev, 'request':request})
+			History.objects.create(user_performed_task=request.user, dev_id=device, date_time=timezone.now(), action_type='Modified device', action='Modified device {0}'.format(device))
+			messages.success(request, 'Database updated')
+			return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
 		else:
-			messages.error(request, "You don't have the right permissions")
-			return HttpResponseRedirect(reverse('nms:devices'))
-	except:
+			return render(request, 'nms/devices_modify.html', {'device': device, 'dev_type_view': dev_type_view, 'vendor_view': vendor_view, 'dev_model_view': dev_model_view, 'os_view': os_view, 'gen_dev': gen_dev, 'request':request})
+	else:
+		messages.error(request, "You don't have the right permissions")
 		return HttpResponseRedirect(reverse('nms:devices'))
 
 @login_required
