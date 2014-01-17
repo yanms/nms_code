@@ -1099,9 +1099,12 @@ def manage_gendev(request):
 			if p['qtype'] == 'add_gendev':
 				if 'dev_type' in p and 'vendor' in p and 'model' in p and 'xml_files' in p:
 					try:
-						Gen_dev(dev_type_id_id=int(p['dev_type']), vendor_id_id=int(p['vendor']), model_id_id=int(p['model']), file_location_id_id=int(p['xml_files'])).save()
-						History.objects.create(action_type='Gendev: add', action='Added gendev', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if p['dev_type'] == '' and p['vendor'] == '' and p['model'] == '' and p['xml_files'] == '':
+							raise
+						else:
+							Gen_dev(dev_type_id_id=int(p['dev_type']), vendor_id_id=int(p['vendor']), model_id_id=int(p['model']), file_location_id_id=int(p['xml_files'])).save()
+							History.objects.create(action_type='Gendev: add', action='Added gendev', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding device template')
 			elif p['qtype'] == 'del_gendev':
@@ -1118,9 +1121,12 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_devtype':
 				if 'name' in p:
 					try:
-						Dev_type(dev_type_name=p['name']).save()
-						History.objects.create(action_type='Gendev: add', action='Added gendev device type', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if p['name'] == '':
+							raise
+						else:
+							Dev_type(dev_type_name=p['name']).save()
+							History.objects.create(action_type='Gendev: add', action='Added gendev device type', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding device type')
 			elif p['qtype'] == 'del_devtype':
