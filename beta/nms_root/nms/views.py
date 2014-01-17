@@ -1147,7 +1147,6 @@ def manage_gendev(request):
 						if ['name'] == '':
 							raise
 						else:
-								
 							Vendor(vendor_name=p['name']).save()
 							History.objects.create(action_type='Gendev: add', action='Added gendev vendor', user_performed_task=request.user, date_time=timezone.now())
 							messages.success(request, 'Database updated')
@@ -1167,7 +1166,7 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_model':
 				if 'name' in p:
 					try:
-						if ['name'] == '':
+						if p['name'] == '':
 							raise
 						else:
 							Dev_model(model_name=p['name'], version=p['version']).save()
@@ -1189,7 +1188,7 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_xml':
 				if 'name' in p:
 					try:
-						if ['name'] == '':
+						if p['name'] == '':
 							raise
 						else:
 							file_data = request.FILES['file']
@@ -1234,7 +1233,7 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_os_type':
 				if 'name' in p:
 					try:
-						if ['name'] == '':
+						if p['name'] == '':
 							raise
 						else:
 							OS_type(type=p['name']).save()
@@ -1256,7 +1255,7 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_os':
 				if 'vendor_id' in p and 'os_type_id' in p:
 					try:
-						if ['vendor_id'] == '' and p['os_type_id'] == '':
+						if p['vendor_id'] == '' and p['os_type_id'] == '':
 							raise
 							else:
 							os = OS()
