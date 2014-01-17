@@ -573,8 +573,11 @@ def register(request):
 		last_name = request.POST['last_name']
 		email = request.POST['email']
 		check_username = User.objects.filter(username=username).exists()
+		if username == '':
+			messages.error(request, 'Please enter a username.')
+			return HttpResponseRedirect(reverse('nms:register'))
 		if not check_username:
-			if password == password_check:
+			if password == password_check and password != '':
 				user = User.objects.create_user(username=username, password=password)
 				user.is_active = False
 				user.first_name = first_name
