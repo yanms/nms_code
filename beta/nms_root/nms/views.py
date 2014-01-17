@@ -1144,7 +1144,7 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_vendor':
 				if 'name' in p:
 					try:
-						if ['name'] == '':
+						if p['name'] == '':
 							raise
 						else:
 							Vendor(vendor_name=p['name']).save()
