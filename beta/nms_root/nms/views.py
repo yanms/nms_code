@@ -1420,7 +1420,7 @@ def change_gendev_handler(request, gendev_id):
 		elif p['qtype'] == 'change_os_dev':
 			try:
 				os_dev = OS_dev.objects.get(pk=gendev_id)
-				os_dev.os_id = OS_dev.objects.get(pk=p['os_id'])
+				os_dev.os_id = OS.objects.get(pk=p['os_id'])
 				os_dev.gen_dev_id = Gen_dev.objects.get(pk=p['gen_dev_id'])
 				os_dev.save()
 				messages.success(request, 'Database successfully updated')
