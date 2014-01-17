@@ -699,7 +699,7 @@ def device_add(request):
 					try:
 						socket.inet_pton(socket.AF_INET6, ip_recv)
 					except:
-						messages.error(requets, 'Not a valid IPv4 or IPv6 address')
+						messages.error(request, 'Not a valid IPv4 or IPv6 address')
 						return HttpResponseRedirect(reverse('nms:device_add'))
 				device = Devices(gen_dev_id=gen_dev, os_dev_id=os, ip=ip_recv, pref_remote_prot=pref_remote_prot, 
 				ip_version = ipprot, login_name = login_name, password_enable='', password_remote='', port=port)
@@ -710,9 +710,8 @@ def device_add(request):
 					dev_groups = request.POST['dev_groups']
 					group_dev_add = get_object_or_404(Group, pk=dev_groups)
 					Dev_group.objects.create(gid=group_dev_add, devid=device)
-			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
+			except (KeyError, ValueError, NameError, UnboundLocalError):
 				messages.error(request, 'Not all fields are set or an other error occured')
-				messages.error(request, str(err))
 				return HttpResponseRedirect(reverse('nms:device_add'))
 			History.objects.create(user_performed_task=request.user, dev_id=device, date_time=timezone.now(), action_type='Created device', action='Created device {0}'.format(device))
 			messages.success(request, 'Database updated')
@@ -789,6 +788,22 @@ def device_modify(request, device_id_request):
 				except:
 					messages.error(request, "No gendev found")
 					return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+
+				try:
+					socket.inet_pton(socket.AF_INET, request.POST['ipaddr'])
+				except AttributeError: #inet_pton not available, no IPv6 support
+					try:
+						socket.inet_aton(request.POST['ipaddr'])
+					except:
+						messages.error(request, 'Not a valid IPv4 address')
+						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+				except:
+					try:
+						socket.inet_pton(socket.AF_INET6, request.POST['ipaddr'])
+					except:
+						messages.error(request, 'Not a valid IPv4 or IPv6 address')
+						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+
 				device.os_dev_id = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
 				device.pref_remote_prot = request.POST['pref_remote_prot']
 				device.ip_version = request.POST['ipprot']
@@ -802,11 +817,8 @@ def device_modify(request, device_id_request):
 					passwordstore.storeEnablePassword(device, password_enable)
 				if password_remote != '':
 					passwordstore.storeRemotePassword(device, password_remote)
-			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
+			except (KeyError, ValueError, NameError, UnboundLocalError):
 				messages.error(request, 'Not all fields are set or an other error occured')
-				messages.error(request, err)
-				print(err)
-				#return HttpResponse(request.POST.items())
 				return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
 			History.objects.create(user_performed_task=request.user, dev_id=device, date_time=timezone.now(), action_type='Modified device', action='Modified device {0}'.format(device))
 			messages.success(request, 'Database updated')
@@ -1129,7 +1141,7 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_model':
 				if 'name' in p:
 					try:
-						Dev_model(model_name=p['name']).save()
+						Dev_model(model_name=p['name'], version=p['version']).save()
 						History.objects.create(action_type='Gendev: add', action='Added gendev model', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
