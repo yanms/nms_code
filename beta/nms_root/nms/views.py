@@ -367,7 +367,7 @@ def acl_handler(request, acl_id):
 						Dev_group.objects.get_or_create(gid=group_obj, devid=device)
 						History.objects.create(action_type = 'ACL: Modified groups where device is listed', dev_id = device, user_performed_task = request.user, action='Currently assigned groups: {0}'.format(group_obj), group_id=group_obj, date_time = timezone.now())
 					messages.success(request, 'Database updated successfully')
-					return HttpResponseRedirect(reverse('nms:acl_groups'))
+					return HttpResponseRedirect(reverse('nms:acl_device'))
 				else:
 					messages.error(request, "You don't have the right permissions")
 					return HttpResponseRedirect(reverse('nms:acl'))	
