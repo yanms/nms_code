@@ -699,11 +699,8 @@ def device_add(request):
 					dev_groups = request.POST['dev_groups']
 					group_dev_add = get_object_or_404(Group, pk=dev_groups)
 					Dev_group.objects.create(gid=group_dev_add, devid=device)
-			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
+			except (KeyError, ValueError, NameError, UnboundLocalError):
 				messages.error(request, 'Not all fields are set or an other error occured')
-				messages.error(request, err)
-				print(err)
-				#return HttpResponse(request.POST.items())
 				return HttpResponseRedirect(reverse('nms:device_add'))
 			
 			History.objects.create(user_performed_task=request.user, dev_id=device, date_time=timezone.now(), action_type='Created device', action='Created device {0}'.format(device))
