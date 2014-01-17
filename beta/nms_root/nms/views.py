@@ -1398,7 +1398,7 @@ def acl_device_history(request, acl_id):
 			
 		
 		
-		return render(request, 'nms/acl_devices_history.html', {'request': request, 'history': history_items})
+		return render(request, 'nms/acl_devices_history.html', {'request': request, 'history': history_items, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 	else:
 		return HttpResponseRedirect(reverse('nms:acl'))
 
