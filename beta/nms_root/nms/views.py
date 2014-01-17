@@ -173,6 +173,9 @@ def acl_user_add_handler(request):
 				if User.objects.filter(username=username).exists():
 					messages.error(request, 'User already exists.')
 					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+				if username == '':
+					messages.error(request, 'Username cannot be empty.')
+					return HttpResponseRedirect(reverse('nms:acl_user_add'))
 				#Check if the two passwords match and are not empty
 				if password == password_check and password != '':
 					#Create the player
