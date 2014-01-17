@@ -796,16 +796,29 @@ def device_modify(request, device_id_request):
 				device.login_name = request.POST['login_name']
 				password_remote = request.POST['password_remote']
 				password_enable = request.POST['password_enable']
+				
+				try:
+					socket.inet_pton(socket.AF_INET, ip_recv)
+				except AttributeError: #inet_pton not available, no IPv6 support
+					try:
+						socket.inet_aton(ip_recv)
+					except:
+						messages.error(request, 'Not a valid IPv4 address')
+						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+				except:
+					try:
+						socket.inet_pton(socket.AF_INET6, ip_recv)
+					except:
+						messages.error(request, 'Not a valid IPv4 or IPv6 address')
+						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+				
 				device.save()
 				if password_enable != '':
 					passwordstore.storeEnablePassword(device, password_enable)
 				if password_remote != '':
 					passwordstore.storeRemotePassword(device, password_remote)
-			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
+			except (KeyError, ValueError, NameError, UnboundLocalError):
 				messages.error(request, 'Not all fields are set or an other error occured')
-				messages.error(request, err)
-				print(err)
-				#return HttpResponse(request.POST.items())
 				return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
 			History.objects.create(user_performed_task=request.user, dev_id=device, date_time=timezone.now(), action_type='Modified device', action='Modified device {0}'.format(device))
 			messages.success(request, 'Database updated')
