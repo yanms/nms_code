@@ -163,7 +163,7 @@ def __addCategory__(e, od, interfaces, privPassword):
 			elif child.get('type') == 'single':
 				__addItemSingle__(child, od['c:' + e.get('name')], privPassword=privPassword)
 
-def removeXmlStruct(device):
+def removeXmlStruct(location):
 	"""Removes an XML structure from the cache
 	
 	Keyword arguments:
@@ -175,7 +175,6 @@ def removeXmlStruct(device):
 	global cacheLock
 	global cache
 	cacheLock.acquire()
-	location = device.gen_dev_id.file_location_id.location
 	if location in cache.keys():
 		del cache[location]
 	cacheLock.release()
