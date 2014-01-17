@@ -829,8 +829,7 @@ def device_modify(request, device_id_request):
 		else:
 			messages.error(request, "You don't have the right permissions")
 			return HttpResponseRedirect(reverse('nms:devices'))
-	except as err:
-		messages.error(request, str(err))
+	except:
 		return HttpResponseRedirect(reverse('nms:devices'))
 
 @login_required
