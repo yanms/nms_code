@@ -788,6 +788,22 @@ def device_modify(request, device_id_request):
 				except:
 					messages.error(request, "No gendev found")
 					return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+
+				try:
+					socket.inet_pton(socket.AF_INET, request.POST['ipaddr'])
+				except AttributeError: #inet_pton not available, no IPv6 support
+					try:
+						socket.inet_aton(request.POST['ipaddr'])
+					except:
+						messages.error(request, 'Not a valid IPv4 address')
+						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+				except:
+					try:
+						socket.inet_pton(socket.AF_INET6, request.POST['ipaddr'])
+					except:
+						messages.error(request, 'Not a valid IPv4 or IPv6 address')
+						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+
 				device.os_dev_id = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
 				device.pref_remote_prot = request.POST['pref_remote_prot']
 				device.ip_version = request.POST['ipprot']
@@ -796,22 +812,6 @@ def device_modify(request, device_id_request):
 				device.login_name = request.POST['login_name']
 				password_remote = request.POST['password_remote']
 				password_enable = request.POST['password_enable']
-				"""
-				try:
-					socket.inet_pton(socket.AF_INET, ip_recv)
-				except AttributeError: #inet_pton not available, no IPv6 support
-					try:
-						socket.inet_aton(ip_recv)
-					except:
-						messages.error(request, 'Not a valid IPv4 address')
-						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
-				except:
-					try:
-						socket.inet_pton(socket.AF_INET6, ip_recv)
-					except:
-						messages.error(request, 'Not a valid IPv4 or IPv6 address')
-						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
-				"""
 				device.save()
 				if password_enable != '':
 					passwordstore.storeEnablePassword(device, password_enable)
