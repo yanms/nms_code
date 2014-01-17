@@ -192,7 +192,7 @@
 	                                            <form action="{% url 'nms:manage_gendev' %}" method="POST">
 	                                                {% csrf_token %}
 	                                                <input type="hidden" name="qtype" value="add_model" />
-	                                                <input type="text" name="name" /><input type="submit" value="Add" />
+	                                                Name: <input type="text" name="name" /> Version: <input type="text" name="version" /><input type="submit" value="Add" />
 	                                            </form>
 												{% endif %}
 	                                            <form action="{% url 'nms:manage_gendev' %}" method="post">
