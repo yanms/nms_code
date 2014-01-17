@@ -18,14 +18,14 @@
 						<div id="tab-1" class="tab">
 							<article>
 								<div class="text-section">
-									<h1>Yet Another Network Management System</h1>
+									<h1>yaNMS</h1>
 									<ul class="states">
 										{% for message in messages %}
 										<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
 										{% endfor %}
 									</ul>
 									<h2>Login</h2>
-									<h3>Welcome to the yaNMS</h3>
+									<h3>Welcome to the yet another Network Management System</h3>
 									<form action="{% url 'nms:session_handler' %}" method="POST">
 										{% csrf_token %}
 										<table border="0">
@@ -57,7 +57,7 @@
 			<div class="push"></div>
 		</div>
 		<footer>
-			Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+			yaNMS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
 		</footer>
 	</body>
 </html>

@@ -257,12 +257,12 @@ def acl_user_manage_handler(request, acl_user):
 					return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,)))
 				else:
 				   messages.error(request, "Passwords are not the same")
-				   return HttpResponseRedirect(reverse('nms:acl_user_add')) 
+				   return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,))) 
 			except KeyError:
 				messages.error(request, "Not all fields are set")
-				return HttpResponseRedirect(reverse('nms:acl_user_add'))
+				return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,))) 
 		messages.error(request, "Invalid method")
-		return HttpResponseRedirect(reverse('nms:acl_user_add'))
+		return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,))) 
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
 		return HttpResponseRedirect(reverse('nms:acl'))
@@ -367,7 +367,7 @@ def acl_handler(request, acl_id):
 						Dev_group.objects.get_or_create(gid=group_obj, devid=device)
 						History.objects.create(action_type = 'ACL: Modified groups where device is listed', dev_id = device, user_performed_task = request.user, action='Currently assigned groups: {0}'.format(group_obj), group_id=group_obj, date_time = timezone.now())
 					messages.success(request, 'Database updated successfully')
-					return HttpResponseRedirect(reverse('nms:acl_groups'))
+					return HttpResponseRedirect(reverse('nms:acl_device'))
 				else:
 					messages.error(request, "You don't have the right permissions")
 					return HttpResponseRedirect(reverse('nms:acl'))	
@@ -573,8 +573,11 @@ def register(request):
 		last_name = request.POST['last_name']
 		email = request.POST['email']
 		check_username = User.objects.filter(username=username).exists()
+		if username == '':
+			messages.error(request, 'Please enter a username.')
+			return HttpResponseRedirect(reverse('nms:register'))
 		if not check_username:
-			if password == password_check:
+			if password == password_check and password != '':
 				user = User.objects.create_user(username=username, password=password)
 				user.is_active = False
 				user.first_name = first_name
