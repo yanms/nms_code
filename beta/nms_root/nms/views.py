@@ -1141,7 +1141,7 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_model':
 				if 'name' in p:
 					try:
-						Dev_model(model_name=p['name'], version=['version']).save()
+						Dev_model(model_name=p['name'], version=p['version']).save()
 						History.objects.create(action_type='Gendev: add', action='Added gendev model', user_performed_task=request.user, date_time=timezone.now())
 						messages.success(request, 'Database updated')
 					except:
