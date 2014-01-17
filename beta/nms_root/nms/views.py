@@ -729,8 +729,7 @@ def device_manager(request, device_id_request):
 			commands.removeInterfaces(devices)
 		root = xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location)
 		cmd, parser = xmlparser.getInterfaceQuery(root)
-		interfaces = commands.getInterfaces(cmd, parser, devices, request.user) #Use if the device is online
-		#interfaces = ['FastEthernet0/0', 'FastEthernet0/1'] #Use if no connection to the device is possible for dummy interfaces
+		interfaces = commands.getInterfaces(cmd, parser, devices, request.user)
 		if interfaces == -1:
 			messages.error(request, 'Failed to connect to device')
 			return HttpResponseRedirect(reverse('nms:devices'))
