@@ -74,14 +74,15 @@ def install(request):
 			add_devices = Permission.objects.get(codename='add_devices')
 			delete_devices = Permission.objects.get(codename='delete_devices')
 			add_gen_dev = Permission.objects.get(codename='add_gen_dev')
+			change_gen_dev = Permission.objects.get(codename='change_gen_dev')
 			delete_gen_dev = Permission.objects.get(codename='delete_gen_dev')
-			group.permissions = [add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
+			group.permissions = [add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, change_gen_dev, delete_gen_dev]
 			
 			group, created = Group.objects.get_or_create(name='usr:admin')
 			add_user = Permission.objects.get(codename='add_user')
 			change_user = Permission.objects.get(codename='change_user')
 			delete_user = Permission.objects.get(codename='delete_user')
-			group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
+			group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, change_gen_dev, delete_gen_dev]
 			Settings.objects.create(known_id=1, known_name='install complete', known_boolean=True)
 			Settings.objects.create(known_id=2, known_name='hostname', string=request.POST['hostname'])
 			
@@ -1447,6 +1448,7 @@ def change_gendev_handler(request, gendev_id):
 				dev_model.save()
 				messages.success(request, 'Database successfully updated')
 			except:
+				messages.error(request, traceback.format_exc())
 				messages.error(request, 'Error occured during the request. Can not change model')
 		elif p['qtype'] == 'change_xml':
 			if 'file' in request.FILES:
