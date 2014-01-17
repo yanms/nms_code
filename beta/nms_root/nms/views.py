@@ -673,14 +673,10 @@ def device_add(request):
 					if len(model_id) == 1:
 						gen_dev = Gen_dev.objects.get(model_id=model_id[0], vendor_id=Vendor.objects.get(vendor_name=request.POST['selectVendor']), dev_type_id=Dev_type.objects.get(dev_type_name=request.POST['selectType']))
 					else:
-						messages.error(request, 'test')
-						messages.error(request, list(request.POST.items()))
 						messages.error(request, "Received multiple models, not unique")
 						return HttpResponseRedirect(reverse('nms:device_add'))
 				except:
-					messages.error(request, list(request.POST.items()))
-					messages.error(request, "No gendev found")
-					messages.error(request, traceback.format_exc())
+					messages.error(request, "No device template found")
 					return HttpResponseRedirect(reverse('nms:device_add'))
 				os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
 				pref_remote_prot = request.POST['pref_remote_prot']
