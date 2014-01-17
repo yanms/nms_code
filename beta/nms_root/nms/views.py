@@ -1427,6 +1427,7 @@ def change_gendev_handler(request, gendev_id):
 				os_dev.save()
 				messages.success(request, 'Database successfully updated')
 			except:
+				messages.error(request, traceback.format_exc())
 				messages.error(request, 'Error occured during the request. Can not change OS device relationship')
 		elif p['qtype'] == 'change_gendev':
 			try:
