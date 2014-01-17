@@ -14,135 +14,136 @@
 				<div class="c1">
 					<div class="controls">
 						<nav class="links">
-						{% include "_navup.html" %}
+							{% include "_navup.html" %}
 						</nav>
 						{% include "_navuser.html" %}
-				 </div>
-				<div class="tabs">
-					<div id="tab-8" class="tab">
-						<article>
-							<div class="text-section">
-								<h1>Dashboard</h1>
-								<h2>ACL Manage Group: <strong>{{ group }}</strong></h2>
-								<ul class="states">
-									{% for message in messages %}
-									<li class="{{message.tags}}">{{ message.tags.title }} : {{ message }}</li>
-									{% endfor %}
-								</ul>
-								<form name="devices" action="{% url 'nms:acl_handler' group.id %}" method="POST">
-								{% csrf_token %}
-								{% if dev_check %}
-									<h2>Devices</h2>
-									{% for iter in devices %}
-									{% if iter in checked %}
-									<input type="checkbox" name="devices" value="{{ iter.dev_id }}" checked/> {{ iter }}<br />
+				 	</div>
+					<div class="tabs">
+						<div id="tab-8" class="tab">
+							<article>
+								<div class="text-section">
+									<h1>Dashboard</h1>
+									<h2>ACL Manage Group: <strong>{{ group }}</strong></h2>
+									<ul class="states">
+										{% for message in messages %}
+										<li class="{{message.tags}}">{{ message.tags.title }} : {{ message }}</li>
+										{% endfor %}
+									</ul>
+									<form name="devices" action="{% url 'nms:acl_handler' group.id %}" method="POST">
+									{% csrf_token %}
+									{% if dev_check %}
+										<h2>Devices</h2>
+										{% for iter in devices %}
+										{% if iter in checked %}
+										<input type="checkbox" name="devices" value="{{ iter.dev_id }}" checked/> {{ iter }}<br />
+										{% else %}
+										<input type="checkbox" name="devices" value="{{ iter.dev_id }}" /> {{ iter }}<br />
+										{%endif %}
+										{% endfor %}
+										<h2>Device Group Rights</h2>
+										<input type="checkbox" name="rights" value="list" {{ list_check }}/>List Devices<br />
+										<input type="checkbox" name="rights" value="manage" {{ manage_check }}/>Manage Devices<br />
+										<input type="checkbox" name="rights" value="change" {{ change_check }} />Change Devices<br />
+										<br/>
+										<h2>INHERIT OPTIONS</h2>
+										<table class="TFtable">
+											<tr>
+												<td></td>
+												<td><strong>Users in Group</strong></td>
+											</tr>
+											{% for item in groups_dev %}
+											{% if item.id == group.id %}
+											{% else %}
+											<tr>
+												<td><input type="checkbox" name="groups" value="{{ item.id }}" {{ group_checked }} />{{ item }}</td>
+												<td>{% for iter in item.user_set.all %}{{ iter }}<br />{% endfor %}</td>
+											</tr>
+											{% endif %}
+											{% endfor %}
+										</table>
+										<br />
+										<h2>INDIVIDUAL USERS</h2>
+										<table class="TFtable">
+											<tr>
+												<td>User</td>
+												<td>Added to group?</td>
+											</tr>
+											{% for item in users %}
+											{% if item in group.user_set.all %}
+											<tr>
+												<td><input type="checkbox" name="users" value="{{ item.id }}" checked> {{ item }}</td>
+												<td><img src="{{ STATIC_URL }}images/addButton.png" width="16px" /></td>
+											</tr>
+											{% else %}
+											<tr>
+												<td><input type="checkbox" name="users" value="{{ item.id }}"> {{ item }}</td>
+												<td><img src="{{ STATIC_URL }}images/deleteButton.png" width="16px" /></td>
+											</tr>
+											{% endif %}
+											{% endfor %}
+										</table>
+										<input type="hidden" value="ch_per_dev_group" name="task" />
 									{% else %}
-									<input type="checkbox" name="devices" value="{{ iter.dev_id }}" /> {{ iter }}<br />
-									{%endif %}
-									{% endfor %}
-									<h2>Device Group Rights</h2>
-									<input type="checkbox" name="rights" value="list" {{ list_check }}/>List Devices<br />
-									<input type="checkbox" name="rights" value="manage" {{ manage_check }}/>Manage Devices<br />
-									<input type="checkbox" name="rights" value="change" {{ change_check }} />Change Devices<br />
-									<br/>
-									<h2>INHERIT OPTIONS</h2>
-									<table class="TFtable">
-										<tr>
-											<td></td>
-											<td><strong>Users in Group</strong></td>
-										</tr>
-										{% for item in groups_dev %}
-										{% if item.id == group.id %}
-										{% else %}
-										<tr>
-											<td><input type="checkbox" name="groups" value="{{ item.id }}" {{ group_checked }} />{{ item }}</td>
-											<td>{% for iter in item.user_set.all %}{{ iter }}<br />{% endfor %}</td>
-										</tr>
-										{% endif %}
-										{% endfor %}
-									</table>
+										<h2>User Rights</h2>
+										<input type="checkbox" name="rights" value="add_user" {{ add_user }}/>Add user<br />
+										<input type="checkbox" name="rights" value="change_user" {{ change_user }}/>Change user<br />
+										<input type="checkbox" name="rights" value="delete_user" {{ delete_user }}/>Delete user<br />
+										<input type="checkbox" name="rights" value="list_user" {{ list_user }}/>List user<br />
+										<h2>Group Rights</h2>
+										<input type="checkbox" name="rights" value="add_group" {{ add_group }}/>Add group<br />
+										<input type="checkbox" name="rights" value="change_group" {{ change_group }}/>Change group<br />
+										<input type="checkbox" name="rights" value="delete_group" {{ delete_group }}/>Delete group<br />
+										<input type="checkbox" name="rights" value="list_group" {{ list_group }}/>List group and can add user/device to group<br />
+										<h2>Device Rights</h2>
+										<input type="checkbox" name="rights" value="add_devices" {{ add_devices }}/>Add device<br />
+										<input type="checkbox" name="rights" value="delete_devices" {{ delete_devices }}/>Delete device<br />
+										<h2>Generic Device Rights</h2>
+										<input type="checkbox" name="rights" value="add_gen_dev" {{ add_gen_dev }}/>Add generic device<br />
+										<input type="checkbox" name="rights" value="change_gen_dev" {{ change_gen_dev }}/>Change generic device<br />
+										<input type="checkbox" name="rights" value="delete_gen_dev" {{ delete_gen_dev }}/>Delete generic device<br />
+										<h2>INHERIT OPTIONS</h2>
+										<table class="TFtable">
+											<tr>
+												<td></td>
+												<td><strong>Users in Group</strong></td>
+											</tr>
+											{% for item in groups_usr %}
+											{% if item.id == group.id %}
+											{% else %}
+											<tr>
+												<td><input type="checkbox" name="groups" value="{{ item.id }}" {{ usr_checked }} />{{ item }}</td>
+												<td>{% for iter in item.user_set.all %}{{ iter }}<br />{% endfor %}</td>
+											</tr>
+											{% endif %}
+											{% endfor %}
+										</table>
+										<br />
+										<h2>INDIVIDUAL USERS</h2>
+										<table class="TFtable">
+											<tr>
+												<td>User</td>
+												<td>Added to group?</td>
+											</tr>
+											{% for item in users %}
+											{% if item in group.user_set.all %}
+											<tr>
+												<td><input type="checkbox" name="users" value="{{ item.id }}" checked> {{ item }}</td>
+												<td><img src="{{ STATIC_URL }}images/addButton.png" width="16px" /></td>
+											</tr>
+											{% else %}
+											<tr>
+												<td><input type="checkbox" name="users" value="{{ item.id }}"> {{ item }}</td>
+												<td><img src="{{ STATIC_URL }}images/deleteButton.png" width="16px" /></td>
+											</tr>
+											{% endif %}
+											{% endfor %}
+										</table>
+										<input type="hidden" value="ch_per_usr_group" name="task" />								
+									{% endif %}
+										<input type="submit" value="Update" id="update" />
+									</form>
 									<br />
-									<h2>INDIVIDUAL USERS</h2>
-									<table class="TFtable">
-										<tr>
-											<td>User</td>
-											<td>Added to group?</td>
-										</tr>
-										{% for item in users %}
-										{% if item in group.user_set.all %}
-										<tr>
-											<td><input type="checkbox" name="users" value="{{ item.id }}" checked> {{ item }}</td>
-											<td><img src="{{ STATIC_URL }}images/addButton.png" width="16px" /></td>
-										</tr>
-										{% else %}
-										<tr>
-											<td><input type="checkbox" name="users" value="{{ item.id }}"> {{ item }}</td>
-											<td><img src="{{ STATIC_URL }}images/deleteButton.png" width="16px" /></td>
-										</tr>
-										{% endif %}
-										{% endfor %}
-									</table>
-									<input type="hidden" value="ch_per_dev_group" name="task" />
-								{% else %}
-									<h2>User Rights</h2>
-									<input type="checkbox" name="rights" value="add_user" {{ add_user }}/>Add user<br />
-									<input type="checkbox" name="rights" value="change_user" {{ change_user }}/>Change user<br />
-									<input type="checkbox" name="rights" value="delete_user" {{ delete_user }}/>Delete user<br />
-									<input type="checkbox" name="rights" value="list_user" {{ list_user }}/>List user<br />
-									<h2>Group Rights</h2>
-									<input type="checkbox" name="rights" value="add_group" {{ add_group }}/>Add group<br />
-									<input type="checkbox" name="rights" value="change_group" {{ change_group }}/>Change group<br />
-									<input type="checkbox" name="rights" value="delete_group" {{ delete_group }}/>Delete group<br />
-									<input type="checkbox" name="rights" value="list_group" {{ list_group }}/>List group and can add user/device to group<br />
-									<h2>Device Rights</h2>
-									<input type="checkbox" name="rights" value="add_devices" {{ add_devices }}/>Add device<br />
-									<input type="checkbox" name="rights" value="delete_devices" {{ delete_devices }}/>Delete device<br />
-									<h2>Generic Device Rights</h2>
-									<input type="checkbox" name="rights" value="add_gen_dev" {{ add_gen_dev }}/>Add generic device<br />
-									<input type="checkbox" name="rights" value="change_gen_dev" {{ change_gen_dev }}/>Change generic device<br />
-									<input type="checkbox" name="rights" value="delete_gen_dev" {{ delete_gen_dev }}/>Delete generic device<br />
-									<h2>INHERIT OPTIONS</h2>
-									<table class="TFtable">
-										<tr>
-											<td></td>
-											<td><strong>Users in Group</strong></td>
-										</tr>
-										{% for item in groups_usr %}
-										{% if item.id == group.id %}
-										{% else %}
-										<tr>
-											<td><input type="checkbox" name="groups" value="{{ item.id }}" {{ usr_checked }} />{{ item }}</td>
-											<td>{% for iter in item.user_set.all %}{{ iter }}<br />{% endfor %}</td>
-										</tr>
-										{% endif %}
-										{% endfor %}
-									</table>
-									<br />
-									<h2>INDIVIDUAL USERS</h2>
-									<table class="TFtable">
-										<tr>
-											<td>User</td>
-											<td>Added to group?</td>
-										</tr>
-										{% for item in users %}
-										{% if item in group.user_set.all %}
-										<tr>
-											<td><input type="checkbox" name="users" value="{{ item.id }}" checked> {{ item }}</td>
-											<td><img src="{{ STATIC_URL }}images/addButton.png" width="16px" /></td>
-										</tr>
-										{% else %}
-										<tr>
-											<td><input type="checkbox" name="users" value="{{ item.id }}"> {{ item }}</td>
-											<td><img src="{{ STATIC_URL }}images/deleteButton.png" width="16px" /></td>
-										</tr>
-										{% endif %}
-										{% endfor %}
-									</table>
-									<input type="hidden" value="ch_per_usr_group" name="task" />								
-								{% endif %}
-									<input type="submit" value="Update" id="update" />
-								</form>
-								<br />
+								</div>
 							</div>
 						</article>
 					</div>
@@ -156,7 +157,7 @@
 			<div class="push"></div>
 		</div>
 		<footer>
-			Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+			yaNMS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
 		</footer>
 	</body>
 </html>
