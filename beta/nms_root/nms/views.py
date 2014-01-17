@@ -1425,6 +1425,7 @@ def change_gendev_handler(request, gendev_id):
 				gen_dev.save()
 				messages.success(request, 'Database successfully updated')
 			except:
+				messages.error(request, traceback.format_exc())
 				messages.error(request, 'Error occured during the request. Can not change generic device')
 		elif p['qtype'] == 'change_dev_type':
 			try:
