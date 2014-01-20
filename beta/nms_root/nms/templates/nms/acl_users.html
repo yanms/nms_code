@@ -1,95 +1,95 @@
 <!DOCTYPE html>
-<head>
-	<meta charset="utf-8">
-	<title>Network Management System - AdminPanel: ACL</title>
-	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
-	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
-	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
-</head>
-<body>
-	<div id="wrapper">
-		<div id="content">
-			<div class="c1">
-				<div class="controls">
-					<nav class="links">
-						{% include "_navup.html" %}
-					</nav>
-					{% include "_navuser.html" %}
-				</div>
-				<div class="tabs">
-					<div id="tab-8" class="tab">
-						<article>
-							<div class="text-section">
-								<h1>Dashboard</h1>
-								<ul class="states">
-									{% for message in messages %}
-									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
-									{% endfor %}
-								</ul>
-								{% if perms.auth.list_user %}
-								<h2>Account Control List: Users: </h2>
-								<form name="devices" action="{% url 'nms:acl_groups_handler' %}" method="POST">
-									{% csrf_token %}
-								<table class="TFtable">
-									<tr>
-										<td><b>User</b></td>
-										<td><b>Is superuser?</b></td>
-										<td>Change user</td>
-										<td>History</td>
-										<td>Delete</td>
-									</tr>
-								{% for user in user_list %}
-									<tr>
-										<td> {{ user }} </td>
-										<td> {{ user.is_superuser }}</td>
-										{% if perms.auth.change_user %}
-										{% if user.is_superuser %}
-										<td><img src="{{ STATIC_URL }}images/lockedButton.png" width="20px" /></td>
-										{% else %}
-										<td><a href="{% url 'nms:acl_user_manage' user.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a> </td>
+	<head>
+		<meta charset="utf-8">
+		<title>yaNMS - ACL Users</title>
+		<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+		<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="content">
+				<div class="c1">
+					<div class="controls">
+						<nav class="links">
+							{% include "_navup.html" %}
+						</nav>
+						{% include "_navuser.html" %}
+					</div>
+					<div class="tabs">
+						<div id="tab-8" class="tab">
+							<article>
+								<div class="text-section">
+									<h1>Dashboard</h1>
+									<ul class="states">
+										{% for message in messages %}
+										<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+										{% endfor %}
+									</ul>
+									{% if perms.auth.list_user %}
+									<h2>Account Control List: Users: </h2>
+									<form name="devices" action="{% url 'nms:acl_groups_handler' %}" method="POST">
+										{% csrf_token %}
+									<table class="TFtable">
+										<tr>
+											<td><b>User</b></td>
+											<td><b>Is superuser?</b></td>
+											<td>Change user</td>
+											<td>History</td>
+											<td>Delete</td>
+										</tr>
+									{% for user in user_list %}
+										<tr>
+											<td> {{ user }} </td>
+											<td> {{ user.is_superuser }}</td>
+											{% if perms.auth.change_user %}
+											{% if user.is_superuser %}
+											<td><img src="{{ STATIC_URL }}images/lockedButton.png" width="20px" /></td>
+											{% else %}
+											<td><a href="{% url 'nms:acl_user_manage' user.id %}"><img src="{{ STATIC_URL }}images/infoButton.png" width="20px" /></a> </td>
 										
-										{% endif %}
-										{% else %}
-										<td>N/A</td>
-										{% endif %}
-										{% if perms.auth.list_user %}
-										<td><a href="{% url 'nms:acl_user_history' user.id %}"><img src="{{ STATIC_URL }}images/historyIcon.png" width="20px"></a></td>
-										{% else %}
-										<td>N/A</td>
-										{% endif %}
-										{% if perms.auth.delete_user %}
-										<td>{% if user.username == 'root' %}<input type="checkbox" disabled />{% else %}<input type="checkbox" name="delete" value="{{ user.id }}" />{% endif %}</td>
-										{% else %}
-										<td>N/A</td>
-										{% endif %}
-									</tr>
-								{% endfor %}
-								</table>
-								<input type="hidden" name="task" value="del_user" />
-								<input type="submit" value="Delete" id="delete" />
+											{% endif %}
+											{% else %}
+											<td>N/A</td>
+											{% endif %}
+											{% if perms.auth.list_user %}
+											<td><a href="{% url 'nms:acl_user_history' user.id %}"><img src="{{ STATIC_URL }}images/historyIcon.png" width="20px"></a></td>
+											{% else %}
+											<td>N/A</td>
+											{% endif %}
+											{% if perms.auth.delete_user %}
+											<td>{% if user.username == 'root' %}<input type="checkbox" disabled />{% else %}<input type="checkbox" name="delete" value="{{ user.id }}" />{% endif %}</td>
+											{% else %}
+											<td>N/A</td>
+											{% endif %}
+										</tr>
+									{% endfor %}
+									</table>
+									<input type="hidden" name="task" value="del_user" />
+									<input type="submit" value="Delete" id="delete" />
+									{% endif %}
+								</form>
+								{% if perms.auth.add_user %}
+								<h2>Add user</h2>
+								<a href="{%url 'nms:acl_user_add' %}">Add User</a>
 								{% endif %}
-							</form>
-							{% if perms.auth.add_user %}
-							<h2>Add user</h2>
-							<a href="{%url 'nms:acl_user_add' %}">Add User</a>
-							{% endif %}
-							</div>
-						</article>
+								</div>
+							</article>
+						</div>
 					</div>
 				</div>
 			</div>
+			<aside id="sidebar">
+				<img src="{{ STATIC_URL }}images/yanms.png"/>
+				{% include "_nav.html" %}
+				<span class="shadow"></span>
+			</aside>
+			<div class="push"></div>
 		</div>
-		<aside id="sidebar">
-			<img src="{{ STATIC_URL }}images/NMS.png"/>
-			{% include "_nav.html" %}
-			<span class="shadow"></span>
-		</aside>
-		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
-	</div> <!-- Wrapper -->
-	<footer>
-		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
-	</footer>
-</body>
+		<footer>
+			yaNMS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+		</footer>
+	</body>
 </html>

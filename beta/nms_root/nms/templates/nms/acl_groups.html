@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 	<meta charset="utf-8">
-	<title>Network Management System - AdminPanel: ACL</title>
+	<title>yaNMS - ACL Groups</title>
 	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
@@ -32,7 +32,7 @@
 								<table border="0" width="100%">
 									<tr>
 										<td width="50%" style="vertical-align: top;">
-											<h2>Device Groups: </h2>
+											<h2>ACL Device Groups: </h2>
 											<form action="{% url 'nms:acl_groups_handler' %}" method ="POST">
 											{% csrf_token %}
 											<table border="0">
@@ -49,8 +49,8 @@
 											<table class="TFtable">
 												<tr>
 													<td><b>Group</b></td>
-													<td>Permissions</td>
-													<td>Change Group</td>
+													<td><b>Permissions</b></td>
+													<td><b>Change Group</b></td>
 													<td><b>Delete</b></td>
 												</tr>
 												{% for group in dev_groups %}
@@ -74,7 +74,7 @@
 										<td width="50%" style="vertical-align: top;">
 											{% if perms.auth.add_group %}
 											{% if user_perm %}
-											<h2>User Groups:</h2>
+											<h2>ACL User Groups:</h2>
 											<form action="{% url 'nms:acl_groups_handler' %}" method ="POST">
 											{% csrf_token %}
 											<table border="0">
@@ -93,8 +93,8 @@
 												<tr>
 													<td><b>Group</b></td>
 													<td><b>Permissions</b></td>
-													<td>Change Group</td>
-													<td>Delete</td>
+													<td><b>Change Group</b></td>
+													<td><b>Delete</b></td>
 												</tr>
 												<tr>		
 												{% for group in usr_groups %}
@@ -126,14 +126,14 @@
 			</div>
 		</div>
 		<aside id="sidebar">
-			<img src="{{ STATIC_URL }}images/NMS.png"/>
+			<img src="{{ STATIC_URL }}images/yanms.png"/>
 			{% include "_nav.html" %}
 			<span class="shadow"></span>
 		</aside>
-		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
-	</div> <!-- Wrapper -->
+		<div class="push"></div>
+	</div>
 	<footer>
-		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+		yaNMS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
 	</footer>
 </body>
 </html>

@@ -1,324 +1,325 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Network Management System - AdminPanel: Devices</title>
-    <link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
-    <!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
-</head>
-<body>
-    <div id="wrapper">
-        <div id="content">
-            <div class="c1">
-                <div class="controls">
-                    <nav class="links">
-						{% include "_navupdev.html" %}
-                    </nav>
-                    {% include "_navuser.html" %}
-                </div>
-                <div class="tabs">
-                    <div id="tab-7" class="tab">
-                        <article>
-                            <div class="text-section">
-                                <h1>Dashboard</h1>
-                                <ul class="states">
-                                    {% for message in messages %}
-                                    <li class="{{ message.tags }}">{{ message.tags.title }} : {{ message }}</li>
-                                    {% endfor %}
-                                </ul>
-                                <h2>Change Device Templates</h2>
-                                <table border="0" width="100%">
-                                    <tr>
-										{% if qtype == 'change_gendev' %}
-										{% if perms.nms.add_gen_dev %}
-                                        <td width="50%">
+	<head>
+	    <meta charset="utf-8">
+	    <title>yaNMS - Change GenDev</title>
+	    <link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+	    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	    <script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+	    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+	    <!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+	</head>
+	<body>
+	    <div id="wrapper">
+	        <div id="content">
+	            <div class="c1">
+	                <div class="controls">
+	                    <nav class="links">
+							{% include "_navupdev.html" %}
+	                    </nav>
+	                    {% include "_navuser.html" %}
+	                </div>
+	                <div class="tabs">
+	                    <div id="tab-7" class="tab">
+	                        <article>
+	                            <div class="text-section">
+	                                <h1>Dashboard</h1>
+	                                <ul class="states">
+	                                    {% for message in messages %}
+	                                    <li class="{{ message.tags }}">{{ message.tags.title }} : {{ message }}</li>
+	                                    {% endfor %}
+	                                </ul>
+	                                <h2>Change Device Templates</h2>
+	                                <table border="0" width="100%">
+	                                    <tr>
+											{% if qtype == 'change_gendev' %}
+											{% if perms.nms.add_gen_dev %}
+	                                        <td width="50%">
 											
-                                            <form action="{% url 'nms:change_gendev_handler' object.gen_dev_id %}" method="POST">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="change_gendev" />
-                                                <table border="0">
-                                                    <tr>
-                                                        <td>Type:</td>
-                                                        <td>
-                                                            <select id="selectType" name="dev_type">
-                                                                {% for record in dev_type %}
-                                                                <option value="{{ record.dev_type_id }}">{{ record }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Vendor:</td>
-                                                        <td>
-                                                            <select id="selectVendor" name="vendor">
-                                                                {% for record in vendors %}
-                                                                <option value="{{ record.vendor_id }}">{{ record }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Model:</td>
-                                                        <td>
-                                                            <select id="selectModel" name="model">
-                                                                {% for record in models %}
-                                                                <option value="{{ record.model_id }}">{{ record }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>XML:</td>
-                                                        <td>
-                                                            <select id="selectXMLFile" name="xml_files">
-                                                                {% for record in xml %}
-                                                                <option value="{{ record.file_location_id }}">{{ record.location }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="submit" value="Change Template" /></td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                        </td>
-										{% endif %}
-										{% endif %}
-                                    </tr>
-                                </table>
-                                <table border="0" width="100%">
-                                    <tr>
-										{% if qtype == 'change_dev_type' %}
-                                        <td width="50%">
-                                            <h3>Types</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' object.dev_type_id %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="change_dev_type" /><br />
-                                                <table class="TFtable" width="70%">
-                                                    <tr>
-                                                        <td width="90%"><b>Name</b></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="text" value="{{ object.dev_type_name }}" name="dev_type_name" /></td>
-                                                    </tr>
-                                                </table>
-                                                <table border="0" width="70%">
-                                                    <tr>
-                                                        <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                        </td>
-										{% endif %}
-										{% if qtype == 'change_vendor' %}
-                                        <td width="50%">
-                                            <h3>Vendors</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' object.vendor_id %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="change_vendor" /><br />
-                                                <table class="TFtable" width="70%">
-                                                    <tr>
-                                                        <td width="100%"><b>Name</b></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="type=" value="{{ object }}" name="vendor_name" /></td>
-                                                    </tr>
-                                                </table>
-                                                <table border="0" width="70%">
-                                                    <tr>
-                                                        <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                        </td>
-										{% endif %}
-                                    </tr>
-                                    <tr>
-										{% if qtype == 'change_model' %}
-                                        <td width="50%">
-                                            <h3>Models</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' object.model_id %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="change_model" /><br />
-                                                <table class="TFtable" width="70%">
-                                                    <tr>
-                                                        <td width="100%"><b>Name</b></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="text" value="{{ object.model_name }}" name="model_name" /></td>
-                                                    </tr>
-                                                </table>
-                                                <table border="0" width="70%">
-                                                    <tr>
-                                                        <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                        </td>
-										{% endif %}
-										{% if qtype == 'change_xml' %}
-                                        <td width="50%">
-                                            <h3>XML Files</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' object.file_location_id %}" method="post"  enctype="multipart/form-data">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="change_xml" /><br />
-                                                <table class="TFtable" width="70%">
-                                                    <tr>
-                                                        <td width="100%"><b>Name</b></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Name XML file: <input type="text" name="name" value="{{ file_name }}"/><br />
-															<input type="file" name="file" id="file">
-															{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                        </td>
-										{% endif %}
-                                    </tr>
-                                </table>
-                                <table border="0" width="100%">
-                                    <tr>
-										{% if qtype == 'change_os_dev' %}
-                                        <td width="50%">
-											<h3>OS - GenDev</h3>
+	                                            <form action="{% url 'nms:change_gendev_handler' object.gen_dev_id %}" method="POST">
+	                                                {% csrf_token %}
+	                                                <input type="hidden" name="qtype" value="change_gendev" />
+	                                                <table border="0">
+	                                                    <tr>
+	                                                        <td>Type:</td>
+	                                                        <td>
+	                                                            <select id="selectType" name="dev_type_id">
+	                                                                {% for record in dev_type %}
+	                                                                <option value="{{ record.dev_type_id }}">{{ record }}</option>
+	                                                                {% endfor %}
+	                                                            </select>
+	                                                        </td>
+	                                                    </tr>
+	                                                    <tr>
+	                                                        <td>Vendor:</td>
+	                                                        <td>
+	                                                            <select id="selectVendor" name="vendor_id">
+	                                                                {% for record in vendors %}
+	                                                                <option value="{{ record.vendor_id }}">{{ record }}</option>
+	                                                                {% endfor %}
+	                                                            </select>
+	                                                        </td>
+	                                                    </tr>
+	                                                    <tr>
+	                                                        <td>Model:</td>
+	                                                        <td>
+	                                                            <select id="selectModel" name="model_id">
+	                                                                {% for record in models %}
+	                                                                <option value="{{ record.model_id }}">{{ record }}</option>
+	                                                                {% endfor %}
+	                                                            </select>
+	                                                        </td>
+	                                                    </tr>
+	                                                    <tr>
+	                                                        <td>XML:</td>
+	                                                        <td>
+	                                                            <select id="selectXMLFile" name="file_location_id">
+	                                                                {% for record in xml %}
+	                                                                <option value="{{ record.file_location_id }}">{{ record.location }}</option>
+	                                                                {% endfor %}
+	                                                            </select>
+	                                                        </td>
+	                                                    </tr>
+	                                                    <tr>
+	                                                        <td><input type="submit" value="Change Template" /></td>
+	                                                    </tr>
+	                                                </table>
+	                                            </form>
+	                                        </td>
+											{% endif %}
+											{% endif %}
+	                                    </tr>
+	                                </table>
+	                                <table border="0" width="100%">
+	                                    <tr>
+											{% if qtype == 'change_dev_type' %}
+	                                        <td width="50%">
+	                                            <h3>Types</h3>
+	                                            <form action="{% url 'nms:change_gendev_handler' object.dev_type_id %}" method="post">
+	                                                {% csrf_token %}
+	                                                <input type="hidden" name="qtype" value="change_dev_type" /><br />
+	                                                <table class="TFtable" width="70%">
+	                                                    <tr>
+	                                                        <td width="90%"><b>Name</b></td>
+	                                                    </tr>
+	                                                    <tr>
+	                                                        <td><input type="text" value="{{ object.dev_type_name }}" name="dev_type_name" /></td>
+	                                                    </tr>
+	                                                </table>
+	                                                <table border="0" width="70%">
+	                                                    <tr>
+	                                                        <td width="95%"></td>
+	                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
+	                                                    </tr>
+	                                                </table>
+	                                            </form>
+	                                        </td>
+											{% endif %}
+											{% if qtype == 'change_vendor' %}
+	                                        <td width="50%">
+	                                            <h3>Vendors</h3>
+	                                            <form action="{% url 'nms:change_gendev_handler' object.vendor_id %}" method="post">
+	                                                {% csrf_token %}
+	                                                <input type="hidden" name="qtype" value="change_vendor" /><br />
+	                                                <table class="TFtable" width="70%">
+	                                                    <tr>
+	                                                        <td width="100%"><b>Name</b></td>
+	                                                    </tr>
+	                                                    <tr>
+	                                                        <td><input type="type=" value="{{ object }}" name="vendor_name" /></td>
+	                                                    </tr>
+	                                                </table>
+	                                                <table border="0" width="70%">
+	                                                    <tr>
+	                                                        <td width="95%"></td>
+	                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
+	                                                    </tr>
+	                                                </table>
+	                                            </form>
+	                                        </td>
+											{% endif %}
+	                                    </tr>
+	                                    <tr>
+											{% if qtype == 'change_model' %}
+	                                        <td width="50%">
+	                                            <h3>Models</h3>
+	                                            <form action="{% url 'nms:change_gendev_handler' object.model_id %}" method="post">
+	                                                {% csrf_token %}
+	                                                <input type="hidden" name="qtype" value="change_model" /><br />
+	                                                <table class="TFtable" width="70%">
+	                                                    <tr>
+	                                                        <td width="80%"><b>Name</b></td>
+															<td width="20%"><b>Version</b></td>
+	                                                    </tr>
+	                                                    <tr>
+	                                                        <td><input type="text" value="{{ object.model_name }}" name="model_name" /></td>
+															<td><input type="text" value="{{ object.version }}" name="version" /></td>
+	                                                    </tr>
+	                                                </table>
+	                                                <table border="0" width="70%">
+	                                                    <tr>
+	                                                        <td width="95%"></td>
+	                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
+	                                                    </tr>
+	                                                </table>
+	                                            </form>
+	                                        </td>
+											{% endif %}
+											{% if qtype == 'change_xml' %}
+	                                        <td width="50%">
+	                                            <h3>XML Files</h3>
+	                                            <form action="{% url 'nms:change_gendev_handler' object.file_location_id %}" method="post"  enctype="multipart/form-data">
+	                                                {% csrf_token %}
+	                                                <input type="hidden" name="qtype" value="change_xml" /><br />
+	                                                <table class="TFtable" width="70%">
+	                                                    <tr>
+	                                                        <td width="100%"><b>Name</b></td>
+	                                                    </tr>
+	                                                    <tr>
+	                                                        <td>Name XML file: <input type="text" name="name" value="{{ file_name }}"/><br />
+																<input type="file" name="file" id="file">
+																{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
+	                                                    </tr>
+	                                                </table>
+	                                            </form>
+	                                        </td>
+											{% endif %}
+	                                    </tr>
+	                                </table>
+	                                <table border="0" width="100%">
+	                                    <tr>
+											{% if qtype == 'change_os_dev' %}
+	                                        <td width="50%">
+												<h3>OS - GenDev</h3>
 											
-                                            <form action="{% url 'nms:change_gendev_handler' object.os_dev_id %}" method="POST">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="change_os_dev" />
-                                                <table border="0">
-                                                    <tr>
-                                                        <td>Device template:</td>
-                                                        <td>
-                                                            <select id="selectGen_dev" name="gen_dev">
-                                                                {% for record in gen_devs %}
-                                                                <option value="{{ record.gen_dev_id }}">{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>OS:</td>
-                                                        <td>
-                                                            <select id="selectOS" name="os">
-                                                                {% for record in os %}
-                                                                <option value="{{ record.os_id }}">{{ record }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="submit" value="Change OS Template" /></td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                        </td>
-										{% endif %}
-                                    </tr>
-                                    <tr>
-										{% if qtype == 'change_os' %}
-                                        <td width="100%">
-                                            <h3>Change OS</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' object.os_id %}" method="POST">
-                                                {% csrf_token %}
-												<input type="hidden" name="qtype" value="change_os" />
-												<table border="0">
-                                                    <tr>
-                                                        <td>Vendor</td>
-                                                        <td>
-                                                            <select id="vendor_id" name="vendor_id">
-                                                                {% for record in vendors %}
-                                                                <option value="{{ record.vendor_id }}">{{ record }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>OS type</td>
-                                                        <td>
-                                                            <select id="os_type_id" name="os_type_id">
-                                                                {% for record in os_type %}
-                                                                <option value="{{ record.os_type_id }}">{{ record }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-													<tr>
-														<td>Name</td>
-														<td>
-															<input type="text" name="name" value="{{ object.name }}" />
-														</td>
-													</tr>													
-													<tr>
-														<td>Build</td>
-														<td>
-															<input type="text" name="build" value="{{ object.build }}" />
-														</td>
-													</tr>
-													<tr>
-														<td>Short info</td>
-														<td>
-															<input type="text" name="short_info" value="{{ object.short_info }}" />
-														</td>
-													</tr>
-                                                    <tr>
-                                                        <td><input type="submit" value="Change OS Template" /></td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                        </td>
-										{% endif %}
-                                    </tr>
-									<tr>
-										{% if qtype == 'change_os_type' %}
-										<td width="50%">
-											<h3>OS type</h3>
-                                            <form action="{% url 'nms:change_gendev_handler' object.os_type_id %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="qtype" value="change_os_type" /><br />
-                                                <table class="TFtable" width="70%">
-                                                    <tr>
-                                                        <td width="100%"><b>Name</b></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="text" value="{{ object.type }}" name="type" /></td>
-                                                    </tr>
-                                                </table>
-                                                <table border="0" width="70%">
-                                                    <tr>
-                                                        <td width="95%"></td>
-                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
+	                                            <form action="{% url 'nms:change_gendev_handler' object.os_dev_id %}" method="POST">
+	                                                {% csrf_token %}
+	                                                <input type="hidden" name="qtype" value="change_os_dev" />
+	                                                <table border="0">
+	                                                    <tr>
+	                                                        <td>Device template:</td>
+	                                                        <td>
+	                                                            <select id="selectGen_dev" name="gen_dev_id">
+	                                                                {% for record in gen_devs %}
+	                                                                <option value="{{ record.gen_dev_id }}">{{ record.dev_type_id }}: {{ record.vendor_id }} {{ record.model_id }} - {{ record.file_location_id.location }}</option>
+	                                                                {% endfor %}
+	                                                            </select>
+	                                                        </td>
+	                                                    </tr>
+	                                                    <tr>
+	                                                        <td>OS:</td>
+	                                                        <td>
+	                                                            <select id="selectOS" name="os_id">
+	                                                                {% for record in os %}
+	                                                                <option value="{{ record.os_id }}">{{ record }}</option>
+	                                                                {% endfor %}
+	                                                            </select>
+	                                                        </td>
+	                                                    </tr>
+	                                                    <tr>
+	                                                        <td><input type="submit" value="Change OS Template" /></td>
+	                                                    </tr>
+	                                                </table>
+	                                            </form>
+	                                        </td>
+											{% endif %}
+	                                    </tr>
+	                                    <tr>
+											{% if qtype == 'change_os' %}
+	                                        <td width="100%">
+	                                            <h3>Change OS</h3>
+	                                            <form action="{% url 'nms:change_gendev_handler' object.os_id %}" method="POST">
+	                                                {% csrf_token %}
+													<input type="hidden" name="qtype" value="change_os" />
+													<table border="0">
+	                                                    <tr>
+	                                                        <td>Vendor</td>
+	                                                        <td>
+	                                                            <select id="vendor_id" name="vendor_id">
+	                                                                {% for record in vendors %}
+	                                                                <option value="{{ record.vendor_id }}">{{ record }}</option>
+	                                                                {% endfor %}
+	                                                            </select>
+	                                                        </td>
+	                                                    </tr>
+	                                                    <tr>
+	                                                        <td>OS type</td>
+	                                                        <td>
+	                                                            <select id="os_type_id" name="os_type_id">
+	                                                                {% for record in os_type %}
+	                                                                <option value="{{ record.os_type_id }}">{{ record }}</option>
+	                                                                {% endfor %}
+	                                                            </select>
+	                                                        </td>
+	                                                    </tr>
+														<tr>
+															<td>Name</td>
+															<td>
+																<input type="text" name="name" value="{{ object.name }}" />
+															</td>
+														</tr>													
+														<tr>
+															<td>Build</td>
+															<td>
+																<input type="text" name="build" value="{{ object.build }}" />
+															</td>
+														</tr>
+														<tr>
+															<td>Short info</td>
+															<td>
+																<input type="text" name="short_info" value="{{ object.short_info }}" />
+															</td>
+														</tr>
+	                                                    <tr>
+	                                                        <td><input type="submit" value="Change OS Template" /></td>
+	                                                    </tr>
+	                                                </table>
+	                                            </form>
+	                                        </td>
+											{% endif %}
+	                                    </tr>
+										<tr>
+											{% if qtype == 'change_os_type' %}
+											<td width="50%">
+												<h3>OS type</h3>
+	                                            <form action="{% url 'nms:change_gendev_handler' object.os_type_id %}" method="post">
+	                                                {% csrf_token %}
+	                                                <input type="hidden" name="qtype" value="change_os_type" /><br />
+	                                                <table class="TFtable" width="70%">
+	                                                    <tr>
+	                                                        <td width="100%"><b>Name</b></td>
+	                                                    </tr>
+	                                                    <tr>
+	                                                        <td><input type="text" value="{{ object.type }}" name="type" /></td>
+	                                                    </tr>
+	                                                </table>
+	                                                <table border="0" width="70%">
+	                                                    <tr>
+	                                                        <td width="95%"></td>
+	                                                        <td width="5%">{% if perms.nms.change_gen_dev %}<input type="submit" value="Update" />{% endif %}</td>
 
-                                                    </tr>
-                                                </table>
-                                            </form>
-										</td>
-										{% endif %}
-										<td width="50%"></td>
-									</tr>
-                                </table>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <aside id="sidebar">
-            <img src="{{ STATIC_URL }}images/NMS.png" />
-            {% include "_nav.html" %}
-            <span class="shadow"></span>
-        </aside>
-		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
-	</div> <!-- Wrapper -->
-	<footer>
-		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
-	</footer>
-</body>
+	                                                    </tr>
+	                                                </table>
+	                                            </form>
+											</td>
+											{% endif %}
+											<td width="50%"></td>
+										</tr>
+	                                </table>
+	                            </div>
+	                        </article>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <aside id="sidebar">
+	            <img src="{{ STATIC_URL }}images/yanms.png" />
+	            {% include "_nav.html" %}
+	            <span class="shadow"></span>
+	        </aside>
+			<div class="push"></div>
+		</div>
+		<footer>
+			yaNMS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+		</footer>
+	</body>
 </html>

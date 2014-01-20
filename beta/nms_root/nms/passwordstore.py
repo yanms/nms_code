@@ -1,3 +1,14 @@
+"""
+This module is used to obtain or store passwords for devices, as well as the master password used for encryption.
+
+Copyright (c) 2014 Remy Bien, Sebastiaan Groot, Wouter Miltenburg and Koen Veelenturf
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option) 
+any later version.
+"""
+
 from Crypto.Cipher import AES
 from Crypto import Random
 import base64
@@ -5,6 +16,7 @@ import ctypes
 import nms
 import os
 
+#Handle to the C library used to access shared memory.
 lib = None
 
 class AESCipher:
@@ -27,6 +39,11 @@ class AESCipher:
 		return self.unpad(cipher.decrypt(enc[16:]))
 
 def __initSHMLib__():
+	"""Put the ctypes library handle for the shared memory .so in the global lib variable
+	
+	Return value:
+	None
+	"""
 	global lib
 	path = os.path.abspath(os.path.dirname(nms.__file__))
 	lib = ctypes.cdll.LoadLibrary(path + '/c/shmlib.so')
@@ -34,6 +51,14 @@ def __initSHMLib__():
 	lib.get_password.restype = ctypes.c_char_p
 
 def storeMasterPassword(password):
+	"""Writes the master password to shared memory
+	
+	Keyword arguments:
+	password -- A 16-character password used as half of the AES encryption and decryption
+	
+	Return value:
+	Integer
+	"""
 	global lib
 	if lib == None:
 		__initSHMLib__()
@@ -44,15 +69,29 @@ def storeMasterPassword(password):
 	return 0
 
 def hasMasterPassword():
+	"""Returns True if the master password has been set, False otherwise
+	
+	Return value:
+	Boolean	
+	"""
 	global lib
-	#if lib == None:
-	__initSHMLib__()
+	if lib == None:
+		__initSHMLib__()
 
 	if len(lib.get_password()) == 16:
 		return True
 	return False
 
 def storeEnablePassword(device, password):
+	"""Encrypts and stores the privileged-mode password for a device
+	
+	Keyword arguments:
+	device   -- The device to store the password for
+	password -- The password
+	
+	Return value:
+	None
+	"""
 	global lib
 	if lib == None:
 		__initSHMLib__()
@@ -63,6 +102,15 @@ def storeEnablePassword(device, password):
 	device.save()
 
 def storeRemotePassword(device, password):
+	"""Encrypts and stores the login password for a device
+	
+	Keyword arguments:
+	device   -- The device to store the password for
+	password -- The password
+	
+	Return value:
+	None
+	"""
 	global lib
 	if lib == None:
 		__initSHMLib__()
@@ -73,6 +121,14 @@ def storeRemotePassword(device, password):
 	device.save()
 
 def getEnablePassword(device):
+	"""Decrypts and returns the privileged-mode password for a device
+	
+	Keyword arguments:
+	device -- The device to obtain the password for
+	
+	Return value:
+	String
+	"""
 	global lib
 	if lib == None:
 		__initSHMLib__()
@@ -85,6 +141,14 @@ def getEnablePassword(device):
 		
 
 def getRemotePassword(device):
+	"""Decrypts and returns the login password for a device
+	
+	Keyword arguments:
+	device -- The device to obtain the password for
+	
+	Return value:
+	String	
+	"""
 	global lib
 	if lib == None:
 		__initSHMLib__()

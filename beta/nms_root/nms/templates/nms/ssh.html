@@ -1,156 +1,156 @@
 <!DOCTYPE html>
-<head>
-	<meta charset="utf-8">
-	<title>Network Management System - AdminPanel: Devices</title>
-	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
-	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
-	<script type="text/javascript">
-	function sshSend()
-	{
-		var xmlhttp;
-		if (window.XMLHttpRequest)
+	<head>
+		<meta charset="utf-8">
+		<title>yaNMS - SSH Connection</title>
+		<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+		<script type="text/javascript">
+		function sshSend()
 		{
-			// IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp = new XMLHttpRequest();
-		}
-		else
-		{
-			// IE6, IE5
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		var textElement = document.getElementById("sshinput");
-		var text = textElement.value;
-		textElement.value = "";
-
-		var args = "?type=ssh&q=send&text=".concat(text, "\n", "&dev={{ device.dev_id }}&t=", Math.random().toString(36).substring(7));
-		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
-		xmlhttp.send();
-	}
-
-	function sshPriv()
-	{
-		var xmlhttp;
-		if (window.XMLHttpRequest)
-		{
-			// IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp = new XMLHttpRequest();
-		}
-		else
-		{
-			// IE6, IE5
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		var textElement = document.getElementById("sshinput");
-		var text = textElement.value;
-		textElement.value = "";
-
-		var args = "?type=ssh&q=priv&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
-		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
-		xmlhttp.send();
-	}
-
-	function sshReceive()
-	{
-		var xmlhttp;
-		if (window.XMLHttpRequest)
-		{
-			// IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp = new XMLHttpRequest();
-		}
-		else
-		{
-			// IE6, IE5
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		xmlhttp.onreadystatechange = function(){
-			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+			var xmlhttp;
+			if (window.XMLHttpRequest)
 			{
-				var div = document.getElementById("sshtext");
-				if (xmlhttp.responseText != "")
+				// IE7+, Firefox, Chrome, Opera, Safari
+				xmlhttp = new XMLHttpRequest();
+			}
+			else
+			{
+				// IE6, IE5
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			var textElement = document.getElementById("sshinput");
+			var text = textElement.value;
+			textElement.value = "";
+
+			var args = "?type=ssh&q=send&text=".concat(text, "\n", "&dev={{ device.dev_id }}&t=", Math.random().toString(36).substring(7));
+			xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
+			xmlhttp.send();
+		}
+
+		function sshPriv()
+		{
+			var xmlhttp;
+			if (window.XMLHttpRequest)
+			{
+				// IE7+, Firefox, Chrome, Opera, Safari
+				xmlhttp = new XMLHttpRequest();
+			}
+			else
+			{
+				// IE6, IE5
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			var textElement = document.getElementById("sshinput");
+			var text = textElement.value;
+			textElement.value = "";
+
+			var args = "?type=ssh&q=priv&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
+			xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
+			xmlhttp.send();
+		}
+
+		function sshReceive()
+		{
+			var xmlhttp;
+			if (window.XMLHttpRequest)
+			{
+				// IE7+, Firefox, Chrome, Opera, Safari
+				xmlhttp = new XMLHttpRequest();
+			}
+			else
+			{
+				// IE6, IE5
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			xmlhttp.onreadystatechange = function(){
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
 				{
-					div.innerHTML = div.innerHTML + xmlhttp.responseText.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
-					div.scrollTop = div.scrollHeight;
+					var div = document.getElementById("sshtext");
+					if (xmlhttp.responseText != "")
+					{
+						div.innerHTML = div.innerHTML + xmlhttp.responseText.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
+						div.scrollTop = div.scrollHeight;
+					}
 				}
 			}
-		}
 		
-		var args = "?type=ssh&q=receive&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
-		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
-		xmlhttp.send();
-	}
-	function sshClose()
-	{
-		var xmlhttp;
-		if (window.XMLHttpRequest)
-		{
-			// IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp = new XMLHttpRequest();
+			var args = "?type=ssh&q=receive&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
+			xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
+			xmlhttp.send();
 		}
-		else
+		function sshClose()
 		{
-			// IE6, IE5
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		xmlhttp.onreadystatechange = function(){
-			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+			var xmlhttp;
+			if (window.XMLHttpRequest)
 			{
-				var div = document.getElementById("sshtext");
-				if (xmlhttp.responseText != "")
+				// IE7+, Firefox, Chrome, Opera, Safari
+				xmlhttp = new XMLHttpRequest();
+			}
+			else
+			{
+				// IE6, IE5
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			xmlhttp.onreadystatechange = function(){
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
 				{
-					div.innerHTML = div.innerHTML + xmlhttp.responseText.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
-					div.scrollTop = div.scrollHeight;
+					var div = document.getElementById("sshtext");
+					if (xmlhttp.responseText != "")
+					{
+						div.innerHTML = div.innerHTML + xmlhttp.responseText.replace(/\n/g, "<br></br>").replace(/\s/g, "&nbsp;");
+						div.scrollTop = div.scrollHeight;
+					}
 				}
 			}
-		}
 
-		window.clearInterval(intervalId);
-		var args = "?type=ssh&q=del&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
-		xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
-		xmlhttp.send();
-	}
+			window.clearInterval(intervalId);
+			var args = "?type=ssh&q=del&dev={{ device.dev_id }}&t=".concat(Math.random().toString(36).substring(7));
+			xmlhttp.open("GET", "{% url 'nms:query' %}".concat(args), true);
+			xmlhttp.send();
+		}
 	
-	var intervalId = window.setInterval(function(){sshReceive()}, 1000);	</script>
-	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
-</head>
-<body>
-	<div id="wrapper">
-		<div id="content">
-			<div class="c1">
-				<div class="controls">
-					<!-- Upper Menu -->
-					{% include "_navuser.html" %}
-				</div>
-				<div class="tabs">
-					<div id="tab-7" class="tab">
-						<article>
-							<div class="text-section">
-								<h1>Dashboard</h1>
-								<ul class="states">
-									{% for message in messages %}
-									<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
-									{% endfor %}
-								</ul>
-								<h2>SSH Connection: {{ device }}</h2>
-								<form action='#' onsubmit="sshSend();"><input type="text" id="sshinput"></input> <button id="sendssh" type="button" onclick="sshSend();">send</button><button id="sshpriv" type="button" onclick="sshPriv();">enable password</button><button id="sshclose" type="button" onclick="sshClose();">close</button></form>
-								<div id="sshtext" style="height:400px; width:800px; border:1px solid #ccc; overflow:auto; line-height:70%;">
+		var intervalId = window.setInterval(function(){sshReceive()}, 1000);	</script>
+		<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="content">
+				<div class="c1">
+					<div class="controls">
+						<!-- Upper Menu -->
+						{% include "_navuser.html" %}
+					</div>
+					<div class="tabs">
+						<div id="tab-7" class="tab">
+							<article>
+								<div class="text-section">
+									<h1>Dashboard</h1>
+									<ul class="states">
+										{% for message in messages %}
+										<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
+										{% endfor %}
+									</ul>
+									<h2>SSH Connection: {{ device }}</h2>
+									<form action='#' onsubmit="sshSend();"><input type="text" id="sshinput"></input> <button id="sendssh" type="button" onclick="sshSend();">send</button><button id="sshpriv" type="button" onclick="sshPriv();">enable password</button><button id="sshclose" type="button" onclick="sshClose();">close</button></form>
+									<div id="sshtext" style="height:400px; width:800px; border:1px solid #ccc; overflow:auto; line-height:70%;">
+									</div>
 								</div>
-							</div>
-						</article>
+							</article>
+						</div>
 					</div>
 				</div>
 			</div>
+			<aside id="sidebar">
+				<img src="{{ STATIC_URL }}images/yanms.png"/>
+				{% include "_nav.html" %}
+				<span class="shadow"></span>
+			</aside>
+			<div class="push"></div>
 		</div>
-		<aside id="sidebar">
-			<img src="{{ STATIC_URL }}images/NMS.png"/>
-			{% include "_nav.html" %}
-			<span class="shadow"></span>
-		</aside>
-		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
-	</div> <!-- Wrapper -->
-	<footer>
-		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
-	</footer>
-</body>
+		<footer>
+			yaNMS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+		</footer>
+	</body>
 </html>

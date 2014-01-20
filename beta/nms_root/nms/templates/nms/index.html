@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 	<head>
 		<meta charset="utf-8">
-		<title>Network Management System - AdminPanel</title>
+		<title>yaNMS - Dashboard</title>
 		<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
 		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 		<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
@@ -45,8 +45,8 @@
 										<li class="{{message.tags}}">{{message.tags.title}} : {{message}}</li>
 										{% endfor %}
 									</ul>
-									<h2>Network Management System</h2>
-	                                <p>Welcome to the Network Management System. Please select one of the options from the menu.</p>
+									<h2>yaNMS</h2>
+	                                <p>Welcome to the yet another Network Management System. Please select one of the options from the menu.</p>
 								</div>
 
 							</article>
@@ -57,14 +57,14 @@
 
 			</div>
 			<aside id="sidebar">
-				<img src="{{ STATIC_URL }}images/NMS.png"/>
+				<img src="{{ STATIC_URL }}images/yanms.png"/>
 				{% include "_nav.html" %}
 				<span class="shadow"></span>
 			</aside>
 			<div class="push"></div>
 		</div>
 		<footer>
-			Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+			yaNMS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
 		</footer>
 	</body>
 </html>

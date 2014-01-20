@@ -1,40 +1,64 @@
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
-from django.core.urlresolvers import reverse
+"""
+This module contains all django views for this app
+
+Copyright (c) 2014 Remy Bien, Sebastiaan Groot, Wouter Miltenburg and Koen Veelenturf
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option) 
+any later version.
+"""
+
+import nms
+from nms import commands
+from nms import xmlparser
+from nms import passwordstore
 from nms.models import *
+
+import traceback
+import socket
+import os as os_library
+from xml.etree import ElementTree
+from subprocess import call
+
+import django.db.models as django_exception
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User, Permission, Group
 from django.contrib.auth.decorators import login_required, permission_required
-from django.template import RequestContext
+from django.contrib.auth.models import User, Permission, Group
 from django.contrib.contenttypes.models import ContentType
-import nms.commands as commands
-import nms.xmlparser as xmlparser
-import nms.passwordstore as passwordstore
-import traceback
-import  django.db.models as django_exception
-from django.utils import timezone
-from django.db.models import Q
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
+from django.db.models import Q
+from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
+from django.shortcuts import get_object_or_404, render
+from django.template import RequestContext
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_protect
-from xml.etree import ElementTree
-import os as os_library
-from subprocess import call
-import nms
 
 @login_required
 def index(request):
 	return render(request, 'nms/index.html', {'request':request})
 
 def install(request):
+	"""Creates several permissions, sets the hostname for the server
+	and calls make on the nms/c/ directory for the shmlib.so
+	
+	Location: /install
+	"""
+	#Check if the installation is already completed
 	if Settings.objects.filter(known_name='install complete').exists():
 		if Settings.objects.filter(known_name='install complete', known_boolean=True).exists():
-			return HttpResponse('Installation already finished.') 
+			return HttpResponse('Installation already finished.')
+	#Do the installation
 	else:
+		#request.method == 'POST' -> The hostname form was submitted, we can install
 		if request.method == 'POST':
 			if not 'hostname' in request.POST:
-				return HttpResponse('Missing hostname');
+				return HttpResponse('Missing hostname')
+			
+			#Set up all permissions
 			content_type = ContentType.objects.get_for_model(User)
 			list_user, created = Permission.objects.get_or_create(codename='list_user', name='Can list users', content_type=content_type)
 			content_type = ContentType.objects.get_for_model(Group)
@@ -51,24 +75,33 @@ def install(request):
 			add_devices = Permission.objects.get(codename='add_devices')
 			delete_devices = Permission.objects.get(codename='delete_devices')
 			add_gen_dev = Permission.objects.get(codename='add_gen_dev')
+			change_gen_dev = Permission.objects.get(codename='change_gen_dev')
 			delete_gen_dev = Permission.objects.get(codename='delete_gen_dev')
-			group.permissions = [add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
+			group.permissions = [add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, change_gen_dev, delete_gen_dev]
 			
 			group, created = Group.objects.get_or_create(name='usr:admin')
 			add_user = Permission.objects.get(codename='add_user')
 			change_user = Permission.objects.get(codename='change_user')
 			delete_user = Permission.objects.get(codename='delete_user')
-			group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, delete_gen_dev]
+			group.permissions = [add_user, change_user, delete_user, list_user, add_group, change_group, delete_group, list_group, add_devices, delete_devices, add_gen_dev, change_gen_dev, delete_gen_dev]
 			Settings.objects.create(known_id=1, known_name='install complete', known_boolean=True)
 			Settings.objects.create(known_id=2, known_name='hostname', string=request.POST['hostname'])
-			call(['make', './nms/c/'])
-
+			
+			#Make the shmlib C library for shared memory segments
+			path = os_library.path.abspath(os_library.path.dirname(nms.__file__))
+			call(['make', path + '/c/'])
 			return HttpResponse('Finished installing NMS.')
+		#request.method != 'POST' -> Display the form to fill in the hostname
 		else:
 			return render(request, 'nms/install.html', {'request':request})
 
 @login_required
 def acl(request):
+	"""Main ACL page
+	
+	Location: /acl
+	"""
+	#Counts are used in all ACL pages for the menu-numbers indicating the number of group, user and device objects
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -76,12 +109,15 @@ def acl(request):
 
 @login_required
 def acl_groups(request):
+	"""Main ACL groups page
+	
+	Location: /acl/groups
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
 	if request.user.has_perm('auth.list_user') or request.user.has_perm('auth.add_group') or request.user.has_perm('auth.change_group') or request.user.has_perm('auth.delete_group'):
-		user = request.user
-		user_perm = user.has_perm('auth.list_group')
+		user_perm = request.user.has_perm('auth.list_group')
 		dev_groups = Group.objects.filter(name__startswith='dev:')
 		usr_groups = Group.objects.filter(name__startswith='usr:')
 		return render(request, 'nms/acl_groups.html', {'user_perm': user_perm, 'dev_groups': dev_groups, 'usr_groups': usr_groups, 'request':request, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
@@ -91,6 +127,10 @@ def acl_groups(request):
 
 @login_required
 def acl_user(request):
+	"""Main ACL users page
+	
+	Location: /acl/users
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -103,6 +143,10 @@ def acl_user(request):
 
 @login_required
 def acl_user_add(request):
+	"""User add page
+	
+	Location: /acl/users/add
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -113,6 +157,10 @@ def acl_user_add(request):
 
 @login_required
 def acl_user_add_handler(request):
+	"""User add handler. Redirects when done.
+	
+	Location: /acl/users/add/handler
+	"""
 	if request.user.has_perm('auth.add_user'):
 		if request.method == 'POST':
 			try:
@@ -122,11 +170,16 @@ def acl_user_add_handler(request):
 				email = request.POST['emailaddress']
 				password = request.POST['password']
 				password_check = request.POST['password2']
-				check = User.objects.filter(username=username).exists()
-				if check:
+				#Check if the user already exists
+				if User.objects.filter(username=username).exists():
 					messages.error(request, 'User already exists.')
 					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+				if username == '':
+					messages.error(request, 'Username cannot be empty.')
+					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+				#Check if the two passwords match and are not empty
 				if password == password_check and password != '':
+					#Create the player
 					user = User.objects.create()
 					user.username = username
 					user.first_name = firstname
@@ -137,22 +190,30 @@ def acl_user_add_handler(request):
 					History.objects.create(action_type='ACL: User', action='Added user', user_id=user, user_performed_task=request.user, date_time = timezone.now())
 					messages.success(request, "Database updated successfully.")
 					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+				#Password mismatch or empty
 				else:
 					messages.error(request, 'Password fields may not be empty.')
 					return HttpResponseRedirect(reverse('nms:acl_user_add'))
+			#KeyError can be raised on POST arguments not existing
 			except KeyError as err:
 				messages.error(request, "Not all fields are set")
 				messages.error(request, err)
 				return HttpResponseRedirect(reverse('nms:acl_user_add'))
+		#request.method != 'POST'
 		else:
 			messages.error(request, "Invalid method")
 			return HttpResponseRedirect(reverse('nms:acl_user_add'))
+	#not request.user.has_perm('auth.add_user')
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
 		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 def acl_user_manage(request, acl_user):
+	"""User-specific manage page
+	
+	Location: /acl/users/\d+/manage
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -167,6 +228,10 @@ def acl_user_manage(request, acl_user):
 
 @login_required
 def acl_user_manage_handler(request, acl_user):
+	"""User-specific manage handler. This view redirects when done.
+	
+	Location: /acl/users/\d+/manage/handler
+	"""
 	if request.user.has_perm('auth.change_user'):
 		user_obj = get_object_or_404(User, pk=acl_user)
 		if request.method == 'POST':
@@ -193,18 +258,22 @@ def acl_user_manage_handler(request, acl_user):
 					return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,)))
 				else:
 				   messages.error(request, "Passwords are not the same")
-				   return HttpResponseRedirect(reverse('nms:acl_user_add')) 
+				   return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,))) 
 			except KeyError:
 				messages.error(request, "Not all fields are set")
-				return HttpResponseRedirect(reverse('nms:acl_user_add'))
+				return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,))) 
 		messages.error(request, "Invalid method")
-		return HttpResponseRedirect(reverse('nms:acl_user_add'))
+		return HttpResponseRedirect(reverse('nms:acl_user_manage', args=(acl_user,))) 
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
 		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 def acl_device(request):
+	"""Main ACL devices page
+	
+	Location: /acl/devices
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
@@ -214,20 +283,24 @@ def acl_device(request):
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
 		return HttpResponseRedirect(reverse('nms:acl'))
-	
+
 
 @login_required
 def acl_device_manage(request, acl_id):
+	"""ACL device-specific manage page
+	
+	Location: /acl/devices/\d+/manage
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
 	if request.user.has_perm('auth.list_group'):
+		#The object of the device we're managing here
 		dev_obj = get_object_or_404(Devices, pk=acl_id)
+		#All available device groups
 		dev_groups = Group.objects.filter(name__startswith='dev:')
-		check = Dev_group.objects.filter(devid=dev_obj)
-		checked = []
-		for iter in check:
-			checked.append(iter.gid)
+		#The device groups that will appear with checkboxes already ticked
+		checked = [dev_group.gid for dev_group in Dev_group.objects.filter(devid=dev_obj)]
 		return render(request, 'nms/acl_devices_manage.html', {'dev_obj': dev_obj, 'dev_groups': dev_groups, 'checked': checked, 'request':request, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 	else:
 		messages.error(request, 'You do not have the right permissions to access this page')
@@ -235,16 +308,20 @@ def acl_device_manage(request, acl_id):
 
 @login_required
 def acl_handler(request, acl_id):
+	"""ACL handler, all requests for changing user/device groups are handled here. This view redirects when done.
+	
+	Location: /acl/\d+/manage
+	"""
 	if request.method == 'POST':
 		try:
 			task = request.POST['task']
 			if task == 'usr_group_update':
 				if request.user.has_perm('auth.list_group'):
 					user_obj = get_object_or_404(User, pk=acl_id)
-					groups = request.POST.getlist('groups')
+					groupnames = request.POST.getlist('groups')
 					user_obj.groups = []
-					for iter in groups:
-						group = get_object_or_404(Group, name=iter)
+					for groupname in groupnames:
+						group = get_object_or_404(Group, name=groupname)
 						user_obj.groups.add(group)
 						History.objects.create(action_type = 'ACL: Modified user groups', user_id = user_obj, user_performed_task = request.user, action='Currently assigned groups: {0}'.format(group), group_id=group, date_time = timezone.now())
 					messages.success(request, 'Database updated successfully')
@@ -260,17 +337,16 @@ def acl_handler(request, acl_id):
 					users_received = request.POST.getlist('users')
 					group.permissions = []
 					group.user_set.clear()
-					for iter in rights:
-						right = iter
+					for right in rights:
 						permission = Permission.objects.get(codename=right)
 						group.permissions.add(permission)
 			
-					for iter in groups_received:
-						group_recv = get_object_or_404(Group, pk=iter)
+					for group_received in groups_received:
+						group_recv = get_object_or_404(Group, pk=group_received)
 						for item in group_recv.user_set.all():
 							group.user_set.add(item)
-					for iter in users_received:
-						user_recv = get_object_or_404(User, pk=iter)
+					for user_received in users_received:
+						user_recv = get_object_or_404(User, pk=user_received)
 						group.user_set.add(user_recv)
 					
 					History.objects.create(action_type='ACL: Changed permission user group', action='Current permissions {0}'.format(group.permissions.all()), group_id=group, user_performed_task = request.user, date_time = timezone.now())
@@ -292,7 +368,7 @@ def acl_handler(request, acl_id):
 						Dev_group.objects.get_or_create(gid=group_obj, devid=device)
 						History.objects.create(action_type = 'ACL: Modified groups where device is listed', dev_id = device, user_performed_task = request.user, action='Currently assigned groups: {0}'.format(group_obj), group_id=group_obj, date_time = timezone.now())
 					messages.success(request, 'Database updated successfully')
-					return HttpResponseRedirect(reverse('nms:acl_groups'))
+					return HttpResponseRedirect(reverse('nms:acl_device'))
 				else:
 					messages.error(request, "You don't have the right permissions")
 					return HttpResponseRedirect(reverse('nms:acl'))	
@@ -308,20 +384,19 @@ def acl_handler(request, acl_id):
 					group.user_set.clear()
 					if Dev_group.objects.filter(gid=group).exists():
 						Dev_group.objects.filter(gid=group).delete()
-					for iter in devices:
-						dev = Devices.objects.get(pk=iter)
+					for device in devices:
+						dev = Devices.objects.get(pk=device)
 						Dev_group.objects.get_or_create(gid=group, devid=dev)
-					for iter in rights:
-						right = iter
+					for right in rights:
 						right += '_devices'
 						permission = Permission.objects.get(codename=right)
 						group.permissions.add(permission)
-					for iter in groups_received:
-						group_recv = get_object_or_404(Group, pk=iter)
+					for group_received in groups_received:
+						group_recv = get_object_or_404(Group, pk=group_received)
 						for item in group_recv.user_set.all():
 							group.user_set.add(item)
-					for iter in users_received:
-						user_recv = get_object_or_404(User, pk=iter)
+					for user_received in users_received:
+						user_recv = get_object_or_404(User, pk=user_received)
 						group.user_set.add(user_recv)
 					History.objects.create(action_type='ACL: Changed permission device group', action='Current permissions {0}'.format(group.permissions.all()), group_id=group, user_performed_task = request.user, date_time = timezone.now())
 					History.objects.create(action_type='ACL: Changed users listed in device group', action='Current users listed in device group: {0}'.format(group.user_set.all()), group_id = group, user_performed_task = request.user, date_time = timezone.now())
@@ -343,10 +418,15 @@ def acl_handler(request, acl_id):
 
 @login_required
 def acl_groups_manage(request, acl_id):
+	"""ACL group-specific manage page
+	
+	Location: /acl/groups/\d+/manage
+	"""
 	group_count = Group.objects.count()
 	user_count = User.objects.count()
 	devices_count = Devices.objects.count()
 	if request.user.has_perm('auth.change_group'):
+		#Set the default values for all variables the template needs
 		group = get_object_or_404(Group, pk=acl_id)
 		dev_check = True if group.name[:4] == 'dev:' else False
 		groups_usr = Group.objects.filter(name__startswith='usr:')
@@ -370,6 +450,7 @@ def acl_groups_manage(request, acl_id):
 		add_gen_dev = None
 		delete_gen_dev = None
 		change_gen_dev = None
+		#Try to set the variables
 		if dev_check:
 			devices = Devices.objects.all()
 			checked = []
@@ -403,6 +484,10 @@ def acl_groups_manage(request, acl_id):
 
 @login_required
 def acl_groups_handler(request):
+	"""Handler for ACL Groups. This view redirects when done.
+	
+	Location: /acl/groups/handler
+	"""
 	if request.method == 'POST':
 		if request.POST['task'] == 'usr':
 			if request.user.has_perm('auth.add_user'):
@@ -450,6 +535,7 @@ def acl_groups_handler(request):
 						messages.error(request, "Can't remove user: root")
 						return HttpResponseRedirect(reverse('nms:acl_user'))
 					History.objects.create(user_performed_task=request.user, date_time=timezone.now(), action_type='ACL: Removed user', action='Removed user {0}'.format(user))
+					[x.delete() for x in Session.objects.all() if x.get_decoded().get('_auth_user_id') == user.id]
 					user.delete()
 				messages.success(request, "Database updated succesfully")
 				return HttpResponseRedirect(reverse('nms:acl_user'))
@@ -476,6 +562,10 @@ def acl_groups_handler(request):
 			return HttpResponseRedirect(reverse('nms:acl_groups'))
 
 def register(request):
+	"""Register view for registering new user accounts
+	
+	Location: /register
+	"""
 	if request.method == 'POST':
 		username = request.POST['username']
 		password = request.POST['password']
@@ -484,8 +574,11 @@ def register(request):
 		last_name = request.POST['last_name']
 		email = request.POST['email']
 		check_username = User.objects.filter(username=username).exists()
+		if username == '':
+			messages.error(request, 'Please enter a username.')
+			return HttpResponseRedirect(reverse('nms:register'))
 		if not check_username:
-			if password == password_check:
+			if password == password_check and password != '':
 				user = User.objects.create_user(username=username, password=password)
 				user.is_active = False
 				user.first_name = first_name
@@ -497,7 +590,7 @@ def register(request):
 				return HttpResponseRedirect(reverse('nms:register'))
 			else:
 				messages.error(request, 'Password mismatch')
-				return HttpResponseRedirect(request('nms:register'))
+				return HttpResponseRedirect(reverse('nms:register'))
 		else:
 			messages.error(request, 'User already exists')
 			return HttpResponseRedirect(reverse('nms:register'))
@@ -506,6 +599,10 @@ def register(request):
 			
 
 def login_handler(request):
+	"""The login view
+	
+	Location: /login
+	"""
 	if (request.method == 'GET' and 'next' in request.GET):
 		url = request.GET['next']
 		return(render(request, 'nms/login.html', {'url': url}))
@@ -514,10 +611,18 @@ def login_handler(request):
 
 @login_required
 def devices(request):
+	"""The main devices view
+	
+	Location: /devices
+	"""
 	return render(request, 'nms/devices.html', {'request':request})
 
 @login_required
 def devices_manage(request):
+	"""The main manage devices page, listing all added devices
+	
+	Location: /devices/manage
+	"""
 	if request.user.has_perm('nms.list_devices'):
 		user_obj = request.user
 		groups = user_obj.groups.all()
@@ -543,6 +648,10 @@ def devices_manage(request):
 
 @login_required
 def device_add(request):
+	"""The view used to add new devices
+	
+	Location: /devices/add
+	"""
 	if not passwordstore.hasMasterPassword():
 			return HttpResponseRedirect(reverse('nms:init') + '?next=' + reverse('nms:device_add'))
 	if request.user.has_perm('nms.add_devices'):
@@ -565,14 +674,10 @@ def device_add(request):
 					if len(model_id) == 1:
 						gen_dev = Gen_dev.objects.get(model_id=model_id[0], vendor_id=Vendor.objects.get(vendor_name=request.POST['selectVendor']), dev_type_id=Dev_type.objects.get(dev_type_name=request.POST['selectType']))
 					else:
-						messages.error(request, 'test')
-						messages.error(request, list(request.POST.items()))
 						messages.error(request, "Received multiple models, not unique")
 						return HttpResponseRedirect(reverse('nms:device_add'))
 				except:
-					messages.error(request, list(request.POST.items()))
-					messages.error(request, "No gendev found")
-					messages.error(request, traceback.format_exc())
+					messages.error(request, "No device template found")
 					return HttpResponseRedirect(reverse('nms:device_add'))
 				os = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
 				pref_remote_prot = request.POST['pref_remote_prot']
@@ -581,7 +686,29 @@ def device_add(request):
 				port = request.POST['port']
 				login_name = request.POST['login_name']
 				password_remote = request.POST['password_remote']
-				password_enable = request.POST['password_enable']				
+				password_enable = request.POST['password_enable']
+				try:
+					socket.inet_pton(socket.AF_INET, ip_recv)
+				except AttributeError: #inet_pton not available, no IPv6 support
+					try:
+						socket.inet_aton(ip_recv)
+					except:
+						messages.error(request, 'Not a valid IPv4 address')
+						return HttpResponseRedirect(reverse('nms:device_add'))
+				except:
+					try:
+						socket.inet_pton(socket.AF_INET6, ip_recv)
+					except:
+						messages.error(request, 'Not a valid IPv4 or IPv6 address')
+						return HttpResponseRedirect(reverse('nms:device_add'))
+
+				try:
+					if int(port) <= 0 or int(port) > 65535:
+						raise ValueError
+				except:
+					messages.error(request, 'Not a valid port number')
+					return HttpResponseRedirect(reverse('nms:device_add', args=(device.dev_id,)))
+
 				device = Devices(gen_dev_id=gen_dev, os_dev_id=os, ip=ip_recv, pref_remote_prot=pref_remote_prot, 
 				ip_version = ipprot, login_name = login_name, password_enable='', password_remote='', port=port)
 				device.save()
@@ -591,13 +718,9 @@ def device_add(request):
 					dev_groups = request.POST['dev_groups']
 					group_dev_add = get_object_or_404(Group, pk=dev_groups)
 					Dev_group.objects.create(gid=group_dev_add, devid=device)
-			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
+			except (KeyError, ValueError, NameError, UnboundLocalError):
 				messages.error(request, 'Not all fields are set or an other error occured')
-				messages.error(request, err)
-				print(err)
-				#return HttpResponse(request.POST.items())
 				return HttpResponseRedirect(reverse('nms:device_add'))
-			
 			History.objects.create(user_performed_task=request.user, dev_id=device, date_time=timezone.now(), action_type='Created device', action='Created device {0}'.format(device))
 			messages.success(request, 'Database updated')
 			return HttpResponseRedirect(reverse('nms:device_add'))
@@ -610,7 +733,10 @@ def device_add(request):
 		
 @login_required
 def device_manager(request, device_id_request):
-
+	"""Device-specific manage page, allowing executing tasks on the device
+	
+	Location: /devices/\d+/manage
+	"""
 	devices = get_object_or_404(Devices, pk=device_id_request)
 	groups = request.user.groups.all()
 	group_device = [group for group in groups if group.dev_group_set.filter(devid=devices).exists()]
@@ -625,8 +751,7 @@ def device_manager(request, device_id_request):
 			commands.removeInterfaces(devices)
 		root = xmlparser.get_xml_struct(devices.gen_dev_id.file_location_id.location)
 		cmd, parser = xmlparser.getInterfaceQuery(root)
-		interfaces = commands.getInterfaces(cmd, parser, devices, request.user) #Use if the device is online
-		#interfaces = ['FastEthernet0/0', 'FastEthernet0/1'] #Use if no connection to the device is possible for dummy interfaces
+		interfaces = commands.getInterfaces(cmd, parser, devices, request.user)
 		if interfaces == -1:
 			messages.error(request, 'Failed to connect to device')
 			return HttpResponseRedirect(reverse('nms:devices'))
@@ -639,6 +764,10 @@ def device_manager(request, device_id_request):
 
 @login_required
 def device_modify(request, device_id_request):
+	"""View for modifying device settings, such as the IP address
+	
+	Location: /devices/\d+/modify
+	"""
 	device = get_object_or_404(Devices, pk=device_id_request)
 	groups = request.user.groups.all()
 	group_device = [group for group in groups if group.dev_group_set.filter(devid=device).exists()]
@@ -667,6 +796,30 @@ def device_modify(request, device_id_request):
 				except:
 					messages.error(request, "No gendev found")
 					return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+
+				try:
+					socket.inet_pton(socket.AF_INET, request.POST['ipaddr'])
+				except AttributeError: #inet_pton not available, no IPv6 support
+					try:
+						socket.inet_aton(request.POST['ipaddr'])
+					except:
+						messages.error(request, 'Not a valid IPv4 address')
+						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+				except:
+					try:
+						socket.inet_pton(socket.AF_INET6, request.POST['ipaddr'])
+					except:
+						messages.error(request, 'Not a valid IPv4 or IPv6 address')
+						return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+
+				try:
+					if int(request.POST['port']) <= 0 or int(request.POST['port']) > 65535:
+						raise ValueError
+				except:
+					messages.error(request, 'Not a valid port number')
+					return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
+						
+
 				device.os_dev_id = get_object_or_404(OS_dev, pk=request.POST['os_dev_id'])
 				device.pref_remote_prot = request.POST['pref_remote_prot']
 				device.ip_version = request.POST['ipprot']
@@ -680,11 +833,8 @@ def device_modify(request, device_id_request):
 					passwordstore.storeEnablePassword(device, password_enable)
 				if password_remote != '':
 					passwordstore.storeRemotePassword(device, password_remote)
-			except (KeyError, ValueError, NameError, UnboundLocalError) as err:
+			except (KeyError, ValueError, NameError, UnboundLocalError):
 				messages.error(request, 'Not all fields are set or an other error occured')
-				messages.error(request, err)
-				print(err)
-				#return HttpResponse(request.POST.items())
 				return HttpResponseRedirect(reverse('nms:device_modify', args=(device.dev_id,)))
 			History.objects.create(user_performed_task=request.user, dev_id=device, date_time=timezone.now(), action_type='Modified device', action='Modified device {0}'.format(device))
 			messages.success(request, 'Database updated')
@@ -697,6 +847,10 @@ def device_modify(request, device_id_request):
 
 @login_required
 def user_settings(request):
+	"""User settings page
+	
+	Location: /settings
+	"""
 	if request.method == 'POST':
 		try:
 			if request.POST['mode'] == 'chpasswd':
@@ -743,6 +897,10 @@ def user_settings(request):
 
 @login_required
 def send_command(request, device_id_request):
+	"""View for sending commands to a device. This view redirects when done.
+	
+	Location: /devices/\d+/send_command
+	"""
 	device = Devices.objects.get(pk=device_id_request)
 	groups = request.user.groups.all()
 	group_device = [group for group in groups if group.dev_group_set.filter(devid=device).exists()]
@@ -772,6 +930,10 @@ def send_command(request, device_id_request):
 		return HttpResponseRedirect(reverse('nms:devices'))
 
 def session_handler(request):
+	"""Session handler to check if the current user is a valid user
+	
+	Location: /session
+	"""
 	if request.method == 'POST':
 		try:
 			username = request.POST['username']
@@ -803,6 +965,10 @@ def session_handler(request):
 
 @login_required
 def query(request):
+	"""AJAX-view to query device models or SSH connection traffic.
+	
+	Location: /query
+	"""
 	if request.method == 'GET':
 		if 'type' in request.GET and 'q' in request.GET and 'HTTP_REFERER' in request.META:
 			qtype = request.GET['type']
@@ -863,7 +1029,7 @@ def query(request):
 			connection.send(text.encode())
 			return HttpResponse('', content_type='text/plain')
 		elif query == 'del':
-			commands.removeSSHConnection(request.user, device)
+			commands.removeConnection(request.user, device)
 			return HttpResponse('Connection closed', content_type='text/plain')
 		elif query == 'priv':
 			connection = commands.getConnection(request.user, device)
@@ -876,6 +1042,10 @@ def query(request):
 
 @login_required
 def logout_handler(request):
+	"""Handler to terminate the current users session. Redirects when done.
+	
+	Location: /logout
+	"""
 	History.objects.create(user_performed_task=request.user, user_id=request.user, action_type='User: logged out', action='The user has been logged out', date_time=timezone.now())
 	logout(request)
 	messages.success(request, "You are logged out")
@@ -883,14 +1053,26 @@ def logout_handler(request):
 
 @login_required
 def device_ssh(request, device_id_request):
+	"""Device-specific SSH / Telnet terminal
+	
+	Location: /devices/\d+/manage/ssh
+	"""
 	device = get_object_or_404(Devices, pk=device_id_request)
 	return render(request, 'nms/ssh.html', {'device': device, 'request':request})
 
 def license(request):
+	"""Displays the licenses applicable to the application
+	
+	Location: /license
+	"""
 	return render(request, 'nms/license.html', {'request':request})
 
 @login_required
 def init(request):
+	"""Application-management page for entering the master password
+	
+	Location: /init
+	"""
 	if request.method == 'POST' and 'master' in request.POST:
 		master = request.POST['master']
 		if passwordstore.storeMasterPassword(master) != -1:
@@ -907,15 +1089,22 @@ def init(request):
 
 @login_required
 def manage_gendev(request):
+	"""This view allows the manipulation of several database tables used for generic devices.
+	
+	Location: /devices/gen_dev/manage
+	"""
 	if request.user.has_perm('nms.add_gen_dev') or request.user.has_perm('nms.delete_gen_dev') or request.user.has_perm('nms.change_gen_dev'):
 		if request.method == 'POST' and 'qtype' in request.POST:
 			p = request.POST
 			if p['qtype'] == 'add_gendev':
 				if 'dev_type' in p and 'vendor' in p and 'model' in p and 'xml_files' in p:
 					try:
-						Gen_dev(dev_type_id_id=int(p['dev_type']), vendor_id_id=int(p['vendor']), model_id_id=int(p['model']), file_location_id_id=int(p['xml_files'])).save()
-						History.objects.create(action_type='Gendev: add', action='Added gendev', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if p['dev_type'] == '' and p['vendor'] == '' and p['model'] == '' and p['xml_files'] == '':
+							raise
+						else:
+							Gen_dev(dev_type_id_id=int(p['dev_type']), vendor_id_id=int(p['vendor']), model_id_id=int(p['model']), file_location_id_id=int(p['xml_files'])).save()
+							History.objects.create(action_type='Gendev: add', action='Added gendev', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding device template')
 			elif p['qtype'] == 'del_gendev':
@@ -932,9 +1121,12 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_devtype':
 				if 'name' in p:
 					try:
-						Dev_type(dev_type_name=p['name']).save()
-						History.objects.create(action_type='Gendev: add', action='Added gendev device type', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if p['name'] == '':
+							raise
+						else:
+							Dev_type(dev_type_name=p['name']).save()
+							History.objects.create(action_type='Gendev: add', action='Added gendev device type', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding device type')
 			elif p['qtype'] == 'del_devtype':
@@ -952,9 +1144,12 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_vendor':
 				if 'name' in p:
 					try:
-						Vendor(vendor_name=p['name']).save()
-						History.objects.create(action_type='Gendev: add', action='Added gendev vendor', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if p['name'] == '':
+							raise
+						else:
+							Vendor(vendor_name=p['name']).save()
+							History.objects.create(action_type='Gendev: add', action='Added gendev vendor', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding vendor')
 			elif p['qtype'] == 'del_vendor':
@@ -971,9 +1166,12 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_model':
 				if 'name' in p:
 					try:
-						Dev_model(model_name=p['name']).save()
-						History.objects.create(action_type='Gendev: add', action='Added gendev model', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if p['name'] == '':
+							raise
+						else:
+							Dev_model(model_name=p['name'], version=p['version']).save()
+							History.objects.create(action_type='Gendev: add', action='Added gendev model', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding model')
 			elif p['qtype'] == 'del_model':
@@ -990,24 +1188,27 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_xml':
 				if 'name' in p:
 					try:
-						file_data = request.FILES['file']
-						if file_data.content_type != 'text/xml':
-							messages.error(request,"The uploaded file isn't a XML-file")
-							return HttpResponseRedirect(reverse('nms:manage_gendev'))
-						try:
-							ElementTree.parse(file_data)
-							messages.success(request, 'Well formatted XML-file received')
-						except:
-							messages.error(request, 'Not well formatted XML-file')
-							return HttpResponseRedirect(reverse('nms:manage_gendev'))
-						destination = os_library.path.abspath(os_library.path.dirname(nms.__file__)) + '/static/devices/' + p['name']
-						file = open(destination, 'wb+')
-						for item in file_data:
-							file.write(item)
-						file.close()
-						File_location(location=destination).save()	
-						History.objects.create(action_type='Gendev: add', action='Added gendev XML', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if p['name'] == '':
+							raise
+						else:
+							file_data = request.FILES['file']
+							if file_data.content_type != 'text/xml':
+								messages.error(request,"The uploaded file isn't a XML-file")
+								return HttpResponseRedirect(reverse('nms:manage_gendev'))
+							try:
+								ElementTree.parse(file_data)
+								messages.success(request, 'Well formatted XML-file received')
+							except:
+								messages.error(request, 'Not well formatted XML-file')
+								return HttpResponseRedirect(reverse('nms:manage_gendev'))
+							destination = os_library.path.abspath(os_library.path.dirname(nms.__file__)) + '/static/devices/' + p['name']
+							file = open(destination, 'wb+')
+							for item in file_data:
+								file.write(item)
+							file.close()
+							File_location(location=destination).save()	
+							History.objects.create(action_type='Gendev: add', action='Added gendev XML', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, list(request.POST.items()))
 						messages.error(request, traceback.format_exc()) #debug code
@@ -1032,9 +1233,12 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_os_type':
 				if 'name' in p:
 					try:
-						OS_type(type=p['name']).save()
-						History.objects.create(action_type='Gendev: add', action='Added gendev OS type', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if p['name'] == '':
+							raise
+						else:
+							OS_type(type=p['name']).save()
+							History.objects.create(action_type='Gendev: add', action='Added gendev OS type', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding model')
 			elif p['qtype'] == 'del_os_type':
@@ -1051,15 +1255,18 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_os':
 				if 'vendor_id' in p and 'os_type_id' in p:
 					try:
-						os = OS()
-						os.vendor_id = Vendor.objects.get(pk=request.POST['vendor_id'])
-						os.os_type_id =	OS_type.objects.get(pk=request.POST['os_type_id'])
-						os.build = request.POST['build']
-						os.short_info = request.POST['short_info']
-						os.name = request.POST['name']		
-						os.save()
-						History.objects.create(action_type='Gendev: add', action='Added gendev OS', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if p['vendor_id'] == '' and p['os_type_id'] == '':
+							raise
+						else:
+							os = OS()
+							os.vendor_id = Vendor.objects.get(pk=request.POST['vendor_id'])
+							os.os_type_id =	OS_type.objects.get(pk=request.POST['os_type_id'])
+							os.build = request.POST['build']
+							os.short_info = request.POST['short_info']
+							os.name = request.POST['name']		
+							os.save()
+							History.objects.create(action_type='Gendev: add', action='Added gendev OS', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding model')
 			elif p['qtype'] == 'del_os':
@@ -1077,9 +1284,12 @@ def manage_gendev(request):
 			elif p['qtype'] == 'add_osdev':
 				if 'os' in p and 'gen_dev' in p:
 					try:
-						OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['gen_dev']))
-						History.objects.create(action_type='Gendev: add', action='Added gendev OS device', user_performed_task=request.user, date_time=timezone.now())
-						messages.success(request, 'Database updated')
+						if p['os'] == '' and p['gen_dev'] == '':
+							raise
+						else: 
+							OS_dev.objects.create(os_id=OS.objects.get(pk=p['os']), gen_dev_id=Gen_dev.objects.get(pk=p['gen_dev']))
+							History.objects.create(action_type='Gendev: add', action='Added gendev OS device', user_performed_task=request.user, date_time=timezone.now())
+							messages.success(request, 'Database updated')
 					except:
 						messages.error(request, 'Error adding model')
 			elif p['qtype'] == 'del_osdev':
@@ -1116,6 +1326,10 @@ def manage_gendev(request):
 	
 @login_required
 def history(request, device_id_request):
+	"""Shows the logged history of a device
+	
+	Location: /devices/\d+/history
+	"""
 	if request.user.has_perm('nms.manage_devices'):
 		device = get_object_or_404(Devices, pk=device_id_request)
 		history_items_list = History.objects.filter(dev_id=device)
@@ -1140,6 +1354,10 @@ def history(request, device_id_request):
 		
 @login_required
 def user_history(request):
+	"""Shows the user-specific history
+	
+	Location: /history
+	"""
 	history_items_list = History.objects.filter(Q(user_id = request.user) | Q(user_performed_task = request.user ))
 	history_items_list = history_items_list.extra(order_by = ['-history_id'])
 	paginator = Paginator(history_items_list, 25)
@@ -1156,6 +1374,10 @@ def user_history(request):
 
 @login_required
 def acl_user_history(request, acl_user):
+	"""Application administrator page for listing user-specific history
+	
+	Location: /acl/users/\d+/history
+	"""
 	if request.user.has_perm('auth.list_user'):
 		group_count = Group.objects.count()
 		user_count = User.objects.count()
@@ -1179,7 +1401,14 @@ def acl_user_history(request, acl_user):
 
 @login_required
 def acl_device_history(request, acl_id):
+	"""Application administrator page for listing device-specific history
+	
+	Location: /acl/devices/\d+/history
+	"""
 	if request.user.has_perm('auth.list_group'):
+		group_count = Group.objects.count()
+		user_count = User.objects.count()
+		devices_count = Devices.objects.count()
 		device = get_object_or_404(Devices, pk=acl_id)
 		history_items_list = History.objects.filter(dev_id=device)
 		history_items_list = history_items_list.extra(order_by = ['-history_id'])
@@ -1196,12 +1425,16 @@ def acl_device_history(request, acl_id):
 			
 		
 		
-		return render(request, 'nms/acl_devices_history.html', {'request': request, 'history': history_items})
+		return render(request, 'nms/acl_devices_history.html', {'request': request, 'history': history_items, 'group_count': group_count, 'user_count': user_count, 'devices_count': devices_count})
 	else:
 		return HttpResponseRedirect(reverse('nms:acl'))
 
 @login_required
 def acl_kick_user(request, user_id):
+	"""User-kick handler. Redirects when done.
+	
+	Location: /acl/users/\d+/kick
+	"""
 	user_obj = get_object_or_404(User, pk=user_id)
 	if request.user.has_perm('auth.change_user') and user_obj.username != 'root':
 		[x.delete() for x in Session.objects.all() if x.get_decoded().get('_auth_user_id') == user_obj.id]
@@ -1213,6 +1446,10 @@ def acl_kick_user(request, user_id):
 
 @login_required
 def change_gendev_handler(request, gendev_id):
+	"""Handler for changing gen_dev related tables. Redirects when done
+	
+	Location: /devices/gen_dev/change/\d+/handler
+	"""
 	if request.user.has_perm('nms.change_gen_dev') and 'qtype' in request.POST:
 		p = request.POST
 		if p['qtype'] == 'change_os':
@@ -1238,11 +1475,12 @@ def change_gendev_handler(request, gendev_id):
 		elif p['qtype'] == 'change_os_dev':
 			try:
 				os_dev = OS_dev.objects.get(pk=gendev_id)
-				os_dev.os_id = OS_dev.objects.get(pk=p['os_id'])
+				os_dev.os_id = OS.objects.get(pk=p['os_id'])
 				os_dev.gen_dev_id = Gen_dev.objects.get(pk=p['gen_dev_id'])
 				os_dev.save()
 				messages.success(request, 'Database successfully updated')
 			except:
+				messages.error(request, traceback.format_exc())
 				messages.error(request, 'Error occured during the request. Can not change OS device relationship')
 		elif p['qtype'] == 'change_gendev':
 			try:
@@ -1254,6 +1492,7 @@ def change_gendev_handler(request, gendev_id):
 				gen_dev.save()
 				messages.success(request, 'Database successfully updated')
 			except:
+				messages.error(request, traceback.format_exc())
 				messages.error(request, 'Error occured during the request. Can not change generic device')
 		elif p['qtype'] == 'change_dev_type':
 			try:
@@ -1280,6 +1519,7 @@ def change_gendev_handler(request, gendev_id):
 				dev_model.save()
 				messages.success(request, 'Database successfully updated')
 			except:
+				messages.error(request, traceback.format_exc())
 				messages.error(request, 'Error occured during the request. Can not change model')
 		elif p['qtype'] == 'change_xml':
 			if 'file' in request.FILES:
@@ -1323,6 +1563,10 @@ def change_gendev_handler(request, gendev_id):
 
 @login_required
 def change_gendev(request, gendev_id):
+	"""Page for allowing users to change gendev records
+	
+	Location: /devices/gen_dev/\d+/change
+	"""
 	if request.user.has_perm('nms.change_gen_dev') and 'qtype' in request.GET:
 		qtype = request.GET['qtype']
 		if qtype == 'change_os':

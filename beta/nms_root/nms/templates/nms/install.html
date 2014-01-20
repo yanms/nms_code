@@ -1,52 +1,52 @@
 <!DOCTYPE html>
-<head>
-	<meta charset="utf-8">
-	<title>Network Management System - Install</title>
-	<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
-	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
-	<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
-</head>
-<body>
-	<div id="wrapper">
-		<div id="content">
-			<div class="c1">
-				<div class="controls">
-					<!-- Upper Menu -->
-					{% include "_navuser.html" %}
-				</div>
-				<div class="tabs">
-					<div id="tab-1" class="tab">
-						<article>
-							<div class="text-section">
-								<h1>Network Management System - Install</h1>
-								<ul class="states">
-									{% for message in messages %}
-									<li class="{{message.tags}}">{{ message.tags.title }} : {{ message }}</li>
-									{% endfor %}
-								</ul>
-								<h2>Install</h2>
-                                <form action="{% url 'nms:install' %}" method="POST">
-									{% csrf_token %}
-									Hostname: <input type="text" name="hostname" /><br />
-									<input type="submit" value="Install" />
-								</form>
-							</div>
-						</article>
+	<head>
+		<meta charset="utf-8">
+		<title>yaNMS - Install</title>
+		<link media="all" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/all.css" />
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"><\/script>');</script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.main.js"></script>
+		<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" /><![endif]-->
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="content">
+				<div class="c1">
+					<div class="controls">
+						<!-- Upper Menu -->
+						{% include "_navuser.html" %}
+					</div>
+					<div class="tabs">
+						<div id="tab-1" class="tab">
+							<article>
+								<div class="text-section">
+									<h1>yet another Network Management System - Install</h1>
+									<ul class="states">
+										{% for message in messages %}
+										<li class="{{message.tags}}">{{ message.tags.title }} : {{ message }}</li>
+										{% endfor %}
+									</ul>
+									<h2>Install</h2>
+	                                <form action="{% url 'nms:install' %}" method="POST">
+										{% csrf_token %}
+										Hostname: <input type="text" name="hostname" /><br />
+										<input type="submit" value="Install" />
+									</form>
+								</div>
+							</article>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<aside id="sidebar">
-			<img src="{{ STATIC_URL }}images/NMS.png"/>
-			{% include "_nav.html" %}
-			<span class="shadow"></span>
-		</aside>
-		<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
-	</div> <!-- Wrapper -->
-	<footer>
-		Project Network Management System is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
-	</footer>
-</body>
+			<aside id="sidebar">
+				<img src="{{ STATIC_URL }}images/yanms.png"/>
+				{% include "_nav.html" %}
+				<span class="shadow"></span>
+			</aside>
+			<div class="push"></div> <!-- This element pushes the footer beyond the wrapper... If forgotten, the footer will be underneath the wrapper -->
+		</div> <!-- Wrapper -->
+		<footer>
+			yaNMS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.
+		</footer>
+	</body>
 </html>

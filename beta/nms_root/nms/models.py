@@ -1,3 +1,14 @@
+"""
+nms.models contains the django model definitions for the application. Each class here translates to a database table.
+
+Copyright (c) 2014 Remy Bien, Sebastiaan Groot, Wouter Miltenburg and Koen Veelenturf
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option) 
+any later version.
+"""
+
 from django.db import models
 from django.contrib.auth.models import User, Group
 
