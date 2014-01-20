@@ -1,4 +1,4 @@
-Beta release project NMS (Network Management System)
+Release candidate yaNMS
 ====
 
 Requirements
